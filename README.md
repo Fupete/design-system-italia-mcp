@@ -2,17 +2,13 @@
 
 > ⚠️ **Progetto non ufficiale e sperimentale**
 > Questo è un progetto personale sandbox di Daniele Tabellini.
-> Non è affiliato, approvato o mantenuto dal Dipartimento per la
-> trasformazione digitale o dal team di Designers Italia.
 > I dati sono forniti così come sono e potrebbero essere incompleti
 > o non aggiornati. Utilizzare a proprio rischio.
 
 > ⚠️ **Unofficial & experimental personal sandbox project**
 > This is a personal sandbox project by Daniele Tabellini.
-> It is not affiliated with, endorsed by, or maintained by
-> the Dipartimento per la Trasformazione Digitale or the
-> Designers Italia team. Data is provided as-is and may be
-> outdated or incomplete. Use at your own risk.
+> Data is provided as-is and may be outdated or incomplete. 
+> Use at your own risk.
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/fupete/design-system-italia-mcp)
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
