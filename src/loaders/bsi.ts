@@ -1,6 +1,7 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify, slugFromStatusTitle } from '../slugify.js'
 import type { ComponentStatus, ComponentVariant, CssToken, StatusValue } from '../types.js'
+import { slugify, slugFromStatusTitle, slugsToTry } from '../slugify.js'
 
 const BSI_RAW_V3 = 'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x'
 
@@ -90,15 +91,18 @@ export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
   const cached = cache.get<ComponentVariant[]>(key)
   if (cached) return cached
 
-  const url = `${BSI_RAW_V3}/api/componenti/${slug}.json`
-  try {
-    const raw = await fetchJson<RawVariantsJson>(url)
-    const variants = raw.map((v) => ({ name: v.name, html: v.content }))
-    cache.set(key, variants, TTL.bsiMarkup)
-    return variants
-  } catch {
-    return []
+  for (const s of slugsToTry(slug)) {
+    const url = `${BSI_RAW_V3}/api/componenti/${s}.json`
+    try {
+      const raw = await fetchJson<RawVariantsJson>(url)
+      const variants = raw.map((v) => ({ name: v.name, html: v.content }))
+      cache.set(key, variants, TTL.bsiMarkup)
+      return variants
+    } catch {
+      continue
+    }
   }
+  return []
 }
 
 // ─── Sorgente #3 — api/custom_properties.json ────────────────────────────────

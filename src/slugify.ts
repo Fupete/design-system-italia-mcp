@@ -55,6 +55,29 @@ export function slugsMatch(a: string, b: string): boolean {
   return slugify(a) === slugify(b)
 }
 
+// ─── Alias cross-sorgente ─────────────────────────────────────────────────────
+//
+// Alcune sorgenti usano slug diversi per lo stesso componente.
+// Aggiungere nuovi casi man mano che emergono inconsistenze.
+//
+//   'buttons' → Dev Kit usa "button" (senza s)
+//   'modal'   → BSI salva il file come "modale.json"
+//
+const SLUG_ALIASES: Record<string, string[]> = {
+  'buttons': ['button'],
+  'modal':   ['modale'],
+}
+
+// Dato uno slug canonico, restituisce tutti gli slug da provare in ordine
+export function getSlugAliases(slug: string): string[] {
+  return SLUG_ALIASES[slug] ?? []
+}
+
+// Restituisce slug + tutti gli alias: utile per loop di fallback nei loader
+export function slugsToTry(slug: string): string[] {
+  return [slug, ...getSlugAliases(slug)]
+}
+
 // Dev Kit importPath → URL raw GitHub
 export function importPathToRawUrl(importPath: string): string {
   const clean = importPath.replace(/^\.\//, '')

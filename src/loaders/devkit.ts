@@ -1,6 +1,7 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugFromStorybookId, slugFromImportPath, importPathToRawUrl } from '../slugify.js'
 import type { DevKitEntry, DevKitComponent, WebComponentProp } from '../types.js'
+import { slugsToTry } from '../slugify.js' 
 
 const DEVKIT_INDEX = 'https://italia.github.io/dev-kit-italia/index.json'
 const DEVKIT_STORYBOOK = 'https://italia.github.io/dev-kit-italia'
@@ -81,7 +82,11 @@ export async function loadDevKitIndex(): Promise<DevKitIndex> {
 
 export async function loadDevKitEntry(slug: string): Promise<DevKitEntry | null> {
   const index = await loadDevKitIndex()
-  return index.get(slug) ?? null
+  for (const s of slugsToTry(slug)) {
+    const entry = index.get(s)
+    if (entry) return entry
+  }
+  return null
 }
 
 // ─── Sorgente #7 — stories.ts ─────────────────────────────────────────────────
