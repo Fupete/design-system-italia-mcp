@@ -61,7 +61,7 @@ export async function loadComponentIssues(slug: string): Promise<ComponentIssue[
   const cached = cache.get<ComponentIssue[]>(key)
   if (cached) return cached
 
-  const repoFilter = REPOS.map((r) => `repo:${r}`).join('+')
+  const repoFilter = REPOS.map((r) => `repo:${r}`).join(' ')
   const q = encodeURIComponent(`${normalized} ${repoFilter} is:issue is:open`)
   const url = `${GITHUB_API}/search/issues?q=${q}&sort=updated&per_page=20`
 
