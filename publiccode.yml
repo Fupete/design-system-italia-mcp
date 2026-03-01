@@ -1,20 +1,15 @@
-publiccodeYmlVersion: "0.4"
-
+publiccodeYmlVersion: "0.5.0"
 name: design-system-italia-mcp
 url: "https://github.com/fupete/design-system-italia-mcp"
 softwareVersion: "0.1.0"
 releaseDate: "2026-03-01"
-softwareType: standalone/other
-
+softwareType: addon
 platforms:
   - web
   - linux
-
 categories:
   - it-development
-
 developmentStatus: beta
-
 description:
   it:
     localisedName: "MCP Server per il Design System .italia"
@@ -24,22 +19,24 @@ description:
     longDescription: >
       Server MCP (Model Context Protocol) remoto non ufficiale che consente ad
       assistenti AI (Claude, Cursor, VS Code) di accedere in modo strutturato
-      alle risorse del Design System .italia. Aggrega dati da 8 sorgenti
-      ufficiali: markup HTML dei componenti Bootstrap Italia, token CSS --bsi-*,
-      linee guida d'uso da Designers Italia, stato di accessibilità, props dei
-      web component Dev Kit Italia e issue GitHub in tempo reale.
-      Il tool principale get_component_full restituisce in una singola chiamata
-      tutte le informazioni disponibili su un componente.
+      alle risorse del Design System .italia. Aggrega dati da 9 sorgenti
+      ufficiali: markup HTML dei componenti Bootstrap Italia, token CSS --bsi-*
+      con valori risolti, linee guida d'uso da Designers Italia, stato di
+      accessibilità, props dei web component Dev Kit Italia, issue GitHub in
+      tempo reale e versioni verificate delle librerie. Il tool principale
+      get_component_full restituisce in una singola chiamata tutte le
+      informazioni disponibili su un componente, inclusi URL di documentazione
+      ufficiale e versioni correnti di Design System, Bootstrap Italia e Dev Kit Italia.
     documentation: "https://github.com/fupete/design-system-italia-mcp#readme"
     features:
       - Espone 10 tool MCP per accesso strutturato al Design System .italia
-      - Aggrega 8 sorgenti dati ufficiali in tempo reale
+      - Aggrega 9 sorgenti dati ufficiali in tempo reale
       - Risoluzione catena token CSS (--bsi-* → --it-* → valore concreto)
       - Linee guida d'uso e stato accessibilità per componente
       - Issue GitHub live sui repository del design system
+      - Versioni verificate di Design System, Bootstrap Italia e Dev Kit Italia
       - Cache con TTL configurabile per sorgente
       - Deploy universale via Docker (locale o VPS EU)
-
   en:
     localisedName: "MCP Server for Design System .italia"
     shortDescription: >
@@ -48,39 +45,38 @@ description:
     longDescription: >
       An unofficial remote MCP (Model Context Protocol) server that enables
       AI assistants (Claude, Cursor, VS Code) to access Italy's Design System
-      resources in a structured way. Aggregates data from 8 official sources:
-      Bootstrap Italia component HTML markup, --bsi-* CSS tokens, usage
-      guidelines from Designers Italia, accessibility status, Dev Kit Italia
-      web component props, and real-time GitHub issues.
-      The main get_component_full tool returns all available information about
-      a component in a single API call.
+      resources in a structured way. Aggregates data from 9 official sources:
+      Bootstrap Italia component HTML markup, --bsi-* CSS tokens with resolved
+      values, usage guidelines from Designers Italia, accessibility status,
+      Dev Kit Italia web component props, real-time GitHub issues, and verified
+      library versions. The main get_component_full tool returns all available
+      information about a component in a single API call, including official
+      documentation URLs and current versions of Design System, Bootstrap Italia
+      and Dev Kit Italia.
     documentation: "https://github.com/fupete/design-system-italia-mcp#readme"
     features:
       - Exposes 10 MCP tools for structured access to Italy's Design System
-      - Aggregates 8 official data sources in real time
+      - Aggregates 9 official data sources in real time
       - CSS token chain resolution (--bsi-* → --it-* → concrete value)
       - Usage guidelines and accessibility status per component
       - Live GitHub issues from design system repositories
+      - Verified versions of Design System, Bootstrap Italia and Dev Kit Italia
       - Configurable TTL cache per data source
       - Universal Docker deploy (local or EU VPS)
-
 legal:
   license: BSD-3-Clause
   mainCopyrightOwner: "Daniele Tabellini (Fupete)"
   repoOwner: "Daniele Tabellini (Fupete)"
-
 localisation:
   localisationReady: true
   availableLanguages:
     - it
     - en
-
 maintenance:
   type: internal
   contacts:
     - name: "Daniele Tabellini"
       github: "https://github.com/Fupete"
-
 dependsOn:
   open:
     - name: "Bootstrap Italia"
