@@ -7,6 +7,7 @@ import { loadDevKitEntry, loadDevKitComponent } from '../loaders/devkit.js'
 import { loadComponentIssues } from '../loaders/github.js'
 import { slugify } from '../slugify.js'
 import type { ComponentFull } from '../types.js'
+import { loadDsMeta } from '../loaders/meta.js'
 
 function formatTimestamp(): string {
   return new Date().toISOString()
@@ -36,6 +37,7 @@ export function registerGetComponentFull(server: McpServer): void {
         devKitEntry,
         devKitComponent,
         openIssues,
+        dsMeta,
       ] = await Promise.allSettled([
         loadStatus(slug),
         loadVariants(slug),
@@ -44,6 +46,7 @@ export function registerGetComponentFull(server: McpServer): void {
         loadDevKitEntry(slug),
         loadDevKitComponent(slug),
         loadComponentIssues(slug),
+        loadDsMeta(),
       ])
 
       // ── Unwrap results con warnings su failure ───────────────────────────────
@@ -53,13 +56,14 @@ export function registerGetComponentFull(server: McpServer): void {
         return fallback
       }
 
-      const statusData     = unwrap(status,          'BSI status',       null)
-      const variantsData   = unwrap(variants,         'BSI markup',       [])
-      const rawTokensData  = unwrap(rawTokens,        'BSI tokens',       [])
-      const guidelinesData = unwrap(guidelines,       'Designers Italia', null)
-      const devKitEntryData    = unwrap(devKitEntry,      'Dev Kit index',    null)
-      const devKitComponentData = unwrap(devKitComponent, 'Dev Kit stories',  null)
-      const issuesData     = unwrap(openIssues,       'GitHub Issues',    [])
+      const statusData = unwrap(status, 'BSI status', null)
+      const variantsData = unwrap(variants, 'BSI markup', [])
+      const rawTokensData = unwrap(rawTokens, 'BSI tokens', [])
+      const guidelinesData = unwrap(guidelines, 'Designers Italia', null)
+      const devKitEntryData = unwrap(devKitEntry, 'Dev Kit index', null)
+      const devKitComponentData = unwrap(devKitComponent, 'Dev Kit stories', null)
+      const issuesData = unwrap(openIssues, 'GitHub Issues', [])
+      const dsMetaData = unwrap(dsMeta, 'DS meta', null)
 
       // ── Risolvi token values ─────────────────────────────────────────────────
       let tokens = rawTokensData
@@ -70,9 +74,9 @@ export function registerGetComponentFull(server: McpServer): void {
       }
 
       // ── Warnings su dati mancanti ────────────────────────────────────────────
-      if (!statusData)      warnings.push(`Stato non trovato per "${slug}" in components_status.json`)
+      if (!statusData) warnings.push(`Stato non trovato per "${slug}" in components_status.json`)
       if (variantsData.length === 0) warnings.push(`Nessuna variante HTML trovata per "${slug}"`)
-      if (!guidelinesData)  warnings.push(`Linee guida non trovate per "${slug}" in Designers Italia`)
+      if (!guidelinesData) warnings.push(`Linee guida non trovate per "${slug}" in Designers Italia`)
       if (!devKitEntryData) warnings.push(`"${slug}" non presente nel Dev Kit Italia`)
       if (tokens.length === 0) warnings.push(`Nessun token CSS trovato per "${slug}"`)
 
@@ -92,33 +96,36 @@ export function registerGetComponentFull(server: McpServer): void {
 
       // ── Assembla risposta ComponentFull ──────────────────────────────────────
       const full: ComponentFull = {
-        name:  statusData?.name ?? slug,
+        name: statusData?.name ?? slug,
         slug,
         status: statusData,
         variants: variantsData,
         guidelines: guidelinesData,
         tokens,
         devKit: {
-          entry:     devKitEntryData,
+          entry: devKitEntryData,
           component: devKitComponentData,
         },
         openIssues: issuesData,
         meta: {
-          fetchedAt:  formatTimestamp(),
+          fetchedAt: formatTimestamp(),
           sourceUrls,
           warnings,
+          versions: dsMetaData?.versions ?? undefined,
+          designersUrl: dsMetaData?.components.get(slug)?.absoluteUrl ?? null,
+
         },
       }
 
       // ── Fonti disponibili per trasparenza ────────────────────────────────────
       const sourcesAvailable = [
-        statusData      && 'bsi:status',
+        statusData && 'bsi:status',
         variantsData.length > 0 && 'bsi:markup',
-        tokens.length > 0       && 'bsi:tokens',
-        guidelinesData  && 'designers:yaml',
+        tokens.length > 0 && 'bsi:tokens',
+        guidelinesData && 'designers:yaml',
         devKitEntryData && 'devkit:index',
         devKitComponentData && 'devkit:stories',
-        issuesData.length > 0   && 'github:issues',
+        issuesData.length > 0 && 'github:issues',
       ].filter(Boolean) as string[]
 
       return {

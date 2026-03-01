@@ -31,7 +31,8 @@ src/
 │   ├── designers.ts  # Designers Italia YAML
 │   ├── tokens.ts     # Design Tokens Italia _variables.scss
 │   ├── devkit.ts     # Dev Kit Italia index.json + stories.ts
-│   └── github.ts     # GitHub Issues REST API
+│   ├── github.ts     # GitHub Issues REST API
+│   └── meta.ts       # Versioni DS/BSI/DevKit + URL nav da dsnav.yaml
 ├── cache.ts          # cache in-memory con TTL per sorgente
 ├── slugify.ts        # slug matching tra sorgenti eterogenee
 └── types.ts          # tipi condivisi
@@ -42,7 +43,7 @@ Partire monolite, refactoring solo quando necessario.
 
 ---
 
-## Sorgenti dati — 8 fonti, tutte read-only
+## Sorgenti dati — 9 fonti, tutte read-only
 
 | # | Sorgente | URL / path | TTL cache |
 |---|----------|------------|-----------|
@@ -54,9 +55,36 @@ Partire monolite, refactoring solo quando necessario.
 | 6 | Dev Kit index | `https://italia.github.io/dev-kit-italia/index.json` | 15 min |
 | 7 | Dev Kit stories | raw GitHub, path da importPath in #6 | 4h |
 | 8 | GitHub Issues | `https://api.github.com/search/issues?q={slug}+repo:italia/bootstrap-italia+repo:italia/design-ui-kit+repo:italia/dev-kit-italia+repo:italia/design-tokens-italia+is:open` | 15 min |
+| 9 | DS meta/nav | `dsnav.yaml` (Designers Italia) + `package.json` (BSI 3.x) + `package.json` (Dev Kit `packages/dev-kit-italia/`) | 24h |
 
 **Regola**: non modificare mai le URL upstream. Se una sorgente cambia
 struttura, aggiornare solo il loader corrispondente, non i tool.
+
+**Nota sorgente #9**: Dev Kit Italia è un monorepo workspace. Il `package.json`
+root ha `"version": "0.0.0"` — usare sempre `packages/dev-kit-italia/package.json`
+per la versione reale. Il `dsnav.yaml` espone anche `foundations[]` con URL delle
+pagine dei fondamenti — base per futuro tool `list_foundations`.
+
+---
+
+## Versioni nelle risposte
+
+Ogni risposta include `meta.versions` con tre campi distinti:
+
+```typescript
+versions: {
+  designSystem: string      // da dsnav.yaml → tag.label, es. "v1.10.1"
+  bootstrapItalia: string   // da BSI package.json → .version, es. "3.0.0-alpha.2"
+  devKitItalia: string      // da Dev Kit packages/dev-kit-italia/package.json → .version
+}
+```
+
+E `meta.designersUrl` con l'URL verificato dalla nav (non dedotto dallo slug):
+```typescript
+designersUrl: string | null  // es. "https://designers.italia.it/design-system/componenti/accordion/"
+```
+
+Il meta loader usa `Promise.allSettled` — nessuna versione è critica per la risposta principale.
 
 ---
 
@@ -84,8 +112,9 @@ le sorgenti che hanno risposto. Non fallire silenziosamente.
 
 Alcune sorgenti usano slug diversi per lo stesso componente.
 Il mapping è centralizzato in `src/slugify.ts`:
+
 ```typescript
-const SLUG_ALIASES: Record = {
+const SLUG_ALIASES: Record<string, string[]> = {
   'buttons': ['button'],  // Dev Kit usa "button", BSI usa "buttons"
   'modal':   ['modale'],  // BSI salva il file come "modale.json"
 }
@@ -126,7 +155,7 @@ Endpoint di invalidazione manuale:
 ```
 POST /cache/invalidate
 Authorization: Bearer <CACHE_INVALIDATION_TOKEN>
-Body: { "source": "all" | "bsi" | "designers" | "tokens" | "devkit" | "github" }
+Body: { "source": "all" | "bsi" | "designers" | "tokens" | "devkit" | "github" | "meta" }
 ```
 
 Non implementare invalidazione automatica per ora.
@@ -137,14 +166,16 @@ Non implementare invalidazione automatica per ora.
 
 ```typescript
 meta: {
-  fetchedAt: string,       // ISO timestamp
-  sourceUrls: string[],    // URL delle sorgenti usate
-  bsiVersion?: string,     // da components_status.json se disponibile
+  fetchedAt: string,           // ISO timestamp di assemblaggio risposta
+  sourceUrls: string[],        // URL delle sorgenti usate
+  warnings: string[],          // sorgenti mancanti o errori non fatali
+  versions?: DsVersions,       // designSystem / bootstrapItalia / devKitItalia
+  designersUrl?: string | null // URL verificato da dsnav.yaml, non dedotto
 }
 ```
 
-Se una sorgente non risponde, includere nel campo `warnings: string[]`
-e restituire comunque i dati delle sorgenti disponibili.
+Se una sorgente non risponde, includere nel campo `warnings` e
+restituire comunque i dati delle sorgenti disponibili.
 
 ---
 
@@ -160,13 +191,15 @@ e restituire comunque i dati delle sorgenti disponibili.
 
 - Non integrare conoscenza pregressa di Bootstrap nella logica dei tool
 - Non parsare SCSS o TypeScript — usare solo i JSON e file pre-processati
-  (eccezione: parser leggero su stories.ts (regex per argTypes), 
+  (eccezione: parser leggero su stories.ts (regex per argTypes),
   _variables.scss (regex per $it-* con risoluzione ricorsiva),
   _root.scss branch 3.x (regex per bridge --bsi-* → --it-*))
+- Non usare `require()` — il progetto è ESM, usare sempre import statico
 - Non usare Playwright o browser headless — parsing statico soltanto
 - Non aggiungere dipendenze pesanti senza discuterne prima
 - Non duplicare la logica di slug matching fuori da `slugify.ts`
 - Non fallire silenziosamente se una sorgente non risponde
+- Non usare il `package.json` root di dev-kit-italia per la versione (è `"0.0.0"`)
 
 ---
 

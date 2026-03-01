@@ -48,6 +48,7 @@ export const TTL = {
   devKitIndex:    DEV ? 15 * 60_000 : 15 * 60_000,        // 15 min sempre
   devKitStories:  DEV ? 60 * 60_000 :  4 * 60 * 60_000,  // 1h dev,  4h prod
   githubIssues:   DEV ? 15 * 60_000 : 15 * 60_000,        // 15 min sempre
+  dsMeta:         DEV ? 60 * 60_000 : 24 * 60 * 60_000,   // 1h dev, 24h prod
 }
 
 // ─── Prefissi chiavi cache ────────────────────────────────────────────────────
@@ -61,4 +62,5 @@ export const CACHE_KEYS = {
   devKitIndex:   () => `devkit:index`,
   devKitStories: (slug: string) => `devkit:stories:${slug}`,
   githubIssues:  (slug: string) => `github:issues:${slug}`,
+  dsMeta:        () => `ds:meta`,
 }

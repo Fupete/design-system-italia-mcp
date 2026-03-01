@@ -101,6 +101,20 @@ export interface ComponentIssue {
   labels: string[]
 }
 
+// ─── Design System — metadati navigazione e versioni ─────────────────────────
+
+export interface DsVersions {
+  designSystem: string        // da dsnav.yaml, es. "v1.10.1"
+  bootstrapItalia: string     // da BSI package.json, es. "3.0.0-alpha.2"
+  devKitItalia: string        // da Dev Kit package.json
+}
+
+export interface DsNavEntry {
+  label: string
+  url: string                 // URL relativo
+  absoluteUrl: string         // https://designers.italia.it/...
+}
+
 // ─── Risposta aggregata get_component_full ────────────────────────────────────
 
 export interface ComponentFull {
@@ -133,5 +147,7 @@ export interface ComponentFull {
     fetchedAt: string
     sourceUrls: string[]
     warnings: string[]
+    versions?: DsVersions        
+    designersUrl?: string | null 
   }
 }

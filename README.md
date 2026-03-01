@@ -67,8 +67,8 @@ Esempio: *"Dimmi tutto sul componente Alert"* → stato beta/stabile,
 markup HTML con varianti, variabili CSS con valori risolti, note
 accessibilità, issue GitHub aperte.
 
-Ogni risposta include versione della sorgente, URL della documentazione
-ufficiale e timestamp dell'ultimo fetch.
+Ogni risposta include le versioni delle sorgenti (Design System, Bootstrap Italia,
+Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'ultimo fetch.
 
 ---
 
@@ -120,18 +120,20 @@ repository ufficiali in tempo reale.
 | # | Repo | File / endpoint | Contenuto | Tool MCP | TTL cache |
 |---|------|-----------------|-----------|----------|-----------|
 | 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/componenti/{slug}.json` | Markup HTML varianti per componente | `get_component` `list_components` `search_components` | Lunga (per release) |
-| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/components_status.json` | Lista ~55 componenti, stato per libreria (BSI/UI Kit/React/Angular), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` | Media (4h) |
+| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/components_status.json` | Lista ~55 componenti, stato per libreria (BSI/UI Kit), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` | Media (4h) |
 | 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/custom_properties.json` | Token CSS `--bsi-*` per-componente con descrizioni semantiche. Prefisso canonico BSI v3 | `get_component_tokens` `find_token` | Lunga (per release) |
 | 4 | [designers.italia.it](https://github.com/italia/designers.italia.it) | `src/data/content/design-system/componenti/{slug}.yaml` | Linee guida d'uso, accessibilità, stato redazionale, quando/come usare | `get_component_guidelines` | Lunga (24h) |
-| 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | `dist/scss/_variables.scss` | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `1.5rem (24px)` per i designer | `get_component_tokens` (campo `valueResolved`) `find_token` | Lunga (24h) |
+| 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | `dist/scss/_variables.scss` | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` per i designer | `get_component_tokens` (campo `valueResolved`) `find_token` | Lunga (24h) |
 | 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `italia.github.io/dev-kit-italia/index.json` | Indice Storybook: tag stato (`a11y-ok` `alpha` `new` `web-component`), varianti in italiano, URL docs, importPath → path esatto stories.ts | `list_components` `get_component_guidelines` | Breve (15-30 min) |
-| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti. Due pattern: package dedicato `it-{slug}` o wrapper bundle | `get_component` `get_component_full` | Media (4h) |
+| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti. Due pattern: package dedicato o wrapper bundle | `get_component` `get_component_full` | Media (4h) |
 | 8 | GitHub REST API | `search/issues?q={slug}+repo:italia/...+is:open` | Issue aperte sui repo: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` | Breve (15-30 min) |
+| 9 | [designers.italia.it](https://github.com/italia/designers.italia.it) + [bootstrap-italia](https://github.com/italia/bootstrap-italia) + [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `src/data/dsnav.yaml` + `package.json` (×2) | Versioni Design System / BSI / Dev Kit Italia. URL verificati pagine componenti e fondamenti su designers.italia.it | `meta` in tutte le risposte | Lunga (24h) |
 
 **Note:**
 - TTL indicativi e configurabili. In fase di sviluppo: cache di qualche ora + endpoint di invalidazione manuale protetto da token
 - Sorgenti #1 #2 #3: stesso repo BSI, loader condiviso con cache unica per repo
 - Sorgenti #6 #7: Dev Kit Italia, due fetch — index.json come indice, stories.ts per dettaglio props. L'`importPath` in #6 indica il path esatto del file #7
+- Sorgente #9: fetch parallelo con `Promise.allSettled` — non esposta come tool separato, popola il campo `meta.versions` e `meta.designersUrl` in tutte le risposte
 - `get_component_full` aggrega tutte le sorgenti in una risposta unica
 
 ---

@@ -1,3 +1,4 @@
+import yaml from 'js-yaml'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 
 // ─── Sorgenti metadati ────────────────────────────────────────────────────────
@@ -8,8 +9,10 @@ const DSNAV_URL =
 const BSI_PACKAGE_URL =
   'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/package.json'
 
+// Il root package.json del monorepo ha versione "0.0.0" (workspace placeholder).
+// Il package pubblicato è packages/dev-kit-italia/package.json.
 const DEVKIT_PACKAGE_URL =
-  'https://raw.githubusercontent.com/italia/dev-kit-italia/main/package.json'
+  'https://raw.githubusercontent.com/italia/dev-kit-italia/main/packages/dev-kit-italia/package.json'
 
 const DESIGNERS_BASE = 'https://designers.italia.it'
 
@@ -18,7 +21,7 @@ const DESIGNERS_BASE = 'https://designers.italia.it'
 export interface DsVersions {
   designSystem: string       // da dsnav.yaml → tag.label, es. "v1.10.1"
   bootstrapItalia: string    // da BSI package.json → .version, es. "3.0.0-alpha.2"
-  devKitItalia: string       // da Dev Kit package.json → .version
+  devKitItalia: string       // da Dev Kit packages/dev-kit-italia/package.json → .version
 }
 
 export interface DsNavEntry {
@@ -48,11 +51,7 @@ async function fetchText(url: string): Promise<string> {
   return res.text()
 }
 
-// ─── Parser YAML minimale per dsnav.yaml ──────────────────────────────────────
-//
-// dsnav.yaml ha struttura semplice e stabile: label/url in list/subList.
-// Non serve js-yaml completo — parsing riga per riga è sufficiente e
-// più robusto contro cambi di struttura non critici.
+// ─── Tipi interni per dsnav.yaml ─────────────────────────────────────────────
 
 interface RawNavItem {
   label: string
@@ -67,27 +66,6 @@ interface RawNavSection {
 interface RawDsnav {
   tag?: { label?: string }
   list?: RawNavSection[]
-}
-
-function parseDsnavYaml(text: string): RawDsnav {
-  // Usa js-yaml se disponibile nell'ambiente (è già una dipendenza del progetto)
-  // altrimenti parsing riga per riga
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const yaml = require('js-yaml')
-    return yaml.load(text) as RawDsnav
-  } catch {
-    // Fallback: estrai solo label/url con regex
-    const result: RawDsnav = { list: [] }
-
-    // Versione
-    const versionMatch = text.match(/label:\s*["']?(v[\d.]+(?:-[\w.]+)?)["']?/)
-    if (versionMatch) {
-      result.tag = { label: versionMatch[1] }
-    }
-
-    return result
-  }
 }
 
 // ─── Slug da URL Designers Italia ─────────────────────────────────────────────
@@ -105,7 +83,7 @@ export async function loadDsMeta(): Promise<DsMeta> {
   const cached = cache.get<DsMeta>(CACHE_KEYS.dsMeta())
   if (cached) return cached
 
-  // Fetch parallelo delle tre sorgenti — fallback su stringa vuota in caso di errore
+  // Fetch parallelo — fallback graceful su errore di singola sorgente
   const [dsnavText, bsiPackage, devKitPackage] = await Promise.allSettled([
     fetchText(DSNAV_URL),
     fetchJson<{ version: string }>(BSI_PACKAGE_URL),
@@ -131,7 +109,7 @@ export async function loadDsMeta(): Promise<DsMeta> {
   const foundations: DsNavEntry[] = []
 
   if (dsnavText.status === 'fulfilled') {
-    const dsnav = parseDsnavYaml(dsnavText.value)
+    const dsnav = yaml.load(dsnavText.value) as RawDsnav
 
     if (dsnav.tag?.label) {
       versions.designSystem = dsnav.tag.label
@@ -155,7 +133,6 @@ export async function loadDsMeta(): Promise<DsMeta> {
         if (isComponents) {
           const slug = slugFromDesignersUrl(item.url)
           if (slug && slug !== 'componenti') {
-            // Normalizza: "Buttons" → entry accessibile con slug "buttons"
             components.set(slug.toLowerCase(), entry)
           }
         } else if (isFoundations) {

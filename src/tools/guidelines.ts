@@ -4,6 +4,7 @@ import { loadAllStatuses, loadStatus } from '../loaders/bsi.js'
 import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
+import { loadDsMeta } from '../loaders/meta.js'
 
 function formatTimestamp(): string {
   return new Date().toISOString()
@@ -23,10 +24,11 @@ export function registerGetComponentGuidelines(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      const [guidelines, status, devKitEntry] = await Promise.all([
+      const [guidelines, status, devKitEntry, dsMeta] = await Promise.all([
         loadGuidelines(slug),
         loadStatus(slug),
         loadDevKitEntry(slug),
+        loadDsMeta(),
       ])
 
       if (!guidelines) {
@@ -68,7 +70,7 @@ export function registerGetComponentGuidelines(server: McpServer): void {
                   }
                   : null,
                 sourceUrls: {
-                  designersItalia: designersUrl(slug),
+                  designersItalia: dsMeta.components.get(slug)?.absoluteUrl ?? designersUrl(slug),
                   bsiDoc: status?.sourceUrls.bsiDoc ?? null,
                   figma: status?.sourceUrls.figma ?? null,
                 },
@@ -80,6 +82,7 @@ export function registerGetComponentGuidelines(server: McpServer): void {
                     'https://italia.github.io/dev-kit-italia/index.json',
                   ],
                   warnings,
+                  versions: dsMeta.versions,
                 },
               },
               null,
