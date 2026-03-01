@@ -1,4 +1,4 @@
-# MCP Server per il Design System .italia
+# MCP Server per Design system .italia
 
 > ⚠️ **Progetto non ufficiale e sperimentale**
 > Questo è un progetto personale sandbox di Daniele Tabellini.
@@ -18,14 +18,15 @@
 ## Cos'è / What it is
 
 **IT** — Server MCP (Model Context Protocol) remoto non ufficiale
-che espone a assistenti AI i dati strutturati del Design System
-.italia: componenti Bootstrap Italia, token CSS, linee guida d'uso,
-stato di accessibilità e issue GitHub collegate.
+che espone a assistenti AI i dati strutturati di Design system
+.italia: componenti Bootstrap Italia, Dev Kit Italia, token CSS, 
+linee guida d'uso, stato di accessibilità e issue GitHub collegate.
 
 **EN** — An unofficial remote MCP (Model Context Protocol) server
 providing AI assistants with structured access to Italy's Design
-System resources: Bootstrap Italia components, CSS tokens, usage
-guidelines, accessibility status, and related GitHub issues.
+System resources: Bootstrap Italia and Dev Kit Italia components, 
+CSS tokens, usage guidelines, accessibility status, and related 
+GitHub issues.
 
 ---
 
@@ -33,21 +34,21 @@ guidelines, accessibility status, and related GitHub issues.
 
 ### Componenti (Bootstrap Italia)
 - `list_components` — elenco di tutti i componenti con stato
-- `get_component(name)` — markup HTML e varianti di un componente
-- `search_components(query)` — ricerca per nome o caratteristica
+- `get_component(name)` — markup HTML Bootstrap Italia e varianti di un componente
+- `search_components(query)` — ricerca per nome o caratteristica (tendenzialmente nome in inglese)
 - `get_component_full(name)` ⭐ — risposta aggregata: markup +
-  token CSS + linee guida + stato + issue aperte in una sola query
+  token CSS + linee guida + stato + issue aperte in una sola query + ...
 
 ### Token e variabili CSS
 - `get_component_tokens(name)` — variabili CSS `--bsi-*` personalizzabili
-  con descrizioni semantiche e valori risolti
+  con descrizioni semantiche, tokens da Design Tokens Italia e valori risolti
 - `find_token(query)` — ricerca per nome variabile o descrizione
 
 ### Linee guida e accessibilità (Designers Italia)
 - `get_component_guidelines(name)` — linee guida d'uso, quando/come usarlo,
-  stato accessibilità
-- `list_by_status(status)` — componenti per stato (stabile, beta, WIP…)
-- `list_accessibility_issues` — componenti con note di accessibilità aperte
+  stato verifiche accessibilità complete 
+- `list_by_status(status)` — componenti per stato (…)
+- `list_accessibility_issues` — componenti con note di accessibilità aperte (liste manuali)
 
 ### Issue e stato progetto (GitHub)
 - `get_component_issues(name)` — issue aperte per componente
@@ -141,11 +142,11 @@ Per ridurre il rischio di allucinazioni, istruire l'agente a basarsi
 esclusivamente sui dati restituiti dal server.
 
 ```
-Usa esclusivamente i dati restituiti dagli strumenti MCP del
-Design System .italia. Non integrare con conoscenza pregressa
-su Bootstrap Italia o altri framework. Per ogni risposta,
-cita la versione della sorgente e il link alla documentazione
-ufficiale inclusi nella risposta del tool.
+Usa esclusivamente i dati restituiti dagli strumenti MCP di
+Design system .italia. Non integrare con conoscenza pregressa
+su Bootstrap, Bootstrap Italia, Dev Kit Italia o altri framework.
+Per ogni risposta, cita la versione della sorgente e il link
+alla documentazione ufficiale inclusi nella risposta del tool.
 ```
 
 ---
@@ -182,7 +183,7 @@ npx @modelcontextprotocol/inspector http://localhost:8080/mcp
 ## Riferimenti / References
 
 - [dati-semantic-mcp](https://github.com/italia/dati-semantic-mcp)
-  — progetto analogo per schema.gov.it, riferimento tecnico
+  — progetto analogo per schema.gov.it iniziato da @mfortini, idea iniziale
 - [MCP Protocol](https://modelcontextprotocol.io)
 - [Designers Italia](https://designers.italia.it)
 - [Bootstrap Italia](https://italia.github.io/bootstrap-italia)
