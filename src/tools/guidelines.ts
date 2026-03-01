@@ -76,7 +76,7 @@ export function registerGetComponentGuidelines(server: McpServer): void {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [
                     `https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/content/design-system/componenti/${slug}.yaml`,
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/main/api/components_status.json',
+                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
                     'https://italia.github.io/dev-kit-italia/index.json',
                   ],
                   warnings,
@@ -134,7 +134,7 @@ export function registerListByStatus(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/main/api/components_status.json',
+                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
                   ],
                 },
               },
@@ -190,7 +190,7 @@ export function registerListAccessibilityIssues(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/main/api/components_status.json',
+                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
                   ],
                 },
               },
