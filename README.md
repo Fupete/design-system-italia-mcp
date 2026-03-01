@@ -36,7 +36,7 @@ GitHub issues.
 - `list_components` — elenco di tutti i componenti con stato
 - `get_component(name)` — markup HTML Bootstrap Italia e varianti di un componente
 - `search_components(query)` — ricerca per nome o caratteristica (tendenzialmente nome in inglese)
-- `get_component_full(name)` ⭐ — risposta aggregata: markup +
+- `get_component_full(name)` — risposta aggregata: markup +
   token CSS + linee guida + stato + issue aperte in una sola query + ...
 
 ### Token e variabili CSS
