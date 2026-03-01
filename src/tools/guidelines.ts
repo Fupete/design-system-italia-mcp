@@ -19,6 +19,7 @@ export function registerGetComponentGuidelines(server: McpServer): void {
     'e stato per libreria (Bootstrap Italia, UI Kit, ...).',
     { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
     async ({ name }) => {
+      name = name.trim()
       const slug = slugify(name)
       const warnings: string[] = []
 
@@ -107,6 +108,7 @@ export function registerListByStatus(server: McpServer): void {
         .describe('Stato da filtrare (es. "PRONTO", "DA FARE", "NON PRESENTE")'),
     },
     async ({ library, status }) => {
+      status = status.trim()
       const allStatuses = await loadAllStatuses()
       const statusUpper = status.toUpperCase().trim()
 

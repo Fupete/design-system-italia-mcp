@@ -85,6 +85,7 @@ export function registerGetComponent(server: McpServer): void {
     'e props del web component it-* dal Dev Kit Italia.',
     { name: z.string().describe('Nome o slug del componente (es. "accordion", "Accordion")') },
     async ({ name }) => {
+      name = name.trim()
       const slug = slugify(name)
       const warnings: string[] = []
 
@@ -148,6 +149,7 @@ export function registerSearchComponents(server: McpServer): void {
     'Ricerca su nome, slug e tag Dev Kit (es. "a11y-ok", "alpha", "web-component").',
     { query: z.string().describe('Testo da cercare (es. "button", "alpha", "accordion")') },
     async ({ query }) => {
+      query = query.trim()
       const q = query.toLowerCase().trim()
       const [statuses, devKitIndex] = await Promise.all([
         loadAllStatuses(),

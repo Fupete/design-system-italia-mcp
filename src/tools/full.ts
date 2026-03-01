@@ -23,6 +23,7 @@ export function registerGetComponentFull(server: McpServer): void {
     'Killer feature del server — una sola chiamata per tutto.',
     { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
     async ({ name }) => {
+      name = name.trim()
       const slug = slugify(name)
       const warnings: string[] = []
 

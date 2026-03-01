@@ -19,6 +19,7 @@ export function registerGetComponentIssues(server: McpServer): void {
     'Include anche le issue note già presenti in components_status.json.',
     { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
     async ({ name }) => {
+      name = name.trim()
       const slug = slugify(name)
       const warnings: string[] = []
 
@@ -46,23 +47,23 @@ export function registerGetComponentIssues(server: McpServer): void {
             text: JSON.stringify(
               {
                 component: slug,
-                name:      status?.name ?? slug,
+                name: status?.name ?? slug,
                 issues: {
                   live: {
-                    total:   liveUnique.length,
+                    total: liveUnique.length,
                     results: liveUnique,
                   },
                   known: {
-                    total:   knownIssues.length,
-                    urls:    knownIssues,
-                    note:    'Issue note in components_status.json — aggiornamento manuale, potrebbero non essere live',
+                    total: knownIssues.length,
+                    urls: knownIssues,
+                    note: 'Issue note in components_status.json — aggiornamento manuale, potrebbero non essere live',
                   },
                 },
                 meta: {
-                  fetchedAt:  formatTimestamp(),
+                  fetchedAt: formatTimestamp(),
                   sourceUrls: [
-                    `https://api.github.com/search/issues?q=${slug}+org:italia+is:open`,
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/main/api/components_status.json',
+                    `https://api.github.com/search/issues?q=${slug}+repo:italia/bootstrap-italia+repo:italia/design-ui-kit+repo:italia/dev-kit-italia+repo:italia/design-tokens-italia+is:open`,
+                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
                   ],
                   warnings,
                   rateLimitNote: process.env.GITHUB_TOKEN
@@ -101,7 +102,7 @@ export function registerGetProjectBoardStatus(server: McpServer): void {
               {
                 board,
                 projectBoard: {
-                  url:  'https://github.com/orgs/italia/projects/17',
+                  url: 'https://github.com/orgs/italia/projects/17',
                   note: board.note,
                 },
                 meta: {

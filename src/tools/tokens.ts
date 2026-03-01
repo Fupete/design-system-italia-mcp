@@ -18,6 +18,7 @@ export function registerGetComponentTokens(server: McpServer): void {
     'Utile per designer che vogliono conoscere i valori concreti dei token.',
     { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
     async ({ name }) => {
+      name = name.trim()
       const slug = slugify(name)
       const warnings: string[] = []
 
@@ -89,6 +90,7 @@ export function registerFindToken(server: McpServer): void {
     'Utile per trovare quale variabile controlla un certo aspetto visivo.',
     { query: z.string().describe('Termine da cercare (es. "spacing", "border-radius", "padding")') },
     async ({ query }) => {
+      query = query.trim()
       const warnings: string[] = []
 
       // Ricerca su token per-componente BSI
