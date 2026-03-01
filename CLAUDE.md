@@ -80,6 +80,23 @@ le sorgenti che hanno risposto. Non fallire silenziosamente.
 
 ---
 
+## Slug aliases — inconsistenze cross-sorgente note
+
+Alcune sorgenti usano slug diversi per lo stesso componente.
+Il mapping è centralizzato in `src/slugify.ts`:
+```typescript
+const SLUG_ALIASES: Record = {
+  'buttons': ['button'],  // Dev Kit usa "button", BSI usa "buttons"
+  'modal':   ['modale'],  // BSI salva il file come "modale.json"
+}
+```
+
+Usare `slugsToTry(slug)` nei loader per il fallback automatico.
+Aggiungere nuovi alias qui quando emergono nuove inconsistenze —
+non gestire il fallback inline nei loader.
+
+---
+
 ## Dev Kit Italia — due pattern
 
 Dal `index.json` il campo `importPath` può essere:

@@ -126,7 +126,7 @@ repository ufficiali in tempo reale.
 | 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | `dist/scss/_variables.scss` | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `1.5rem (24px)` per i designer | `get_component_tokens` (campo `valueResolved`) `find_token` | Lunga (24h) |
 | 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `italia.github.io/dev-kit-italia/index.json` | Indice Storybook: tag stato (`a11y-ok` `alpha` `new` `web-component`), varianti in italiano, URL docs, importPath → path esatto stories.ts | `list_components` `get_component_guidelines` | Breve (15-30 min) |
 | 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti. Due pattern: package dedicato `it-{slug}` o wrapper bundle | `get_component` `get_component_full` | Media (4h) |
-| 8 | GitHub REST API | `search/issues?q={slug}+org:italia+is:open` | Issue aperte sui 4 repo: bootstrap-italia, design-ui-kit, design-react-kit, design-angular-kit | `get_component_issues` `get_project_board_status` | Breve (15-30 min) |
+| 8 | GitHub REST API | `search/issues?q={slug}+repo:italia/...+is:open` | Issue aperte sui repo: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` | Breve (15-30 min) |
 
 **Note:**
 - TTL indicativi e configurabili. In fase di sviluppo: cache di qualche ora + endpoint di invalidazione manuale protetto da token

@@ -1,7 +1,6 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
-import { slugify, slugFromStatusTitle } from '../slugify.js'
-import type { ComponentStatus, ComponentVariant, CssToken, StatusValue } from '../types.js'
 import { slugify, slugFromStatusTitle, slugsToTry } from '../slugify.js'
+import type { ComponentStatus, ComponentVariant, CssToken, StatusValue } from '../types.js'
 
 const BSI_RAW_V3 = 'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x'
 
