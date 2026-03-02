@@ -16,6 +16,25 @@ const PORT        = parseInt(process.env.PORT ?? '8080', 10)
 const VERSION     = '0.1.0'
 const CACHE_TOKEN = process.env.CACHE_INVALIDATION_TOKEN ?? ''
 
+// ─── Warning alpha — incluso in ping e in meta.warnings di tutte le risposte ──
+//
+// BSI 2.x è stabile e ha le API markup e stato componenti.
+// BSI 3.x aggiunge i token CSS strutturati (custom_properties.json, _root.scss)
+// necessari per valueResolved. Dev Kit Italia è costruito su BSI 3.x.
+// Il layer token e i web component sono soggetti a breaking changes prima della
+// release stabile — non usare in produzione senza verificare upstream.
+
+export const ALPHA_WARNING =
+  'Token layer alpha: Bootstrap Italia ' + VERSION_BSI_HINT() + ' e Dev Kit Italia usano BSI 3.x (alpha). ' +
+  'Markup HTML e stato componenti sono stabili. ' +
+  'Token CSS (--bsi-*) e web component Dev Kit possono avere breaking changes prima della release stabile.'
+
+function VERSION_BSI_HINT(): string {
+  // Il valore reale viene da meta.versions.bootstrapItalia a runtime.
+  // Questa stringa è usata solo nel ping prima che meta sia disponibile.
+  return '3.x'
+}
+
 // ─── Factory MCP Server ───────────────────────────────────────────────────────
 //
 // Una nuova istanza per ogni richiesta HTTP — il McpServer non può essere
@@ -27,10 +46,10 @@ function createMcpServer(): McpServer {
     version: VERSION,
   })
 
-  // ping
+  // ping — primo tool eseguito da qualsiasi client, include warning alpha
   s.tool(
     'ping',
-    'Verifica la connessione al server MCP. Restituisce stato, versione e timestamp.',
+    'Verifica la connessione al server MCP. Restituisce stato, versione, timestamp e avvisi sullo stato delle sorgenti.',
     {},
     async () => ({
       content: [
@@ -43,6 +62,13 @@ function createMcpServer(): McpServer {
               version:   VERSION,
               timestamp: new Date().toISOString(),
               message:   'Server MCP non ufficiale per il Design System .italia. Usa list_components per iniziare.',
+              warnings: [
+                'Progetto sperimentale non ufficiale — dati forniti così come sono.',
+                'Layer token alpha: Bootstrap Italia 3.x e Dev Kit Italia sono in fase alpha. ' +
+                'Markup HTML e stato componenti sono stabili (API presenti anche in BSI 2.x). ' +
+                'Token CSS (--bsi-*) e web component Dev Kit possono avere breaking changes prima della release stabile. ' +
+                'Non usare il layer token in produzione senza verificare lo stato upstream.',
+              ],
               tools: [
                 'ping',
                 'list_components',
@@ -152,4 +178,5 @@ httpServer.listen(PORT, () => {
   console.log(`   Health → http://localhost:${PORT}/health`)
   console.log(`   Cache  → POST http://localhost:${PORT}/cache/invalidate`)
   console.log(`   Auth   → ${CACHE_TOKEN ? '✓ token configurato' : '⚠️  CACHE_INVALIDATION_TOKEN non impostato'}`)
+  console.log(`   ⚠️  Layer token alpha: BSI 3.x e Dev Kit Italia in fase alpha`)
 })

@@ -45,17 +45,23 @@ Partire monolite, refactoring solo quando necessario.
 
 ## Sorgenti dati — 9 fonti, tutte read-only
 
-| # | Sorgente | URL / path | TTL cache |
-|---|----------|------------|-----------|
-| 1 | BSI markup | `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/componenti/{slug}.json` | 24h |
-| 2 | BSI status | `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json` | 4h |
-| 3 | BSI tokens | `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/custom_properties.json` | 24h |
-| 4 | Designers YAML | `https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/content/design-system/componenti/{slug}.yaml` | 24h |
-| 5 | Design Tokens | `https://raw.githubusercontent.com/italia/design-tokens-italia/main/dist/scss/_variables.scss` | 24h |
-| 6 | Dev Kit index | `https://italia.github.io/dev-kit-italia/index.json` | 15 min |
-| 7 | Dev Kit stories | raw GitHub, path da importPath in #6 | 4h |
-| 8 | GitHub Issues | `https://api.github.com/search/issues?q={slug}+repo:italia/bootstrap-italia+repo:italia/design-ui-kit+repo:italia/dev-kit-italia+repo:italia/design-tokens-italia+is:open` | 15 min |
-| 9 | DS meta/nav | `dsnav.yaml` (Designers Italia) + `package.json` (BSI 3.x) + `package.json` (Dev Kit `packages/dev-kit-italia/`) | 24h |
+| # | Sorgente | URL / path | TTL cache | Note |
+|---|----------|------------|-----------|------|
+| 1 | BSI markup | `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/componenti/{slug}.json` | 24h | Stabile (esiste anche in 2.x) |
+| 2 | BSI status | `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json` | 4h | Stabile (esiste anche in 2.x) |
+| 3 | BSI tokens | `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/custom_properties.json` | 24h | ⚠️ Alpha — introdotto in 3.x |
+| 4 | Designers YAML | `https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/content/design-system/componenti/{slug}.yaml` | 24h | Stabile |
+| 5 | Design Tokens | `https://raw.githubusercontent.com/italia/design-tokens-italia/main/dist/scss/_variables.scss` | 24h | Stabile |
+| 6 | Dev Kit index | `https://italia.github.io/dev-kit-italia/index.json` | 15 min | ⚠️ Alpha — basato su BSI 3.x |
+| 7 | Dev Kit stories | raw GitHub, path da importPath in #6 | 4h | ⚠️ Alpha — basato su BSI 3.x |
+| 8 | GitHub Issues | `https://api.github.com/search/issues?q={slug}+repo:italia/bootstrap-italia+repo:italia/design-ui-kit+repo:italia/dev-kit-italia+repo:italia/design-tokens-italia+is:open` | 15 min | Stabile |
+| 9 | DS meta/nav | `dsnav.yaml` (Designers Italia) + `package.json` (BSI 3.x) + `package.json` (Dev Kit `packages/dev-kit-italia/`) | 24h | Stabile |
+
+**Perché BSI 3.x e non 2.x?**
+BSI 2.x è stabile e ha le API di stato componenti (#2) e markup HTML (#1).
+BSI 3.x aggiunge i token CSS strutturati per componente (`custom_properties.json` — sorgente #3)
+e `_root.scss` con i bridge `--bsi-* → --it-*`, necessari per la risoluzione `valueResolved`.
+Senza la 3.x non sarebbe possibile esporre il layer token. Dev Kit Italia è costruito su BSI 3.x.
 
 **Regola**: non modificare mai le URL upstream. Se una sorgente cambia
 struttura, aggiornare solo il loader corrispondente, non i tool.
@@ -176,6 +182,10 @@ meta: {
 
 Se una sorgente non risponde, includere nel campo `warnings` e
 restituire comunque i dati delle sorgenti disponibili.
+
+**Nota warnings**: aggiungere sempre un warning se `bootstrapItalia` o `devKitItalia`
+contengono `alpha` nel numero di versione — il client deve sapere che il layer token
+potrebbe avere breaking changes.
 
 ---
 

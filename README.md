@@ -7,7 +7,7 @@
 
 > ⚠️ **Unofficial & experimental personal sandbox project**
 > This is a personal sandbox project by Daniele Tabellini.
-> Data is provided as-is and may be outdated or incomplete. 
+> Data is provided as-is and may be outdated or incomplete.
 > Use at your own risk.
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/fupete/design-system-italia-mcp)
@@ -36,7 +36,7 @@ GitHub issues.
 - `list_components` — elenco di tutti i componenti con stato
 - `get_component(name)` — markup HTML Bootstrap Italia e varianti di un componente
 - `search_components(query)` — ricerca per nome o caratteristica (tendenzialmente nome in inglese)
-- `get_component_full(name)` — risposta aggregata: markup +
+- `get_component_full(name)` ⭐ — risposta aggregata: markup +
   token CSS + linee guida + stato + issue aperte in una sola query + ...
 
 ### Token e variabili CSS
@@ -73,6 +73,9 @@ Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'
 ---
 
 ## Come connettersi / How to connect
+
+> ℹ️ **Al momento disponibile solo via self-hosting** — Non esiste ancora
+> un endpoint pubblico. Per testare senza infrastruttura usa Docker in locale.
 
 ### Claude (claude.ai)
 Impostazioni → Integrazioni → Aggiungi server MCP
@@ -117,20 +120,36 @@ imposta `TRANSPORT=stdio` nelle variabili d'ambiente.
 Il server non ospita dati propri. Legge direttamente dai
 repository ufficiali in tempo reale.
 
+> ⚠️ **Layer token in fase alpha** — Il server usa Bootstrap Italia 3.x (alpha) e Dev Kit Italia (alpha).
+> La 3.x è necessaria per accedere ai token CSS strutturati per componente (`custom_properties.json`,
+> `_root.scss`) e all'integrazione completa con Design Tokens Italia — funzionalità non presenti in BSI 2.x.
+> Le API di stato componenti e markup HTML esistono in entrambe le versioni e sono stabili,
+> ma token CSS e web component Dev Kit possono avere breaking changes prima della release stabile.
+> Non usare il layer token in produzione senza verificare lo stato upstream.
+
+> ⚠️ **Token layer in alpha** — This server uses Bootstrap Italia 3.x (alpha) and Dev Kit Italia (alpha).
+> 3.x is required for structured per-component CSS tokens (`custom_properties.json`, `_root.scss`)
+> and full Design Tokens Italia integration — features not available in BSI 2.x.
+> Component status and markup HTML APIs exist in both versions and are stable,
+> but CSS tokens and Dev Kit web components may have breaking changes before stable release.
+> Do not use the token layer in production without checking upstream status.
+
 | # | Repo | File / endpoint | Contenuto | Tool MCP | TTL cache |
 |---|------|-----------------|-----------|----------|-----------|
 | 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/componenti/{slug}.json` | Markup HTML varianti per componente | `get_component` `list_components` `search_components` | Lunga (per release) |
 | 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/components_status.json` | Lista ~55 componenti, stato per libreria (BSI/UI Kit), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` | Media (4h) |
-| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/custom_properties.json` | Token CSS `--bsi-*` per-componente con descrizioni semantiche. Prefisso canonico BSI v3 | `get_component_tokens` `find_token` | Lunga (per release) |
+| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/custom_properties.json` | Token CSS `--bsi-*` per-componente con descrizioni semantiche. Prefisso canonico BSI v3 ⚠️ alpha | `get_component_tokens` `find_token` | Lunga (per release) |
 | 4 | [designers.italia.it](https://github.com/italia/designers.italia.it) | `src/data/content/design-system/componenti/{slug}.yaml` | Linee guida d'uso, accessibilità, stato redazionale, quando/come usare | `get_component_guidelines` | Lunga (24h) |
 | 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | `dist/scss/_variables.scss` | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` per i designer | `get_component_tokens` (campo `valueResolved`) `find_token` | Lunga (24h) |
-| 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `italia.github.io/dev-kit-italia/index.json` | Indice Storybook: tag stato (`a11y-ok` `alpha` `new` `web-component`), varianti in italiano, URL docs, importPath → path esatto stories.ts | `list_components` `get_component_guidelines` | Breve (15-30 min) |
-| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti. Due pattern: package dedicato o wrapper bundle | `get_component` `get_component_full` | Media (4h) |
+| 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `italia.github.io/dev-kit-italia/index.json` | Indice Storybook: tag stato (`a11y-ok` `alpha` `new` `web-component`), varianti in italiano, URL docs, importPath → path esatto stories.ts ⚠️ alpha | `list_components` `get_component_guidelines` | Breve (15-30 min) |
+| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti ⚠️ alpha | `get_component` `get_component_full` | Media (4h) |
 | 8 | GitHub REST API | `search/issues?q={slug}+repo:italia/...+is:open` | Issue aperte sui repo: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` | Breve (15-30 min) |
 | 9 | [designers.italia.it](https://github.com/italia/designers.italia.it) + [bootstrap-italia](https://github.com/italia/bootstrap-italia) + [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `src/data/dsnav.yaml` + `package.json` (×2) | Versioni Design System / BSI / Dev Kit Italia. URL verificati pagine componenti e fondamenti su designers.italia.it | `meta` in tutte le risposte | Lunga (24h) |
 
 **Note:**
 - TTL indicativi e configurabili. In fase di sviluppo: cache di qualche ora + endpoint di invalidazione manuale protetto da token
+- Sorgenti #1 #2: markup e stato componenti — presenti anche in BSI 2.x stabile, struttura consolidata
+- Sorgenti #3 #6 #7: token CSS per-componente e web component Dev Kit — introdotti in BSI 3.x ⚠️ alpha
 - Sorgenti #1 #2 #3: stesso repo BSI, loader condiviso con cache unica per repo
 - Sorgenti #6 #7: Dev Kit Italia, due fetch — index.json come indice, stories.ts per dettaglio props. L'`importPath` in #6 indica il path esatto del file #7
 - Sorgente #9: fetch parallelo con `Promise.allSettled` — non esposta come tool separato, popola il campo `meta.versions` e `meta.designersUrl` in tutte le risposte
