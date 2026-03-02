@@ -1,6 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import { createServer, IncomingMessage, ServerResponse } from 'node:http'
+import { createRequire } from 'node:module'
 
 // ─── Tools ───────────────────────────────────────────────────────────────────
 import { registerListComponents, registerGetComponent, registerSearchComponents } from './tools/components.js'
@@ -14,7 +15,10 @@ import { ALPHA_WARNING } from './constants.js'
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const PORT        = parseInt(process.env.PORT ?? '8080', 10)
-const VERSION     = '0.1.3'
+
+const require = createRequire(import.meta.url)
+const VERSION: string = require('../package.json').version
+
 const CACHE_TOKEN = process.env.CACHE_INVALIDATION_TOKEN ?? ''
 
 // ─── Warning alpha — incluso in ping e in meta.warnings di tutte le risposte ──
