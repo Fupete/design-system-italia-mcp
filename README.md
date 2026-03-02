@@ -70,6 +70,11 @@ accessibilità, issue GitHub aperte.
 Ogni risposta include le versioni delle sorgenti (Design System, Bootstrap Italia,
 Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'ultimo fetch.
 
+**Caso d'uso avanzato / Advanced use case** — Incolla il sorgente HTML di una pagina
+che usa componenti Bootstrap Italia e chiedi al modello di verificarne la conformità
+ai componenti standard. Il modello dovrebbe identificare i componenti usati, chiamare
+`get_component_guidelines` per ciascuno e produrre un'analisi basata su dati ufficiali.
+
 ---
 
 ## Come connettersi / How to connect
@@ -84,7 +89,7 @@ Impostazioni → Integrazioni → Aggiungi server MCP
 https://[url-server]/mcp
 ```
 
-### Cursor / VS Code
+### Claude Desktop / Cursor / VS Code
 ```json
 {
   "mcpServers": {
@@ -95,12 +100,25 @@ https://[url-server]/mcp
 }
 ```
 
+Oppure via CLI:
+```bash
+claude mcp add --url https://[url-server]/mcp design-system-italia
+```
+
 ### Self-hosting con Docker (locale o VPS)
 ```bash
 docker pull ghcr.io/fupete/design-system-italia-mcp
 docker run -e GITHUB_TOKEN=your_token -p 8080:8080 \
   ghcr.io/fupete/design-system-italia-mcp
 ```
+
+> ℹ️ **`GITHUB_TOKEN` (opzionale ma consigliato)** — serve per il tool `get_component_issues`.
+> Senza token: 60 richieste/ora per IP. Con token: 5000 richieste/ora.
+> Basta un token con scope pubblico read-only — nessun permesso speciale richiesto.
+> [Genera un token →](https://github.com/settings/tokens/new)
+
+> ⚠️ **Docker multiarch** — se `docker pull` scarica un'architettura incompatibile,
+> fai una build locale: `docker build -t design-system-italia-mcp .`
 
 Funziona su qualsiasi macchina con Docker installato — locale,
 VPS personale, server aziendale.
