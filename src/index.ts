@@ -9,11 +9,12 @@ import { registerGetComponentGuidelines, registerListByStatus, registerListAcces
 import { registerGetComponentIssues, registerGetProjectBoardStatus } from './tools/issues.js'
 import { registerGetComponentFull } from './tools/full.js'
 import { cache } from './cache.js'
+import { ALPHA_WARNING } from './constants.js'
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const PORT        = parseInt(process.env.PORT ?? '8080', 10)
-const VERSION     = '0.1.0'
+const VERSION     = '0.1.2'
 const CACHE_TOKEN = process.env.CACHE_INVALIDATION_TOKEN ?? ''
 
 // ─── Warning alpha — incluso in ping e in meta.warnings di tutte le risposte ──
@@ -24,16 +25,7 @@ const CACHE_TOKEN = process.env.CACHE_INVALIDATION_TOKEN ?? ''
 // Il layer token e i web component sono soggetti a breaking changes prima della
 // release stabile — non usare in produzione senza verificare upstream.
 
-export const ALPHA_WARNING =
-  'Token layer alpha: Bootstrap Italia ' + VERSION_BSI_HINT() + ' e Dev Kit Italia usano BSI 3.x (alpha). ' +
-  'Markup HTML e stato componenti sono stabili. ' +
-  'Token CSS (--bsi-*) e web component Dev Kit possono avere breaking changes prima della release stabile.'
-
-function VERSION_BSI_HINT(): string {
-  // Il valore reale viene da meta.versions.bootstrapItalia a runtime.
-  // Questa stringa è usata solo nel ping prima che meta sia disponibile.
-  return '3.x'
-}
+export { ALPHA_WARNING }
 
 // ─── Factory MCP Server ───────────────────────────────────────────────────────
 //

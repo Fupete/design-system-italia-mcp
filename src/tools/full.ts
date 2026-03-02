@@ -8,6 +8,7 @@ import { loadComponentIssues } from '../loaders/github.js'
 import { slugify } from '../slugify.js'
 import type { ComponentFull } from '../types.js'
 import { loadDsMeta } from '../loaders/meta.js'
+import { ALPHA_WARNING } from '../constants.js'
 
 function formatTimestamp(): string {
   return new Date().toISOString()
@@ -79,6 +80,9 @@ export function registerGetComponentFull(server: McpServer): void {
       if (!guidelinesData) warnings.push(`Linee guida non trovate per "${slug}" in Designers Italia`)
       if (!devKitEntryData) warnings.push(`"${slug}" non presente nel Dev Kit Italia`)
       if (tokens.length === 0) warnings.push(`Nessun token CSS trovato per "${slug}"`)
+
+      // ── Alpha layer warning ──────────────────────────────────────────────────────
+      warnings.push(ALPHA_WARNING)
 
       // ── Sorgenti usate ───────────────────────────────────────────────────────
       const sourceUrls = [

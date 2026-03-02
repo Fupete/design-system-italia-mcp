@@ -5,6 +5,7 @@ import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
+import { ALPHA_WARNING } from '../constants.js'
 
 function formatTimestamp(): string {
   return new Date().toISOString()
@@ -37,6 +38,8 @@ export function registerGetComponentGuidelines(server: McpServer): void {
       if (!status) {
         warnings.push(`Stato componente non trovato per "${slug}"`)
       }
+
+      warnings.push(ALPHA_WARNING)
 
       return {
         content: [

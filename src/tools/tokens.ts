@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { loadTokens, searchTokens } from '../loaders/bsi.js'
 import { resolveTokenValues, searchDesignTokens } from '../loaders/tokens.js'
 import { slugify } from '../slugify.js'
+import { ALPHA_WARNING } from '../constants.js'
 
 function formatTimestamp(): string {
   return new Date().toISOString()
@@ -28,6 +29,8 @@ export function registerGetComponentTokens(server: McpServer): void {
       if (rawTokens.length === 0) {
         warnings.push(`Nessun token CSS trovato per "${slug}"`)
       }
+
+      warnings.push(ALPHA_WARNING)
 
       // Risolvi valori tramite Design Tokens Italia
       let tokens = rawTokens
@@ -92,6 +95,8 @@ export function registerFindToken(server: McpServer): void {
     async ({ query }) => {
       query = query.trim()
       const warnings: string[] = []
+      
+      warnings.push(ALPHA_WARNING)
 
       // Ricerca su token per-componente BSI
       const bsiResults = await searchTokens(query)
