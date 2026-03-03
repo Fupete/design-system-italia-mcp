@@ -1,5 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
+import { ZGetComponentTokensOutput } from '../schemas.js'
 import { loadTokens, searchTokens } from '../loaders/bsi.js'
 import { resolveTokenValues, searchDesignTokens } from '../loaders/tokens.js'
 import { slugify } from '../slugify.js'
@@ -21,6 +22,7 @@ export function registerGetComponentTokens(server: McpServer): void {
         'Utile per designer che vogliono conoscere i valori concreti dei token.',
       inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
+      outputSchema: ZGetComponentTokensOutput,
     },
     async ({ name }) => {
       name = name.trim()
@@ -51,34 +53,28 @@ export function registerGetComponentTokens(server: McpServer): void {
         scssExpression: tokens.filter((t) => t.valueType === 'scss-expression'),
       }
 
+      const output = {
+        component: slug,
+        total: tokens.length,
+        tokens,
+        summary: {
+          tokenReference: byType.tokenReference.length,
+          literal: byType.literal.length,
+          scssExpression: byType.scssExpression.length,
+        },
+        meta: {
+          fetchedAt: formatTimestamp(),
+          sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
+          note: 'valueResolved: valore concreto risolto tramite Design Tokens Italia. ' +
+            'null = risoluzione non disponibile o valore già letterale.',
+          warnings,
+          stability: 'alpha' as const,
+        },
+      }
+
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(
-              {
-                component: slug,
-                total: tokens.length,
-                tokens,
-                summary: {
-                  tokenReference: byType.tokenReference.length,
-                  literal: byType.literal.length,
-                  scssExpression: byType.scssExpression.length,
-                },
-                meta: {
-                  fetchedAt: formatTimestamp(),
-                  sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
-                  note: 'valueResolved: valore concreto risolto tramite Design Tokens Italia. ' +
-                    'null = risoluzione non disponibile o valore già letterale.',
-                  warnings,
-                  stability: 'alpha' as const,
-                },
-              },
-              null,
-              2
-            ),
-          },
-        ],
+        content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )

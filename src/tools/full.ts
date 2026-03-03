@@ -1,5 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
+import { ZGetComponentFullOutput } from '../schemas.js'
 import { loadStatus, loadVariants, loadTokens } from '../loaders/bsi.js'
 import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { resolveTokenValues } from '../loaders/tokens.js'
@@ -38,6 +39,7 @@ export function registerGetComponentFull(server: McpServer): void {
         'Killer feature del server — una sola chiamata per tutto.',
       inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
+      outputSchema: ZGetComponentFullOutput,
     },
     async ({ name }) => {
       name = name.trim()
@@ -146,20 +148,14 @@ export function registerGetComponentFull(server: McpServer): void {
         issuesData.length > 0 && 'github:issues',
       ].filter(Boolean) as string[]
 
+      const output = {
+        ...full,
+        sources_available: sourcesAvailable,
+      }
+
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(
-              {
-                ...full,
-                sources_available: sourcesAvailable,
-              },
-              null,
-              2
-            ),
-          },
-        ],
+        content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )
