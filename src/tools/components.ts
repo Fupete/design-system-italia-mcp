@@ -18,31 +18,35 @@ function formatTimestamp(): string {
 // ─── Tool: list_components ────────────────────────────────────────────────────
 
 export function registerListComponents(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'list_components',
-    'Elenca tutti i componenti del Design System .italia con stato per libreria ' +
-    '(Bootstrap Italia, UI Kit, ...) e stato accessibilità.',
-    {},
+    {
+      title: 'List Components',
+      description: 'Elenca tutti i componenti del Design System .italia con stato per libreria ' +
+        '(Bootstrap Italia, UI Kit, ...) e stato accessibilità.',
+      inputSchema: {},
+      annotations: { readOnlyHint: true },
+    },
     async () => {
       const statuses = await loadAllStatuses()
       const devKitIndex = await loadDevKitIndex()
 
       const components = [...statuses.values()].map((s) => ({
-        name:   s.name,
-        slug:   s.slug,
+        name: s.name,
+        slug: s.slug,
         status: {
           bootstrapItalia: s.libraryStatus.bootstrapItalia,
-          uiKitItalia:     s.libraryStatus.uiKitItalia,
+          uiKitItalia: s.libraryStatus.uiKitItalia,
         },
         accessibility: {
           checkCompleted: s.accessibility.checkCompleted,
         },
         devKit: devKitIndex.has(s.slug)
           ? {
-              tags:        devKitIndex.get(s.slug)!.tags,
-              storybookUrl: devKitIndex.get(s.slug)!.storybookUrl,
-              pattern:     devKitIndex.get(s.slug)!.pattern,
-            }
+            tags: devKitIndex.get(s.slug)!.tags,
+            storybookUrl: devKitIndex.get(s.slug)!.storybookUrl,
+            pattern: devKitIndex.get(s.slug)!.pattern,
+          }
           : null,
         bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
       }))
@@ -56,7 +60,7 @@ export function registerListComponents(server: McpServer): void {
                 total: components.length,
                 components,
                 meta: {
-                  fetchedAt:  formatTimestamp(),
+                  fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
                 },
               },
@@ -73,11 +77,15 @@ export function registerListComponents(server: McpServer): void {
 // ─── Tool: get_component ──────────────────────────────────────────────────────
 
 export function registerGetComponent(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'get_component',
-    'Restituisce markup HTML di tutte le varianti di un componente Bootstrap Italia ' +
-    'e props del web component it-* dal Dev Kit Italia.',
-    { name: z.string().describe('Nome o slug del componente (es. "accordion", "Accordion")') },
+    {
+      title: 'Get Component',
+      description: 'Restituisce markup HTML di tutte le varianti di un componente Bootstrap Italia ' +
+        'e props del web component it-* dal Dev Kit Italia.',
+      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Accordion")') },
+      annotations: { readOnlyHint: true },
+    },
     async ({ name }) => {
       name = name.trim()
       const slug = slugify(name)
@@ -108,14 +116,14 @@ export function registerGetComponent(server: McpServer): void {
                 variants,
                 devKit: devKitEntry
                   ? {
-                      tags:        devKitEntry.tags,
-                      storybookUrl: devKitEntry.storybookUrl,
-                      variants:    devKitEntry.variants,
-                      pattern:     devKitEntry.pattern,
-                    }
+                    tags: devKitEntry.tags,
+                    storybookUrl: devKitEntry.storybookUrl,
+                    variants: devKitEntry.variants,
+                    pattern: devKitEntry.pattern,
+                  }
                   : null,
                 meta: {
-                  fetchedAt:  formatTimestamp(),
+                  fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_COMPONENT_URL(slug), DEVKIT_INDEX_URL],
                   warnings,
                 },
@@ -133,12 +141,16 @@ export function registerGetComponent(server: McpServer): void {
 // ─── Tool: search_components ──────────────────────────────────────────────────
 
 export function registerSearchComponents(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'search_components',
-    'Cerca componenti per nome o caratteristica. ' +
-    'I nomi dei componenti sono tendenzialmente in inglese (es. "modal" non "modale", "button" non "bottone"). ' +
-    'Ricerca su nome, slug e tag Dev Kit (es. "a11y-ok", "alpha", "web-component").',
-    { query: z.string().describe('Testo da cercare (es. "button", "alpha", "accordion")') },
+    {
+      title: 'Search Components',
+      description: 'Cerca componenti per nome o caratteristica. ' +
+        'I nomi dei componenti sono tendenzialmente in inglese (es. "modal" non "modale", "button" non "bottone"). ' +
+        'Ricerca su nome, slug e tag Dev Kit (es. "a11y-ok", "alpha", "web-component").',
+      inputSchema: { query: z.string().describe('Testo da cercare (es. "button", "alpha", "accordion")') },
+      annotations: { readOnlyHint: true },
+    },
     async ({ query }) => {
       query = query.trim()
       const q = query.toLowerCase().trim()
@@ -159,10 +171,10 @@ export function registerSearchComponents(server: McpServer): void {
         .map((s) => {
           const devKit = devKitIndex.get(s.slug)
           return {
-            name:    s.name,
-            slug:    s.slug,
-            status:  s.libraryStatus.bootstrapItalia,
-            tags:    devKit?.tags ?? [],
+            name: s.name,
+            slug: s.slug,
+            status: s.libraryStatus.bootstrapItalia,
+            tags: devKit?.tags ?? [],
             bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
             storybookUrl: devKit?.storybookUrl ?? null,
           }
@@ -175,10 +187,10 @@ export function registerSearchComponents(server: McpServer): void {
             text: JSON.stringify(
               {
                 query,
-                total:   results.length,
+                total: results.length,
                 results,
                 meta: {
-                  fetchedAt:  formatTimestamp(),
+                  fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
                 },
               },

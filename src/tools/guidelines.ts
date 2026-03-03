@@ -14,12 +14,16 @@ function formatTimestamp(): string {
 // ─── Tool: get_component_guidelines ──────────────────────────────────────────
 
 export function registerGetComponentGuidelines(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'get_component_guidelines',
-    'Restituisce linee guida d\'uso di un componente da Designers Italia: ' +
-    'quando usarlo, come usarlo, alternative consigliate, note di accessibilità ' +
-    'e stato per libreria (Bootstrap Italia, UI Kit, ...).',
-    { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+    {
+      title: 'Get Component Guidelines',
+      description: 'Restituisce linee guida d\'uso di un componente da Designers Italia: ' +
+        'quando usarlo, come usarlo, alternative consigliate, note di accessibilità ' +
+        'e stato per libreria (Bootstrap Italia, UI Kit, ...).',
+      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+      annotations: { readOnlyHint: true },
+    },
     async ({ name }) => {
       name = name.trim()
       const slug = slugify(name)
@@ -97,17 +101,21 @@ export function registerGetComponentGuidelines(server: McpServer): void {
 // ─── Tool: list_by_status ─────────────────────────────────────────────────────
 
 export function registerListByStatus(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'list_by_status',
-    'Elenca componenti filtrati per stato in una libreria specifica. ' +
-    'Librerie disponibili: bootstrapItalia, uiKitItalia, ... ' +
-    'Stati possibili: PRONTO, DA RIVEDERE A11Y, DA RIVEDERE, IN REVIEW, ' +
-    'DA COMPLETARE VARIANTI, NON PRESENTE, DA FARE, N/D.',
     {
-      library: z.enum(['bootstrapItalia', 'uiKitItalia'])
-        .describe('Libreria da filtrare'),
-      status: z.string()
-        .describe('Stato da filtrare (es. "PRONTO", "DA FARE", "NON PRESENTE")'),
+      title: 'List By Status',
+      description: 'Elenca componenti filtrati per stato in una libreria specifica. ' +
+        'Librerie disponibili: bootstrapItalia, uiKitItalia, ... ' +
+        'Stati possibili: PRONTO, DA RIVEDERE A11Y, DA RIVEDERE, IN REVIEW, ' +
+        'DA COMPLETARE VARIANTI, NON PRESENTE, DA FARE, N/D.',
+      inputSchema: {
+        library: z.enum(['bootstrapItalia', 'uiKitItalia'])
+          .describe('Libreria da filtrare'),
+        status: z.string()
+          .describe('Stato da filtrare (es. "PRONTO", "DA FARE", "NON PRESENTE")'),
+      },
+      annotations: { readOnlyHint: true },
     },
     async ({ library, status }) => {
       status = status.trim()
@@ -151,11 +159,15 @@ export function registerListByStatus(server: McpServer): void {
 // ─── Tool: list_accessibility_issues ─────────────────────────────────────────
 
 export function registerListAccessibilityIssues(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'list_accessibility_issues',
-    'Elenca i componenti con note o problemi di accessibilità aperti, ' +
-    'inclusi quelli con check di accessibilità non completato.',
-    {},
+    {
+      title: 'List Accessibility Issues',
+      description: 'Elenca i componenti con note o problemi di accessibilità aperti, ' +
+        'inclusi quelli con check di accessibilità non completato.',
+      inputSchema: {},
+      annotations: { readOnlyHint: true },
+    },
     async () => {
       const allStatuses = await loadAllStatuses()
 

@@ -28,13 +28,17 @@ function formatTimestamp(): string {
 // ─── Tool: get_component_full ⭐ ──────────────────────────────────────────────
 
 export function registerGetComponentFull(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'get_component_full',
-    'Risposta aggregata su un componente del Design System .italia: ' +
-    'markup HTML + token CSS con valori risolti + linee guida d\'uso + ' +
-    'stato per libreria + props web component it-* + issue GitHub aperte. ' +
-    'Killer feature del server — una sola chiamata per tutto.',
-    { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+    {
+      title: 'Get Component Full',
+      description: 'Risposta aggregata su un componente del Design System .italia: ' +
+        'markup HTML + token CSS con valori risolti + linee guida d\'uso + ' +
+        'stato per libreria + props web component it-* + issue GitHub aperte. ' +
+        'Killer feature del server — una sola chiamata per tutto.',
+      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+      annotations: { readOnlyHint: true },
+    },
     async ({ name }) => {
       name = name.trim()
       const slug = slugify(name)

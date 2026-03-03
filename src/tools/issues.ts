@@ -12,13 +12,17 @@ function formatTimestamp(): string {
 // ─── Tool: get_component_issues ───────────────────────────────────────────────
 
 export function registerGetComponentIssues(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'get_component_issues',
-    'Restituisce le issue GitHub aperte relative a un componente ' +
-    'sui 4 repository del Design System .italia: bootstrap-italia, ' +
-    'design-ui-kit, design-react-kit, design-angular-kit. ' +
-    'Include anche le issue note già presenti in components_status.json.',
-    { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+    {
+      title: 'Get Component Issues',
+      description: 'Restituisce le issue GitHub aperte relative a un componente ' +
+        'sui 4 repository del Design System .italia: bootstrap-italia, ' +
+        'design-ui-kit, design-react-kit, design-angular-kit. ' +
+        'Include anche le issue note già presenti in components_status.json.',
+      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+      annotations: { readOnlyHint: true },
+    },
     async ({ name }) => {
       name = name.trim()
       const slug = slugify(name)
@@ -87,13 +91,17 @@ export function registerGetComponentIssues(server: McpServer): void {
 // ─── Tool: get_project_board_status ───────────────────────────────────────────
 
 export function registerGetProjectBoardStatus(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'get_project_board_status',
-    'Restituisce lo stato aggregato delle board GitHub del Design System .italia. ' +
-    'Include link alle issue aperte per ciascun repository. ' +
-    'Nota: GitHub Projects v2 (project #17) non è integrato — ' +
-    'usa get_component_issues per issue specifiche.',
-    {},
+    {
+      title: 'Get Project Board Status',
+      description: 'Restituisce lo stato aggregato delle board GitHub del Design System .italia. ' +
+        'Include link alle issue aperte per ciascun repository. ' +
+        'Nota: GitHub Projects v2 (project #17) non è integrato — ' +
+        'usa get_component_issues per issue specifiche.',
+      inputSchema: {},
+      annotations: { readOnlyHint: true },
+    },
     async () => {
       const board = getProjectBoardStatus()
 

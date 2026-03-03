@@ -12,12 +12,16 @@ function formatTimestamp(): string {
 // ─── Tool: get_component_tokens ───────────────────────────────────────────────
 
 export function registerGetComponentTokens(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'get_component_tokens',
-    'Restituisce le variabili CSS --bsi-* personalizzabili per un componente, ' +
-    'con descrizione semantica e valore risolto (es. var(--bsi-spacing-m) → 1.5rem). ' +
-    'Utile per designer che vogliono conoscere i valori concreti dei token.',
-    { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+    {
+      title: 'Get Component Tokens',
+      description: 'Restituisce le variabili CSS --bsi-* personalizzabili per un componente, ' +
+        'con descrizione semantica e valore risolto (es. var(--bsi-spacing-m) → 1.5rem). ' +
+        'Utile per designer che vogliono conoscere i valori concreti dei token.',
+      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+      annotations: { readOnlyHint: true },
+    },
     async ({ name }) => {
       name = name.trim()
       const slug = slugify(name)
@@ -82,16 +86,20 @@ export function registerGetComponentTokens(server: McpServer): void {
 // ─── Tool: find_token ─────────────────────────────────────────────────────────
 
 export function registerFindToken(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'find_token',
-    'Cerca un token CSS per nome variabile o descrizione semantica. ' +
-    'Ricerca su tutti i componenti BSI (--bsi-*) e sui token globali Design Tokens Italia (--it-*). ' +
-    'Utile per trovare quale variabile controlla un certo aspetto visivo.',
-    { query: z.string().describe('Termine da cercare (es. "spacing", "border-radius", "padding")') },
+    {
+      title: 'Find Token',
+      description: 'Cerca un token CSS per nome variabile o descrizione semantica. ' +
+        'Ricerca su tutti i componenti BSI (--bsi-*) e sui token globali Design Tokens Italia (--it-*). ' +
+        'Utile per trovare quale variabile controlla un certo aspetto visivo.',
+      inputSchema: { query: z.string().describe('Termine da cercare (es. "spacing", "border-radius", "padding")') },
+      annotations: { readOnlyHint: true },
+    },
     async ({ query }) => {
       query = query.trim()
       const warnings: string[] = []
-      
+
       warnings.push(ALPHA_WARNING)
 
       // Ricerca su token per-componente BSI

@@ -14,7 +14,7 @@ import { ALPHA_WARNING } from './constants.js'
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const PORT        = parseInt(process.env.PORT ?? '8080', 10)
+const PORT = parseInt(process.env.PORT ?? '8080', 10)
 
 const require = createRequire(import.meta.url)
 const VERSION: string = require('../package.json').version
@@ -38,26 +38,30 @@ export { ALPHA_WARNING }
 
 function createMcpServer(): McpServer {
   const s = new McpServer({
-    name:    'design-system-italia-mcp',
+    name: 'design-system-italia-mcp',
     version: VERSION,
   })
 
   // ping — primo tool eseguito da qualsiasi client, include warning alpha
-  s.tool(
+  s.registerTool(
     'ping',
-    'Verifica la connessione al server MCP. Restituisce stato, versione, timestamp e avvisi sullo stato delle sorgenti.',
-    {},
+    {
+      title: 'Ping',
+      description: 'Verifica la connessione al server MCP. Restituisce stato, versione, timestamp e avvisi sullo stato delle sorgenti.',
+      inputSchema: {},
+      annotations: { readOnlyHint: true },
+    },
     async () => ({
       content: [
         {
           type: 'text',
           text: JSON.stringify(
             {
-              status:    'ok',
-              server:    'design-system-italia-mcp',
-              version:   VERSION,
+              status: 'ok',
+              server: 'design-system-italia-mcp',
+              version: VERSION,
               timestamp: new Date().toISOString(),
-              message:   'Server MCP non ufficiale per il Design System .italia. Usa list_components per iniziare.',
+              message: 'Server MCP non ufficiale per il Design System .italia. Usa list_components per iniziare.',
               warnings: [
                 'Progetto sperimentale non ufficiale — dati forniti così come sono.',
                 'Layer token alpha: Bootstrap Italia 3.x e Dev Kit Italia sono in fase alpha. ' +
