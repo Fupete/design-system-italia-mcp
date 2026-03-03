@@ -18,10 +18,10 @@ export function registerGetComponentGuidelines(server: McpServer): void {
     'get_component_guidelines',
     {
       title: 'Get Component Guidelines',
-      description: 'Restituisce linee guida d\'uso di un componente da Designers Italia: ' +
-        'quando usarlo, come usarlo, alternative consigliate, note di accessibilità ' +
-        'e stato per libreria (Bootstrap Italia, UI Kit, ...).',
-      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+      description: 'Returns usage guidelines for a component from Designers Italia: ' +
+        'when to use it, how to use it, recommended alternatives, accessibility notes ' +
+        'and library status (Bootstrap Italia, UI Kit, ...).',
+      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
     },
     async ({ name }) => {
@@ -37,10 +37,10 @@ export function registerGetComponentGuidelines(server: McpServer): void {
       ])
 
       if (!guidelines) {
-        warnings.push(`Linee guida Designers Italia non trovate per "${slug}"`)
+        warnings.push(`Designers Italia component guidelines not found for "${slug}"`)
       }
       if (!status) {
-        warnings.push(`Stato componente non trovato per "${slug}"`)
+        warnings.push(`Component status not found for "${slug}"`)
       }
 
       warnings.push(ALPHA_WARNING)
@@ -106,15 +106,13 @@ export function registerListByStatus(server: McpServer): void {
     'list_by_status',
     {
       title: 'List By Status',
-      description: 'Elenca componenti filtrati per stato in una libreria specifica. ' +
-        'Librerie disponibili: bootstrapItalia, uiKitItalia, ... ' +
-        'Stati possibili: PRONTO, DA RIVEDERE A11Y, DA RIVEDERE, IN REVIEW, ' +
+      description: 'Lists components filtered by status in a specific library. ' +
+        'Available libraries: bootstrapItalia, uiKitItalia, ... ' +
+        'Possible statuses: PRONTO, DA RIVEDERE A11Y, DA RIVEDERE, IN REVIEW, ' +
         'DA COMPLETARE VARIANTI, NON PRESENTE, DA FARE, N/D.',
       inputSchema: {
-        library: z.enum(['bootstrapItalia', 'uiKitItalia'])
-          .describe('Libreria da filtrare'),
-        status: z.string()
-          .describe('Stato da filtrare (es. "PRONTO", "DA FARE", "NON PRESENTE")'),
+        library: z.enum(['bootstrapItalia', 'uiKitItalia']).describe('Library to filter'),
+        status: z.string().describe('Status to filter (e.g. "PRONTO", "DA FARE", "NON PRESENTE")'),
       },
       annotations: { readOnlyHint: true },
     },
@@ -165,8 +163,8 @@ export function registerListAccessibilityIssues(server: McpServer): void {
     'list_accessibility_issues',
     {
       title: 'List Accessibility Issues',
-      description: 'Elenca i componenti con note o problemi di accessibilità aperti, ' +
-        'inclusi quelli con check di accessibilità non completato.',
+      description: 'Lists components with open accessibility notes or issues, ' +
+        'including those with incomplete accessibility checks.',
       inputSchema: {},
       annotations: { readOnlyHint: true },
     },

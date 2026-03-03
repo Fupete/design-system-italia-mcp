@@ -11,7 +11,7 @@ async function fetchJson<T>(url: string): Promise<T> {
   return res.json() as Promise<T>
 }
 
-// ─── Sorgente #2 — components_status.json ────────────────────────────────────
+// ─── Source #2 — components_status.json ──────────────────────────────────────
 
 interface RawStatusEntry {
   'title': string
@@ -26,7 +26,7 @@ interface RawStatusEntry {
   'check completato'?: boolean
   'status a11y check'?: string
   'notes / More'?: string
-  'notes / Issues'?: string  // stringa con URL separati da " — "
+  'notes / Issues'?: string  // string with URLs separated by " — "
 }
 
 type RawStatusJson = { items: RawStatusEntry[] }
@@ -80,7 +80,7 @@ export async function loadStatus(slug: string): Promise<ComponentStatus | null> 
   return all.get(slugify(slug)) ?? null
 }
 
-// ─── Sorgente #1 — api/componenti/{slug}.json ─────────────────────────────────
+// ─── Source #1 — api/componenti/{slug}.json ───────────────────────────────────
 
 type RawVariantsJson = Array<{ name: string; content: string }>
 
@@ -103,7 +103,7 @@ export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
   return []
 }
 
-// ─── Sorgente #3 — api/custom_properties.json ────────────────────────────────
+// ─── Source #3 — api/custom_properties.json ──────────────────────────────────
 
 type RawTokenEntry = { 'variable-name': string; value: string; description: string }
 type RawTokensJson = Record<string, RawTokenEntry[]>
@@ -132,7 +132,7 @@ export async function loadTokens(slug: string): Promise<CssToken[]> {
     name: e['variable-name'],
     value: e.value,
     valueType: classifyValue(e.value),
-    valueResolved: null,  // popolato da loaders/tokens.ts
+    valueResolved: null,  // populated by loaders/tokens.ts
     description: e.description || null,
   }))
 }

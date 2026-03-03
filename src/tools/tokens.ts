@@ -17,10 +17,10 @@ export function registerGetComponentTokens(server: McpServer): void {
     'get_component_tokens',
     {
       title: 'Get Component Tokens',
-      description: 'Restituisce le variabili CSS --bsi-* personalizzabili per un componente, ' +
-        'con descrizione semantica e valore risolto (es. var(--bsi-spacing-m) → 1.5rem). ' +
-        'Utile per designer che vogliono conoscere i valori concreti dei token.',
-      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+      description: 'Returns customizable CSS --bsi-* variables for a component, ' +
+        'with semantic description and resolved value (e.g. var(--bsi-spacing-m) → 1.5rem). ' +
+        'Useful for designers who want to know the concrete token values.',
+      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
       outputSchema: ZGetComponentTokensOutput,
     },
@@ -29,24 +29,24 @@ export function registerGetComponentTokens(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      // Carica token BSI
+      // Load BSI tokens
       const rawTokens = await loadTokens(slug)
 
       if (rawTokens.length === 0) {
-        warnings.push(`Nessun token CSS trovato per "${slug}"`)
+        warnings.push(`No CSS tokens found for "${slug}"`)
       }
 
       warnings.push(ALPHA_WARNING)
 
-      // Risolvi valori tramite Design Tokens Italia
+      // Resolve values via Design Tokens Italia
       let tokens = rawTokens
       try {
         tokens = await resolveTokenValues(rawTokens)
       } catch {
-        warnings.push('Risoluzione valori Design Tokens Italia non disponibile')
+        warnings.push('Design Tokens Italia value resolution not available')
       }
 
-      // Raggruppa per tipo per leggibilità
+      // // Group by type for readability
       const byType = {
         tokenReference: tokens.filter((t) => t.valueType === 'token-reference'),
         literal: tokens.filter((t) => t.valueType === 'literal'),
@@ -65,8 +65,8 @@ export function registerGetComponentTokens(server: McpServer): void {
         meta: {
           fetchedAt: formatTimestamp(),
           sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
-          note: 'valueResolved: valore concreto risolto tramite Design Tokens Italia. ' +
-            'null = risoluzione non disponibile o valore già letterale.',
+          note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
+            'null = resolution not available or value is already literal.',
           warnings,
           stability: 'alpha' as const,
         },
@@ -87,10 +87,10 @@ export function registerFindToken(server: McpServer): void {
     'find_token',
     {
       title: 'Find Token',
-      description: 'Cerca un token CSS per nome variabile o descrizione semantica. ' +
-        'Ricerca su tutti i componenti BSI (--bsi-*) e sui token globali Design Tokens Italia (--it-*). ' +
-        'Utile per trovare quale variabile controlla un certo aspetto visivo.',
-      inputSchema: { query: z.string().describe('Termine da cercare (es. "spacing", "border-radius", "padding")') },
+      description: 'Search a CSS token by variable name or semantic description. ' +
+        'Searches all BSI components (--bsi-*) and global Design Tokens Italia tokens (--it-*). ' +
+        'Useful to find which variable controls a given visual aspect.',
+      inputSchema: { query: z.string().describe('Search term (e.g. "spacing", "border-radius", "padding")') },
       annotations: { readOnlyHint: true },
     },
     async ({ query }) => {
@@ -99,23 +99,23 @@ export function registerFindToken(server: McpServer): void {
 
       warnings.push(ALPHA_WARNING)
 
-      // Ricerca su token per-componente BSI
+      // Search per-component BSI tokens
       const bsiResults = await searchTokens(query)
 
-      // Risolvi valori
+      // Risolve values
       let resolvedBsi = bsiResults
       try {
         resolvedBsi = await resolveTokenValues(bsiResults) as typeof bsiResults
       } catch {
-        warnings.push('Risoluzione valori Design Tokens Italia non disponibile')
+        warnings.push('Design Tokens Italia value resolution not available')
       }
 
-      // Ricerca su token globali --it-*
+      // Search global --it-* tokens
       let globalResults: Array<{ name: string; value: string }> = []
       try {
         globalResults = await searchDesignTokens(query)
       } catch {
-        warnings.push('Ricerca token globali Design Tokens Italia non disponibile')
+        warnings.push('Global Design Tokens Italia search not available')
       }
 
       return {

@@ -1,24 +1,24 @@
-// ─── Slug matching tra sorgenti eterogenee ────────────────────────────────────
+// ─── Slug matching across heterogeneous sources ───────────────────────────────
 //
-// Le sorgenti usano nomi diversi per lo stesso componente:
+// Sources use different names for the same component:
 //   components_status.json → `Accordion`  (backtick, Title Case)
 //   BSI API                → accordion    (lowercase)
 //   Designers Italia YAML  → accordion    (lowercase)
-//   Dev Kit index.json     → componenti-accordion--documentazione (id Storybook)
+//   Dev Kit index.json     → componenti-accordion--documentazione (Storybook id)
 //   Dev Kit stories path   → packages/accordion/stories/it-accordion.stories.ts
 //
-// Normalizzazione canonica: lowercase + trim + strip backtick + hyphenated
+// Canonical normalization: lowercase + trim + strip backtick + hyphenated
 
 export function slugify(name: string): string {
   return name
     .replace(/`/g, '')           // strip backtick: `Accordion` → Accordion
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, '-')        // spazi → trattini
-    .replace(/[^a-z0-9-]/g, '')  // rimuovi caratteri non validi
+    .replace(/\s+/g, '-')        // spaces → dashes
+    .replace(/[^a-z0-9-]/g, '')  // remove invalid chars
 }
 
-// components_status.json: title può essere `Accordion` o `Accordion Group`
+// components_status.json: title can be `Accordion` or `Accordion Group`
 export function slugFromStatusTitle(title: string): string {
   return slugify(
     title
@@ -28,16 +28,16 @@ export function slugFromStatusTitle(title: string): string {
   )
 }
 
-// Dev Kit index.json: id è "componenti-accordion--documentazione"
-// → estrae "accordion"
+// Dev Kit index.json: id is "componenti-accordion--documentazione"
+// → extracts "accordion"
 export function slugFromStorybookId(id: string): string {
   const match = id.match(/^componenti-(.+?)--/)
   if (!match) return ''
-  return match[1]  // già lowercase e hyphenated
+  return match[1]  // already lowercase and hyphenated
 }
 
 // Dev Kit importPath: "./packages/accordion/stories/it-accordion.stories.ts"
-// → estrae "accordion"
+// → extracts "accordion"
 export function slugFromImportPath(importPath: string): string {
   // pattern package dedicato: packages/{slug}/stories/
   const dedicated = importPath.match(/^\.\/packages\/([^/]+)\/stories\//)
@@ -50,30 +50,30 @@ export function slugFromImportPath(importPath: string): string {
   return ''
 }
 
-// Confronto fuzzy: "accordion group" ≈ "accordion-group"
+// Fuzzy comparison: "accordion group" ≈ "accordion-group"
 export function slugsMatch(a: string, b: string): boolean {
   return slugify(a) === slugify(b)
 }
 
-// ─── Alias cross-sorgente ─────────────────────────────────────────────────────
+// ─── Cross-source aliases ─────────────────────────────────────────────────────
 //
-// Alcune sorgenti usano slug diversi per lo stesso componente.
-// Aggiungere nuovi casi man mano che emergono inconsistenze.
+// Some sources use different slugs for the same component.
+// Add new cases as inconsistencies emerge.
 //
-//   'buttons' → Dev Kit usa "button" (senza s)
-//   'modal'   → BSI salva il file come "modale.json"
+//   'buttons' → Dev Kit uses "button" (without s)
+//   'modal'   → BSI saves the file as "modale.json"
 //
 const SLUG_ALIASES: Record<string, string[]> = {
   'buttons': ['button'],
   'modal':   ['modale'],
 }
 
-// Dato uno slug canonico, restituisce tutti gli slug da provare in ordine
+// Given a canonical slug, returns all known aliases
 export function getSlugAliases(slug: string): string[] {
   return SLUG_ALIASES[slug] ?? []
 }
 
-// Restituisce slug + tutti gli alias: utile per loop di fallback nei loader
+// Returns slug + all aliases: useful for fallback loops in loaders
 export function slugsToTry(slug: string): string[] {
   return [slug, ...getSlugAliases(slug)]
 }

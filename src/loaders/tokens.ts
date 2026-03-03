@@ -2,9 +2,8 @@ import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import type { CssToken } from '../types.js'
 import { DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
 
-// Map 1: --bsi-* → --it-* (da BSI scss/base/root.scss (v3))
-// Map 2: $it-* → valore o altra $it-* (da design-tokens-italia > _variables.scss)
-
+// Map 1: --bsi-* → --it-* (from BSI scss/base/root.scss (v3))
+// Map 2: $it-* → value or another $it-* (from design-tokens-italia > _variables.scss)
 
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
 
@@ -14,10 +13,10 @@ async function fetchText(url: string): Promise<string> {
   return res.text()
 }
 
-// ─── Parser _variables.scss ───────────────────────────────────────────────────
+// ─── _variables.scss parser ───────────────────────────────────────────────────
 //
-// Formato: $it-spacing-m: 1.5rem; // 24px
-// Estraiamo: nome ($it-* → --it-*) e valore concreto con commento
+// Format: $it-spacing-m: 1.5rem; // 24px
+// Extract: name ($it-* → --it-*) and concrete value with comment
 
 type TokenMap = Map<string, string>  // --it-spacing-m → "1.5rem (24px)"
 
@@ -47,10 +46,10 @@ function parseVariables(scss: string): TokenMap {
   return map
 }
 
-// ─── Parser _root.scss BSI ────────────────────────────────────────────────────
+// ─── BSI _root.scss parser ────────────────────────────────────────────────────
 //
-// Formato: --#{$prefix}spacing-m: var(--it-spacing-m);
-// Estraiamo il bridge: --bsi-spacing-m → --it-spacing-m
+// Format: --#{$prefix}spacing-m: var(--it-spacing-m);
+// Extract the bridge: --bsi-spacing-m → --it-spacing-m
 
 type BridgeMap = Map<string, string>  // --bsi-spacing-m → --it-spacing-m
 
@@ -69,7 +68,7 @@ function parseBridge(scss: string): BridgeMap {
   return map
 }
 
-// ─── Cache e caricamento ──────────────────────────────────────────────────────
+// ─── Cache and loading ────────────────────────────────────────────────────────
 
 async function loadTokenMap(): Promise<TokenMap> {
   const cached = cache.get<TokenMap>(CACHE_KEYS.designTokens())
@@ -82,20 +81,20 @@ async function loadTokenMap(): Promise<TokenMap> {
   ])
 
   const bridge = parseBridge(rootScss)       // --bsi-* → --it-*
-  const dtiRaw = parseVariables(variablesScss) // --it-* → valore o $it-* ref
+  const dtiRaw = parseVariables(variablesScss) // --it-* → value or $it-* ref
 
-  // Risoluzione ricorsiva DTI: $it-spacing-base → --it-spacing-base → 1.5rem (24px)
+  // Recursive DTI resolution: $it-spacing-base → --it-spacing-base → 1.5rem (24px)
   function resolveIt(name: string, visited = new Set<string>()): string | null {
-    if (visited.has(name)) return null  // protezione loop
+    if (visited.has(name)) return null  // loop protection
     visited.add(name)
     const val = dtiRaw.get(name)
     if (!val) return null
-    // Se è ancora un riferimento a $it-* (parseVariables lo salva come --it-*)
+    // If still a reference to $it-* (parseVariables saves it as --it-*)
     if (val.startsWith('--it-')) return resolveIt(val, visited)
     return val
   }
 
-  // Mappa finale: --bsi-* → valore concreto
+  // Final map: --bsi-* → concrete value
   const map: TokenMap = new Map()
   for (const [bsiName, itName] of bridge) {
     const resolved = resolveIt(itName)
@@ -106,7 +105,7 @@ async function loadTokenMap(): Promise<TokenMap> {
   return map
 }
 
-// ─── Arricchimento token con valore risolto ───────────────────────────────────
+// ─── Token value enrichment with resolved value ───────────────────────────────
 
 export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]> {
   if (tokens.length === 0) return tokens
@@ -115,7 +114,7 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
   try {
     map = await loadTokenMap()
   } catch {
-    return tokens  // fallback: restituisci senza risoluzione
+    return tokens  // fallback: return without resolution
   }
 
   return tokens.map((token) => {
@@ -130,7 +129,7 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
   })
 }
 
-// ─── Ricerca globale su tutti i token --bsi-* ──────────────────────────────────
+// ─── Global search across all --bsi-* tokens ──────────────────────────────────
 
 export async function searchDesignTokens(
   query: string

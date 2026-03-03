@@ -47,7 +47,7 @@ export interface CssToken {
   name: string          // --bsi-accordion-body-padding-x
   value: string         // var(--bsi-spacing-m)
   valueType: 'token-reference' | 'scss-expression' | 'literal'
-  valueResolved: string | null  // 1.5rem — da Design Tokens Italia
+  valueResolved: string | null  // 1.5rem — from Design Tokens Italia
   description: string | null
 }
 
@@ -67,13 +67,13 @@ export interface DevKitEntry {
   slug: string
   tags: string[]         // ['a11y-ok', 'web-component', 'alpha'…]
   storybookUrl: string
-  importPath: string     // path esatto stories.ts
-  variants: string[]     // nomi export stories in italiano
+  importPath: string     // exact stories.ts path
+  variants: string[]     // story export names in Italian
   pattern: 'dedicated' | 'bundle'
 }
 
 export interface WebComponentProp {
-  name: string           // nome attributo HTML (es. background-active)
+  name: string           // HTML attribute name (e.g. background-active)
   type: string
   description: string | null
   default: string | null
@@ -101,21 +101,21 @@ export interface ComponentIssue {
   labels: string[]
 }
 
-// ─── Design System — metadati navigazione e versioni ─────────────────────────
+// ─── Design System — navigation metadata and versions ────────────────────────
 
 export interface DsVersions {
-  designSystem: string        // da dsnav.yaml, es. "v1.10.1"
-  bootstrapItalia: string     // da BSI package.json, es. "3.0.0-alpha.2"
-  devKitItalia: string        // da Dev Kit package.json
+  designSystem: string        // from dsnav.yaml, e.g. "v1.10.1"
+  bootstrapItalia: string     // from BSI package.json, e.g. "3.0.0-alpha.2"
+  devKitItalia: string        // from Dev Kit package.json
 }
 
 export interface DsNavEntry {
   label: string
-  url: string                 // URL relativo
+  url: string                 // relative URL
   absoluteUrl: string         // https://designers.italia.it/...
 }
 
-// ─── Risposta aggregata get_component_full ────────────────────────────────────
+// ─── Aggregated response get_component_full ───────────────────────────────────
 
 export type StabilityLevel = 'alpha' | 'stable'
 
@@ -123,34 +123,34 @@ export interface ComponentFull {
   name: string
   slug: string
 
-  // da ComponentStatus
+  // from ComponentStatus
   status: ComponentStatus | null
 
-  // da api/componenti/{slug}.json
+  // from api/componenti/{slug}.json
   variants: ComponentVariant[]
 
-  // da ComponentGuidelines
+  // from ComponentGuidelines
   guidelines: ComponentGuidelines | null
 
-  // da custom_properties.json
+  // from custom_properties.json
   tokens: CssToken[]
 
-  // da Dev Kit Italia
+  // from Dev Kit Italia
   devKit: {
     entry: DevKitEntry | null
     component: DevKitComponent | null
   }
 
-  // da GitHub Issues
+  // from GitHub Issues
   openIssues: ComponentIssue[]
 
-  // meta sempre presente
+  // always present
   meta: {
     fetchedAt: string
     sourceUrls: string[]
     warnings: string[]
     stability: StabilityLevel
-    versions?: DsVersions        
-    designersUrl?: string | null 
+    versions?: DsVersions
+    designersUrl?: string | null
   }
 }

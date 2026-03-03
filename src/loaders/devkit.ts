@@ -18,7 +18,7 @@ async function fetchText(url: string): Promise<string> {
   return res.text()
 }
 
-// ─── Sorgente #6 — index.json ─────────────────────────────────────────────────
+// ─── Source #6 — index.json ───────────────────────────────────────────────────
 
 interface IndexEntry {
   id: string
@@ -42,22 +42,22 @@ export async function loadDevKitIndex(): Promise<DevKitIndex> {
   const index: DevKitIndex = new Map()
 
   for (const entry of Object.values(raw.entries)) {
-    // Prendi solo le entry di tipo docs per i componenti
+    // Take only docs-type entries for components
     if (entry.type !== 'docs') continue
     if (!entry.id.startsWith('componenti-')) continue
 
     const slug = slugFromStorybookId(entry.id)
     if (!slug) continue
 
-    // Determina importPath della story (da storiesImports se presente)
+    // Determine story importPath (from storiesImports if present)
     const importPath = entry.storiesImports?.[0] ?? entry.importPath
 
-    // Determina pattern: dedicated (package it-*) o bundle
+    // Determine pattern: dedicated (it-* package) or bundle
     const pattern = importPath.includes('/dev-kit-italia/stories/components/')
       ? 'bundle'
       : 'dedicated'
 
-    // Varianti: le story di tipo 'story' con stesso titolo
+    // Variants: 'story' type entries with same title
     const variants = Object.values(raw.entries)
       .filter((e) => e.type === 'story' && e.title === entry.title)
       .map((e) => e.name)
@@ -87,15 +87,15 @@ export async function loadDevKitEntry(slug: string): Promise<DevKitEntry | null>
   return null
 }
 
-// ─── Sorgente #7 — stories.ts ─────────────────────────────────────────────────
+// ─── Source #7 — stories.ts ───────────────────────────────────────────────────
 //
-// Parsing statico del TypeScript as text — solo regex, nessun transpiler.
-// Estrae argTypes per ogni componente e sottocomponente.
+// Static TypeScript parsing as text — regex only, no transpiler.
+// Extracts argTypes for each component and subcomponent.
 
-// Estrae il blocco argTypes da una story export
+// Extracts the argTypes block from a story export
 function extractArgTypesBlock(source: string, exportName?: string): string | null {
-  // Fix: usa [\s\S]*? invece di [^}]* per attraversare oggetti annidati
-  // prima di raggiungere argTypes nel meta o nell'export
+  // Fix: use [\s\S]*? instead of [^}]* to traverse nested objects
+  // before reaching argTypes in meta or export
   const pattern = exportName
     ? new RegExp(`export const ${exportName}[\\s\\S]*?argTypes:\\s*\\{`, 's')
     : /const meta[\s\S]*?argTypes:\s*\{/s
@@ -118,9 +118,9 @@ function extractArgTypesBlock(source: string, exportName?: string): string | nul
   return null
 }
 
-// Estrae singola prop dal blocco argTypes
+// Extracts a single prop from an argTypes block
 function parseProp(name: string, block: string): WebComponentProp | null {
-  // Cerca il blocco della prop: propName: { ... }
+  // Search for the prop block: propName: { ... }
   const propPattern = new RegExp(`${name}:\\s*\\{`, 's')
   const startMatch = block.match(propPattern)
   if (!startMatch) return null
@@ -152,7 +152,7 @@ function parseProp(name: string, block: string): WebComponentProp | null {
     ? optionsMatch[1].match(/['"`]([^'"`]+)['"`]/g)?.map((s) => s.replace(/['"`]/g, '')) ?? []
     : []
 
-  // nome HTML dell'attributo (può differire dalla chiave TS)
+  // HTML attribute name (may differ from TS key)
   const htmlName = propBlock.match(/name:\s*['"`]([^'"`]+)['"`]/)?.[1] ?? name
 
   return {
@@ -164,10 +164,10 @@ function parseProp(name: string, block: string): WebComponentProp | null {
   }
 }
 
-// Estrae tutte le prop keys da un blocco argTypes
+// Extracts all prop keys from an argTypes block
 function extractPropKeys(argTypesBlock: string): string[] {
   const keys: string[] = []
-  // Cerca pattern: "  propName: {" all'inizio di riga (dentro il blocco)
+  // Matches pattern: "  propName: {" at start of line (inside the block)
   const matches = argTypesBlock.matchAll(/^\s{2,4}(\w+):\s*\{/gm)
   for (const m of matches) {
     keys.push(m[1])
@@ -175,7 +175,7 @@ function extractPropKeys(argTypesBlock: string): string[] {
   return keys
 }
 
-// Cerca export const con argTypes che riguarda un sottocomponente
+// Searches for export const with argTypes for a subcomponent
 function extractSubcomponentExports(source: string): string[] {
   const exports: string[] = []
   const matches = source.matchAll(/^export const (\w+)\s*=/gm)
@@ -187,13 +187,13 @@ function extractSubcomponentExports(source: string): string[] {
   return exports
 }
 
-// Estrae tag name del componente principale dal meta
-// Fix: ancora su singola riga con $ per evitare match su descrizioni multiriga
+// Extracts the main component tag name from meta
+// Fix: anchored to single line with $ to avoid matching multiline descriptions
 function extractTagName(source: string): string | null {
   return source.match(/^\s*component:\s*['"`](it-[a-z0-9-]+)['"`]\s*,?$/m)?.[1] ?? null
 }
 
-// Estrae tag name dai sottocomponenti (decorator o render)
+// Extracts tag names from subcomponents (decorator or render)
 function extractSubTagNames(source: string, exportName: string): string[] {
   const exportPattern = new RegExp(
     `export const ${exportName}[\\s\\S]*?(?=export const |$)`, 'm'
@@ -209,7 +209,7 @@ function parseStories(source: string): DevKitComponent | null {
   const tagName = extractTagName(source)
   if (!tagName) return null
 
-  // Props del componente principale dal meta.argTypes
+  // Props of the main component from meta.argTypes
   const metaArgTypes = extractArgTypesBlock(source)
   const mainProps: WebComponentProp[] = []
 
@@ -221,7 +221,7 @@ function parseStories(source: string): DevKitComponent | null {
     }
   }
 
-  // Sottocomponenti dagli export secondari
+  // Subcomponents from secondary exports
   const subExports = extractSubcomponentExports(source)
   const subcomponents: DevKitComponent['subcomponents'] = []
 
@@ -245,13 +245,13 @@ function parseStories(source: string): DevKitComponent | null {
     }
   }
 
-  // Descrizione dal docs.description.component
+  // Description from docs.description.component
   const desc = source.match(/component:\s*`([\s\S]*?)`/)?.[1]?.trim() ?? null
 
   return { tagName, props: mainProps, subcomponents, description: desc }
 }
 
-// ─── Loader pubblico ──────────────────────────────────────────────────────────
+// ─── Public loader ────────────────────────────────────────────────────────────
 
 export async function loadDevKitComponent(slug: string): Promise<DevKitComponent | null> {
   const key = CACHE_KEYS.devKitStories(slug)

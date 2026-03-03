@@ -1,126 +1,125 @@
-// ─── Costanti condivise ───────────────────────────────────────────────────────
-// Punto unico per aggiornare branch, URL base e warning
-// quando cambiano le sorgenti upstream.
+// ─── Shared constants ────────────────────────────────────────────────────────
+// Single place to update branch, base URLs and warnings
+// when upstream sources change.
 //
-// REGOLA: non duplicare queste costanti nei loader.
-// Se una sorgente cambia struttura, aggiornare solo il loader
-// corrispondente. Se cambia branch o URL base, aggiornare qui.
+// RULE: do not duplicate these constants in loaders.
+// If a source changes structure, update only the corresponding loader.
+// If a branch or base URL changes, update here.
 
 // ─── Alpha warning ────────────────────────────────────────────────────────────
-// Usato in ping (index.ts) e in meta.warnings dei tool che espongono dati da
-// sorgenti alpha (token CSS, Dev Kit Italia).
+// Used in ping (index.ts) and in meta.warnings for tools exposing data from
+// alpha sources (CSS tokens, Dev Kit Italia).
 //
-// Sorgenti alpha:   #3 BSI custom_properties.json, #6 Dev Kit index, #7 Dev Kit stories
-// Sorgenti stabili: #1 #2 BSI markup/status, #4 Designers YAML, #5 DTI, #8 GitHub Issues
+// Alpha sources:  #3 BSI custom_properties.json, #6 Dev Kit index, #7 Dev Kit stories
+// Stable sources: #1 #2 BSI markup/status, #4 Designers YAML, #5 DTI, #8 GitHub Issues
 
 export const ALPHA_WARNING =
-  'Token layer alpha: Bootstrap Italia ' + VERSION_BSI_HINT() + ' e Dev Kit Italia usano BSI 3.x (alpha). ' +
-  'Markup HTML e stato componenti sono stabili. ' +
-  'Token CSS (--bsi-*) e web component Dev Kit possono avere breaking changes prima della release stabile.'
+  'Token layer alpha: Bootstrap Italia ' + VERSION_BSI_HINT() + ' and Dev Kit Italia use BSI 3.x (alpha). ' +
+  'HTML markup and component status are stable. ' +
+  'CSS tokens (--bsi-*) and Dev Kit web components may have breaking changes before stable release.'
 
 function VERSION_BSI_HINT(): string {
   return '3.x'
 }
 
-// ─── Bootstrap Italia — sorgenti #1 #2 #3 ────────────────────────────────────
+// ─── Bootstrap Italia — sources #1 #2 #3 ────────────────────────────────────
 
-/** Branch attivo con API token strutturate — non presenti in 2.x */
+/** Active branch with structured token APIs — not present in 2.x */
 export const BSI_BRANCH = '3.x'
 
 const BSI_RAW_BASE =
   `https://raw.githubusercontent.com/italia/bootstrap-italia/${BSI_BRANCH}`
 
-/** Lista ~55 componenti con stato, accessibilità, note issue */
+/** List of ~55 components with status, accessibility, known issues */
 export const BSI_STATUS_URL =
   `${BSI_RAW_BASE}/api/components_status.json`
 
-/** Token CSS --bsi-* per-componente con descrizioni semantiche ⚠️ alpha */
+/** Per-component CSS tokens --bsi-* with semantic descriptions ⚠️ alpha */
 export const BSI_CUSTOM_PROPERTIES_URL =
   `${BSI_RAW_BASE}/api/custom_properties.json`
 
-/** Markup HTML varianti per componente */
+/** HTML markup variants per component */
 export const BSI_COMPONENT_URL = (slug: string): string =>
   `${BSI_RAW_BASE}/api/componenti/${slug}.json`
 
-/** Bridge --bsi-* → --it-* (necessario per valueResolved) */
+/** Bridge --bsi-* → --it-* (required for valueResolved) */
 export const BSI_ROOT_SCSS_URL =
   `${BSI_RAW_BASE}/src/scss/_root.scss`
 
-/** Versione BSI per meta.versions.bootstrapItalia */
+/** BSI version for meta.versions.bootstrapItalia */
 export const BSI_PACKAGE_JSON_URL =
   `${BSI_RAW_BASE}/package.json`
 
 /**
-* URL base documentazione componenti BSI
-* TODO: aggiornare a URL stabile docs v3 quando disponibile
-* (attualmente solo preview che rimanda alla v2 — URL potrebbe variare)
-*/
+ * Bootstrap Italia component docs base URL
+ * TODO: update to stable v3 docs URL when available
+ * (currently preview only, redirects to v2 — URL may change)
+ */
 export const BSI_DOC_BASE =
   'https://italia.github.io/bootstrap-italia/docs/componenti'
 
-// ─── Designers Italia — sorgenti #4 + parte di #9 ────────────────────────────
+// ─── Designers Italia — sources #4 + part of #9 ─────────────────────────────
 
 const DESIGNERS_RAW_BASE =
   'https://raw.githubusercontent.com/italia/designers.italia.it/main'
 
-/** Linee guida d'uso, accessibilità, stato redazionale, quando/come usare */
+/** Usage guidelines, accessibility, editorial status, when/how to use */
 export const DESIGNERS_COMPONENT_URL = (slug: string): string =>
   `${DESIGNERS_RAW_BASE}/src/data/content/design-system/componenti/${slug}.yaml`
 
-/** Nav YAML — versioni DS + URL verificati componenti + foundations[] */
+/** Nav YAML — DS versions + verified component URLs + foundations[] */
 export const DESIGNERS_DSNAV_URL =
   `${DESIGNERS_RAW_BASE}/src/data/dsnav.yaml`
 
-/** URL base sito — per costruire URL assoluti da voci nav relative */
+/** Site base URL — to build absolute URLs from relative nav entries */
 export const DESIGNERS_SITE_BASE = 'https://designers.italia.it'
 
-// ─── Design Tokens Italia — sorgente #5 ──────────────────────────────────────
+// ─── Design Tokens Italia — source #5 ───────────────────────────────────────
 
-/** Token globali --it-* con valori concreti (per valueResolved) */
+/** Global --it-* tokens with concrete values (for valueResolved) */
 export const DTI_VARIABLES_SCSS_URL =
   'https://raw.githubusercontent.com/italia/design-tokens-italia/main/dist/scss/_variables.scss'
 
-// ─── Dev Kit Italia — sorgenti #6 #7 + parte di #9 ──────────────────────────
+// ─── Dev Kit Italia — sources #6 #7 + part of #9 ────────────────────────────
 
 const DEVKIT_RAW_BASE =
   'https://raw.githubusercontent.com/italia/dev-kit-italia/main'
 
 /**
- * Indice Storybook: tag stato, varianti IT, importPath → path esatto stories.ts ⚠️ alpha
- * GitHub Pages URL — non raw GitHub
+ * Storybook index: status tags, Italian variants, importPath → exact stories.ts path ⚠️ alpha
+ * GitHub Pages URL — not raw GitHub
  */
 export const DEVKIT_INDEX_URL =
   'https://italia.github.io/dev-kit-italia/index.json'
 
-/** URL base Storybook — per costruire i link /docs/{id} */
+/** Storybook base URL — to build /docs/{id} links */
 export const DEVKIT_STORYBOOK_BASE =
   'https://italia.github.io/dev-kit-italia'
 
 /**
- * Stories per componente — path da importPath in index.json ⚠️ alpha
- * Usare sempre importPath dal loader, non assumere il pattern dal nome.
- * importPath ha prefisso "./" — viene rimosso qui.
+ * Component stories — path from importPath in index.json ⚠️ alpha
+ * Always use importPath from loader, do not assume pattern from name.
+ * importPath has "./" prefix — removed here.
  */
 export const DEVKIT_STORIES_URL = (importPath: string): string =>
   `${DEVKIT_RAW_BASE}/${importPath.replace(/^\.\//, '')}`
 
 /**
- * Versione Dev Kit per meta.versions.devKitItalia
- * NOTA: il package.json root ha "version": "0.0.0" (monorepo workspace) — non usarlo.
+ * Dev Kit version for meta.versions.devKitItalia
+ * NOTE: root package.json has "version": "0.0.0" (monorepo workspace) — do not use it.
  */
 export const DEVKIT_PACKAGE_JSON_URL =
   `${DEVKIT_RAW_BASE}/packages/dev-kit-italia/package.json`
 
+// ─── GitHub REST API — source #8 ─────────────────────────────────────────────
 
-// ─── GitHub REST API — sorgente #8 ───────────────────────────────────────────
-
-/** Endpoint search issues */
+/** Issues search endpoint */
 export const GITHUB_SEARCH_ISSUES_URL =
   'https://api.github.com/search/issues'
 
 /**
- * Repo monitorati per le issue
- * Ordine: principale → kit → dipendenze
+ * Monitored repos for issues
+ * Order: main → kit → dependencies
  */
 export const GITHUB_WATCHED_REPOS = [
   'italia/bootstrap-italia',

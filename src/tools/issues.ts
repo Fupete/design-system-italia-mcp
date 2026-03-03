@@ -16,11 +16,11 @@ export function registerGetComponentIssues(server: McpServer): void {
     'get_component_issues',
     {
       title: 'Get Component Issues',
-      description: 'Restituisce le issue GitHub aperte relative a un componente ' +
-        'sui 4 repository del Design System .italia: bootstrap-italia, ' +
-        'design-ui-kit, design-react-kit, design-angular-kit. ' +
-        'Include anche le issue note già presenti in components_status.json.',
-      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+      description: 'Returns open GitHub issues for a component ' +
+        'across the 4 Design System .italia repositories: bootstrap-italia, ' +
+        'design-ui-kit, dev-kit-italia, design-tokens-italia. ' +
+        'Also includes known issues already present in components_status.json.',
+      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
     },
     async ({ name }) => {
@@ -34,13 +34,13 @@ export function registerGetComponentIssues(server: McpServer): void {
       ])
 
       if (liveIssues.length === 0) {
-        warnings.push(`Nessuna issue live trovata per "${slug}" — potrebbe essere un problema di rate limit o nessuna issue aperta`)
+        warnings.push(`No live issues found for "${slug}" — may be a rate limit issue or no open issues`)
       }
 
-      // Issue note statiche da components_status.json
+      // Static known issues from components_status.json
       const knownIssues = status?.knownIssueUrls ?? []
 
-      // Deduplica: rimuovi dalle live quelle già note per URL
+      // Deduplicate: remove from live those already known by URL
       const liveUnique = liveIssues.filter(
         (issue) => !knownIssues.includes(issue.url)
       )
@@ -63,7 +63,7 @@ export function registerGetComponentIssues(server: McpServer): void {
                   known: {
                     total: knownIssues.length,
                     urls: knownIssues,
-                    note: 'Issue note in components_status.json — aggiornamento manuale, potrebbero non essere live',
+                    note: 'Known issues from components_status.json — manually updated, may not be live',
                   },
                 },
                 meta: {
@@ -75,8 +75,8 @@ export function registerGetComponentIssues(server: McpServer): void {
                   warnings,
                   stability: 'stable' as const,
                   rateLimitNote: process.env.GITHUB_TOKEN
-                    ? 'Autenticato — limite 5000 req/ora'
-                    : '⚠️ Non autenticato — limite 60 req/ora per IP. Imposta GITHUB_TOKEN.',
+                    ? 'Authenticated — 5000 req/hour limit'
+                    : '⚠️ Not authenticated — 60 req/hour per IP. Set GITHUB_TOKEN.',
                 },
               },
               null,
@@ -96,10 +96,10 @@ export function registerGetProjectBoardStatus(server: McpServer): void {
     'get_project_board_status',
     {
       title: 'Get Project Board Status',
-      description: 'Restituisce lo stato aggregato delle board GitHub del Design System .italia. ' +
-        'Include link alle issue aperte per ciascun repository. ' +
-        'Nota: GitHub Projects v2 (project #17) non è integrato — ' +
-        'usa get_component_issues per issue specifiche.',
+      description: 'Returns the aggregated status of Design System .italia GitHub boards. ' +
+        'Includes links to open issues for each repository. ' +
+        'Note: GitHub Projects v2 (project #17) is not integrated — ' +
+        'use get_component_issues for component-specific issues.',
       inputSchema: {},
       annotations: { readOnlyHint: true },
     },

@@ -22,8 +22,8 @@ export function registerListComponents(server: McpServer): void {
     'list_components',
     {
       title: 'List Components',
-      description: 'Elenca tutti i componenti del Design System .italia con stato per libreria ' +
-        '(Bootstrap Italia, UI Kit, ...) e stato accessibilità.',
+      description: 'Lists all Design System .italia components with library status ' +
+        '(Bootstrap Italia, UI Kit, ...) and accessibility status.',
       inputSchema: {},
       annotations: { readOnlyHint: true },
     },
@@ -82,9 +82,9 @@ export function registerGetComponent(server: McpServer): void {
     'get_component',
     {
       title: 'Get Component',
-      description: 'Restituisce markup HTML di tutte le varianti di un componente Bootstrap Italia ' +
-        'e props del web component it-* dal Dev Kit Italia.',
-      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Accordion")') },
+      description: 'Returns HTML markup for all variants of a Bootstrap Italia component ' +
+        'and web component it-* props from Dev Kit Italia.',
+      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Accordion")') },
       annotations: { readOnlyHint: true },
     },
     async ({ name }) => {
@@ -98,12 +98,12 @@ export function registerGetComponent(server: McpServer): void {
       ])
 
       if (variants.length === 0) {
-        warnings.push(`Nessuna variante BSI trovata per "${slug}"`)
+        warnings.push(`No BSI variants found for "${slug}"`)
       }
 
       const devKitEntry = devKitIndex.get(slug) ?? null
       if (!devKitEntry) {
-        warnings.push(`Componente non trovato nel Dev Kit Italia per "${slug}"`)
+        warnings.push(`Component not found in Dev Kit Italia for "${slug}"`)
       }
 
       return {
@@ -147,10 +147,10 @@ export function registerSearchComponents(server: McpServer): void {
     'search_components',
     {
       title: 'Search Components',
-      description: 'Cerca componenti per nome o caratteristica. ' +
-        'I nomi dei componenti sono tendenzialmente in inglese (es. "modal" non "modale", "button" non "bottone"). ' +
-        'Ricerca su nome, slug e tag Dev Kit (es. "a11y-ok", "alpha", "web-component").',
-      inputSchema: { query: z.string().describe('Testo da cercare (es. "button", "alpha", "accordion")') },
+      description: 'Search components by name or feature. ' +
+        'Component names are generally in English (e.g. "modal" not "modale", "button" not "bottone"). ' +
+        'Searches name, slug and Dev Kit tags (e.g. "a11y-ok", "alpha", "web-component").',
+      inputSchema: { query: z.string().describe('Search text (e.g. "button", "alpha", "accordion")') },
       annotations: { readOnlyHint: true },
     },
     async ({ query }) => {

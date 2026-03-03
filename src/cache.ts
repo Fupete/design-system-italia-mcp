@@ -1,4 +1,4 @@
-// ─── Cache in-memory con TTL per sorgente ─────────────────────────────────────
+// ─── In-memory cache with per-source TTL ─────────────────────────────────────
 
 interface CacheEntry<T> {
   data: T
@@ -35,7 +35,7 @@ class Cache {
 
 export const cache = new Cache()
 
-// ─── TTL per sorgente (ms) ────────────────────────────────────────────────────
+// ─── Per-source TTL (ms) ──────────────────────────────────────────────────────
 
 const DEV = process.env.NODE_ENV !== 'production'
 
@@ -51,7 +51,7 @@ export const TTL = {
   dsMeta:         DEV ? 60 * 60_000 : 24 * 60 * 60_000,   // 1h dev, 24h prod
 }
 
-// ─── Prefissi chiavi cache ────────────────────────────────────────────────────
+// ─── Cache key prefixes ───────────────────────────────────────────────────────
 
 export const CACHE_KEYS = {
   bsiMarkup:     (slug: string) => `bsi:markup:${slug}`,

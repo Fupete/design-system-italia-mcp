@@ -21,20 +21,20 @@ const VERSION: string = require('../package.json').version
 
 const CACHE_TOKEN = process.env.CACHE_INVALIDATION_TOKEN ?? ''
 
-// ─── Warning alpha — incluso in ping e in meta.warnings di tutte le risposte ──
+// ─── Alpha warning — included in ping and in meta.warnings of all responses ──
 //
-// BSI 2.x è stabile e ha le API markup e stato componenti.
-// BSI 3.x aggiunge i token CSS strutturati (custom_properties.json, _root.scss)
-// necessari per valueResolved. Dev Kit Italia è costruito su BSI 3.x.
-// Il layer token e i web component sono soggetti a breaking changes prima della
-// release stabile — non usare in produzione senza verificare upstream.
+// BSI 2.x is stable and has markup and component status APIs.
+// BSI 3.x adds structured CSS tokens (custom_properties.json, _root.scss)
+// needed for valueResolved. Dev Kit Italia is built on BSI 3.x.
+// The token layer and web components may have breaking changes before
+// stable release — do not use in production without checking upstream.
 
 export { ALPHA_WARNING }
 
-// ─── Factory MCP Server ───────────────────────────────────────────────────────
+// ─── MCP Server factory ───────────────────────────────────────────────────────
 //
-// Una nuova istanza per ogni richiesta HTTP — il McpServer non può essere
-// connesso a più di un transport contemporaneamente.
+// A new instance per HTTP request — McpServer cannot be connected
+// to more than one transport at a time.
 
 function createMcpServer(): McpServer {
   const s = new McpServer({
@@ -42,12 +42,12 @@ function createMcpServer(): McpServer {
     version: VERSION,
   })
 
-  // ping — primo tool eseguito da qualsiasi client, include warning alpha
+  // ping — first tool executed by any client, includes alpha warning
   s.registerTool(
     'ping',
     {
       title: 'Ping',
-      description: 'Verifica la connessione al server MCP. Restituisce stato, versione, timestamp e avvisi sullo stato delle sorgenti.',
+      description: 'Checks connection to the MCP server. Returns status, version, timestamp and source state warnings.',
       inputSchema: {},
       annotations: { readOnlyHint: true },
     },
@@ -61,13 +61,13 @@ function createMcpServer(): McpServer {
               server: 'design-system-italia-mcp',
               version: VERSION,
               timestamp: new Date().toISOString(),
-              message: 'Server MCP non ufficiale per il Design System .italia. Usa list_components per iniziare.',
+              message: 'Unofficial MCP server for Design System .italia. Use list_components to get started.',
               warnings: [
-                'Progetto sperimentale non ufficiale — dati forniti così come sono.',
-                'Layer token alpha: Bootstrap Italia 3.x e Dev Kit Italia sono in fase alpha. ' +
-                'Markup HTML e stato componenti sono stabili (API presenti anche in BSI 2.x). ' +
-                'Token CSS (--bsi-*) e web component Dev Kit possono avere breaking changes prima della release stabile. ' +
-                'Non usare il layer token in produzione senza verificare lo stato upstream.',
+                'Unofficial experimental project — data provided as-is.',
+                'Token layer alpha: Bootstrap Italia 3.x and Dev Kit Italia are in alpha. ' +
+                'HTML markup and component status are almost stable (APIs also present in BSI 2.x). ' +
+                'CSS tokens (--bsi-*) and Dev Kit web components may have breaking changes before stable release. ' +
+                'Do not use the token layer in production without checking upstream status.',
               ],
               tools: [
                 'ping',
@@ -177,6 +177,6 @@ httpServer.listen(PORT, () => {
   console.log(`   MCP    → http://localhost:${PORT}/mcp`)
   console.log(`   Health → http://localhost:${PORT}/health`)
   console.log(`   Cache  → POST http://localhost:${PORT}/cache/invalidate`)
-  console.log(`   Auth   → ${CACHE_TOKEN ? '✓ token configurato' : '⚠️  CACHE_INVALIDATION_TOKEN non impostato'}`)
-  console.log(`   ⚠️  Layer token alpha: BSI 3.x e Dev Kit Italia in fase alpha`)
+  console.log(`   Auth   → ${CACHE_TOKEN ? '✓ token configured' : '⚠️  CACHE_INVALIDATION_TOKEN not set'}`)
+  console.log(`   ⚠️  Token layer alpha: BSI 3.x and Dev Kit Italia in alpha`)
 })

@@ -13,13 +13,13 @@ async function fetchYaml(url: string): Promise<unknown> {
   return yaml.load(text)
 }
 
-// ─── Struttura YAML Designers Italia ─────────────────────────────────────────
+// ─── Designers Italia YAML structure ─────────────────────────────────────────
 //
 // src/data/content/design-system/componenti/{slug}.yaml
 //
-// I campi rilevanti sono annidati in strutture CMS Jekyll.
-// Verifica empirica su accordion.yaml — adattare se altri componenti
-// hanno struttura diversa.
+// Relevant fields are nested in Jekyll CMS structures.
+// Empirically verified on accordion.yaml — adapt if other components
+// have different structure.
 
 interface RawDesignersYaml {
   components?: {
@@ -48,27 +48,27 @@ function parseYaml(raw: unknown): ComponentGuidelines {
   const data = raw as RawDesignersYaml
   const hero = data?.components?.hero
 
-  // tab Uso e accessibilità è sempre il primo [0]
+  // "Uso e accessibilità" tab is always the first [0]
   const allComponents = data?.tabs?.[0]?.sectionsEditorial
     ?.flatMap(s => s.components ?? []) ?? []
 
   function findText(titleMatch: string): string | null {
     return allComponents.find(
       c => c.name === 'TextImageCta' &&
-           c.title?.toLowerCase().includes(titleMatch.toLowerCase())
+        c.title?.toLowerCase().includes(titleMatch.toLowerCase())
     )?.text ?? null
   }
 
   return {
-    description:        hero?.subtitle ?? null,
-    categories:         hero?.kangaroo?.tagsDesignSystem ?? [],
-    whenToUse:          findText('quando usarlo') ?? findText('quando usare'),
-    howToUse:           findText('come usarlo') ?? findText('come usare'),
+    description: hero?.subtitle ?? null,
+    categories: hero?.kangaroo?.tagsDesignSystem ?? [],
+    whenToUse: findText('quando usarlo') ?? findText('quando usare'),
+    howToUse: findText('come usarlo') ?? findText('come usare'),
     accessibilityNotes: findText('accessibilit'),
   }
 }
 
-// ─── Loader pubblico ──────────────────────────────────────────────────────────
+// ─── Public loader ────────────────────────────────────────────────────────────
 
 export async function loadGuidelines(slug: string): Promise<ComponentGuidelines | null> {
   const normalized = slugify(slug)

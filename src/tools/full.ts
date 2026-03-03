@@ -33,11 +33,11 @@ export function registerGetComponentFull(server: McpServer): void {
     'get_component_full',
     {
       title: 'Get Component Full',
-      description: 'Risposta aggregata su un componente del Design System .italia: ' +
-        'markup HTML + token CSS con valori risolti + linee guida d\'uso + ' +
-        'stato per libreria + props web component it-* + issue GitHub aperte. ' +
-        'Killer feature del server — una sola chiamata per tutto.',
-      inputSchema: { name: z.string().describe('Nome o slug del componente (es. "accordion", "Alert")') },
+      description: 'Aggregated response for a Design System .italia component: ' +
+        'HTML markup + CSS tokens with resolved values + usage guidelines + ' +
+        'library status + it-* web component props + open GitHub issues. ' +
+        'Killer feature of the server — one call for everything.',
+      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
       outputSchema: ZGetComponentFullOutput,
     },
@@ -46,7 +46,7 @@ export function registerGetComponentFull(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      // ── Fetch parallelo di tutte le sorgenti ────────────────────────────────
+      // ── Parallel fetch from all sources ──────────────────────────────────────
       const [
         status,
         variants,
@@ -67,10 +67,10 @@ export function registerGetComponentFull(server: McpServer): void {
         loadDsMeta(),
       ])
 
-      // ── Unwrap results con warnings su failure ───────────────────────────────
+      // ── Unwrap results with warnings on failure ───────────────────────────────
       function unwrap<T>(result: PromiseSettledResult<T>, label: string, fallback: T): T {
         if (result.status === 'fulfilled') return result.value
-        warnings.push(`${label}: ${result.reason?.message ?? 'errore sconosciuto'}`)
+        warnings.push(`${label}: ${result.reason?.message ?? 'unknown error'}`)
         return fallback
       }
 
@@ -83,25 +83,25 @@ export function registerGetComponentFull(server: McpServer): void {
       const issuesData = unwrap(openIssues, 'GitHub Issues', [])
       const dsMetaData = unwrap(dsMeta, 'DS meta', null)
 
-      // ── Risolvi token values ─────────────────────────────────────────────────
+      // ── Resolve token values ──────────────────────────────────────────────────
       let tokens = rawTokensData
       try {
         tokens = await resolveTokenValues(rawTokensData)
       } catch {
-        warnings.push('Design Tokens Italia: risoluzione valori non disponibile')
+        warnings.push('Design Tokens Italia: value resolution not available')
       }
 
-      // ── Warnings su dati mancanti ────────────────────────────────────────────
-      if (!statusData) warnings.push(`Stato non trovato per "${slug}" in components_status.json`)
-      if (variantsData.length === 0) warnings.push(`Nessuna variante HTML trovata per "${slug}"`)
-      if (!guidelinesData) warnings.push(`Linee guida non trovate per "${slug}" in Designers Italia`)
-      if (!devKitEntryData) warnings.push(`"${slug}" non presente nel Dev Kit Italia`)
-      if (tokens.length === 0) warnings.push(`Nessun token CSS trovato per "${slug}"`)
+      // ── Warnings for missing data ─────────────────────────────────────────────
+      if (!statusData) warnings.push(`Status not found for "${slug}" in components_status.json`)
+      if (variantsData.length === 0) warnings.push(`No HTML variants found for "${slug}"`)
+      if (!guidelinesData) warnings.push(`Component guidelines not found for "${slug}" in Designers Italia`)
+      if (!devKitEntryData) warnings.push(`"${slug}" not found in Dev Kit Italia`)
+      if (tokens.length === 0) warnings.push(`No CSS tokens found for "${slug}"`)
 
-      // ── Alpha layer warning ──────────────────────────────────────────────────────
+      // ── Alpha layer warning ───────────────────────────────────────────────────
       warnings.push(ALPHA_WARNING)
 
-      // ── Sorgenti usate ───────────────────────────────────────────────────────
+      // ── Sources used ──────────────────────────────────────────────────────────
       const repoFilter = GITHUB_WATCHED_REPOS.map((r) => `repo:${r}`).join('+')
       const sourceUrls = [
         BSI_STATUS_URL,
@@ -114,7 +114,7 @@ export function registerGetComponentFull(server: McpServer): void {
         `${GITHUB_SEARCH_ISSUES_URL}?q=${slug}+${repoFilter}+is:open`,
       ]
 
-      // ── Assembla risposta ComponentFull ──────────────────────────────────────
+      // ── Assemble ComponentFull response ──────────────────────────────────────
       const full: ComponentFull = {
         name: statusData?.name ?? slug,
         slug,
@@ -137,7 +137,7 @@ export function registerGetComponentFull(server: McpServer): void {
         },
       }
 
-      // ── Fonti disponibili per trasparenza ────────────────────────────────────
+      // ── Available sources for transparency ───────────────────────────────────
       const sourcesAvailable = [
         statusData && 'bsi:status',
         variantsData.length > 0 && 'bsi:markup',

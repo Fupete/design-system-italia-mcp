@@ -3,7 +3,7 @@ import { slugify } from '../slugify.js'
 import type { ComponentIssue } from '../types.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS } from '../constants.js'
 
-// Repo da interrogare per ogni componente
+// Repos to query for each component
 const REPOS = [
   'italia/bootstrap-italia',
   'italia/design-ui-kit',
@@ -33,7 +33,7 @@ async function fetchJson<T>(url: string): Promise<T> {
   return res.json() as Promise<T>
 }
 
-// ─── Sorgente #8 — GitHub Issues REST search ─────────────────────────────────
+// ─── Source #8 — GitHub Issues REST search ────────────────────────────────────
 
 interface RawIssue {
   title: string
@@ -68,7 +68,7 @@ export async function loadComponentIssues(slug: string): Promise<ComponentIssue[
     const raw = await fetchJson<SearchResult>(url)
 
     const issues: ComponentIssue[] = raw.items
-      // Filtra solo i 4 repo rilevanti
+      // Filter only the 4 relevant repositories
       .filter((item) =>
         GITHUB_WATCHED_REPOS.some((r) => item.repository_url.endsWith(r))
       )
@@ -84,17 +84,17 @@ export async function loadComponentIssues(slug: string): Promise<ComponentIssue[
     cache.set(key, issues, TTL.githubIssues)
     return issues
   } catch (err) {
-    // Rate limit o errore di rete — restituisci array vuoto con warning
+    // Rate limit or network error — return empty array with warning
     console.warn(`GitHub issues loader: ${err}`)
     return []
   }
 }
 
-// ─── Stato aggregato board ────────────────────────────────────────────────────
+// ─── Aggregated board status ──────────────────────────────────────────────────
 //
-// Non usiamo GraphQL Projects v2 (richiede read:project, API instabile).
-// Restituiamo un aggregato dalle issue note in components_status.json
-// + conteggio issue live per repo.
+// No GraphQL Projects v2 (requires read:project, unstable API).
+// Returns aggregate from known issues in components_status.json
+// + live issue count per repo.
 
 export interface BoardStatus {
   repos: Array<{
@@ -111,8 +111,8 @@ export function getProjectBoardStatus(): BoardStatus {
       openIssuesUrl: `https://github.com/${repo}/issues`,
     })),
     note:
-      'Board GitHub Projects v2 (project #17) non integrata — ' +
-      'richiede scope read:project. ' +
-      'Usa get_component_issues per issue specifiche per componente.',
+      'GitHub Projects v2 board (project #17) not integrated — ' +
+      'requires read:project scope. ' +
+      'Use get_component_issues for component-specific issues.',
   }
 }

@@ -2,24 +2,24 @@ import yaml from 'js-yaml'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { DESIGNERS_DSNAV_URL, BSI_PACKAGE_JSON_URL, DEVKIT_PACKAGE_JSON_URL, DESIGNERS_SITE_BASE } from '../constants.js'
 
-// ─── Tipi ─────────────────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface DsVersions {
-  designSystem: string       // da dsnav.yaml → tag.label, es. "v1.10.1"
-  bootstrapItalia: string    // da BSI package.json → .version, es. "3.0.0-alpha.2"
-  devKitItalia: string       // da Dev Kit packages/dev-kit-italia/package.json → .version
+  designSystem: string       // from dsnav.yaml → tag.label, e.g. "v1.10.1"
+  bootstrapItalia: string    // from BSI package.json → .version, e.g. "3.0.0-alpha.2"
+  devKitItalia: string       // from Dev Kit packages/dev-kit-italia/package.json → .version
 }
 
 export interface DsNavEntry {
   label: string
-  url: string                // URL relativo designers.italia.it
-  absoluteUrl: string        // URL assoluto completo
+  url: string                // relative URL designers.italia.it
+  absoluteUrl: string        // absolute complete URL
 }
 
 export interface DsMeta {
   versions: DsVersions
   components: Map<string, DsNavEntry>   // slug → entry
-  foundations: DsNavEntry[]             // lista fondamenti
+  foundations: DsNavEntry[]             // foundations list
   fetchedAt: string
 }
 
@@ -37,7 +37,7 @@ async function fetchText(url: string): Promise<string> {
   return res.text()
 }
 
-// ─── Tipi interni per dsnav.yaml ─────────────────────────────────────────────
+// ─── Internal types for dsnav.yaml ───────────────────────────────────────────
 
 interface RawNavItem {
   label: string
@@ -54,7 +54,7 @@ interface RawDsnav {
   list?: RawNavSection[]
 }
 
-// ─── Slug da URL Designers Italia ─────────────────────────────────────────────
+// ─── Slug from Designers Italia URL ──────────────────────────────────────────
 //
 // "/design-system/componenti/accordion/" → "accordion"
 
@@ -63,20 +63,20 @@ function slugFromDesignersUrl(url: string): string {
   return match?.[1] ?? ''
 }
 
-// ─── Loader principale ────────────────────────────────────────────────────────
+// ─── Main loader ──────────────────────────────────────────────────────────────
 
 export async function loadDsMeta(): Promise<DsMeta> {
   const cached = cache.get<DsMeta>(CACHE_KEYS.dsMeta())
   if (cached) return cached
 
-  // Fetch parallelo — fallback graceful su errore di singola sorgente
+  // Parallel fetch — graceful fallback on single source error
   const [dsnavText, bsiPackage, devKitPackage] = await Promise.allSettled([
     fetchText(DESIGNERS_DSNAV_URL),
     fetchJson<{ version: string }>(BSI_PACKAGE_JSON_URL),
     fetchJson<{ version: string }>(DEVKIT_PACKAGE_JSON_URL),
   ])
 
-  // Versioni
+  // Versions
   const versions: DsVersions = {
     designSystem: '',
     bootstrapItalia: '',
@@ -90,7 +90,7 @@ export async function loadDsMeta(): Promise<DsMeta> {
     versions.devKitItalia = devKitPackage.value.version
   }
 
-  // Navigazione
+  // Navigation
   const components = new Map<string, DsNavEntry>()
   const foundations: DsNavEntry[] = []
 
@@ -139,21 +139,21 @@ export async function loadDsMeta(): Promise<DsMeta> {
   return meta
 }
 
-// ─── Helper pubblici ──────────────────────────────────────────────────────────
+// ─── Public helpers ───────────────────────────────────────────────────────────
 
-// Restituisce l'URL assoluto della pagina Designers Italia per un componente
+// Returns the absolute Designers Italia URL for a component
 export async function getDesignersUrl(slug: string): Promise<string | null> {
   const meta = await loadDsMeta()
   return meta.components.get(slug)?.absoluteUrl ?? null
 }
 
-// Restituisce le tre versioni del design system
+// Returns the three design system versions
 export async function getDsVersions(): Promise<DsVersions> {
   const meta = await loadDsMeta()
   return meta.versions
 }
 
-// Restituisce tutti i fondamenti con URL assoluti
+// Returns all foundations with absolute URLs
 export async function getFoundations(): Promise<DsNavEntry[]> {
   const meta = await loadDsMeta()
   return meta.foundations
