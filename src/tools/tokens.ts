@@ -71,6 +71,7 @@ export function registerGetComponentTokens(server: McpServer): void {
                   note: 'valueResolved: valore concreto risolto tramite Design Tokens Italia. ' +
                     'null = risoluzione non disponibile o valore già letterale.',
                   warnings,
+                  stability: 'alpha' as const,
                 },
               },
               null,
@@ -140,6 +141,7 @@ export function registerFindToken(server: McpServer): void {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL],
                   warnings,
+                  stability: 'alpha' as const,
                 },
               },
               null,

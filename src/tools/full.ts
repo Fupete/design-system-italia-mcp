@@ -131,7 +131,7 @@ export function registerGetComponentFull(server: McpServer): void {
           warnings,
           versions: dsMetaData?.versions ?? undefined,
           designersUrl: dsMetaData?.components.get(slug)?.absoluteUrl ?? null,
-
+          stability: 'alpha' as const,
         },
       }
 

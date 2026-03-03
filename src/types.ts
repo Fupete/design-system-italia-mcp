@@ -117,6 +117,8 @@ export interface DsNavEntry {
 
 // ─── Risposta aggregata get_component_full ────────────────────────────────────
 
+export type StabilityLevel = 'alpha' | 'stable'
+
 export interface ComponentFull {
   name: string
   slug: string
@@ -147,6 +149,7 @@ export interface ComponentFull {
     fetchedAt: string
     sourceUrls: string[]
     warnings: string[]
+    stability: StabilityLevel
     versions?: DsVersions        
     designersUrl?: string | null 
   }

@@ -85,6 +85,7 @@ export function registerGetComponentGuidelines(server: McpServer): void {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [DESIGNERS_COMPONENT_URL(slug), BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   warnings,
+                  stability: 'alpha' as const,
                   versions: dsMeta.versions,
                 },
               },
@@ -144,6 +145,7 @@ export function registerListByStatus(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_STATUS_URL],
+                  stability: 'stable' as const,
                 },
               },
               null,
@@ -202,6 +204,7 @@ export function registerListAccessibilityIssues(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_STATUS_URL],
+                  stability: 'stable' as const,
                 },
               },
               null,

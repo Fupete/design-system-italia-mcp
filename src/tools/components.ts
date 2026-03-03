@@ -62,6 +62,7 @@ export function registerListComponents(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
+                  stability: 'alpha' as const,
                 },
               },
               null,
@@ -126,6 +127,7 @@ export function registerGetComponent(server: McpServer): void {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_COMPONENT_URL(slug), DEVKIT_INDEX_URL],
                   warnings,
+                  stability: 'alpha' as const,
                 },
               },
               null,
@@ -192,6 +194,7 @@ export function registerSearchComponents(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
+                  stability: 'alpha' as const,
                 },
               },
               null,
