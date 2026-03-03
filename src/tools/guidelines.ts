@@ -5,7 +5,7 @@ import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
-import { ALPHA_WARNING } from '../constants.js'
+import { ALPHA_WARNING, BSI_STATUS_URL, DESIGNERS_COMPONENT_URL, DEVKIT_INDEX_URL } from '../constants.js'
 
 function formatTimestamp(): string {
   return new Date().toISOString()
@@ -79,11 +79,7 @@ export function registerGetComponentGuidelines(server: McpServer): void {
                 },
                 meta: {
                   fetchedAt: formatTimestamp(),
-                  sourceUrls: [
-                    `https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/content/design-system/componenti/${slug}.yaml`,
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
-                    'https://italia.github.io/dev-kit-italia/index.json',
-                  ],
+                  sourceUrls: [DESIGNERS_COMPONENT_URL(slug), BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   warnings,
                   versions: dsMeta.versions,
                 },
@@ -139,9 +135,7 @@ export function registerListByStatus(server: McpServer): void {
                 results,
                 meta: {
                   fetchedAt: formatTimestamp(),
-                  sourceUrls: [
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
-                  ],
+                  sourceUrls: [BSI_STATUS_URL],
                 },
               },
               null,
@@ -195,9 +189,7 @@ export function registerListAccessibilityIssues(server: McpServer): void {
                 results,
                 meta: {
                   fetchedAt: formatTimestamp(),
-                  sourceUrls: [
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
-                  ],
+                  sourceUrls: [BSI_STATUS_URL],
                 },
               },
               null,

@@ -1,8 +1,7 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify } from '../slugify.js'
 import type { ComponentIssue } from '../types.js'
-
-const GITHUB_API = 'https://api.github.com'
+import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS } from '../constants.js'
 
 // Repo da interrogare per ogni componente
 const REPOS = [
@@ -52,7 +51,7 @@ interface SearchResult {
 
 function repoFromUrl(repositoryUrl: string): string {
   // https://api.github.com/repos/italia/bootstrap-italia → italia/bootstrap-italia
-  return repositoryUrl.replace(`${GITHUB_API}/repos/`, '')
+  return repositoryUrl.replace('https://api.github.com/repos/', '')
 }
 
 export async function loadComponentIssues(slug: string): Promise<ComponentIssue[]> {
@@ -61,9 +60,9 @@ export async function loadComponentIssues(slug: string): Promise<ComponentIssue[
   const cached = cache.get<ComponentIssue[]>(key)
   if (cached) return cached
 
-  const repoFilter = REPOS.map((r) => `repo:${r}`).join(' ')
+  const repoFilter = GITHUB_WATCHED_REPOS.map((r) => `repo:${r}`).join(' ')
   const q = encodeURIComponent(`${normalized} ${repoFilter} is:issue is:open`)
-  const url = `${GITHUB_API}/search/issues?q=${q}&sort=updated&per_page=20`
+  const url = `${GITHUB_SEARCH_ISSUES_URL}?q=${q}&sort=updated&per_page=20`
 
   try {
     const raw = await fetchJson<SearchResult>(url)
@@ -71,7 +70,7 @@ export async function loadComponentIssues(slug: string): Promise<ComponentIssue[
     const issues: ComponentIssue[] = raw.items
       // Filtra solo i 4 repo rilevanti
       .filter((item) =>
-        REPOS.some((r) => item.repository_url.endsWith(r))
+        GITHUB_WATCHED_REPOS.some((r) => item.repository_url.endsWith(r))
       )
       .map((item) => ({
         title: item.title,
@@ -107,7 +106,7 @@ export interface BoardStatus {
 
 export function getProjectBoardStatus(): BoardStatus {
   return {
-    repos: REPOS.map((repo) => ({
+    repos: GITHUB_WATCHED_REPOS.map((repo) => ({
       repo,
       openIssuesUrl: `https://github.com/${repo}/issues`,
     })),

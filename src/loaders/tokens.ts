@@ -1,9 +1,6 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import type { CssToken } from '../types.js'
-
-const TOKENS_RAW =
-  'https://raw.githubusercontent.com/italia/design-tokens-italia/main'
-const BSI_RAW_V3 = 'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x'
+import { DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
 
 // Map 1: --bsi-* → --it-* (da BSI scss/base/root.scss (v3))
 // Map 2: $it-* → valore o altra $it-* (da design-tokens-italia > _variables.scss)
@@ -78,9 +75,10 @@ async function loadTokenMap(): Promise<TokenMap> {
   const cached = cache.get<TokenMap>(CACHE_KEYS.designTokens())
   if (cached) return cached
 
+  // Dopo
   const [rootScss, variablesScss] = await Promise.all([
-    fetchText(`${BSI_RAW_V3}/src/scss/base/_root.scss`),
-    fetchText(`${TOKENS_RAW}/dist/scss/_variables.scss`),
+    fetchText(BSI_ROOT_SCSS_URL),
+    fetchText(DTI_VARIABLES_SCSS_URL),
   ])
 
   const bridge = parseBridge(rootScss)       // --bsi-* → --it-*

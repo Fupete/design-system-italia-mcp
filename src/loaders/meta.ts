@@ -1,20 +1,6 @@
 import yaml from 'js-yaml'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
-
-// ─── Sorgenti metadati ────────────────────────────────────────────────────────
-
-const DSNAV_URL =
-  'https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/dsnav.yaml'
-
-const BSI_PACKAGE_URL =
-  'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/package.json'
-
-// Il root package.json del monorepo ha versione "0.0.0" (workspace placeholder).
-// Il package pubblicato è packages/dev-kit-italia/package.json.
-const DEVKIT_PACKAGE_URL =
-  'https://raw.githubusercontent.com/italia/dev-kit-italia/main/packages/dev-kit-italia/package.json'
-
-const DESIGNERS_BASE = 'https://designers.italia.it'
+import { DESIGNERS_DSNAV_URL, BSI_PACKAGE_JSON_URL, DEVKIT_PACKAGE_JSON_URL, DESIGNERS_SITE_BASE } from '../constants.js'
 
 // ─── Tipi ─────────────────────────────────────────────────────────────────────
 
@@ -85,9 +71,9 @@ export async function loadDsMeta(): Promise<DsMeta> {
 
   // Fetch parallelo — fallback graceful su errore di singola sorgente
   const [dsnavText, bsiPackage, devKitPackage] = await Promise.allSettled([
-    fetchText(DSNAV_URL),
-    fetchJson<{ version: string }>(BSI_PACKAGE_URL),
-    fetchJson<{ version: string }>(DEVKIT_PACKAGE_URL),
+    fetchText(DESIGNERS_DSNAV_URL),
+    fetchJson<{ version: string }>(BSI_PACKAGE_JSON_URL),
+    fetchJson<{ version: string }>(DEVKIT_PACKAGE_JSON_URL),
   ])
 
   // Versioni
@@ -127,7 +113,7 @@ export async function loadDsMeta(): Promise<DsMeta> {
         const entry: DsNavEntry = {
           label: item.label,
           url: item.url,
-          absoluteUrl: `${DESIGNERS_BASE}${item.url}`,
+          absoluteUrl: `${DESIGNERS_SITE_BASE}${item.url}`,
         }
 
         if (isComponents) {

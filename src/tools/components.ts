@@ -3,10 +3,7 @@ import { z } from 'zod'
 import { loadAllStatuses, loadVariants } from '../loaders/bsi.js'
 import { loadDevKitIndex } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
-
-// TODO: aggiornare a URL stabile docs v3 quando disponibile
-// (attualmente solo preview Vercel con URL variabile)
-const BSI_DOC_BASE = 'https://italia.github.io/bootstrap-italia/docs/componenti' 
+import { BSI_STATUS_URL, BSI_COMPONENT_URL, DEVKIT_INDEX_URL, BSI_DOC_BASE } from '../constants.js'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -60,10 +57,7 @@ export function registerListComponents(server: McpServer): void {
                 components,
                 meta: {
                   fetchedAt:  formatTimestamp(),
-                  sourceUrls: [
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
-                    'https://italia.github.io/dev-kit-italia/index.json',
-                  ],
+                  sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
                 },
               },
               null,
@@ -122,10 +116,7 @@ export function registerGetComponent(server: McpServer): void {
                   : null,
                 meta: {
                   fetchedAt:  formatTimestamp(),
-                  sourceUrls: [
-                    `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/componenti/${slug}.json`,
-                    'https://italia.github.io/dev-kit-italia/index.json',
-                  ],
+                  sourceUrls: [BSI_COMPONENT_URL(slug), DEVKIT_INDEX_URL],
                   warnings,
                 },
               },
@@ -188,10 +179,7 @@ export function registerSearchComponents(server: McpServer): void {
                 results,
                 meta: {
                   fetchedAt:  formatTimestamp(),
-                  sourceUrls: [
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
-                    'https://italia.github.io/dev-kit-italia/index.json',
-                  ],
+                  sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
                 },
               },
               null,

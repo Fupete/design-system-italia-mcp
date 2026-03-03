@@ -1,10 +1,8 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
-import { slugFromStorybookId, slugFromImportPath, importPathToRawUrl } from '../slugify.js'
+import { slugFromStorybookId, slugFromImportPath } from '../slugify.js'
 import type { DevKitEntry, DevKitComponent, WebComponentProp } from '../types.js'
-import { slugsToTry } from '../slugify.js' 
-
-const DEVKIT_INDEX = 'https://italia.github.io/dev-kit-italia/index.json'
-const DEVKIT_STORYBOOK = 'https://italia.github.io/dev-kit-italia'
+import { DEVKIT_INDEX_URL, DEVKIT_STORIES_URL, DEVKIT_STORYBOOK_BASE } from '../constants.js'
+import { slugsToTry } from '../slugify.js'
 
 // ─── Fetch helpers ────────────────────────────────────────────────────────────
 
@@ -40,7 +38,7 @@ export async function loadDevKitIndex(): Promise<DevKitIndex> {
   const cached = cache.get<DevKitIndex>(CACHE_KEYS.devKitIndex())
   if (cached) return cached
 
-  const raw = await fetchJson<IndexJson>(DEVKIT_INDEX)
+  const raw = await fetchJson<IndexJson>(DEVKIT_INDEX_URL)
   const index: DevKitIndex = new Map()
 
   for (const entry of Object.values(raw.entries)) {
@@ -67,7 +65,7 @@ export async function loadDevKitIndex(): Promise<DevKitIndex> {
     const devKitEntry: DevKitEntry = {
       slug,
       tags: entry.tags.filter((t) => !['dev', 'test', 'attached-mdx', 'unattached-mdx'].includes(t)),
-      storybookUrl: `${DEVKIT_STORYBOOK}/?path=/docs/${entry.id}`,
+      storybookUrl: `${DEVKIT_STORYBOOK_BASE}/?path=/docs/${entry.id}`,
       importPath,
       variants,
       pattern,
@@ -142,8 +140,8 @@ function parseProp(name: string, block: string): WebComponentProp | null {
 
   // control type
   const control = propBlock.match(/control:\s*['"`]([^'"`]+)['"`]/)?.[1] ??
-                  propBlock.match(/control:\s*\{[^}]*type:\s*['"`]([^'"`]+)['"`]/)?.[1] ??
-                  'text'
+    propBlock.match(/control:\s*\{[^}]*type:\s*['"`]([^'"`]+)['"`]/)?.[1] ??
+    'text'
 
   // default value
   const defaultVal = propBlock.match(/summary:\s*['"`]([^'"`]+)['"`]/)?.[1] ?? null
@@ -263,7 +261,7 @@ export async function loadDevKitComponent(slug: string): Promise<DevKitComponent
   const entry = await loadDevKitEntry(slug)
   if (!entry) return null
 
-  const rawUrl = importPathToRawUrl(entry.importPath)
+  const rawUrl = DEVKIT_STORIES_URL(entry.importPath)
   try {
     const source = await fetchText(rawUrl)
     const component = parseStories(source)

@@ -1,8 +1,7 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify, slugFromStatusTitle, slugsToTry } from '../slugify.js'
 import type { ComponentStatus, ComponentVariant, CssToken, StatusValue } from '../types.js'
-
-const BSI_RAW_V3 = 'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x'
+import { BSI_STATUS_URL, BSI_COMPONENT_URL, BSI_CUSTOM_PROPERTIES_URL } from '../constants.js'
 
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
 
@@ -36,7 +35,7 @@ export async function loadAllStatuses(): Promise<Map<string, ComponentStatus>> {
   const cached = cache.get<Map<string, ComponentStatus>>(CACHE_KEYS.bsiStatus())
   if (cached) return cached
 
-  const url = `${BSI_RAW_V3}/api/components_status.json`
+  const url = BSI_STATUS_URL
   const raw = await fetchJson<RawStatusJson>(url)
 
   const result = new Map<string, ComponentStatus>()
@@ -91,7 +90,7 @@ export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
   if (cached) return cached
 
   for (const s of slugsToTry(slug)) {
-    const url = `${BSI_RAW_V3}/api/componenti/${s}.json`
+    const url = BSI_COMPONENT_URL(s)
     try {
       const raw = await fetchJson<RawVariantsJson>(url)
       const variants = raw.map((v) => ({ name: v.name, html: v.content }))
@@ -119,7 +118,7 @@ async function loadAllTokens(): Promise<RawTokensJson> {
   const cached = cache.get<RawTokensJson>(CACHE_KEYS.bsiTokens())
   if (cached) return cached
 
-  const url = `${BSI_RAW_V3}/api/custom_properties.json`
+  const url = BSI_CUSTOM_PROPERTIES_URL
   const raw = await fetchJson<RawTokensJson>(url)
   cache.set(CACHE_KEYS.bsiTokens(), raw, TTL.bsiTokens)
   return raw

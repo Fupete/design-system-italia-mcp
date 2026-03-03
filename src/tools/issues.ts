@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { loadComponentIssues, getProjectBoardStatus } from '../loaders/github.js'
 import { loadStatus } from '../loaders/bsi.js'
 import { slugify } from '../slugify.js'
+import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS, BSI_STATUS_URL } from '../constants.js'
 
 function formatTimestamp(): string {
   return new Date().toISOString()
@@ -40,6 +41,8 @@ export function registerGetComponentIssues(server: McpServer): void {
         (issue) => !knownIssues.includes(issue.url)
       )
 
+      const repoFilter = GITHUB_WATCHED_REPOS.map((r) => `repo:${r}`).join('+')
+
       return {
         content: [
           {
@@ -62,8 +65,8 @@ export function registerGetComponentIssues(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [
-                    `https://api.github.com/search/issues?q=${slug}+repo:italia/bootstrap-italia+repo:italia/design-ui-kit+repo:italia/dev-kit-italia+repo:italia/design-tokens-italia+is:open`,
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
+                    `${GITHUB_SEARCH_ISSUES_URL}?q=${slug}+${repoFilter}+is:open`,
+                    BSI_STATUS_URL,
                   ],
                   warnings,
                   rateLimitNote: process.env.GITHUB_TOKEN

@@ -8,7 +8,18 @@ import { loadComponentIssues } from '../loaders/github.js'
 import { slugify } from '../slugify.js'
 import type { ComponentFull } from '../types.js'
 import { loadDsMeta } from '../loaders/meta.js'
-import { ALPHA_WARNING } from '../constants.js'
+import {
+  ALPHA_WARNING,
+  BSI_STATUS_URL,
+  BSI_COMPONENT_URL,
+  BSI_CUSTOM_PROPERTIES_URL,
+  DESIGNERS_COMPONENT_URL,
+  DTI_VARIABLES_SCSS_URL,
+  DEVKIT_INDEX_URL,
+  DEVKIT_STORIES_URL,
+  GITHUB_SEARCH_ISSUES_URL,
+  GITHUB_WATCHED_REPOS,
+} from '../constants.js'
 
 function formatTimestamp(): string {
   return new Date().toISOString()
@@ -85,17 +96,16 @@ export function registerGetComponentFull(server: McpServer): void {
       warnings.push(ALPHA_WARNING)
 
       // ── Sorgenti usate ───────────────────────────────────────────────────────
+      const repoFilter = GITHUB_WATCHED_REPOS.map((r) => `repo:${r}`).join('+')
       const sourceUrls = [
-        'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json',
-        `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/componenti/${slug}.json`,
-        'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/custom_properties.json',
-        `https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/content/design-system/componenti/${slug}.yaml`,
-        'https://raw.githubusercontent.com/italia/design-tokens-italia/main/dist/scss/_variables.scss',
-        'https://italia.github.io/dev-kit-italia/index.json',
-        ...(devKitEntryData
-          ? [`https://raw.githubusercontent.com/italia/dev-kit-italia/main/${devKitEntryData.importPath.replace('./', '')}`]
-          : []),
-        `https://api.github.com/search/issues?q=${slug}+repo:italia/bootstrap-italia+repo:italia/design-ui-kit+repo:italia/dev-kit-italia+repo:italia/design-tokens-italia+is:open`,
+        BSI_STATUS_URL,
+        BSI_COMPONENT_URL(slug),
+        BSI_CUSTOM_PROPERTIES_URL,
+        DESIGNERS_COMPONENT_URL(slug),
+        DTI_VARIABLES_SCSS_URL,
+        DEVKIT_INDEX_URL,
+        ...(devKitEntryData ? [DEVKIT_STORIES_URL(devKitEntryData.importPath)] : []),
+        `${GITHUB_SEARCH_ISSUES_URL}?q=${slug}+${repoFilter}+is:open`,
       ]
 
       // ── Assembla risposta ComponentFull ──────────────────────────────────────

@@ -77,9 +77,3 @@ export function getSlugAliases(slug: string): string[] {
 export function slugsToTry(slug: string): string[] {
   return [slug, ...getSlugAliases(slug)]
 }
-
-// Dev Kit importPath → URL raw GitHub
-export function importPathToRawUrl(importPath: string): string {
-  const clean = importPath.replace(/^\.\//, '')
-  return `https://raw.githubusercontent.com/italia/dev-kit-italia/main/${clean}`
-}

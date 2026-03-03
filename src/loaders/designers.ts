@@ -2,9 +2,7 @@ import yaml from 'js-yaml'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify } from '../slugify.js'
 import type { ComponentGuidelines } from '../types.js'
-
-const DESIGNERS_RAW =
-  'https://raw.githubusercontent.com/italia/designers.italia.it/main'
+import { DESIGNERS_COMPONENT_URL, DESIGNERS_SITE_BASE } from '../constants.js'
 
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
 
@@ -78,7 +76,7 @@ export async function loadGuidelines(slug: string): Promise<ComponentGuidelines 
   const cached = cache.get<ComponentGuidelines>(key)
   if (cached) return cached
 
-  const url = `${DESIGNERS_RAW}/src/data/content/design-system/componenti/${normalized}.yaml`
+  const url = DESIGNERS_COMPONENT_URL(normalized)
   try {
     const raw = await fetchYaml(url)
     const guidelines = parseYaml(raw)
@@ -90,5 +88,5 @@ export async function loadGuidelines(slug: string): Promise<ComponentGuidelines 
 }
 
 export function designersUrl(slug: string): string {
-  return `https://designers.italia.it/design-system/componenti/${slugify(slug)}/`
+  return `${DESIGNERS_SITE_BASE}/design-system/componenti/${slugify(slug)}/`
 }

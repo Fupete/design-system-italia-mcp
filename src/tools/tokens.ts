@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { loadTokens, searchTokens } from '../loaders/bsi.js'
 import { resolveTokenValues, searchDesignTokens } from '../loaders/tokens.js'
 import { slugify } from '../slugify.js'
-import { ALPHA_WARNING } from '../constants.js'
+import { ALPHA_WARNING, BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
 
 function formatTimestamp(): string {
   return new Date().toISOString()
@@ -63,11 +63,7 @@ export function registerGetComponentTokens(server: McpServer): void {
                 },
                 meta: {
                   fetchedAt: formatTimestamp(),
-                  sourceUrls: [
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/custom_properties.json',
-                    'https://raw.githubusercontent.com/italia/design-tokens-italia/main/dist/scss/_variables.scss',
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/src/scss/base/_root.scss',
-                  ],
+                  sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
                   note: 'valueResolved: valore concreto risolto tramite Design Tokens Italia. ' +
                     'null = risoluzione non disponibile o valore già letterale.',
                   warnings,
@@ -134,10 +130,7 @@ export function registerFindToken(server: McpServer): void {
                 },
                 meta: {
                   fetchedAt: formatTimestamp(),
-                  sourceUrls: [
-                    'https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/custom_properties.json',
-                    'https://raw.githubusercontent.com/italia/design-tokens-italia/main/dist/scss/_variables.scss',
-                  ],
+                  sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL],
                   warnings,
                 },
               },
