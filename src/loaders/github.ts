@@ -3,14 +3,6 @@ import { slugify } from '../slugify.js'
 import type { ComponentIssue } from '../types.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS } from '../constants.js'
 
-// Repos to query for each component
-const REPOS = [
-  'italia/bootstrap-italia',
-  'italia/design-ui-kit',
-  'italia/dev-kit-italia',
-  'italia/design-tokens-italia'
-]
-
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
 
 function authHeaders(): HeadersInit {
