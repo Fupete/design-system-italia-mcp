@@ -38,9 +38,20 @@ export const BSI_STATUS_URL =
 export const BSI_CUSTOM_PROPERTIES_URL =
   `${BSI_RAW_BASE}/api/custom_properties.json`
 
-/** HTML markup variants per component */
-export const BSI_COMPONENT_URL = (slug: string): string =>
-  `${BSI_RAW_BASE}/api/componenti/${slug}.json`
+/** HTML markup variants per component — subfolder varies by category */
+export const BSI_COMPONENT_URL = (subfolder: string, slug: string): string =>
+  `${BSI_RAW_BASE}/api/${subfolder}/${slug}.json`
+
+/** Default subfolder for components without a bsiDocUrl */
+export const BSI_COMPONENT_DEFAULT_SUBFOLDER = 'componenti'
+
+// Extracts API subfolder from BSI doc URL
+// "https://italia.github.io/bootstrap-italia/docs/menu-di-navigazione/footer/"
+// → "menu-di-navigazione"
+export function subfolderFromDocUrl(bsiDocUrl: string): string {
+  const match = bsiDocUrl.match(/\/docs\/([^/]+)\/[^/]+\/?$/)
+  return match?.[1] ?? BSI_COMPONENT_DEFAULT_SUBFOLDER
+}
 
 /** Bridge --bsi-* → --it-* (required for valueResolved) */
 export const BSI_ROOT_SCSS_URL =

@@ -1,7 +1,7 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify, slugFromStatusTitle, slugsToTry } from '../slugify.js'
 import type { ComponentStatus, ComponentVariant, CssToken, StatusValue } from '../types.js'
-import { BSI_STATUS_URL, BSI_COMPONENT_URL, BSI_CUSTOM_PROPERTIES_URL } from '../constants.js'
+import { BSI_STATUS_URL, BSI_COMPONENT_URL, BSI_COMPONENT_DEFAULT_SUBFOLDER, BSI_CUSTOM_PROPERTIES_URL, subfolderFromDocUrl } from '../constants.js'
 
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
 
@@ -84,13 +84,20 @@ export async function loadStatus(slug: string): Promise<ComponentStatus | null> 
 
 type RawVariantsJson = Array<{ name: string; content: string }>
 
-export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
+export async function loadVariants(
+  slug: string,
+  bsiDocUrl?: string | null
+): Promise<ComponentVariant[]> {
   const key = CACHE_KEYS.bsiMarkup(slug)
   const cached = cache.get<ComponentVariant[]>(key)
   if (cached) return cached
 
+  const subfolder = bsiDocUrl
+    ? subfolderFromDocUrl(bsiDocUrl)
+    : BSI_COMPONENT_DEFAULT_SUBFOLDER
+
   for (const s of slugsToTry(slug)) {
-    const url = BSI_COMPONENT_URL(s)
+    const url = BSI_COMPONENT_URL(subfolder, s)
     try {
       const raw = await fetchJson<RawVariantsJson>(url)
       const variants = raw.map((v) => ({ name: v.name, html: v.content }))
@@ -126,15 +133,23 @@ async function loadAllTokens(): Promise<RawTokensJson> {
 
 export async function loadTokens(slug: string): Promise<CssToken[]> {
   const all = await loadAllTokens()
-  const entries = all[slugify(slug)] ?? []
 
-  return entries.map((e) => ({
-    name: e['variable-name'],
-    value: e.value,
-    valueType: classifyValue(e.value),
-    valueResolved: null,  // populated by loaders/tokens.ts
-    description: e.description || null,
-  }))
+  // Try canonical slug first, then all known aliases
+  // e.g. "buttons" → tries "buttons", "button", "btn"
+  for (const s of slugsToTry(slug)) {
+    const entries = all[s]
+    if (entries && entries.length > 0) {
+      return entries.map((e) => ({
+        name: e['variable-name'],
+        value: e.value,
+        valueType: classifyValue(e.value),
+        valueResolved: null,
+        description: e.description || null,
+      }))
+    }
+  }
+
+  return []
 }
 
 export async function searchTokens(query: string): Promise<Array<CssToken & { component: string }>> {

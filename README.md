@@ -70,11 +70,6 @@ accessibilità, issue GitHub aperte.
 Ogni risposta include le versioni delle sorgenti (Design System, Bootstrap Italia,
 Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'ultimo fetch.
 
-**Caso d'uso avanzato / Advanced use case** — Incolla il sorgente HTML di una pagina
-che usa componenti Bootstrap Italia e chiedi al modello di verificarne la conformità
-ai componenti standard. Il modello dovrebbe identificare i componenti usati, chiamare
-`get_component_guidelines` per ciascuno e produrre un'analisi basata su dati ufficiali.
-
 ---
 
 ## Come connettersi / How to connect

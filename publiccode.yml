@@ -1,8 +1,8 @@
 publiccodeYmlVersion: "0.5.0"
 name: design-system-italia-mcp
 url: "https://github.com/fupete/design-system-italia-mcp"
-softwareVersion: "0.1.0"
-releaseDate: "2026-03-01"
+softwareVersion: "0.1.8"
+releaseDate: "2026-03-04"
 softwareType: addon
 platforms:
   - web

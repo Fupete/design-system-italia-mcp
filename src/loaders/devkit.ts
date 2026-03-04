@@ -118,6 +118,35 @@ function extractArgTypesBlock(source: string, exportName?: string): string | nul
   return null
 }
 
+// Extracts the full block of a named export: export const Foo = { ... }
+function extractExportBlock(source: string, exportName: string): string | null {
+  const start = source.indexOf(`export const ${exportName}`)
+  if (start === -1) return null
+  const braceStart = source.indexOf('{', start)
+  if (braceStart === -1) return null
+  let depth = 0, i = braceStart
+  while (i < source.length) {
+    if (source[i] === '{') depth++
+    if (source[i] === '}') { depth--; if (depth === 0) return source.slice(braceStart, i + 1) }
+    i++
+  }
+  return null
+}
+
+// Finds argTypes: { ... } inside an already-extracted block
+function findArgTypesInBlock(block: string): string | null {
+  const match = block.match(/argTypes:\s*\{/)
+  if (!match) return null
+  const startIdx = (match.index ?? 0) + match[0].length - 1
+  let depth = 0, i = startIdx
+  while (i < block.length) {
+    if (block[i] === '{') depth++
+    if (block[i] === '}') { depth--; if (depth === 0) return block.slice(startIdx, i + 1) }
+    i++
+  }
+  return null
+}
+
 // Extracts a single prop from an argTypes block
 function parseProp(name: string, block: string): WebComponentProp | null {
   // Search for the prop block: propName: { ... }
@@ -135,8 +164,12 @@ function parseProp(name: string, block: string): WebComponentProp | null {
   }
   const propBlock = block.slice(startIdx, i + 1)
 
+   // Skip props explicitly disabled in table
+  if (propBlock.includes('disable: true')) return null
+
   // description
-  const desc = propBlock.match(/description:\s*['"`]([\s\S]*?)['"`]/)?.[1]?.trim() ?? null
+  const descMatch = propBlock.match(/description:\s*("[\s\S]*?"|'[\s\S]*?'|`[\s\S]*?`)/)
+  const desc = descMatch ? descMatch[1].slice(1, -1).trim() : null
 
   // control type
   const control = propBlock.match(/control:\s*['"`]([^'"`]+)['"`]/)?.[1] ??
@@ -195,10 +228,7 @@ function extractTagName(source: string): string | null {
 
 // Extracts tag names from subcomponents (decorator or render)
 function extractSubTagNames(source: string, exportName: string): string[] {
-  const exportPattern = new RegExp(
-    `export const ${exportName}[\\s\\S]*?(?=export const |$)`, 'm'
-  )
-  const block = source.match(exportPattern)?.[0] ?? ''
+  const block = extractExportBlock(source, exportName) ?? ''
   const tags = new Set<string>()
   const matches = block.matchAll(/<(it-[a-z0-9-]+)/g)
   for (const m of matches) tags.add(m[1])
@@ -226,7 +256,8 @@ function parseStories(source: string): DevKitComponent | null {
   const subcomponents: DevKitComponent['subcomponents'] = []
 
   for (const exportName of subExports) {
-    const argTypesBlock = extractArgTypesBlock(source, exportName)
+    const exportBlock = extractExportBlock(source, exportName)
+    const argTypesBlock = exportBlock ? findArgTypesInBlock(exportBlock) : null
     if (!argTypesBlock) continue
 
     const subTagNames = extractSubTagNames(source, exportName)

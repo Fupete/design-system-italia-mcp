@@ -20,6 +20,8 @@ import {
   DEVKIT_STORIES_URL,
   GITHUB_SEARCH_ISSUES_URL,
   GITHUB_WATCHED_REPOS,
+  BSI_COMPONENT_DEFAULT_SUBFOLDER,
+  subfolderFromDocUrl
 } from '../constants.js'
 
 function formatTimestamp(): string {
@@ -46,26 +48,20 @@ export function registerGetComponentFull(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
+      // Load status first — needed for correct variants subfolder
+      const statusData = await loadStatus(slug).catch(() => null)
+
       // ── Parallel fetch from all sources ──────────────────────────────────────
-      const [
-        status,
-        variants,
-        rawTokens,
-        guidelines,
-        devKitEntry,
-        devKitComponent,
-        openIssues,
-        dsMeta,
-      ] = await Promise.allSettled([
-        loadStatus(slug),
-        loadVariants(slug),
-        loadTokens(slug),
-        loadGuidelines(slug),
-        loadDevKitEntry(slug),
-        loadDevKitComponent(slug),
-        loadComponentIssues(slug),
-        loadDsMeta(),
-      ])
+      const [variants, rawTokens, guidelines, devKitEntry, devKitComponent, openIssues, dsMeta] =
+        await Promise.allSettled([
+          loadVariants(slug, statusData?.sourceUrls.bsiDoc),  // now has correct subfolder
+          loadTokens(slug),
+          loadGuidelines(slug),
+          loadDevKitEntry(slug),
+          loadDevKitComponent(slug),
+          loadComponentIssues(slug),
+          loadDsMeta(),
+        ])
 
       // ── Unwrap results with warnings on failure ───────────────────────────────
       function unwrap<T>(result: PromiseSettledResult<T>, label: string, fallback: T): T {
@@ -74,7 +70,6 @@ export function registerGetComponentFull(server: McpServer): void {
         return fallback
       }
 
-      const statusData = unwrap(status, 'BSI status', null)
       const variantsData = unwrap(variants, 'BSI markup', [])
       const rawTokensData = unwrap(rawTokens, 'BSI tokens', [])
       const guidelinesData = unwrap(guidelines, 'Designers Italia', null)
@@ -105,7 +100,12 @@ export function registerGetComponentFull(server: McpServer): void {
       const repoFilter = GITHUB_WATCHED_REPOS.map((r) => `repo:${r}`).join('+')
       const sourceUrls = [
         BSI_STATUS_URL,
-        BSI_COMPONENT_URL(slug),
+        BSI_COMPONENT_URL(
+          statusData?.sourceUrls.bsiDoc
+            ? subfolderFromDocUrl(statusData.sourceUrls.bsiDoc)
+            : BSI_COMPONENT_DEFAULT_SUBFOLDER,
+          slug
+        ),
         BSI_CUSTOM_PROPERTIES_URL,
         DESIGNERS_COMPONENT_URL(slug),
         DTI_VARIABLES_SCSS_URL,

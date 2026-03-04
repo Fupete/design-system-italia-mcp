@@ -64,7 +64,7 @@ export function slugsMatch(a: string, b: string): boolean {
 //   'modal'   → BSI saves the file as "modale.json"
 //
 const SLUG_ALIASES: Record<string, string[]> = {
-  'buttons': ['button'],
+  'buttons': ['button', 'btn'],
   'modal':   ['modale'],
 }
 

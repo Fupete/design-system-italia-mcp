@@ -1,9 +1,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
-import { loadAllStatuses, loadVariants } from '../loaders/bsi.js'
-import { loadDevKitIndex } from '../loaders/devkit.js'
+import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
+import { loadDevKitIndex, loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
-import { BSI_STATUS_URL, BSI_COMPONENT_URL, DEVKIT_INDEX_URL, BSI_DOC_BASE } from '../constants.js'
+import { BSI_STATUS_URL, BSI_COMPONENT_URL, DEVKIT_INDEX_URL, BSI_DOC_BASE, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl } from '../constants.js'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -92,16 +92,18 @@ export function registerGetComponent(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      const [variants, devKitIndex] = await Promise.all([
-        loadVariants(slug),
+      const [status, devKitIndex] = await Promise.all([
+        loadStatus(slug),
         loadDevKitIndex(),
       ])
+
+      const variants = await loadVariants(slug, status?.sourceUrls.bsiDoc)
 
       if (variants.length === 0) {
         warnings.push(`No BSI variants found for "${slug}"`)
       }
 
-      const devKitEntry = devKitIndex.get(slug) ?? null
+      const devKitEntry = await loadDevKitEntry(slug)
       if (!devKitEntry) {
         warnings.push(`Component not found in Dev Kit Italia for "${slug}"`)
       }
@@ -125,7 +127,15 @@ export function registerGetComponent(server: McpServer): void {
                   : null,
                 meta: {
                   fetchedAt: formatTimestamp(),
-                  sourceUrls: [BSI_COMPONENT_URL(slug), DEVKIT_INDEX_URL],
+                  sourceUrls: [
+                    BSI_COMPONENT_URL(
+                      status?.sourceUrls.bsiDoc
+                        ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
+                        : BSI_COMPONENT_DEFAULT_SUBFOLDER,
+                      slug
+                    ),
+                    DEVKIT_INDEX_URL,
+                  ],
                   warnings,
                   stability: 'alpha' as const,
                 },
