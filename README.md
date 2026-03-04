@@ -1,12 +1,9 @@
 # MCP Server per Design system .italia
 
 > ⚠️ **Progetto non ufficiale e sperimentale**
-> Questo è un progetto personale sandbox di Daniele Tabellini.
-> I dati sono forniti così come sono e potrebbero essere incompleti
-> o non aggiornati. Utilizzare a proprio rischio.
+> I dati sono forniti così come sono e potrebbero essere incompleti > o non aggiornati. Utilizzare a proprio rischio.
 
 > ⚠️ **Unofficial & experimental personal sandbox project**
-> This is a personal sandbox project by Daniele Tabellini.
 > Data is provided as-is and may be outdated or incomplete.
 > Use at your own risk.
 
@@ -17,27 +14,19 @@
 
 ## Cos'è / What it is
 
-**IT** — Server MCP (Model Context Protocol) remoto non ufficiale
-che espone a assistenti AI i dati strutturati di Design system
-.italia: componenti Bootstrap Italia, Dev Kit Italia, token CSS, 
-linee guida d'uso, stato di accessibilità e issue GitHub collegate.
+**IT** — Server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia, web component e props Dev Kit Italia ⚠️ alpha, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate.
 
-**EN** — An unofficial remote MCP (Model Context Protocol) server
-providing AI assistants with structured access to Italy's Design
-System resources: Bootstrap Italia and Dev Kit Italia components, 
-CSS tokens, usage guidelines, accessibility status, and related 
-GitHub issues.
+**EN** — An unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia components and HTML markup, Dev Kit Italia web components and props ⚠️ alpha, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues.
 
 ---
 
 ## Strumenti esposti / Exposed tools
 
-### Componenti (Bootstrap Italia)
-- `list_components` — elenco di tutti i componenti con stato
-- `get_component(name)` — markup HTML Bootstrap Italia e varianti di un componente
-- `search_components(query)` — ricerca per nome o caratteristica (tendenzialmente nome in inglese)
-- `get_component_full(name)` ⭐ — risposta aggregata: markup +
-  token CSS + linee guida + stato + issue aperte in una sola query + ...
+### Componenti
+* `list_components` — elenco di tutti i componenti con stato (Bootstrap Italia + Dev Kit Italia)
+* `get_component(name)` — markup HTML Bootstrap Italia, varianti e props web component Dev Kit Italia ⚠️ alpha
+* `search_components(query)` — ricerca per nome o caratteristica
+* **Tool principale:** `get_component_full(name)` — risposta aggregata: markup HTML + props Dev Kit Italia ⚠️ alpha + token CSS + linee guida per componente + stato + issue aperte in una sola query
 
 ### Token e variabili CSS
 - `get_component_tokens(name)` — variabili CSS `--bsi-*` personalizzabili
@@ -121,7 +110,7 @@ VPS personale, server aziendale.
 Per uso locale con Claude Desktop o Cursor senza server remoto,
 imposta `TRANSPORT=stdio` nelle variabili d'ambiente.
 
-> 💡 **Provider remoto consigliato** — Per esporre il server
+> 💡 **Provider consigliato** — Per esporre il server
 > pubblicamente, scegli un VPS con datacenter EU per privacy e
 > sovranità dei dati. Alcune opzioni: Hetzner (DE), OVHcloud (FR),
 > Scaleway (FR), Infomaniak (CH).
