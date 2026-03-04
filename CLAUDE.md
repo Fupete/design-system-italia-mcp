@@ -36,10 +36,13 @@ src/
 ├── cache.ts          # cache in-memory con TTL per sorgente
 ├── slugify.ts        # slug matching tra sorgenti eterogenee
 └── types.ts          # tipi condivisi
+├── constants.ts      # URL sorgenti, ALPHA_WARNING, costanti condivise
+├── schemas.ts        # Zod output schemas per get_component_full e get_component_tokens
 ```
 
 **Regola soglia**: se un file supera ~400 righe, spezzarlo per modulo.
 Partire monolite, refactoring solo quando necessario.
+**Naming tool**: prefisso `dsi_*` previsto in v0.2.0 (breaking change) — es. `dsi_list_components`, `dsi_get_component_full`.
 
 ---
 
@@ -177,6 +180,7 @@ meta: {
   warnings: string[],          // sorgenti mancanti o errori non fatali
   versions?: DsVersions,       // designSystem / bootstrapItalia / devKitItalia
   designersUrl?: string | null // URL verificato da dsnav.yaml, non dedotto
+  stability: 'alpha' | 'stable',  // alpha se include token BSI 3.x o Dev Kit
 }
 ```
 
@@ -210,6 +214,9 @@ potrebbe avere breaking changes.
 - Non duplicare la logica di slug matching fuori da `slugify.ts`
 - Non fallire silenziosamente se una sorgente non risponde
 - Non usare il `package.json` root di dev-kit-italia per la versione (è `"0.0.0"`)
+- Non dichiarare VERSION manualmente — viene letta da `package.json` a runtime via `createRequire`
+- Non usare `server.tool()` — usare sempre `server.registerTool()` con `title`, `inputSchema`, `annotations`
+- Non duplicare l'oggetto output — costruirlo una volta e riusare per `content` e `structuredContent`
 
 ---
 
