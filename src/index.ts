@@ -1,4 +1,7 @@
+#!/usr/bin/env node
+
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import { createServer, IncomingMessage, ServerResponse } from 'node:http'
 import { createRequire } from 'node:module'
@@ -172,11 +175,19 @@ const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse
   res.end(JSON.stringify({ error: 'Not found' }))
 })
 
-httpServer.listen(PORT, () => {
-  console.log(`✅ design-system-italia-mcp v${VERSION}`)
-  console.log(`   MCP    → http://localhost:${PORT}/mcp`)
-  console.log(`   Health → http://localhost:${PORT}/health`)
-  console.log(`   Cache  → POST http://localhost:${PORT}/cache/invalidate`)
-  console.log(`   Auth   → ${CACHE_TOKEN ? '✓ token configured' : '⚠️  CACHE_INVALIDATION_TOKEN not set'}`)
-  console.log(`   ⚠️  Token layer alpha: BSI 3.x and Dev Kit Italia in alpha`)
-})
+const TRANSPORT = process.env.TRANSPORT ?? 'http'
+
+if (TRANSPORT === 'stdio') {
+  const s = createMcpServer()
+  const transport = new StdioServerTransport()
+  s.connect(transport).catch(console.error)
+} else {
+  httpServer.listen(PORT, () => {
+    console.log(`✅ design-system-italia-mcp v${VERSION}`)
+    console.log(`   MCP    → http://localhost:${PORT}/mcp`)
+    console.log(`   Health → http://localhost:${PORT}/health`)
+    console.log(`   Cache  → POST http://localhost:${PORT}/cache/invalidate`)
+    console.log(`   Auth   → ${CACHE_TOKEN ? '✓ token configured' : '⚠️  CACHE_INVALIDATION_TOKEN not set'}`)
+    console.log(`   ⚠️  Token layer alpha: BSI 3.x and Dev Kit Italia in alpha`)
+  })
+}

@@ -89,6 +89,32 @@ Oppure via CLI:
 claude mcp add --url https://[url-server]/mcp design-system-italia
 ```
 
+### Claude Desktop / Cursor / VS Code (via NPX — consigliato)
+
+Aggiungi al file di configurazione MCP del tuo client:
+```json
+{
+  "mcpServers": {
+    "design-system-italia": {
+      "command": "npx",
+      "args": ["-y", "@fupete/design-system-italia-mcp"],
+      "env": {
+        "GITHUB_TOKEN": "your_token_here"
+      }
+    }
+  }
+}
+```
+
+Oppure via CLI (Claude Desktop):
+```bash
+claude mcp add design-system-italia \
+  --command "npx -y @fupete/design-system-italia-mcp" \
+  --env GITHUB_TOKEN=your_token
+```
+
+Non richiede installazione — npx scarica e avvia il server automaticamente.
+
 ### Self-hosting con Docker (locale o VPS)
 ```bash
 docker pull ghcr.io/fupete/design-system-italia-mcp
