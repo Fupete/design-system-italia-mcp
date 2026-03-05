@@ -33,7 +33,7 @@
   con descrizioni semantiche, tokens da Design Tokens Italia e valori risolti
 - `find_token(query)` — ricerca per nome variabile o descrizione
 
-### Linee guida e accessibilità (Designers Italia)
+### Linee guida componenti e stato accessibilità (documentazione su Designers Italia)
 - `get_component_guidelines(name)` — linee guida d'uso, quando/come usarlo,
   stato verifiche accessibilità complete 
 - `list_by_status(status)` — componenti per stato (…)
@@ -50,13 +50,14 @@
 Il valore principale del server è la **combinazione contestuale**
 delle sorgenti. Usa `get_component_full(name)` per ottenere in
 una singola chiamata: stato del componente, markup HTML, variabili CSS
-personalizzabili, linee guida d'uso e issue GitHub aperte.
+personalizzabili, componente da Dev Kit Italia, linee guida d'uso 
+e issue GitHub aperte.
 
 Esempio: *"Dimmi tutto sul componente Alert"* → stato beta/stabile,
-markup HTML con varianti, variabili CSS con valori risolti, note
-accessibilità, issue GitHub aperte.
+markup HTML con varianti, variabili CSS con valori risolti, web component e props,
+eventuali note accessibilità, issue GitHub aperte.
 
-Ogni risposta include le versioni delle sorgenti (Design System, Bootstrap Italia,
+Ogni risposta include le versioni delle sorgenti (Design System .italia, Bootstrap Italia,
 Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'ultimo fetch.
 
 ---
