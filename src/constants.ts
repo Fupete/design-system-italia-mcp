@@ -51,7 +51,7 @@ export function subfolderFromDocUrl(bsiDocUrl: string): string {
 
 /** Bridge --bsi-* → --it-* (required for valueResolved) */
 export const BSI_ROOT_SCSS_URL =
-  `${BSI_RAW_BASE}/src/scss/_root.scss`
+  `${BSI_RAW_BASE}/src/scss/base/_root.scss`
 
 /** BSI version for meta.versions.bootstrapItalia */
 export const BSI_PACKAGE_JSON_URL =

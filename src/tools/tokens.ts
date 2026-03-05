@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentTokensOutput } from '../schemas.js'
 import { loadTokens, searchTokens } from '../loaders/bsi.js'
-import { resolveTokenValues, searchDesignTokens } from '../loaders/tokens.js'
+import { resolveTokenValues, searchDesignTokens, debugTokenResolution } from '../loaders/tokens.js'
 import { slugify } from '../slugify.js'
 import { ALPHA_WARNING, BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
 
@@ -42,6 +42,12 @@ export function registerGetComponentTokens(server: McpServer): void {
       let tokens = rawTokens
       try {
         tokens = await resolveTokenValues(rawTokens)
+        // Debug: uncomment to diagnose token resolution (see also debugTokenResolution in loaders/tokens.ts)
+        // const resolved = tokens.filter(t => t.valueResolved !== null).length
+        // const refs = tokens.filter(t => t.valueType === 'token-reference').length
+        // warnings.push(`[debug] ${refs} token-references, ${resolved} resolved`)
+        // const debugLogs = await debugTokenResolution()
+        // warnings.push(...debugLogs.map(l => `[debug] ${l}`))
       } catch {
         warnings.push('Design Tokens Italia value resolution not available')
       }

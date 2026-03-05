@@ -146,3 +146,39 @@ export async function searchDesignTokens(
 
   return results
 }
+
+// Debug: uncomment to diagnose token resolution chain (bridge/DTI sizes, key matching)
+// export async function debugTokenResolution(): Promise<string[]> {
+//   const logs: string[] = []
+
+//   try {
+//     const [rootScss, variablesScss] = await Promise.all([
+//       fetchText(BSI_ROOT_SCSS_URL),
+//       fetchText(DTI_VARIABLES_SCSS_URL),
+//     ])
+
+//     const bridge = parseBridge(rootScss)
+//     const dtiRaw = parseVariables(variablesScss)
+
+//     logs.push(`bridge.size: ${bridge.size}`)
+//     logs.push(`dtiRaw.size: ${dtiRaw.size}`)
+
+//     // Count concrete vs reference values in DTI
+//     let concrete = 0, refs = 0
+//     for (const val of dtiRaw.values()) {
+//       if (val.startsWith('--it-')) refs++
+//       else concrete++
+//     }
+//     logs.push(`dtiRaw: ${concrete} concrete, ${refs} references`)
+
+//     // Sample bridge entries and check if DTI has them
+//     const sample = [...bridge.entries()].slice(0, 3)
+//     for (const [bsi, it] of sample) {
+//       logs.push(`${bsi} → ${it} → dtiRaw.has: ${dtiRaw.has(it)}`)
+//     }
+//   } catch (err) {
+//     logs.push(`error: ${(err as Error).message}`)
+//   }
+
+//   return logs
+// }
