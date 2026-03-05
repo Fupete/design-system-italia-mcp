@@ -72,7 +72,7 @@ export const STATIC_SOURCES: StaticSource[] = [
     url:  DESIGNERS_COMPONENT_URL("accordion"),
     minLength: 200 },
 
-  // Source #4 — Designers Italia nav (versions + foundation URLs)
+  // Source #9 — Designers Italia nav (versions + foundation URLs)
   { name: "Designers Italia dsnav.yaml",
     url:  DESIGNERS_DSNAV_URL,
     minLength: 100 },

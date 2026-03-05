@@ -74,7 +74,7 @@ async function loadTokenMap(): Promise<TokenMap> {
   const cached = cache.get<TokenMap>(CACHE_KEYS.designTokens())
   if (cached) return cached
 
-  // Dopo
+  // Parallel fetch
   const [rootScss, variablesScss] = await Promise.all([
     fetchText(BSI_ROOT_SCSS_URL),
     fetchText(DTI_VARIABLES_SCSS_URL),

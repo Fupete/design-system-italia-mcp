@@ -14,13 +14,9 @@
 // Stable sources: #1 #2 BSI markup/status, #4 Designers YAML, #5 DTI, #8 GitHub Issues
 
 export const ALPHA_WARNING =
-  'Token layer alpha: Bootstrap Italia ' + VERSION_BSI_HINT() + ' and Dev Kit Italia use BSI 3.x (alpha). ' +
-  'HTML markup and component status are stable. ' +
-  'CSS tokens (--bsi-*) and Dev Kit web components may have breaking changes before stable release.'
-
-function VERSION_BSI_HINT(): string {
-  return '3.x'
-}
+  'Bootstrap Italia 3.x and Dev Kit Italia are in alpha. ' +
+  'CSS tokens (--bsi-*), and web components may have breaking changes before stable release. ' +
+  'HTML markup and component status are a little more reliable.'
 
 // ─── Bootstrap Italia — sources #1 #2 #3 ────────────────────────────────────
 

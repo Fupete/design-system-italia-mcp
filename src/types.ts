@@ -90,7 +90,7 @@ export interface DevKitComponent {
   description: string | null
 }
 
-// ─── GitHub Issues ────────────────────────────────────────────────────────────
+// ─── GitHub Issues and board status ───────────────────────────────────────────
 
 export interface ComponentIssue {
   title: string
@@ -99,6 +99,14 @@ export interface ComponentIssue {
   state: 'open' | 'closed'
   createdAt: string
   labels: string[]
+}
+
+export interface BoardStatus {
+  repos: Array<{
+    repo: string
+    openIssuesUrl: string
+  }>
+  note: string
 }
 
 // ─── Design System — navigation metadata and versions ────────────────────────
@@ -113,6 +121,13 @@ export interface DsNavEntry {
   label: string
   url: string                 // relative URL
   absoluteUrl: string         // https://designers.italia.it/...
+}
+
+export interface DsMeta {
+  versions: DsVersions
+  components: Map<string, DsNavEntry>   // slug → entry
+  foundations: DsNavEntry[]             // foundations list
+  fetchedAt: string
 }
 
 // ─── Aggregated response get_component_full ───────────────────────────────────

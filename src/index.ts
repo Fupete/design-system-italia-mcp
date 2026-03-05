@@ -24,16 +24,6 @@ const VERSION: string = require('../package.json').version
 
 const CACHE_TOKEN = process.env.CACHE_INVALIDATION_TOKEN ?? ''
 
-// ─── Alpha warning — included in ping and in meta.warnings of all responses ──
-//
-// BSI 2.x is stable and has markup and component status APIs.
-// BSI 3.x adds structured CSS tokens (custom_properties.json, _root.scss)
-// needed for valueResolved. Dev Kit Italia is built on BSI 3.x.
-// The token layer and web components may have breaking changes before
-// stable release — do not use in production without checking upstream.
-
-export { ALPHA_WARNING }
-
 // ─── MCP Server factory ───────────────────────────────────────────────────────
 //
 // A new instance per HTTP request — McpServer cannot be connected

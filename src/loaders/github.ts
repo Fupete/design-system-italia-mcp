@@ -1,6 +1,6 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify } from '../slugify.js'
-import type { ComponentIssue } from '../types.js'
+import type { ComponentIssue, BoardStatus } from '../types.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS } from '../constants.js'
 
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
@@ -87,14 +87,6 @@ export async function loadComponentIssues(slug: string): Promise<ComponentIssue[
 // No GraphQL Projects v2 (requires read:project, unstable API).
 // Returns aggregate from known issues in components_status.json
 // + live issue count per repo.
-
-export interface BoardStatus {
-  repos: Array<{
-    repo: string
-    openIssuesUrl: string
-  }>
-  note: string
-}
 
 export function getProjectBoardStatus(): BoardStatus {
   return {

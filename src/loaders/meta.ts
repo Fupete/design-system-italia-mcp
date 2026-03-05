@@ -1,27 +1,7 @@
 import yaml from 'js-yaml'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { DESIGNERS_DSNAV_URL, BSI_PACKAGE_JSON_URL, DEVKIT_PACKAGE_JSON_URL, DESIGNERS_SITE_BASE } from '../constants.js'
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-export interface DsVersions {
-  designSystem: string       // from dsnav.yaml → tag.label, e.g. "v1.10.1"
-  bootstrapItalia: string    // from BSI package.json → .version, e.g. "3.0.0-alpha.2"
-  devKitItalia: string       // from Dev Kit packages/dev-kit-italia/package.json → .version
-}
-
-export interface DsNavEntry {
-  label: string
-  url: string                // relative URL designers.italia.it
-  absoluteUrl: string        // absolute complete URL
-}
-
-export interface DsMeta {
-  versions: DsVersions
-  components: Map<string, DsNavEntry>   // slug → entry
-  foundations: DsNavEntry[]             // foundations list
-  fetchedAt: string
-}
+import type { DsVersions, DsNavEntry, DsMeta } from '../types.js'
 
 // ─── Fetch helpers ────────────────────────────────────────────────────────────
 
