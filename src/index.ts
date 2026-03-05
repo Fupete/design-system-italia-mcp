@@ -110,10 +110,15 @@ function createMcpServer(): McpServer {
 const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse) => {
   const url = new URL(req.url ?? '/', `http://localhost:${PORT}`)
 
-  // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  // CORS — restrict /cache/invalidate to same origin
+  if (url.pathname === '/cache/invalidate') {
+    res.setHeader('Access-Control-Allow-Origin', 'null')
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization')
+
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204)
@@ -197,11 +202,11 @@ if (TRANSPORT === 'stdio') {
     console.log(`   Auth   → ${CACHE_TOKEN ? '✓ token configured' : '⚠️  CACHE_INVALIDATION_TOKEN not set'}`)
     console.log(`   ⚠️  Token layer alpha: BSI 3.x and Dev Kit Italia in alpha`)
   })
+  
+  process.on('SIGTERM', () => {
+    httpServer.close(() => process.exit(0))
+  })
+  process.on('SIGINT', () => {
+    httpServer.close(() => process.exit(0))
+  })
 }
-
-process.on('SIGTERM', () => {
-  httpServer.close(() => process.exit(0))
-})
-process.on('SIGINT', () => {
-  httpServer.close(() => process.exit(0))
-})
