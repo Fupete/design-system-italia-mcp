@@ -170,6 +170,10 @@ const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse
     } else {
       cache.invalidate(source)
     }
+
+    res.writeHead(200, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ invalidated: source ?? 'all', timestamp: new Date().toISOString() }))
+    return
   }
 
   // MCP endpoint
@@ -202,7 +206,7 @@ if (TRANSPORT === 'stdio') {
     console.log(`   Auth   → ${CACHE_TOKEN ? '✓ token configured' : '⚠️  CACHE_INVALIDATION_TOKEN not set'}`)
     console.log(`   ⚠️  Token layer alpha: BSI 3.x and Dev Kit Italia in alpha`)
   })
-  
+
   process.on('SIGTERM', () => {
     httpServer.close(() => process.exit(0))
   })
