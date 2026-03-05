@@ -164,7 +164,7 @@ function parseProp(name: string, block: string): WebComponentProp | null {
   }
   const propBlock = block.slice(startIdx, i + 1)
 
-   // Skip props explicitly disabled in table
+  // Skip props explicitly disabled in table
   if (propBlock.includes('disable: true')) return null
 
   // description
@@ -298,7 +298,8 @@ export async function loadDevKitComponent(slug: string): Promise<DevKitComponent
     const component = parseStories(source)
     if (component) cache.set(key, component, TTL.devKitStories)
     return component
-  } catch {
+  } catch (err) {
+    console.warn(`Dev Kit stories parse failed for "${slug}": ${(err as Error).message}`)
     return null
   }
 }

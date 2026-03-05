@@ -113,7 +113,8 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
   let map: TokenMap
   try {
     map = await loadTokenMap()
-  } catch {
+  } catch (err) {
+    console.warn(`Design Tokens Italia: token resolution failed: ${(err as Error).message}`)
     return tokens  // fallback: return without resolution
   }
 

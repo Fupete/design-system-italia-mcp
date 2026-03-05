@@ -103,7 +103,8 @@ export async function loadVariants(
       const variants = raw.map((v) => ({ name: v.name, html: v.content }))
       cache.set(key, variants, TTL.bsiMarkup)
       return variants
-    } catch {
+    } catch(err) {
+      console.warn(`BSI markup fetch failed for slug "${s}": ${(err as Error).message}`)
       continue
     }
   }

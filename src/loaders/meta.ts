@@ -75,7 +75,7 @@ export async function loadDsMeta(): Promise<DsMeta> {
   const foundations: DsNavEntry[] = []
 
   if (dsnavText.status === 'fulfilled') {
-    const dsnav = yaml.load(dsnavText.value) as RawDsnav
+    const dsnav = yaml.load(dsnavText.value, { schema: yaml.JSON_SCHEMA }) as RawDsnav
 
     if (dsnav.tag?.label) {
       versions.designSystem = dsnav.tag.label

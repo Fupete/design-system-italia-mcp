@@ -82,7 +82,8 @@ export function registerGetComponentFull(server: McpServer): void {
       let tokens = rawTokensData
       try {
         tokens = await resolveTokenValues(rawTokensData)
-      } catch {
+      } catch (err) {
+        console.warn(`Design Tokens Italia: value resolution failed: ${(err as Error).message}`)
         warnings.push('Design Tokens Italia: value resolution not available')
       }
 
