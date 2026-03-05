@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
 import { loadDevKitIndex, loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
+import { loadDsMeta } from '../loaders/meta.js'
 import { BSI_STATUS_URL, BSI_COMPONENT_URL, DEVKIT_INDEX_URL, BSI_DOC_BASE, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl } from '../constants.js'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -28,8 +29,11 @@ export function registerListComponents(server: McpServer): void {
       annotations: { readOnlyHint: true },
     },
     async () => {
-      const statuses = await loadAllStatuses()
-      const devKitIndex = await loadDevKitIndex()
+      const [statuses, devKitIndex, dsMeta] = await Promise.all([
+        loadAllStatuses(),
+        loadDevKitIndex(),
+        loadDsMeta(),
+      ])
 
       const components = [...statuses.values()].map((s) => ({
         name: s.name,
@@ -62,6 +66,7 @@ export function registerListComponents(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
+                  versions: dsMeta.versions,
                   stability: 'alpha' as const,
                 },
               },
@@ -166,9 +171,10 @@ export function registerSearchComponents(server: McpServer): void {
     async ({ query }) => {
       query = query.trim()
       const q = query.toLowerCase().trim()
-      const [statuses, devKitIndex] = await Promise.all([
+      const [statuses, devKitIndex, dsMeta] = await Promise.all([
         loadAllStatuses(),
         loadDevKitIndex(),
+        loadDsMeta(),
       ])
 
       const results = [...statuses.values()]
@@ -204,6 +210,7 @@ export function registerSearchComponents(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
+                  versions: dsMeta.versions,
                   stability: 'alpha' as const,
                 },
               },
