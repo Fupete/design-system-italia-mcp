@@ -245,6 +245,6 @@ npx @modelcontextprotocol/inspector http://localhost:8080/mcp
 
 BSD 3-Clause — © 2026 Daniele Tabellini (Fupete)
 
-Documentazione: CC BY 4.0
+Documentazione: CC BY SA 4.0
 
 I dati esposti mantengono la licenza delle rispettive sorgenti.
