@@ -17,6 +17,7 @@ concurrency:
 permissions:
   contents: read
   packages: write
+  id-token: write             # required for npm Trusted Publishing (OIDC)
 
 jobs:
   # ── Job 1: verify, typecheck, build, upload artifact ──────────────────────
@@ -31,6 +32,7 @@ jobs:
         with:
           node-version: "24"
           cache: "npm"
+          registry-url: "https://registry.npmjs.org"
 
       - run: npm ci
 
@@ -101,9 +103,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # ── npm publish ──────────────────────────────────────────────────────
+      # ── npm publish (Trusted Publishing — no token required) ─────────────
 
       - name: Publish to npm
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
