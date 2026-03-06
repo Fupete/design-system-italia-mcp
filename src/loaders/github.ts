@@ -1,6 +1,6 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify } from '../slugify.js'
-import type { ComponentIssue, BoardStatus } from '../types.js'
+import type { ComponentIssue, ComponentIssuesResult, BoardStatus } from '../types.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS } from '../constants.js'
 
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
@@ -46,11 +46,11 @@ function repoFromUrl(repositoryUrl: string): string {
   return repositoryUrl.replace('https://api.github.com/repos/', '')
 }
 
-export async function loadComponentIssues(slug: string): Promise<ComponentIssue[]> {
+export async function loadComponentIssues(slug: string): Promise<ComponentIssuesResult> {
   const normalized = slugify(slug)
   const key = CACHE_KEYS.githubIssues(normalized)
   const cached = cache.get<ComponentIssue[]>(key)
-  if (cached) return cached
+  if (cached) return { issues: cached }
 
   const repoFilter = GITHUB_WATCHED_REPOS.map((r) => `repo:${r}`).join(' ')
   const q = encodeURIComponent(`${normalized} ${repoFilter} is:issue is:open`)
@@ -74,11 +74,11 @@ export async function loadComponentIssues(slug: string): Promise<ComponentIssue[
       }))
 
     cache.set(key, issues, TTL.githubIssues)
-    return issues
+    return { issues }
   } catch (err) {
     // Rate limit or network error — return empty array with warning
     console.warn(`GitHub issues loader: ${err}`)
-    return []
+    return { issues: [], error: (err as Error).message }
   }
 }
 

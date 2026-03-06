@@ -101,6 +101,11 @@ export interface ComponentIssue {
   labels: string[]
 }
 
+export interface ComponentIssuesResult {
+  issues: ComponentIssue[]
+  error?: string
+}
+
 export interface BoardStatus {
   repos: Array<{
     repo: string

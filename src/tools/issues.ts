@@ -25,13 +25,15 @@ export function registerGetComponentIssues(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      const [liveIssues, status] = await Promise.all([
+      const [{ issues: liveIssues, error: issuesError }, status] = await Promise.all([
         loadComponentIssues(slug),
         loadStatus(slug),
       ])
 
-      if (liveIssues.length === 0) {
-        warnings.push(`No live issues found for "${slug}" — may be a rate limit issue or no open issues`)
+      if (issuesError) {
+        warnings.push(`GitHub issues unavailable: ${issuesError}`)
+      } else if (liveIssues.length === 0) {
+        warnings.push(`No open issues found for "${slug}"`)
       }
 
       // Static known issues from components_status.json
