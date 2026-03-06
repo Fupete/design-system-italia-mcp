@@ -73,10 +73,7 @@ export function registerGetComponentIssues(server: McpServer): void {
                     BSI_STATUS_URL,
                   ],
                   warnings,
-                  stability: 'stable' as const,
-                  rateLimitNote: process.env.GITHUB_TOKEN
-                    ? 'Authenticated — 5000 req/hour limit'
-                    : '⚠️ Not authenticated — 60 req/hour per IP. Set GITHUB_TOKEN.',
+                  stability: 'stable' as const
                 },
               },
               null,
