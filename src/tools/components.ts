@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { formatTimestamp } from '../utils.js'
 import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
 import { loadDevKitIndex, loadDevKitEntry } from '../loaders/devkit.js'
-import { slugify } from '../slugify.js'
+import { slugify, slugsToTry } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { BSI_STATUS_URL, BSI_COMPONENT_URL, DEVKIT_INDEX_URL, BSI_DOC_BASE, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl } from '../constants.js'
 
@@ -32,25 +32,28 @@ export function registerListComponents(server: McpServer): void {
         loadDsMeta(),
       ])
 
-      const components = [...statuses.values()].map((s) => ({
-        name: s.name,
-        slug: s.slug,
-        status: {
-          bootstrapItalia: s.libraryStatus.bootstrapItalia,
-          uiKitItalia: s.libraryStatus.uiKitItalia,
-        },
-        accessibility: {
-          checkCompleted: s.accessibility.checkCompleted,
-        },
-        devKit: devKitIndex.has(s.slug)
-          ? {
-            tags: devKitIndex.get(s.slug)!.tags,
-            storybookUrl: devKitIndex.get(s.slug)!.storybookUrl,
-            pattern: devKitIndex.get(s.slug)!.pattern,
-          }
-          : null,
-        bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
-      }))
+      const components = [...statuses.values()].map((s) => {
+        const devKitSlug = slugsToTry(s.slug).find(a => devKitIndex.has(a)) ?? null
+        return {
+          name: s.name,
+          slug: s.slug,
+          status: {
+            bootstrapItalia: s.libraryStatus.bootstrapItalia,
+            uiKitItalia: s.libraryStatus.uiKitItalia,
+          },
+          accessibility: {
+            checkCompleted: s.accessibility.checkCompleted,
+          },
+          devKit: devKitSlug
+            ? {
+              tags: devKitIndex.get(devKitSlug)!.tags,
+              storybookUrl: devKitIndex.get(devKitSlug)!.storybookUrl,
+              pattern: devKitIndex.get(devKitSlug)!.pattern,
+            }
+            : null,
+          bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
+        }
+      })
 
       return {
         content: [
@@ -176,7 +179,8 @@ export function registerSearchComponents(server: McpServer): void {
 
       const results = [...statuses.values()]
         .filter((s) => {
-          const devKit = devKitIndex.get(s.slug)
+          const devKitSlug = slugsToTry(s.slug).find(a => devKitIndex.has(a)) ?? null
+          const devKit = devKitSlug ? devKitIndex.get(devKitSlug) : null
           return (
             s.slug.includes(q) ||
             s.name.toLowerCase().includes(q) ||
@@ -184,7 +188,8 @@ export function registerSearchComponents(server: McpServer): void {
           )
         })
         .map((s) => {
-          const devKit = devKitIndex.get(s.slug)
+          const devKitSlug = slugsToTry(s.slug).find(a => devKitIndex.has(a)) ?? null
+          const devKit = devKitSlug ? devKitIndex.get(devKitSlug) : null
           return {
             name: s.name,
             slug: s.slug,
