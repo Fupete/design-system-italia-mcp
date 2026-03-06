@@ -16,33 +16,45 @@ Riferimento tecnico: [italia/dati-semantic-mcp](https://github.com/italia/dati-s
 ---
 
 ## Struttura
-
 ```
-src/
-├── index.ts          # entry point, server MCP, routing tool
-├── tools/            # 1 file per gruppo di tool (max ~400 righe ciascuno)
-│   ├── components.ts # list_components, get_component, search_components
-│   ├── tokens.ts     # get_component_tokens, find_token
-│   ├── guidelines.ts # get_component_guidelines, list_by_status, list_accessibility_issues
-│   ├── issues.ts     # get_component_issues, get_project_board_status
-│   └── full.ts       # get_component_full (aggrega tutti)
-├── loaders/          # 1 file per sorgente dati esterna
-│   ├── bsi.ts        # Bootstrap Italia JSON API
-│   ├── designers.ts  # Designers Italia YAML
-│   ├── tokens.ts     # Design Tokens Italia _variables.scss
-│   ├── devkit.ts     # Dev Kit Italia index.json + stories.ts
-│   ├── github.ts     # GitHub Issues REST API
-│   └── meta.ts       # Versioni DS/BSI/DevKit + URL nav da dsnav.yaml
-├── cache.ts          # cache in-memory con TTL per sorgente
-├── slugify.ts        # slug matching tra sorgenti eterogenee
-└── types.ts          # tipi condivisi
-├── constants.ts      # URL sorgenti, ALPHA_WARNING, costanti condivise
-├── schemas.ts        # Zod output schemas per get_component_full e get_component_tokens
+design-system-italia-mcp/
+├── src/
+│   ├── index.ts                  # Entry point — HTTP + stdio transport, /health, /cache/invalidate
+│   ├── cache.ts                  # In-memory cache con TTL per sorgente
+│   ├── constants.ts              # URL e costanti condivise — unica source of truth
+│   ├── schemas.ts                # Zod output schemas per structuredContent
+│   ├── slugify.ts                # Normalizzazione slug + SLUG_ALIASES + slugsToTry()
+│   ├── types.ts                  # Tipi TypeScript condivisi
+│   ├── utils.ts                  # Utility condivise (formatTimestamp)
+│   ├── loaders/
+│   │   ├── bsi.ts                # Sorgenti #1 #2 #3 — markup, status, token BSI
+│   │   ├── designers.ts          # Sorgente #4 — YAML linee guida
+│   │   ├── devkit.ts             # Sorgenti #6 #7 — index + stories Dev Kit
+│   │   ├── github.ts             # Sorgente #8 — GitHub Issues REST API
+│   │   ├── meta.ts               # Sorgente #9 — versioni + designersUrl
+│   │   └── tokens.ts             # Sorgente #5 — DTI + bridge BSI→IT (valueResolved)
+│   └── tools/
+│       ├── components.ts         # list_components, get_component, search_components
+│       ├── full.ts               # get_component_full
+│       ├── guidelines.ts         # get_component_guidelines, list_by_status, list_accessibility_issues
+│       ├── issues.ts             # get_component_issues, get_project_board_status
+│       └── tokens.ts             # get_component_tokens, find_token
+├── scripts/
+│   ├── canary.ts                 # Canary check — 11 sorgenti upstream
+│   ├── canary.config.ts          # Configurazione sorgenti canary
+│   └── check-version.ts         # Verifica allineamento package.json + publiccode.yml + tag
+├── .github/workflows/
+│   ├── ci.yml                    # Typecheck + build su push/PR
+│   ├── release.yml               # Docker multiarch + npm publish su tag
+│   └── upstream-canary.yml       # Daily canary 07:00 UTC — apre issue su failure
+├── Dockerfile
+├── publiccode.yml
+├── package.json                  # Version source of truth — letta da index.ts a runtime
+└── tsconfig.json
 ```
 
 **Regola soglia**: se un file supera ~400 righe, spezzarlo per modulo.
-Partire monolite, refactoring solo quando necessario.
-**Naming tool**: prefisso `dsi_*` previsto in v0.2.0 (breaking change) — es. `dsi_list_components`, `dsi_get_component_full`.
+**Naming tool**: prefisso `dsi_*` previsto in v0.2.0 (breaking change).
 
 ---
 
