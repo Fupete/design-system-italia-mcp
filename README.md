@@ -53,9 +53,9 @@ una singola chiamata: stato del componente, markup HTML, variabili CSS
 personalizzabili, componente da Dev Kit Italia, linee guida d'uso 
 e issue GitHub aperte.
 
-Esempio: *"Dimmi tutto sul componente Alert"* → stato beta/stabile,
+Esempio: *"Dimmi tutto sul componente Alert"* → stato del componente,
 markup HTML con varianti, variabili CSS con valori risolti, web component e props,
-eventuali note accessibilità, issue GitHub aperte.
+eventuali note di accessibilità, issue GitHub aperte.
 
 Ogni risposta include le versioni delle sorgenti (Design System .italia, Bootstrap Italia,
 Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'ultimo fetch.
@@ -101,9 +101,6 @@ docker run -e GITHUB_TOKEN=your_token -p 8080:8080 \
 
 Funziona su qualsiasi macchina con Docker installato — locale,
 VPS personale, server aziendale.
-
-Per uso locale con Claude Desktop o Cursor senza server remoto,
-imposta `TRANSPORT=stdio` nelle variabili d'ambiente.
 
 > ⚠️ **Docker multiarch** — se `docker pull` scarica un'architettura incompatibile,
 > fai una build locale: `docker build -t design-system-italia-mcp .`
@@ -200,7 +197,11 @@ npm install
 cp .env.example .env
 # aggiungi GITHUB_TOKEN in .env
 npm run dev
+
+# Verifica sorgenti upstream
+npx tsx scripts/canary.ts
 ```
+
 
 Server disponibile su `http://localhost:8080/mcp`
 
