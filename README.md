@@ -64,8 +64,6 @@ Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'
 
 ## Come connettersi / How to connect
 
-> ℹ️ **NPX è il canale consigliato** — nessuna installazione richiesta.
-> Per self-hosting usa Docker in locale o su VPS.
 
 ### Claude Desktop / Cursor / VS Code (via NPX — consigliato)
 
@@ -100,13 +98,6 @@ docker run -e GITHUB_TOKEN=your_token -p 8080:8080 \
   ghcr.io/fupete/design-system-italia-mcp
 ```
 
-> ℹ️ **`GITHUB_TOKEN` (opzionale ma consigliato)** — serve per il tool `get_component_issues`.
-> Senza token: 60 richieste/ora per IP. Con token: 5000 richieste/ora.
-> Basta un token con scope pubblico read-only — nessun permesso speciale richiesto.
-> [Genera un token →](https://github.com/settings/tokens/new)
-
-> ⚠️ **Docker multiarch** — se `docker pull` scarica un'architettura incompatibile,
-> fai una build locale: `docker build -t design-system-italia-mcp .`
 
 Funziona su qualsiasi macchina con Docker installato — locale,
 VPS personale, server aziendale.
@@ -114,12 +105,32 @@ VPS personale, server aziendale.
 Per uso locale con Claude Desktop o Cursor senza server remoto,
 imposta `TRANSPORT=stdio` nelle variabili d'ambiente.
 
+> ⚠️ **Docker multiarch** — se `docker pull` scarica un'architettura incompatibile,
+> fai una build locale: `docker build -t design-system-italia-mcp .`
+
+> ℹ️ **`GITHUB_TOKEN` (opzionale ma consigliato)** — serve per il tool `get_component_issues`.
+> Senza token: 60 richieste/ora per IP. Con token: 5000 richieste/ora.
+> Basta un token con scope pubblico read-only — nessun permesso speciale richiesto.
+
 ---
 
 ## Sorgenti dati / Data sources
 
 Il server non ospita dati propri. Legge direttamente dai
 repository ufficiali in tempo reale.
+
+
+| # | Repo | File / endpoint | Contenuto | Tool MCP | TTL cache |
+|---|------|-----------------|-----------|----------|-----------|
+| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/componenti/{slug}.json` | Markup HTML varianti per componente | `get_component` `list_components` `search_components` | Lunga (per release) |
+| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/components_status.json` | Lista ~55 componenti, stato per libreria (BSI/UI Kit), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` | Media (4h) |
+| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/custom_properties.json` | Token CSS `--bsi-*` per-componente con descrizioni semantiche. Prefisso canonico BSI v3 ⚠️ alpha | `get_component_tokens` `find_token` | Lunga (per release) |
+| 4 | [designers.italia.it](https://github.com/italia/designers.italia.it) | `src/data/content/design-system/componenti/{slug}.yaml` | Linee guida d'uso, accessibilità, stato redazionale, quando/come usare | `get_component_guidelines` | Lunga (24h) |
+| 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | `dist/scss/_variables.scss` | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` per i designer | `get_component_tokens` (campo `valueResolved`) `find_token` | Lunga (24h) |
+| 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `italia.github.io/dev-kit-italia/index.json` | Indice Storybook: tag stato (`a11y-ok` `alpha` `new` `web-component`), varianti in italiano, URL docs, importPath → path esatto stories.ts ⚠️ alpha | `list_components` `get_component_guidelines` | Breve (15-30 min) |
+| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti ⚠️ alpha | `get_component` `get_component_full` | Media (4h) |
+| 8 | GitHub REST API | `search/issues?q={slug}+repo:italia/...+is:open` | Issue aperte sui repo: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` | Breve (15-30 min) |
+| 9 | [designers.italia.it](https://github.com/italia/designers.italia.it) + [bootstrap-italia](https://github.com/italia/bootstrap-italia) + [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `src/data/dsnav.yaml` + `package.json` (×2) | Versioni Design System / BSI / Dev Kit Italia. URL verificati pagine componenti e fondamenti su designers.italia.it | `meta` in tutte le risposte | Lunga (24h) |
 
 > ⚠️ **Layer token in fase alpha** — Il server usa Bootstrap Italia 3.x (alpha) e Dev Kit Italia (alpha).
 > La 3.x è necessaria per accedere ai token CSS strutturati per componente (`custom_properties.json`,
@@ -135,18 +146,6 @@ repository ufficiali in tempo reale.
 > but CSS tokens and Dev Kit web components may have breaking changes before stable release.
 > Do not use the token layer in production without checking upstream status.
 
-| # | Repo | File / endpoint | Contenuto | Tool MCP | TTL cache |
-|---|------|-----------------|-----------|----------|-----------|
-| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/componenti/{slug}.json` | Markup HTML varianti per componente | `get_component` `list_components` `search_components` | Lunga (per release) |
-| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/components_status.json` | Lista ~55 componenti, stato per libreria (BSI/UI Kit), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` | Media (4h) |
-| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/custom_properties.json` | Token CSS `--bsi-*` per-componente con descrizioni semantiche. Prefisso canonico BSI v3 ⚠️ alpha | `get_component_tokens` `find_token` | Lunga (per release) |
-| 4 | [designers.italia.it](https://github.com/italia/designers.italia.it) | `src/data/content/design-system/componenti/{slug}.yaml` | Linee guida d'uso, accessibilità, stato redazionale, quando/come usare | `get_component_guidelines` | Lunga (24h) |
-| 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | `dist/scss/_variables.scss` | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` per i designer | `get_component_tokens` (campo `valueResolved`) `find_token` | Lunga (24h) |
-| 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `italia.github.io/dev-kit-italia/index.json` | Indice Storybook: tag stato (`a11y-ok` `alpha` `new` `web-component`), varianti in italiano, URL docs, importPath → path esatto stories.ts ⚠️ alpha | `list_components` `get_component_guidelines` | Breve (15-30 min) |
-| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti ⚠️ alpha | `get_component` `get_component_full` | Media (4h) |
-| 8 | GitHub REST API | `search/issues?q={slug}+repo:italia/...+is:open` | Issue aperte sui repo: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` | Breve (15-30 min) |
-| 9 | [designers.italia.it](https://github.com/italia/designers.italia.it) + [bootstrap-italia](https://github.com/italia/bootstrap-italia) + [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `src/data/dsnav.yaml` + `package.json` (×2) | Versioni Design System / BSI / Dev Kit Italia. URL verificati pagine componenti e fondamenti su designers.italia.it | `meta` in tutte le risposte | Lunga (24h) |
-
 **Note:**
 - TTL indicativi e configurabili. In fase di sviluppo: cache di qualche ora + endpoint di invalidazione manuale protetto da token
 - Sorgenti #1 #2: markup e stato componenti — presenti anche in BSI 2.x stabile, struttura consolidata
@@ -160,15 +159,25 @@ repository ufficiali in tempo reale.
 
 ## System prompt consigliato / Recommended system prompt
 
-Per ridurre il rischio di allucinazioni, istruire l'agente a basarsi
+Per ridurre il rischio di allucinazioni, istruire l'assistente a basarsi
 esclusivamente sui dati restituiti dal server.
 
+**IT**
 ```
-Usa esclusivamente i dati restituiti dagli strumenti MCP di
-Design system .italia. Non integrare con conoscenza pregressa
-su Bootstrap, Bootstrap Italia, Dev Kit Italia o altri framework.
-Per ogni risposta, cita la versione della sorgente e il link
-alla documentazione ufficiale inclusi nella risposta del tool.
+Usa esclusivamente i dati restituiti dagli strumenti MCP del
+Design System .italia. Non integrare con conoscenza pregressa su
+Bootstrap Italia, Dev Kit Italia o altri framework CSS/web component.
+Per ogni risposta includi la versione delle sorgenti e il link alla
+documentazione ufficiale restituiti dal tool.
+```
+
+**EN**
+```
+Use only the data returned by the Design System .italia MCP tools.
+Do not supplement with prior knowledge of Bootstrap Italia, Dev Kit Italia,
+or any other CSS framework or web component library.
+For every response, include the source versions and official documentation
+URL returned by the tool.
 ```
 
 ---
@@ -177,7 +186,7 @@ alla documentazione ufficiale inclusi nella risposta del tool.
 
 - Node.js + TypeScript
 - [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/typescript-sdk)
-- HTTP transport (remoto) / StdioTransport (locale, via `TRANSPORT=stdio`)
+- Streamable HTTP transport / stdio transport (via `TRANSPORT=stdio`)
 - Docker (self-hosting — locale o VPS)
 
 ---
