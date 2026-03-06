@@ -67,6 +67,8 @@ Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'
 
 ### Claude Desktop / Cursor / VS Code (via NPX — consigliato)
 
+Non richiede installazione — npx scarica e avvia il server automaticamente.
+
 Aggiungi al file di configurazione MCP del tuo client:
 ```json
 {
@@ -75,6 +77,7 @@ Aggiungi al file di configurazione MCP del tuo client:
       "command": "npx",
       "args": ["-y", "@fupete/design-system-italia-mcp"],
       "env": {
+        "TRANSPORT": "stdio",
         "GITHUB_TOKEN": "your_token_here"
       }
     }
@@ -82,25 +85,48 @@ Aggiungi al file di configurazione MCP del tuo client:
 }
 ```
 
-Oppure via CLI (Claude Desktop):
+> ℹ️ **nvm su macOS** — se `npx` risolve a una versione vecchia di Node
+> ("You must supply a command" o "Cannot find module 'node:path'"),
+> usa il path esplicito. Trova il path con `nvm use 22 && which npx`, poi:
+> ```json
+> {
+>   "mcpServers": {
+>     "design-system-italia": {
+>       "command": "/Users/tuonome/.nvm/versions/node/v22.12.0/bin/npx",
+>       "args": ["-y", "@fupete/design-system-italia-mcp"],
+>       "env": {
+>         "PATH": "/Users/tuonome/.nvm/versions/node/v22.12.0/bin:/usr/local/bin:/usr/bin:/bin",
+>         "TRANSPORT": "stdio",
+>         "GITHUB_TOKEN": "your_token_here"
+>       }
+>     }
+>   }
+> }
+> ```
+> Sostituisci `tuonome` e `v22.12.0` con i tuoi valori.
+
+
+#### Oppure via CLI (Claude Desktop):
 ```bash
 claude mcp add design-system-italia \
   --command "npx -y @fupete/design-system-italia-mcp" \
+  --env TRANSPORT=stdio \
   --env GITHUB_TOKEN=your_token
 ```
 
-Non richiede installazione — npx scarica e avvia il server automaticamente.
+> ℹ️ **Problemi con nvm su macOS?** Usa la configurazione JSON sopra con path esplicito.
 
 ### Self-hosting con Docker (locale o VPS)
+
+Funziona su qualsiasi macchina con Docker installato — locale,
+VPS personale, server aziendale.
+
 ```bash
 docker pull ghcr.io/fupete/design-system-italia-mcp
 docker run -e GITHUB_TOKEN=your_token -p 8080:8080 \
   ghcr.io/fupete/design-system-italia-mcp
 ```
 
-
-Funziona su qualsiasi macchina con Docker installato — locale,
-VPS personale, server aziendale.
 
 > ⚠️ **Docker multiarch** — se `docker pull` scarica un'architettura incompatibile,
 > fai una build locale: `docker build -t design-system-italia-mcp .`
