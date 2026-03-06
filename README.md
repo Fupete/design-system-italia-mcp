@@ -114,34 +114,6 @@ VPS personale, server aziendale.
 Per uso locale con Claude Desktop o Cursor senza server remoto,
 imposta `TRANSPORT=stdio` nelle variabili d'ambiente.
 
-> 💡 **Provider consigliato** — Per esporre il server
-> pubblicamente, scegli un VPS con datacenter EU per privacy e
-> sovranità dei dati. Alcune opzioni: Hetzner (DE), OVHcloud (FR),
-> Scaleway (FR), Infomaniak (CH).
-
-### Claude (claude.ai)
-Impostazioni → Integrazioni → Aggiungi server MCP
-
-```
-https://[url-server]/mcp
-```
-
-### Claude Desktop / Cursor / VS Code
-```json
-{
-  "mcpServers": {
-    "design-system-italia": {
-      "url": "https://[url-server]/mcp"
-    }
-  }
-}
-```
-
-Oppure via CLI:
-```bash
-claude mcp add --url https://[url-server]/mcp design-system-italia
-```
-
 ---
 
 ## Sorgenti dati / Data sources
@@ -206,7 +178,7 @@ alla documentazione ufficiale inclusi nella risposta del tool.
 - Node.js + TypeScript
 - [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/typescript-sdk)
 - HTTP transport (remoto) / StdioTransport (locale, via `TRANSPORT=stdio`)
-- Docker (deploy universale — locale o VPS EU a scelta)
+- Docker (self-hosting — locale o VPS)
 
 ---
 
