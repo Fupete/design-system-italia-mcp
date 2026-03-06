@@ -64,31 +64,8 @@ Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'
 
 ## Come connettersi / How to connect
 
-> ℹ️ **Al momento disponibile solo via self-hosting** — Non esiste ancora
-> un endpoint pubblico. Per testare senza infrastruttura usa Docker in locale.
-
-### Claude (claude.ai)
-Impostazioni → Integrazioni → Aggiungi server MCP
-
-```
-https://[url-server]/mcp
-```
-
-### Claude Desktop / Cursor / VS Code
-```json
-{
-  "mcpServers": {
-    "design-system-italia": {
-      "url": "https://[url-server]/mcp"
-    }
-  }
-}
-```
-
-Oppure via CLI:
-```bash
-claude mcp add --url https://[url-server]/mcp design-system-italia
-```
+> ℹ️ **NPX è il canale consigliato** — nessuna installazione richiesta.
+> Per self-hosting usa Docker in locale o su VPS.
 
 ### Claude Desktop / Cursor / VS Code (via NPX — consigliato)
 
@@ -141,6 +118,29 @@ imposta `TRANSPORT=stdio` nelle variabili d'ambiente.
 > pubblicamente, scegli un VPS con datacenter EU per privacy e
 > sovranità dei dati. Alcune opzioni: Hetzner (DE), OVHcloud (FR),
 > Scaleway (FR), Infomaniak (CH).
+
+### Claude (claude.ai)
+Impostazioni → Integrazioni → Aggiungi server MCP
+
+```
+https://[url-server]/mcp
+```
+
+### Claude Desktop / Cursor / VS Code
+```json
+{
+  "mcpServers": {
+    "design-system-italia": {
+      "url": "https://[url-server]/mcp"
+    }
+  }
+}
+```
+
+Oppure via CLI:
+```bash
+claude mcp add --url https://[url-server]/mcp design-system-italia
+```
 
 ---
 
