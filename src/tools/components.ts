@@ -1,5 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
+import { formatTimestamp } from '../utils.js'
 import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
 import { loadDevKitIndex, loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
@@ -10,10 +11,6 @@ import { BSI_STATUS_URL, BSI_COMPONENT_URL, DEVKIT_INDEX_URL, BSI_DOC_BASE, BSI_
 
 function bsiDocUrl(slug: string): string {
   return `${BSI_DOC_BASE}/${slug}/`
-}
-
-function formatTimestamp(): string {
-  return new Date().toISOString()
 }
 
 // ─── Tool: list_components ────────────────────────────────────────────────────

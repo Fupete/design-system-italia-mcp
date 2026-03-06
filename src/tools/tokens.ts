@@ -1,14 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
+import { formatTimestamp } from '../utils.js'
 import { ZGetComponentTokensOutput } from '../schemas.js'
 import { loadTokens, searchTokens } from '../loaders/bsi.js'
 import { resolveTokenValues, searchDesignTokens } from '../loaders/tokens.js'
 import { slugify } from '../slugify.js'
 import { ALPHA_WARNING, BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
-
-function formatTimestamp(): string {
-  return new Date().toISOString()
-}
 
 // ─── Tool: get_component_tokens ───────────────────────────────────────────────
 

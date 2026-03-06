@@ -1,13 +1,10 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
+import { formatTimestamp } from '../utils.js'
 import { loadComponentIssues, getProjectBoardStatus } from '../loaders/github.js'
 import { loadStatus } from '../loaders/bsi.js'
 import { slugify } from '../slugify.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS, BSI_STATUS_URL } from '../constants.js'
-
-function formatTimestamp(): string {
-  return new Date().toISOString()
-}
 
 // ─── Tool: get_component_issues ───────────────────────────────────────────────
 
