@@ -82,7 +82,8 @@ export async function loadGuidelines(slug: string): Promise<ComponentGuidelines 
     const guidelines = parseYaml(raw)
     cache.set(key, guidelines, TTL.designers)
     return guidelines
-  } catch {
+  } catch (err) {
+    console.warn(`Designers Italia: guidelines fetch/parse failed for "${slug}": ${(err as Error).message}`)
     return null
   }
 }

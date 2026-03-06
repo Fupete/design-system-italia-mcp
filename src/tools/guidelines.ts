@@ -1,15 +1,12 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
+import { formatTimestamp } from '../utils.js'
 import { loadAllStatuses, loadStatus } from '../loaders/bsi.js'
 import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { ALPHA_WARNING, BSI_STATUS_URL, DESIGNERS_COMPONENT_URL, DEVKIT_INDEX_URL } from '../constants.js'
-
-function formatTimestamp(): string {
-  return new Date().toISOString()
-}
 
 // ─── Tool: get_component_guidelines ──────────────────────────────────────────
 

@@ -1,6 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentFullOutput } from '../schemas.js'
+import { formatTimestamp } from '../utils.js'
 import { loadStatus, loadVariants, loadTokens } from '../loaders/bsi.js'
 import { loadGuidelines } from '../loaders/designers.js'
 import { resolveTokenValues } from '../loaders/tokens.js'
@@ -23,10 +24,6 @@ import {
   BSI_COMPONENT_DEFAULT_SUBFOLDER,
   subfolderFromDocUrl
 } from '../constants.js'
-
-function formatTimestamp(): string {
-  return new Date().toISOString()
-}
 
 // ─── Tool: get_component_full ⭐ ──────────────────────────────────────────────
 

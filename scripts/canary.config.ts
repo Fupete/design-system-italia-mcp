@@ -16,6 +16,7 @@
 import {
   BSI_STATUS_URL,
   BSI_CUSTOM_PROPERTIES_URL,
+  BSI_ROOT_SCSS_URL,
   BSI_PACKAGE_JSON_URL,
   BSI_COMPONENT_URL,
   BSI_COMPONENT_DEFAULT_SUBFOLDER,
@@ -51,51 +52,76 @@ export interface StaticSource {
 export const STATIC_SOURCES: StaticSource[] = [
   // Source #1 — BSI component status (stable)
   // Structure: { items: RawStatusEntry[], totalCount: number }
-  { name: "BSI components_status.json",
-    url:  BSI_STATUS_URL,
-    jsonField: "items" },
+  {
+    name: "BSI components_status.json",
+    url: BSI_STATUS_URL,
+    jsonField: "items"
+  },
 
   // Source #2 — BSI accordion markup (stable)
   // Structure: Array<{ name: string, content: string }>
-  { name: "BSI accordion markup",
-    url:  BSI_COMPONENT_URL(BSI_COMPONENT_DEFAULT_SUBFOLDER, "accordion"),
-    jsonField: "name" },
+  {
+    name: "BSI accordion markup",
+    url: BSI_COMPONENT_URL(BSI_COMPONENT_DEFAULT_SUBFOLDER, "accordion"),
+    jsonField: "name"
+  },
 
   // Source #3 — BSI CSS tokens ⚠️ alpha
   // Structure: Record<slug, RawTokenEntry[]> — key "accordion" must exist
-  { name: "BSI custom_properties.json ⚠️ alpha",
-    url:  BSI_CUSTOM_PROPERTIES_URL,
-    jsonField: "accordion" },
+  {
+    name: "BSI custom_properties.json ⚠️ alpha",
+    url: BSI_CUSTOM_PROPERTIES_URL,
+    jsonField: "accordion"
+  },
+
+  // BSI root.scss — bridge --bsi-* → --it-* (used by source #5 for valueResolved) ⚠️ alpha
+  {
+    name: "BSI _root.scss bridge ⚠️ alpha",
+    url: BSI_ROOT_SCSS_URL,
+    minLength: 500
+  },
 
   // Source #4 — Designers Italia guidelines
-  { name: "Designers Italia accordion.yaml",
-    url:  DESIGNERS_COMPONENT_URL("accordion"),
-    minLength: 200 },
+  {
+    name: "Designers Italia accordion.yaml",
+    url: DESIGNERS_COMPONENT_URL("accordion"),
+    minLength: 200
+  },
 
   // Source #9 — Designers Italia nav (versions + foundation URLs)
-  { name: "Designers Italia dsnav.yaml",
-    url:  DESIGNERS_DSNAV_URL,
-    minLength: 100 },
+  {
+    name: "Designers Italia dsnav.yaml",
+    url: DESIGNERS_DSNAV_URL,
+    minLength: 100
+  },
 
   // Source #5 — Design Tokens Italia global variables
-  { name: "Design Tokens _variables.scss",
-    url:  DTI_VARIABLES_SCSS_URL,
-    minLength: 500 },
+  {
+    name: "Design Tokens _variables.scss",
+    url: DTI_VARIABLES_SCSS_URL,
+    minLength: 500
+  },
 
   // Source #6 — Dev Kit Storybook index ⚠️ alpha
   // Structure: { v: number, entries: Record<string, IndexEntry> }
-  { name: "Dev Kit index.json",
-    url:  DEVKIT_INDEX_URL,
-    jsonField: "entries" },
+  {
+    name: "Dev Kit index.json",
+    url: DEVKIT_INDEX_URL,
+    jsonField: "entries"
+  },
 
   // Source #9 — version metadata
-  { name: "BSI package.json",
-    url:  BSI_PACKAGE_JSON_URL,
-    jsonField: "version" },
+  {
+    name: "BSI package.json",
+    url: BSI_PACKAGE_JSON_URL,
+    jsonField: "version"
+  },
 
-  { name: "Dev Kit package.json",
-    url:  DEVKIT_PACKAGE_JSON_URL,
-    jsonField: "version" },
+  {
+    name: "Dev Kit package.json",
+    url: DEVKIT_PACKAGE_JSON_URL,
+    jsonField: "version"
+  },
 ];
 
 // ── Pipeline checks — logic-driven, URL resolved at runtime ──────────────────
@@ -142,8 +168,10 @@ export const PIPELINE_CHECKS: PipelineCheck[] = [
       // Mirrors loadDevKitIndex(): use storiesImports[0] if present, else importPath
       const index = await get(DEVKIT_INDEX_URL);
       if (!index.ok) {
-        return { url: DEVKIT_INDEX_URL, ok: false, ms: Date.now() - t0,
-                 error: `index fetch failed: HTTP ${index.status}` };
+        return {
+          url: DEVKIT_INDEX_URL, ok: false, ms: Date.now() - t0,
+          error: `index fetch failed: HTTP ${index.status}`
+        };
       }
 
       const entries = (JSON.parse(index.body) as {
@@ -158,13 +186,15 @@ export const PIPELINE_CHECKS: PipelineCheck[] = [
       // Same filter as loadDevKitIndex()
       const accordionEntry = Object.values(entries).find(
         (e) => e.type === "docs" &&
-                e.id.startsWith("componenti-") &&
-                e.id.includes("accordion"),
+          e.id.startsWith("componenti-") &&
+          e.id.includes("accordion"),
       );
 
       if (!accordionEntry) {
-        return { url: DEVKIT_INDEX_URL, ok: false, ms: Date.now() - t0,
-                 error: "accordion docs entry not found in Dev Kit index" };
+        return {
+          url: DEVKIT_INDEX_URL, ok: false, ms: Date.now() - t0,
+          error: "accordion docs entry not found in Dev Kit index"
+        };
       }
 
       // Mirrors: const importPath = entry.storiesImports?.[0] ?? entry.importPath
@@ -174,20 +204,26 @@ export const PIPELINE_CHECKS: PipelineCheck[] = [
       // Step 2 — fetch stories file and validate loader patterns
       const stories = await get(storiesUrl);
       if (!stories.ok) {
-        return { url: storiesUrl, ok: false, ms: Date.now() - t0,
-                 error: `HTTP ${stories.status}` };
+        return {
+          url: storiesUrl, ok: false, ms: Date.now() - t0,
+          error: `HTTP ${stories.status}`
+        };
       }
 
       // Mirror extractTagName() — component: 'it-*' or "it-*" or `it-*`
       if (!/component:\s*['"`](it-[a-z0-9-]+)['"`]/m.test(stories.body)) {
-        return { url: storiesUrl, ok: false, ms: Date.now() - t0,
-                 error: "no component tag (it-*) found — extractTagName() would return null" };
+        return {
+          url: storiesUrl, ok: false, ms: Date.now() - t0,
+          error: "no component tag (it-*) found — extractTagName() would return null"
+        };
       }
 
       // Mirror extractArgTypesBlock() — argTypes: {
       if (!/argTypes:\s*\{/.test(stories.body)) {
-        return { url: storiesUrl, ok: false, ms: Date.now() - t0,
-                 error: "no argTypes block found — loader would return empty props" };
+        return {
+          url: storiesUrl, ok: false, ms: Date.now() - t0,
+          error: "no argTypes block found — loader would return empty props"
+        };
       }
 
       return { url: storiesUrl, ok: true, ms: Date.now() - t0 };
