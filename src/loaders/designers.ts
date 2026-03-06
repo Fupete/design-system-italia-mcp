@@ -10,7 +10,7 @@ async function fetchYaml(url: string): Promise<unknown> {
   const res = await fetch(url)
   if (!res.ok) throw new Error(`Designers fetch failed: ${res.status} ${url}`)
   const text = await res.text()
-  return yaml.load(text)
+  return yaml.load(text, { schema: yaml.JSON_SCHEMA })
 }
 
 // ─── Designers Italia YAML structure ─────────────────────────────────────────

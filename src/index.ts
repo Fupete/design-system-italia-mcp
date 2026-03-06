@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { timingSafeEqual } from 'node:crypto'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
@@ -109,10 +110,15 @@ function createMcpServer(): McpServer {
 const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse) => {
   const url = new URL(req.url ?? '/', `http://localhost:${PORT}`)
 
-  // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  // CORS — restrict /cache/invalidate to same origin
+  if (url.pathname === '/cache/invalidate') {
+    res.setHeader('Access-Control-Allow-Origin', 'null')
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization')
+
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204)
@@ -130,14 +136,34 @@ const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse
   // Cache invalidation
   if (url.pathname === '/cache/invalidate' && req.method === 'POST') {
     const auth = req.headers.authorization ?? ''
-    if (!CACHE_TOKEN || auth !== `Bearer ${CACHE_TOKEN}`) {
+    const expected = `Bearer ${CACHE_TOKEN}`
+    const authOk = auth.length === expected.length &&
+      timingSafeEqual(Buffer.from(auth), Buffer.from(expected))
+    if (!CACHE_TOKEN || !authOk) {
       res.writeHead(401, { 'Content-Type': 'application/json' })
       res.end(JSON.stringify({ error: 'Unauthorized' }))
       return
     }
     let body = ''
-    for await (const chunk of req) body += chunk
-    const { source } = JSON.parse(body || '{}')
+    let bodySize = 0
+    for await (const chunk of req) {
+      bodySize += chunk.length
+      if (bodySize > 1024) {
+        res.writeHead(413, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Request body too large' }))
+        return
+      }
+      body += chunk
+    }
+
+    let source: string | undefined
+    try {
+      source = JSON.parse(body || '{}').source
+    } catch {
+      res.writeHead(400, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ error: 'Invalid JSON body' }))
+      return
+    }
 
     if (!source || source === 'all') {
       cache.invalidateAll()
@@ -179,5 +205,12 @@ if (TRANSPORT === 'stdio') {
     console.log(`   Cache  → POST http://localhost:${PORT}/cache/invalidate`)
     console.log(`   Auth   → ${CACHE_TOKEN ? '✓ token configured' : '⚠️  CACHE_INVALIDATION_TOKEN not set'}`)
     console.log(`   ⚠️  Token layer alpha: BSI 3.x and Dev Kit Italia in alpha`)
+  })
+
+  process.on('SIGTERM', () => {
+    httpServer.close(() => process.exit(0))
+  })
+  process.on('SIGINT', () => {
+    httpServer.close(() => process.exit(0))
   })
 }

@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentFullOutput } from '../schemas.js'
 import { loadStatus, loadVariants, loadTokens } from '../loaders/bsi.js'
-import { loadGuidelines, designersUrl } from '../loaders/designers.js'
+import { loadGuidelines } from '../loaders/designers.js'
 import { resolveTokenValues } from '../loaders/tokens.js'
 import { loadDevKitEntry, loadDevKitComponent } from '../loaders/devkit.js'
 import { loadComponentIssues } from '../loaders/github.js'
@@ -82,7 +82,8 @@ export function registerGetComponentFull(server: McpServer): void {
       let tokens = rawTokensData
       try {
         tokens = await resolveTokenValues(rawTokensData)
-      } catch {
+      } catch (err) {
+        console.warn(`Design Tokens Italia: value resolution failed: ${(err as Error).message}`)
         warnings.push('Design Tokens Italia: value resolution not available')
       }
 
