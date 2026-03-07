@@ -40,27 +40,29 @@ export const cache = new Cache()
 const DEV = process.env.NODE_ENV !== 'production'
 
 export const TTL = {
-  bsiMarkup:      DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
-  bsiStatus:      DEV ? 60 * 60_000 :  4 * 60 * 60_000,  // 1h dev,  4h prod
-  bsiTokens:      DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
-  designers:      DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
-  designTokens:   DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
-  devKitIndex:    DEV ? 15 * 60_000 : 15 * 60_000,        // 15 min sempre
-  devKitStories:  DEV ? 60 * 60_000 :  4 * 60 * 60_000,  // 1h dev,  4h prod
-  githubIssues:   DEV ? 15 * 60_000 : 15 * 60_000,        // 15 min sempre
-  dsMeta:         DEV ? 60 * 60_000 : 24 * 60 * 60_000,   // 1h dev, 24h prod
+  bsiMarkup: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
+  bsiStatus: DEV ? 60 * 60_000 : 4 * 60 * 60_000,  // 1h dev,  4h prod
+  bsiTokens: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
+  designers: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
+  designTokens: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
+  designTokensDti: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
+  devKitIndex: DEV ? 15 * 60_000 : 15 * 60_000,        // 15 min sempre
+  devKitStories: DEV ? 60 * 60_000 : 4 * 60 * 60_000,  // 1h dev,  4h prod
+  githubIssues: DEV ? 15 * 60_000 : 15 * 60_000,        // 15 min sempre
+  dsMeta: DEV ? 60 * 60_000 : 24 * 60 * 60_000,   // 1h dev, 24h prod
 }
 
 // ─── Cache key prefixes ───────────────────────────────────────────────────────
 
 export const CACHE_KEYS = {
-  bsiMarkup:     (slug: string) => `bsi:markup:${slug}`,
-  bsiStatus:     () => `bsi:status`,
-  bsiTokens:     () => `bsi:tokens`,
-  designers:     (slug: string) => `designers:${slug}`,
-  designTokens:  () => `tokens:variables`,
-  devKitIndex:   () => `devkit:index`,
+  bsiMarkup: (slug: string) => `bsi:markup:${slug}`,
+  bsiStatus: () => `bsi:status`,
+  bsiTokens: () => `bsi:tokens`,
+  designers: (slug: string) => `designers:${slug}`,
+  designTokens: () => `tokens:variables`,
+  designTokensDti: () => `tokens:dti`,
+  devKitIndex: () => `devkit:index`,
   devKitStories: (slug: string) => `devkit:stories:${slug}`,
-  githubIssues:  (slug: string) => `github:issues:${slug}`,
-  dsMeta:        () => `ds:meta`,
+  githubIssues: (slug: string) => `github:issues:${slug}`,
+  dsMeta: () => `ds:meta`,
 }

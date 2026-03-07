@@ -84,6 +84,8 @@ async function loadTokenMap(): Promise<TokenMap> {
   const bridge = parseBridge(rootScss)       // --bsi-* → --it-*
   const dtiRaw = parseDesignTokens(variablesScss) // --it-* → value or $it-* ref
 
+  cache.set(CACHE_KEYS.designTokensDti(), dtiRaw, TTL.designTokensDti)
+
   // Recursive DTI resolution: $it-spacing-base → --it-spacing-base → 1.5rem (24px)
   function resolveIt(name: string, visited = new Set<string>()): string | null {
     if (visited.has(name)) return null  // loop protection
@@ -99,11 +101,20 @@ async function loadTokenMap(): Promise<TokenMap> {
   const map: TokenMap = new Map()
   for (const [bsiName, itName] of bridge) {
     const resolved = resolveIt(itName)
-    if (resolved) map.set(bsiName, { value: resolved, via: itName }) 
+    if (resolved) map.set(bsiName, { value: resolved, via: itName })
   }
 
   cache.set(CACHE_KEYS.designTokens(), map, TTL.designTokens)
   return map
+}
+
+// DTI map cached separately for --it-* token search
+async function loadDtiMap(): Promise<DtiMap> {
+  const cached = cache.get<DtiMap>(CACHE_KEYS.designTokensDti())
+  if (cached) return cached
+  // Not yet cached — trigger loadTokenMap which populates it as a side effect
+  await loadTokenMap()
+  return cache.get<DtiMap>(CACHE_KEYS.designTokensDti()) ?? new Map()
 }
 
 // ─── Token value enrichment with resolved value ───────────────────────────────
@@ -135,11 +146,11 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
 export async function searchDesignTokens(
   query: string
 ): Promise<Array<{ name: string; value: string }>> {
-  const map = await loadTokenMap()
+  const dtiMap = await loadDtiMap()
   const q = query.toLowerCase()
   const results: Array<{ name: string; value: string }> = []
 
-  for (const [name, { value }] of map) { 
+  for (const [name, value] of dtiMap) {
     if (name.includes(q) || value.toLowerCase().includes(q)) {
       results.push({ name, value })
     }
