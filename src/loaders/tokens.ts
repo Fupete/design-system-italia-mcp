@@ -13,15 +13,16 @@ async function fetchText(url: string): Promise<string> {
   return res.text()
 }
 
-// ─── _variables.scss parser ───────────────────────────────────────────────────
+// ─── Design Tokens Italia _variables.scss parser ───────────────────────────────
 //
 // Format: $it-spacing-m: 1.5rem; // 24px
 // Extract: name ($it-* → --it-*) and concrete value with comment
 
-type TokenMap = Map<string, string>  // --it-spacing-m → "1.5rem (24px)"
+type DtiMap = Map<string, string>           // --it-* → value (parseDesignTokens, invariato)
+type TokenMap = Map<string, { value: string; via: string }>  // --bsi-* → { value, via } (loadTokenMap)
 
-function parseVariables(scss: string): TokenMap {
-  const map: TokenMap = new Map()
+function parseDesignTokens(scss: string): DtiMap {
+  const map: DtiMap = new Map()
   const lines = scss.split('\n')
 
   for (const line of lines) {
@@ -81,7 +82,7 @@ async function loadTokenMap(): Promise<TokenMap> {
   ])
 
   const bridge = parseBridge(rootScss)       // --bsi-* → --it-*
-  const dtiRaw = parseVariables(variablesScss) // --it-* → value or $it-* ref
+  const dtiRaw = parseDesignTokens(variablesScss) // --it-* → value or $it-* ref
 
   // Recursive DTI resolution: $it-spacing-base → --it-spacing-base → 1.5rem (24px)
   function resolveIt(name: string, visited = new Set<string>()): string | null {
@@ -89,7 +90,7 @@ async function loadTokenMap(): Promise<TokenMap> {
     visited.add(name)
     const val = dtiRaw.get(name)
     if (!val) return null
-    // If still a reference to $it-* (parseVariables saves it as --it-*)
+    // If still a reference to $it-* (parseDesignTokens saves it as --it-*)
     if (val.startsWith('--it-')) return resolveIt(val, visited)
     return val
   }
@@ -98,7 +99,7 @@ async function loadTokenMap(): Promise<TokenMap> {
   const map: TokenMap = new Map()
   for (const [bsiName, itName] of bridge) {
     const resolved = resolveIt(itName)
-    if (resolved) map.set(bsiName, resolved)
+    if (resolved) map.set(bsiName, { value: resolved, via: itName }) 
   }
 
   cache.set(CACHE_KEYS.designTokens(), map, TTL.designTokens)
@@ -115,22 +116,21 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
     map = await loadTokenMap()
   } catch (err) {
     console.warn(`Design Tokens Italia: token resolution failed: ${(err as Error).message}`)
-    return tokens  // fallback: return without resolution
+    return tokens
   }
 
   return tokens.map((token) => {
     if (token.valueType !== 'token-reference') return token
 
-    // var(--bsi-spacing-m) → --bsi-spacing-m
     const ref = token.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
     if (!ref) return token
 
-    const resolved = map.get(ref) ?? null
-    return { ...token, valueResolved: resolved }
+    const entry = map.get(ref) ?? null
+    return { ...token, valueResolved: entry?.value ?? null, resolvedVia: entry?.via ?? null }
   })
 }
 
-// ─── Global search across all --bsi-* tokens ──────────────────────────────────
+// ─── Global search across all --bsi-* → resolved value pairs ───────────────────
 
 export async function searchDesignTokens(
   query: string
@@ -139,7 +139,7 @@ export async function searchDesignTokens(
   const q = query.toLowerCase()
   const results: Array<{ name: string; value: string }> = []
 
-  for (const [name, value] of map) {
+  for (const [name, { value }] of map) { 
     if (name.includes(q) || value.toLowerCase().includes(q)) {
       results.push({ name, value })
     }
@@ -159,7 +159,7 @@ export async function searchDesignTokens(
 //     ])
 
 //     const bridge = parseBridge(rootScss)
-//     const dtiRaw = parseVariables(variablesScss)
+//     const dtiRaw = parseDesignTokens(variablesScss)
 
 //     logs.push(`bridge.size: ${bridge.size}`)
 //     logs.push(`dtiRaw.size: ${dtiRaw.size}`)
