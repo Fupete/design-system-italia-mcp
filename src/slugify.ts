@@ -4,8 +4,7 @@
 //   components_status.json → `Accordion`  (backtick, Title Case)
 //   BSI API                → accordion    (lowercase)
 //   Designers Italia YAML  → accordion    (lowercase)
-//   Dev Kit index.json     → componenti-accordion--documentazione (Storybook id)
-//   Dev Kit stories path   → packages/accordion/stories/it-accordion.stories.ts
+//   Dev Kit index.json     → title "Componenti/Form/Checkbox" (last segment → slug)
 //
 // Canonical normalization: lowercase + trim + strip backtick + hyphenated
 
@@ -28,31 +27,16 @@ export function slugFromStatusTitle(title: string): string {
   )
 }
 
-// Dev Kit index.json: id is "componenti-accordion--documentazione"
-// → extracts "accordion"
-export function slugFromStorybookId(id: string): string {
-  const match = id.match(/^componenti-(.+?)--/)
-  if (!match) return ''
-  return match[1]  // already lowercase and hyphenated
-}
-
-// Dev Kit importPath: "./packages/accordion/stories/it-accordion.stories.ts"
-// → extracts "accordion"
-export function slugFromImportPath(importPath: string): string {
-  // pattern package dedicato: packages/{slug}/stories/
-  const dedicated = importPath.match(/^\.\/packages\/([^/]+)\/stories\//)
-  if (dedicated && dedicated[1] !== 'dev-kit-italia') {
-    return dedicated[1]
-  }
-  // pattern bundle: packages/dev-kit-italia/stories/components/{slug}.stories.ts
-  const bundle = importPath.match(/\/components\/([^/]+)\.stories\.ts$/)
-  if (bundle) return bundle[1]
-  return ''
-}
-
 // Fuzzy comparison: "accordion group" ≈ "accordion-group"
 export function slugsMatch(a: string, b: string): boolean {
   return slugify(a) === slugify(b)
+}
+
+// Dev Kit index.json: title is "Componenti/Form/Checkbox" or "Componenti/Accordion"
+// → extracts last segment as slug: "checkbox", "accordion"
+export function slugFromStorybookTitle(title: string): string {
+  const parts = title.split('/')
+  return parts[parts.length - 1].toLowerCase().replace(/\s+/g, '-')
 }
 
 // ─── Cross-source aliases ─────────────────────────────────────────────────────
@@ -65,7 +49,7 @@ export function slugsMatch(a: string, b: string): boolean {
 //
 const SLUG_ALIASES: Record<string, string[]> = {
   'buttons': ['button', 'btn'],
-  'modal':   ['modale'],
+  'modal': ['modale'],
 }
 
 // Given a canonical slug, returns all known aliases

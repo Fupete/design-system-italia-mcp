@@ -1,5 +1,5 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
-import { slugFromStorybookId, slugFromImportPath } from '../slugify.js'
+import { slugFromStorybookTitle } from '../slugify.js'
 import type { DevKitEntry, DevKitComponent, WebComponentProp } from '../types.js'
 import { DEVKIT_INDEX_URL, DEVKIT_STORIES_URL, DEVKIT_STORYBOOK_BASE } from '../constants.js'
 import { slugsToTry } from '../slugify.js'
@@ -46,7 +46,7 @@ export async function loadDevKitIndex(): Promise<DevKitIndex> {
     if (entry.type !== 'docs') continue
     if (!entry.id.startsWith('componenti-')) continue
 
-    const slug = slugFromStorybookId(entry.id)
+    const slug = slugFromStorybookTitle(entry.title)
     if (!slug) continue
 
     // Determine story importPath (from storiesImports if present)
