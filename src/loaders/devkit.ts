@@ -318,6 +318,170 @@ export async function loadStoryVariants(
   const entry = await loadDevKitEntry(slug)
   if (!entry) return null
 
-  // TODO S6: implement parseStoryVariants() and populate
-  return null
+  const rawUrl = DEVKIT_STORIES_URL(entry.importPath)
+  try {
+    const source = await fetchText(rawUrl)
+    const variants = parseStoryVariants(source)
+    if (variants.length > 0) {
+      cache.set(key, variants, TTL.devKitStories)
+    }
+    return variants.length > 0 ? variants : null
+  } catch (err) {
+    console.warn(`Dev Kit story variants parse failed for "${slug}": ${(err as Error).message}`)
+    return null
+  }
+}
+
+// ─── Story variants parser ───────────────────────────────────────────────────
+//
+// Extracts render HTML from all story exports (dedicated + bundle).
+// Three patterns:
+//   P1: render: () => html`...`           (inline)
+//   P2: render: () => { ... return html`...` }  (function body)
+//   P3: render: () => html`${varRef}`     (variable reference → resolve)
+//
+// Skips stories with tags: ['!dev']
+
+/** Extract a template literal starting at the backtick position. 
+ *  Tracks depth for nested ${...} with inner backticks. */
+function extractTemplateLiteral(source: string, start: number): string | null {
+  if (source[start] !== '`') return null
+  let i = start + 1
+  let depth = 0  // depth of ${...} nesting
+
+  while (i < source.length) {
+    const ch = source[i]
+
+    if (depth === 0 && ch === '`') {
+      // End of template literal
+      return source.slice(start + 1, i)
+    }
+
+    if (ch === '$' && i + 1 < source.length && source[i + 1] === '{') {
+      depth++
+      i += 2
+      continue
+    }
+
+    if (ch === '{' && depth > 0) {
+      depth++
+      i++
+      continue
+    }
+
+    if (ch === '}' && depth > 0) {
+      depth--
+      i++
+      continue
+    }
+
+    if (ch === '`' && depth > 0) {
+      // Nested template literal inside ${...} — recurse by skipping it
+      const nested = extractTemplateLiteral(source, i)
+      if (nested !== null) {
+        i += nested.length + 2  // +2 for the two backticks
+        continue
+      }
+    }
+
+    if (ch === '\\') {
+      i += 2  // skip escaped char
+      continue
+    }
+
+    i++
+  }
+  return null  // unterminated
+}
+
+/** Extract variant name: field `name: '...'` or fallback to export name */
+function extractStoryName(block: string, exportName: string): string {
+  const nameMatch = block.match(/name:\s*['"`]([^'"`]+)['"`]/)
+  return nameMatch?.[1] ?? exportName
+}
+
+/** Check if story block has !dev tag */
+function hasDevTag(block: string): boolean {
+  return /tags:\s*\[([^\]]*)\]/.test(block) &&
+    block.match(/tags:\s*\[([^\]]*)\]/)?.[1]?.includes("'!dev'") === true ||
+    block.match(/tags:\s*\[([^\]]*)\]/)?.[1]?.includes('"!dev"') === true
+}
+
+/** Resolve P3: if html contains only ${ref}, find const ref = html`...` */
+function resolveVariableRef(html: string, source: string): string | null {
+  const refMatch = html.trim().match(/^\$\{(\w+)\}$/)
+  if (!refMatch) return null
+
+  const varName = refMatch[1]
+  const varPattern = new RegExp(`const\\s+${varName}\\s*=\\s*html\\s*\``)
+  const varMatch = source.match(varPattern)
+  if (!varMatch || varMatch.index === undefined) return null
+
+  const backtickPos = source.indexOf('`', varMatch.index + varMatch[0].length - 1)
+  return extractTemplateLiteral(source, backtickPos)
+}
+
+export function parseStoryVariants(source: string): ComponentVariant[] {
+  const variants: ComponentVariant[] = []
+
+  // Find all exported story constants
+  const exportRegex = /export const (\w+)\s*:\s*Story/g
+  let match: RegExpExecArray | null
+
+  while ((match = exportRegex.exec(source)) !== null) {
+    const exportName = match[1]
+    if (exportName === 'default') continue
+
+    // Extract the full story block
+    const blockStart = source.indexOf('{', match.index + match[0].length)
+    if (blockStart === -1) continue
+
+    let depth = 0, i = blockStart
+    while (i < source.length) {
+      if (source[i] === '{') depth++
+      if (source[i] === '}') { depth--; if (depth === 0) break }
+      i++
+    }
+    const block = source.slice(blockStart, i + 1)
+
+    // Skip !dev stories
+    if (hasDevTag(block)) continue
+
+    // Extract name
+    const name = extractStoryName(block, exportName)
+
+    // Find render function and extract HTML
+    let html: string | null = null
+
+    // Pattern 1: render: () => html`...`
+    const p1Match = block.match(/render:\s*\(?[^)]*\)?\s*=>\s*html\s*`/)
+    if (p1Match && p1Match.index !== undefined) {
+      const backtickPos = block.indexOf('`', p1Match.index + p1Match[0].length - 1)
+      html = extractTemplateLiteral(block, backtickPos)
+    }
+
+    // Pattern 2: render: () => { ... return html`...` }
+    if (!html) {
+      const p2Match = block.match(/render:\s*\(?[^)]*\)?\s*=>\s*\{/)
+      if (p2Match && p2Match.index !== undefined) {
+        const returnMatch = block.match(/return\s+html\s*`/)
+        if (returnMatch && returnMatch.index !== undefined) {
+          const backtickPos = block.indexOf('`', returnMatch.index + returnMatch[0].length - 1)
+          html = extractTemplateLiteral(block, backtickPos)
+        }
+      }
+    }
+
+    // Pattern 3: resolve variable reference
+    if (html) {
+      const resolved = resolveVariableRef(html, source)
+      if (resolved !== null) html = resolved
+    }
+
+    if (html) {
+      variants.push({ name, html: html.trim() })
+    }
+  }
+
+  return variants
 }
