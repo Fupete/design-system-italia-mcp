@@ -73,11 +73,23 @@ export function getSlugAliases(slug: string): string[] {
 
 // Returns slug + all aliases: useful for fallback loops in loaders
 export function slugsToTry(slug: string): string[] {
-  // Direct: slug is a key
-  const direct = SLUG_ALIASES[slug] ?? []
+  const result = new Set<string>([slug])
+
+  // Direct aliases
+  for (const alias of SLUG_ALIASES[slug] ?? []) {
+    result.add(alias)
+  }
+
   // Reverse: slug appears as a value
-  const reverse = Object.entries(SLUG_ALIASES)
-    .filter(([, aliases]) => aliases.includes(slug))
-    .map(([key]) => key)
-  return [slug, ...direct, ...reverse]
+  for (const [key, aliases] of Object.entries(SLUG_ALIASES)) {
+    if (aliases.includes(slug)) {
+      result.add(key)
+      // Transitive: also add all aliases of the matched key
+      for (const alias of aliases) {
+        result.add(alias)
+      }
+    }
+  }
+
+  return [...result]
 }
