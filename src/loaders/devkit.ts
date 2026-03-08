@@ -1,6 +1,6 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugFromStorybookTitle } from '../slugify.js'
-import type { DevKitEntry, DevKitComponent, WebComponentProp } from '../types.js'
+import type { DevKitEntry, DevKitComponent, WebComponentProp, ComponentVariant } from '../types.js'
 import { DEVKIT_INDEX_URL, DEVKIT_STORIES_URL, DEVKIT_STORYBOOK_BASE } from '../constants.js'
 import { slugsToTry } from '../slugify.js'
 
@@ -292,6 +292,7 @@ export async function loadDevKitComponent(slug: string): Promise<DevKitComponent
 
   const entry = await loadDevKitEntry(slug)
   if (!entry) return null
+  if (entry.pattern === 'bundle') return null  // bundle → no web component props, use loadStoryVariants
 
   const rawUrl = DEVKIT_STORIES_URL(entry.importPath)
   try {
@@ -303,4 +304,20 @@ export async function loadDevKitComponent(slug: string): Promise<DevKitComponent
     console.warn(`Dev Kit stories parse failed for "${slug}": ${(err as Error).message}`)
     return null
   }
+}
+
+// ─── Story variants — render markup from all stories.ts ──────────────────────
+
+export async function loadStoryVariants(
+  slug: string
+): Promise<ComponentVariant[] | null> {
+  const key = CACHE_KEYS.devKitStoryVariants(slug)
+  const cached = cache.get<ComponentVariant[]>(key)
+  if (cached) return cached
+
+  const entry = await loadDevKitEntry(slug)
+  if (!entry) return null
+
+  // TODO S6: implement parseStoryVariants() and populate
+  return null
 }
