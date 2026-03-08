@@ -88,7 +88,7 @@ if (process.argv.includes('--live')) {
         console.log(`✅ ${slug} (${entry.pattern}): ${variants.length} story variants`)
         passed++
       } else {
-        console.log(`❌ ${slug} (${entry.pattern}): 0 story variants — possible new pattern`)
+        console.log(`❌ ${slug} (${entry.pattern}): 0 story variants — possible new pattern (or not)`)
         failed++
       }
     } catch (err) {
