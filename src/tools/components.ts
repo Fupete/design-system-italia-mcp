@@ -269,19 +269,36 @@ export function registerGetComponentVariant(server: McpServer): void {
       const status = await loadStatus(slug)
       const allVariants = await loadVariants(slug, status?.sourceUrls.bsiDoc)
 
-      // Case-insensitive search
-      const match = allVariants.find(
+      const storyVariants = await loadStoryVariants(slug)
+
+      const results: Array<{ name: string; html: string; source: string }> = []
+
+      // Search BSI variants
+      const bsiMatch = allVariants.find(
         v => v.name.toLowerCase() === variantName.toLowerCase()
       )
+      if (bsiMatch) {
+        results.push({ ...bsiMatch, source: 'bsi' })
+      }
 
-      if (match) {
+      // Search story variants
+      if (storyVariants) {
+        const storyMatch = storyVariants.find(
+          v => v.name.toLowerCase() === variantName.toLowerCase()
+        )
+        if (storyMatch) {
+          results.push({ ...storyMatch, source: 'devkit-story' })
+        }
+      }
+
+      if (results.length > 0) {
         return {
           content: [{
             type: 'text',
             text: JSON.stringify({
               component: slug,
-              variant: match,
-              source: 'bsi',
+              variantName,
+              results,
               meta: {
                 fetchedAt: formatTimestamp(),
                 sourceUrls: [BSI_COMPONENT_URL(
@@ -298,35 +315,14 @@ export function registerGetComponentVariant(server: McpServer): void {
         }
       }
 
-      // Search story variants (Dev Kit stories.ts)
-      const storyVariants = await loadStoryVariants(slug)
-      if (storyVariants) {
-        const storyMatch = storyVariants.find(
-          v => v.name.toLowerCase() === variantName.toLowerCase()
-        )
-        if (storyMatch) {
-          return {
-            content: [{
-              type: 'text',
-              text: JSON.stringify({
-                component: slug,
-                variant: storyMatch,
-                source: 'devkit-story',
-                meta: {
-                  fetchedAt: formatTimestamp(),
-                  warnings,
-                  stability: 'alpha' as const,
-                },
-              }, null, 2),
-            }],
-          }
-        }
-      }
-
-      // Not found — provide available names to help retry
+      // Not found
+      const allNames = [
+        ...allVariants.map(v => v.name),
+        ...(storyVariants?.map(v => v.name) ?? []),
+      ]
       warnings.push(
         `Variant "${variantName}" not found for "${slug}". ` +
-        `Available BSI variants: ${allVariants.map(v => v.name).join(', ') || 'none'}`
+        `Available variants: ${allNames.join(', ') || 'none'}`
       )
 
       return {

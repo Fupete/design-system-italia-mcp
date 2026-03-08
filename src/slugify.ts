@@ -50,6 +50,20 @@ export function slugFromStorybookTitle(title: string): string {
 const SLUG_ALIASES: Record<string, string[]> = {
   'buttons': ['button', 'btn'],
   'modal': ['modale'],
+  'tables': ['table', 'tabelle'],
+  'chips': ['chip'],
+  'sections': ['section'],
+  'autocomplete': ['autocompletamento'],
+  'back': ['torna-indietro'],
+  'back-to-top': ['torna-su'],
+  'datepicker': ['input-calendario'],
+  'form': ['introduzione'],
+  'list': ['liste'],
+  'notifications': ['notifiche'],
+  'number-input': ['input-numerico'],
+  'pagination': ['paginazione'],
+  'tabs': ['tab'],
+  'timepicker': ['input-ora'],
 }
 
 // Given a canonical slug, returns all known aliases
@@ -59,5 +73,11 @@ export function getSlugAliases(slug: string): string[] {
 
 // Returns slug + all aliases: useful for fallback loops in loaders
 export function slugsToTry(slug: string): string[] {
-  return [slug, ...getSlugAliases(slug)]
+  // Direct: slug is a key
+  const direct = SLUG_ALIASES[slug] ?? []
+  // Reverse: slug appears as a value
+  const reverse = Object.entries(SLUG_ALIASES)
+    .filter(([, aliases]) => aliases.includes(slug))
+    .map(([key]) => key)
+  return [slug, ...direct, ...reverse]
 }

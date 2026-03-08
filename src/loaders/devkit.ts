@@ -396,8 +396,15 @@ function extractTemplateLiteral(source: string, start: number): string | null {
 
 /** Extract variant name: field `name: '...'` or fallback to export name */
 function extractStoryName(block: string, exportName: string): string {
-  const nameMatch = block.match(/name:\s*['"`]([^'"`]+)['"`]/)
-  return nameMatch?.[1] ?? exportName
+  // Try double quotes and backticks first (no apostrophe issue)
+  const dqMatch = block.match(/name:\s*"([^"]+)"/)
+  if (dqMatch) return dqMatch[1]
+  const btMatch = block.match(/name:\s*`([^`]+)`/)
+  if (btMatch) return btMatch[1]
+  // Single quotes: handle escaped apostrophes
+  const sqMatch = block.match(/name:\s*'((?:[^'\\]|\\.)+)'/)
+  if (sqMatch) return sqMatch[1].replace(/\\'/g, "'")
+  return exportName
 }
 
 /** Check if story block has !dev tag */
