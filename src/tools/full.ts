@@ -5,7 +5,7 @@ import { formatTimestamp } from '../utils.js'
 import { loadStatus, loadVariants, loadTokens } from '../loaders/bsi.js'
 import { loadGuidelines } from '../loaders/designers.js'
 import { resolveTokenValues } from '../loaders/tokens.js'
-import { loadDevKitEntry, loadDevKitComponent } from '../loaders/devkit.js'
+import { loadDevKitEntry, loadDevKitComponent, loadStoryVariants } from '../loaders/devkit.js'
 import { loadComponentIssues } from '../loaders/github.js'
 import { slugify } from '../slugify.js'
 import type { ComponentFull } from '../types.js'
@@ -75,6 +75,16 @@ export function registerGetComponentFull(server: McpServer): void {
       const issuesResult = unwrap(openIssues, 'GitHub Issues', { issues: [] })
       const dsMetaData = unwrap(dsMeta, 'DS meta', null)
 
+      // ── Story variants (all components — depends on devKitEntry) ───────────
+      let storyVariantsData: import('../types.js').ComponentVariant[] | null = null
+      if (devKitEntryData) {
+        try {
+          storyVariantsData = await loadStoryVariants(slug)
+        } catch (err) {
+          warnings.push(`Dev Kit story variants: ${(err as Error).message}`)
+        }
+      }
+
       if (issuesResult.error) {
         warnings.push(`GitHub issues unavailable: ${issuesResult.error}`)
       }
@@ -130,7 +140,13 @@ export function registerGetComponentFull(server: McpServer): void {
         devKit: {
           entry: devKitEntryData,
           component: devKitComponentData,
-          storyVariants: null,
+          storyVariants: storyVariantsData
+            ? {
+              count: storyVariantsData.length,
+              available: storyVariantsData.map(v => v.name),
+              variants: storyVariantsData.slice(0, 3),
+            }
+            : null,
         },
         openIssues: issuesData,
         meta: {
@@ -151,6 +167,7 @@ export function registerGetComponentFull(server: McpServer): void {
         guidelinesData && 'designers:yaml',
         devKitEntryData && 'devkit:index',
         devKitComponentData && 'devkit:stories',
+        storyVariantsData && storyVariantsData.length > 0 && 'devkit:story-variants',
         issuesData.length > 0 && 'github:issues',
       ].filter(Boolean) as string[]
 
