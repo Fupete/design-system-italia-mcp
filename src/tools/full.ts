@@ -72,8 +72,13 @@ export function registerGetComponentFull(server: McpServer): void {
       const guidelinesData = unwrap(guidelines, 'Designers Italia', null)
       const devKitEntryData = unwrap(devKitEntry, 'Dev Kit index', null)
       const devKitComponentData = unwrap(devKitComponent, 'Dev Kit stories', null)
-      const issuesData = unwrap(openIssues, 'GitHub Issues', [])
+      const issuesResult = unwrap(openIssues, 'GitHub Issues', { issues: [] })
       const dsMetaData = unwrap(dsMeta, 'DS meta', null)
+
+      if (issuesResult.error) {
+        warnings.push(`GitHub issues unavailable: ${issuesResult.error}`)
+      }
+      const issuesData = issuesResult.issues
 
       // ── Resolve token values ──────────────────────────────────────────────────
       let tokens = rawTokensData

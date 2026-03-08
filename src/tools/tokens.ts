@@ -69,7 +69,8 @@ export function registerGetComponentTokens(server: McpServer): void {
           fetchedAt: formatTimestamp(),
           sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
           note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
-            'null = resolution not available or value is already literal.',
+            'resolvedVia: intermediate --it-* token in the resolution chain (--bsi-* → --it-* → value). ' +
+            'null = resolution not available, value is already literal or another --bsi-* variable.',
           warnings,
           stability: 'alpha' as const,
         },

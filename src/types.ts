@@ -47,6 +47,7 @@ export interface CssToken {
   name: string          // --bsi-accordion-body-padding-x
   value: string         // var(--bsi-spacing-m)
   valueType: 'token-reference' | 'scss-expression' | 'literal'
+  resolvedVia?: string | null  // --it-* design token from Design Tokens Italia, e.g. "--it-spacing-m"
   valueResolved: string | null  // 1.5rem — from Design Tokens Italia
   description: string | null
 }
@@ -99,6 +100,11 @@ export interface ComponentIssue {
   state: 'open' | 'closed'
   createdAt: string
   labels: string[]
+}
+
+export interface ComponentIssuesResult {
+  issues: ComponentIssue[]
+  error?: string
 }
 
 export interface BoardStatus {
