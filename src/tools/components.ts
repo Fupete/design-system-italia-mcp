@@ -49,6 +49,7 @@ export function registerListComponents(server: McpServer): void {
               tags: devKitIndex.get(devKitSlug)!.tags,
               storybookUrl: devKitIndex.get(devKitSlug)!.storybookUrl,
               pattern: devKitIndex.get(devKitSlug)!.pattern,
+              componentType: devKitIndex.get(devKitSlug)!.componentType,
             }
             : null,
           bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
@@ -133,6 +134,7 @@ export function registerGetComponent(server: McpServer): void {
                     storybookUrl: devKitEntry.storybookUrl,
                     variants: devKitEntry.variants,
                     pattern: devKitEntry.pattern,
+                    componentType: devKitEntry.componentType,
                   }
                   : null,
                 meta: {
