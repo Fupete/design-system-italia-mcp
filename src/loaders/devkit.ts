@@ -69,6 +69,7 @@ export async function loadDevKitIndex(): Promise<DevKitIndex> {
       importPath,
       variants,
       pattern,
+      componentType: pattern === 'dedicated' ? 'web-component' as const : 'html-bsi' as const,
     }
 
     index.set(slug, devKitEntry)

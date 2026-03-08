@@ -40,6 +40,8 @@ export const ZGetComponentFullOutput = z.object({
   name: z.string(),
   slug: z.string(),
   status: z.any().nullable(),
+  variantsCount: z.number(),
+  variantsAvailable: z.array(z.string()),
   variants: z.array(z.object({
     name: z.string(),
     html: z.string(),
@@ -49,6 +51,14 @@ export const ZGetComponentFullOutput = z.object({
   devKit: z.object({
     entry: z.any().nullable(),
     component: z.any().nullable(),
+    storyVariants: z.object({
+      count: z.number(),
+      available: z.array(z.string()),
+      variants: z.array(z.object({
+        name: z.string(),
+        html: z.string(),
+      })),
+    }).nullable(),
   }),
   openIssues: z.array(z.object({
     title: z.string(),

@@ -122,12 +122,15 @@ export function registerGetComponentFull(server: McpServer): void {
         name: statusData?.name ?? slug,
         slug,
         status: statusData,
+        variantsCount: variantsData.length,
+        variantsAvailable: variantsData.map(v => v.name),
         variants: variantsData,
         guidelines: guidelinesData,
         tokens,
         devKit: {
           entry: devKitEntryData,
           component: devKitComponentData,
+          storyVariants: null,
         },
         openIssues: issuesData,
         meta: {
