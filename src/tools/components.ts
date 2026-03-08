@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { formatTimestamp } from '../utils.js'
 import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
-import { loadDevKitIndex, loadDevKitEntry } from '../loaders/devkit.js'
+import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants } from '../loaders/devkit.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { BSI_STATUS_URL, BSI_COMPONENT_URL, DEVKIT_INDEX_URL, BSI_DOC_BASE, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl } from '../constants.js'
@@ -117,6 +117,8 @@ export function registerGetComponent(server: McpServer): void {
         warnings.push(`Component not found in Dev Kit Italia for "${slug}"`)
       }
 
+      const storyVariants = await loadStoryVariants(slug)
+
       return {
         content: [
           {
@@ -135,6 +137,13 @@ export function registerGetComponent(server: McpServer): void {
                     variants: devKitEntry.variants,
                     pattern: devKitEntry.pattern,
                     componentType: devKitEntry.componentType,
+                  }
+                  : null,
+                storyVariants: storyVariants
+                  ? {
+                    count: storyVariants.length,
+                    available: storyVariants.map(v => v.name),
+                    variants: storyVariants.slice(0, maxVariants),
                   }
                   : null,
                 meta: {
@@ -204,6 +213,8 @@ export function registerSearchComponents(server: McpServer): void {
             tags: devKit?.tags ?? [],
             bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
             storybookUrl: devKit?.storybookUrl ?? null,
+            componentType: devKit?.componentType ?? null,
+            
           }
         })
 
@@ -287,7 +298,30 @@ export function registerGetComponentVariant(server: McpServer): void {
         }
       }
 
-      // TODO S7: also search storyVariants cache
+      // Search story variants (Dev Kit stories.ts)
+      const storyVariants = await loadStoryVariants(slug)
+      if (storyVariants) {
+        const storyMatch = storyVariants.find(
+          v => v.name.toLowerCase() === variantName.toLowerCase()
+        )
+        if (storyMatch) {
+          return {
+            content: [{
+              type: 'text',
+              text: JSON.stringify({
+                component: slug,
+                variant: storyMatch,
+                source: 'devkit-story',
+                meta: {
+                  fetchedAt: formatTimestamp(),
+                  warnings,
+                  stability: 'alpha' as const,
+                },
+              }, null, 2),
+            }],
+          }
+        }
+      }
 
       // Not found — provide available names to help retry
       warnings.push(
