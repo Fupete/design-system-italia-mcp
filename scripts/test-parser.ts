@@ -53,6 +53,22 @@ export const Visibile: Story = {
 };
 `
 
+// Sticky — args-driven, no render in stories → 0 variants is correct
+const sticky = `
+import { html } from 'lit';
+type Story = any;
+const meta = {
+  render: (args: any) => html\`<it-sticky>\${args}</it-sticky>\`,
+};
+export default meta;
+export const Offset: Story = {
+  args: { paddingTop: 50 },
+};
+export const Fixed: Story = {
+  tags: ['!dev'],
+};
+`
+
 function test(label: string, source: string, expected: number) {
   const result = parseStoryVariants(source)
   const ok = result.length === expected
@@ -67,6 +83,7 @@ test('P1 inline', p1, 2)
 test('P2 function body', p2, 1)
 test('P3 variable ref', p3, 1)
 test('Skip !dev', skip, 1)
+test('Sticky args-driven (0 is correct)', sticky, 0)
 
 // ─── Live check — real upstream stories.ts ───────────────────────────────────
 
