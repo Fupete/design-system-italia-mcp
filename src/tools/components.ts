@@ -230,3 +230,83 @@ export function registerSearchComponents(server: McpServer): void {
     }
   )
 }
+
+// ─── Tool: get_component_variant ─────────────────────────────────────────────
+
+export function registerGetComponentVariant(server: McpServer): void {
+  server.registerTool(
+    'get_component_variant',
+    {
+      title: 'Get Component Variant',
+      description: 'Returns the full HTML markup of a specific variant by name. ' +
+        'Use variantsAvailable from get_component to find variant names. ' +
+        'Searches BSI markup variants and Dev Kit story variants transparently.',
+      inputSchema: {
+        name: z.string().describe('Component name or slug (e.g. "accordion", "card")'),
+        variantName: z.string().describe('Variant name (e.g. "Base", "Tabella base")'),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async ({ name, variantName }) => {
+      name = name.trim()
+      variantName = variantName.trim()
+      const slug = slugify(name)
+      const warnings: string[] = []
+
+      const status = await loadStatus(slug)
+      const allVariants = await loadVariants(slug, status?.sourceUrls.bsiDoc)
+
+      // Case-insensitive search
+      const match = allVariants.find(
+        v => v.name.toLowerCase() === variantName.toLowerCase()
+      )
+
+      if (match) {
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              component: slug,
+              variant: match,
+              source: 'bsi',
+              meta: {
+                fetchedAt: formatTimestamp(),
+                sourceUrls: [BSI_COMPONENT_URL(
+                  status?.sourceUrls.bsiDoc
+                    ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
+                    : BSI_COMPONENT_DEFAULT_SUBFOLDER,
+                  slug
+                )],
+                warnings,
+                stability: 'alpha' as const,
+              },
+            }, null, 2),
+          }],
+        }
+      }
+
+      // TODO S7: also search storyVariants cache
+
+      // Not found — provide available names to help retry
+      warnings.push(
+        `Variant "${variantName}" not found for "${slug}". ` +
+        `Available BSI variants: ${allVariants.map(v => v.name).join(', ') || 'none'}`
+      )
+
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({
+            component: slug,
+            variant: null,
+            meta: {
+              fetchedAt: formatTimestamp(),
+              warnings,
+              stability: 'alpha' as const,
+            },
+          }, null, 2),
+        }],
+      }
+    }
+  )
+}
