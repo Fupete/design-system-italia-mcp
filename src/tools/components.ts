@@ -89,10 +89,13 @@ export function registerGetComponent(server: McpServer): void {
       title: 'Get Component',
       description: 'Returns HTML markup for all variants of a Bootstrap Italia component ' +
         'and web component it-* props from Dev Kit Italia.',
-      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Accordion")') },
+      inputSchema: {
+        name: z.string().describe('Component name or slug (e.g. "accordion", "Accordion")'),
+        maxVariants: z.number().optional().default(3).describe('Maximum number of variants with full markup (default 3). Use get_component_variant to fetch others by name.'),
+      },
       annotations: { readOnlyHint: true },
     },
-    async ({ name }) => {
+    async ({ name, maxVariants }) => {
       name = name.trim()
       const slug = slugify(name)
       const warnings: string[] = []
@@ -102,9 +105,9 @@ export function registerGetComponent(server: McpServer): void {
         loadDevKitIndex(),
       ])
 
-      const variants = await loadVariants(slug, status?.sourceUrls.bsiDoc)
+      const allVariants = await loadVariants(slug, status?.sourceUrls.bsiDoc)
 
-      if (variants.length === 0) {
+      if (allVariants.length === 0) {
         warnings.push(`No BSI variants found for "${slug}"`)
       }
 
@@ -121,7 +124,9 @@ export function registerGetComponent(server: McpServer): void {
               {
                 name: slug,
                 slug,
-                variants,
+                variantsCount: allVariants.length,
+                variantsAvailable: allVariants.map(v => v.name),
+                variants: allVariants.slice(0, maxVariants),
                 devKit: devKitEntry
                   ? {
                     tags: devKitEntry.tags,

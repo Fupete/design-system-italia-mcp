@@ -124,7 +124,7 @@ export function registerGetComponentFull(server: McpServer): void {
         status: statusData,
         variantsCount: variantsData.length,
         variantsAvailable: variantsData.map(v => v.name),
-        variants: variantsData,
+        variants: variantsData.slice(0, 3),
         guidelines: guidelinesData,
         tokens,
         devKit: {
