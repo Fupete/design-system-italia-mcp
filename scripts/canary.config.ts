@@ -229,4 +229,64 @@ export const PIPELINE_CHECKS: PipelineCheck[] = [
       return { url: storiesUrl, ok: true, ms: Date.now() - t0 };
     },
   },
+  {
+    // Bundle component — validates parseStoryVariants on a bundle stories.ts
+    // Badge is small (5 variants), stable, P1 pattern (inline render)
+    name: "Dev Kit badge bundle stories ⚠️ alpha",
+
+    async run({ get }) {
+      const t0 = Date.now();
+
+      const index = await get(DEVKIT_INDEX_URL);
+      if (!index.ok) {
+        return {
+          url: DEVKIT_INDEX_URL, ok: false, ms: Date.now() - t0,
+          error: `index fetch failed: HTTP ${index.status}`
+        };
+      }
+
+      const entries = (JSON.parse(index.body) as {
+        entries: Record<string, {
+          id: string;
+          type: string;
+          importPath: string;
+          storiesImports?: string[];
+        }>;
+      }).entries;
+
+      const badgeEntry = Object.values(entries).find(
+        (e) => e.type === "docs" &&
+          e.id.startsWith("componenti-") &&
+          e.id.includes("badge"),
+      );
+
+      if (!badgeEntry) {
+        return {
+          url: DEVKIT_INDEX_URL, ok: false, ms: Date.now() - t0,
+          error: "badge docs entry not found in Dev Kit index"
+        };
+      }
+
+      const importPath = badgeEntry.storiesImports?.[0] ?? badgeEntry.importPath;
+      const storiesUrl = DEVKIT_STORIES_URL(importPath);
+
+      const stories = await get(storiesUrl);
+      if (!stories.ok) {
+        return {
+          url: storiesUrl, ok: false, ms: Date.now() - t0,
+          error: `HTTP ${stories.status}`
+        };
+      }
+
+      // Bundle has no component: 'it-*' — instead verify render: () => html`
+      if (!/render:\s*\(?[^)]*\)?\s*=>\s*html\s*`/.test(stories.body)) {
+        return {
+          url: storiesUrl, ok: false, ms: Date.now() - t0,
+          error: "no render with html template found — parseStoryVariants would return empty"
+        };
+      }
+
+      return { url: storiesUrl, ok: true, ms: Date.now() - t0 };
+    },
+  },
 ];

@@ -15,9 +15,9 @@ export function registerGetComponentGuidelines(server: McpServer): void {
     'get_component_guidelines',
     {
       title: 'Get Component Guidelines',
-      description: 'Returns usage guidelines for a component from Designers Italia: ' +
+      description: 'Returns usage guidelines for a component from Designers Italia website: ' +
         'when to use it, how to use it, recommended alternatives, accessibility notes ' +
-        'and library status (Bootstrap Italia, UI Kit, ...).',
+        'and library status (Bootstrap Italia, UI Kit Italia, ...).',
       inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
     },
@@ -33,11 +33,13 @@ export function registerGetComponentGuidelines(server: McpServer): void {
         loadDsMeta(),
       ])
 
+      const canonicalSlug = status?.slug ?? slug
+
       if (!guidelines) {
-        warnings.push(`Designers Italia component guidelines not found for "${slug}"`)
+        warnings.push(`Designers Italia component guidelines not found for "${canonicalSlug}"`)
       }
       if (!status) {
-        warnings.push(`Component status not found for "${slug}"`)
+        warnings.push(`Component status not found for "${canonicalSlug}"`)
       }
 
       warnings.push(ALPHA_WARNING)
@@ -48,8 +50,8 @@ export function registerGetComponentGuidelines(server: McpServer): void {
             type: 'text',
             text: JSON.stringify(
               {
-                name: status?.name ?? slug,
-                slug,
+                name: status?.name ?? canonicalSlug,
+                slug: canonicalSlug,
                 description: guidelines?.description ?? null,
                 categories: guidelines?.categories ?? [],
                 status: status
@@ -69,18 +71,19 @@ export function registerGetComponentGuidelines(server: McpServer): void {
                   : null,
                 devKit: devKitEntry
                   ? {
+                    slug: devKitEntry.slug,
                     tags: devKitEntry.tags,
                     storybookUrl: devKitEntry.storybookUrl,
                   }
                   : null,
                 sourceUrls: {
-                  designersItalia: dsMeta.components.get(slug)?.absoluteUrl ?? designersUrl(slug),
+                  designersItalia: dsMeta.components.get(canonicalSlug)?.absoluteUrl ?? designersUrl(canonicalSlug),
                   bsiDoc: status?.sourceUrls.bsiDoc ?? null,
                   figma: status?.sourceUrls.figma ?? null,
                 },
                 meta: {
                   fetchedAt: formatTimestamp(),
-                  sourceUrls: [DESIGNERS_COMPONENT_URL(slug), BSI_STATUS_URL, DEVKIT_INDEX_URL],
+                  sourceUrls: [DESIGNERS_COMPONENT_URL(canonicalSlug), BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   warnings,
                   stability: 'alpha' as const,
                   versions: dsMeta.versions,

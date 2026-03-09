@@ -71,6 +71,7 @@ export interface DevKitEntry {
   importPath: string     // exact stories.ts path
   variants: string[]     // story export names in Italian
   pattern: 'dedicated' | 'bundle'
+  componentType: 'web-component' | 'html-bsi'
 }
 
 export interface WebComponentProp {
@@ -148,7 +149,9 @@ export interface ComponentFull {
   status: ComponentStatus | null
 
   // from api/componenti/{slug}.json
-  variants: ComponentVariant[]
+  variantsCount: number
+  variantsAvailable: string[]
+  variants: ComponentVariant[]  // truncated to maxVariants
 
   // from ComponentGuidelines
   guidelines: ComponentGuidelines | null
@@ -160,6 +163,11 @@ export interface ComponentFull {
   devKit: {
     entry: DevKitEntry | null
     component: DevKitComponent | null
+    storyVariants: {
+      count: number
+      available: string[]
+      variants: ComponentVariant[]
+    } | null
   }
 
   // from GitHub Issues

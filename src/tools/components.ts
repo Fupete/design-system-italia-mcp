@@ -1,8 +1,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
+import { ZGetComponentOutput, ZGetComponentVariantOutput } from '../schemas.js'
 import { formatTimestamp } from '../utils.js'
 import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
-import { loadDevKitIndex, loadDevKitEntry } from '../loaders/devkit.js'
+import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants } from '../loaders/devkit.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { BSI_STATUS_URL, BSI_COMPONENT_URL, DEVKIT_INDEX_URL, BSI_DOC_BASE, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl } from '../constants.js'
@@ -46,9 +47,11 @@ export function registerListComponents(server: McpServer): void {
           },
           devKit: devKitSlug
             ? {
+              slug: devKitIndex.get(devKitSlug)!.slug,
               tags: devKitIndex.get(devKitSlug)!.tags,
               storybookUrl: devKitIndex.get(devKitSlug)!.storybookUrl,
               pattern: devKitIndex.get(devKitSlug)!.pattern,
+              componentType: devKitIndex.get(devKitSlug)!.componentType,
             }
             : null,
           bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
@@ -89,10 +92,14 @@ export function registerGetComponent(server: McpServer): void {
       title: 'Get Component',
       description: 'Returns HTML markup for all variants of a Bootstrap Italia component ' +
         'and web component it-* props from Dev Kit Italia.',
-      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Accordion")') },
+      inputSchema: {
+        name: z.string().describe('Component name or slug (e.g. "accordion", "Accordion")'),
+        maxVariants: z.number().optional().default(3).describe('Maximum number of variants with full markup (default 3). Use get_component_variant to fetch others by name.'),
+      },
       annotations: { readOnlyHint: true },
+      outputSchema: ZGetComponentOutput,
     },
-    async ({ name }) => {
+    async ({ name, maxVariants }) => {
       name = name.trim()
       const slug = slugify(name)
       const warnings: string[] = []
@@ -102,54 +109,63 @@ export function registerGetComponent(server: McpServer): void {
         loadDevKitIndex(),
       ])
 
-      const variants = await loadVariants(slug, status?.sourceUrls.bsiDoc)
+      // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
+      const canonicalSlug = status?.slug ?? slug
 
-      if (variants.length === 0) {
-        warnings.push(`No BSI variants found for "${slug}"`)
+      const allVariants = await loadVariants(canonicalSlug, status?.sourceUrls.bsiDoc)
+
+      if (allVariants.length === 0) {
+        warnings.push(`No BSI variants found for "${canonicalSlug}"`)
       }
 
-      const devKitEntry = await loadDevKitEntry(slug)
+      const devKitEntry = await loadDevKitEntry(canonicalSlug)
       if (!devKitEntry) {
-        warnings.push(`Component not found in Dev Kit Italia for "${slug}"`)
+        warnings.push(`Component not found in Dev Kit Italia for "${canonicalSlug}"`)
+      }
+
+      const storyVariants = await loadStoryVariants(canonicalSlug)
+
+      const output = {
+        name: status?.name ?? canonicalSlug,
+        slug: canonicalSlug,
+        variantsCount: allVariants.length,
+        variantsAvailable: allVariants.map(v => v.name),
+        variants: allVariants.slice(0, maxVariants),
+        devKit: devKitEntry
+          ? {
+            slug: devKitEntry.slug,
+            tags: devKitEntry.tags,
+            storybookUrl: devKitEntry.storybookUrl,
+            pattern: devKitEntry.pattern,
+            componentType: devKitEntry.componentType,
+            storyVariants: storyVariants
+              ? {
+                count: storyVariants.length,
+                available: storyVariants.map(v => v.name),
+                variants: storyVariants.slice(0, maxVariants),
+              }
+              : null,
+          }
+          : null,
+        meta: {
+          fetchedAt: formatTimestamp(),
+          sourceUrls: [
+            BSI_COMPONENT_URL(
+              status?.sourceUrls.bsiDoc
+                ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
+                : BSI_COMPONENT_DEFAULT_SUBFOLDER,
+              canonicalSlug
+            ),
+            DEVKIT_INDEX_URL,
+          ],
+          warnings,
+          stability: 'alpha' as const,
+        },
       }
 
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(
-              {
-                name: slug,
-                slug,
-                variants,
-                devKit: devKitEntry
-                  ? {
-                    tags: devKitEntry.tags,
-                    storybookUrl: devKitEntry.storybookUrl,
-                    variants: devKitEntry.variants,
-                    pattern: devKitEntry.pattern,
-                  }
-                  : null,
-                meta: {
-                  fetchedAt: formatTimestamp(),
-                  sourceUrls: [
-                    BSI_COMPONENT_URL(
-                      status?.sourceUrls.bsiDoc
-                        ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
-                        : BSI_COMPONENT_DEFAULT_SUBFOLDER,
-                      slug
-                    ),
-                    DEVKIT_INDEX_URL,
-                  ],
-                  warnings,
-                  stability: 'alpha' as const,
-                },
-              },
-              null,
-              2
-            ),
-          },
-        ],
+        content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )
@@ -181,8 +197,9 @@ export function registerSearchComponents(server: McpServer): void {
         .filter((s) => {
           const devKitSlug = slugsToTry(s.slug).find(a => devKitIndex.has(a)) ?? null
           const devKit = devKitSlug ? devKitIndex.get(devKitSlug) : null
+          const allSlugs = slugsToTry(s.slug)
           return (
-            s.slug.includes(q) ||
+            allSlugs.some(a => a.includes(q)) ||
             s.name.toLowerCase().includes(q) ||
             devKit?.tags.some((t) => t.includes(q))
           )
@@ -196,7 +213,16 @@ export function registerSearchComponents(server: McpServer): void {
             status: s.libraryStatus.bootstrapItalia,
             tags: devKit?.tags ?? [],
             bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
-            storybookUrl: devKit?.storybookUrl ?? null,
+            devKit: devKit
+              ? {
+                slug: devKit.slug,
+                tags: devKit.tags,
+                storybookUrl: devKit.storybookUrl,
+                pattern: devKit.pattern,
+                componentType: devKit.componentType,
+              }
+              : null,
+
           }
         })
 
@@ -221,6 +247,111 @@ export function registerSearchComponents(server: McpServer): void {
             ),
           },
         ],
+      }
+    }
+  )
+}
+
+// ─── Tool: get_component_variant ─────────────────────────────────────────────
+
+export function registerGetComponentVariant(server: McpServer): void {
+  server.registerTool(
+    'get_component_variant',
+    {
+      title: 'Get Component Variant',
+      description: 'Returns the full HTML markup of a specific variant by name. ' +
+        'Use variantsAvailable from get_component to find variant names. ' +
+        'Searches BSI markup variants and Dev Kit story variants transparently.',
+      inputSchema: {
+        name: z.string().describe('Component name or slug (e.g. "accordion", "card")'),
+        variantName: z.string().describe('Variant name (e.g. "Base", "Tabella base")'),
+      },
+      annotations: { readOnlyHint: true },
+      outputSchema: ZGetComponentVariantOutput,
+    },
+    async ({ name, variantName }) => {
+      name = name.trim()
+      variantName = variantName.trim()
+      const slug = slugify(name)
+      const warnings: string[] = []
+
+      const status = await loadStatus(slug)
+
+      // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
+      const canonicalSlug = status?.slug ?? slug
+
+      const allVariants = await loadVariants(canonicalSlug, status?.sourceUrls.bsiDoc)
+      const storyVariants = await loadStoryVariants(canonicalSlug)
+
+      const results: Array<{ name: string; html: string; source: string }> = []
+
+      // Search BSI variants
+      const bsiMatch = allVariants.find(
+        v => v.name.toLowerCase() === variantName.toLowerCase()
+      )
+      if (bsiMatch) {
+        results.push({ ...bsiMatch, source: 'bsi' })
+      }
+
+      // Search story variants
+      if (storyVariants) {
+        const storyMatch = storyVariants.find(
+          v => v.name.toLowerCase() === variantName.toLowerCase()
+        )
+        if (storyMatch) {
+          results.push({ ...storyMatch, source: 'devkit-story' })
+        }
+      }
+
+      if (results.length > 0) {
+        const output = {
+          component: canonicalSlug,
+          variantName,
+          results,
+          meta: {
+            fetchedAt: formatTimestamp(),
+            sourceUrls: [BSI_COMPONENT_URL(
+              status?.sourceUrls.bsiDoc
+                ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
+                : BSI_COMPONENT_DEFAULT_SUBFOLDER,
+              canonicalSlug
+            )],
+            warnings,
+            stability: 'alpha' as const,
+          },
+        }
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+          structuredContent: output,
+        }
+      }
+
+      // Not found
+      const allNames = [
+        ...allVariants.map(v => v.name),
+        ...(storyVariants?.map(v => v.name) ?? []),
+      ]
+      warnings.push(
+        `Variant "${variantName}" not found for "${canonicalSlug}". ` +
+        `Available variants: ${allNames.join(', ') || 'none'}`
+      )
+
+      const output = {
+        component: canonicalSlug,
+        variantName,
+        results: [],
+        meta: {
+          fetchedAt: formatTimestamp(),
+          sourceUrls: [],
+          warnings,
+          stability: 'alpha' as const,
+        },
+      }
+
+      return {
+        content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )

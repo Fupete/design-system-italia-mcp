@@ -77,7 +77,11 @@ export async function loadAllStatuses(): Promise<Map<string, ComponentStatus>> {
 
 export async function loadStatus(slug: string): Promise<ComponentStatus | null> {
   const all = await loadAllStatuses()
-  return all.get(slugify(slug)) ?? null
+  for (const s of slugsToTry(slugify(slug))) {
+    const status = all.get(s)
+    if (status) return status
+  }
+  return null
 }
 
 // ─── Source #1 — api/componenti/{slug}.json ───────────────────────────────────

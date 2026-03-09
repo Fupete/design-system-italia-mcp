@@ -8,7 +8,7 @@ import { createServer, IncomingMessage, ServerResponse } from 'node:http'
 import { createRequire } from 'node:module'
 
 // ─── Tools ───────────────────────────────────────────────────────────────────
-import { registerListComponents, registerGetComponent, registerSearchComponents } from './tools/components.js'
+import { registerListComponents, registerGetComponent, registerSearchComponents, registerGetComponentVariant } from './tools/components.js'
 import { registerGetComponentTokens, registerFindToken } from './tools/tokens.js'
 import { registerGetComponentGuidelines, registerListByStatus, registerListAccessibilityIssues } from './tools/guidelines.js'
 import { registerGetComponentIssues, registerGetProjectBoardStatus } from './tools/issues.js'
@@ -65,17 +65,18 @@ function createMcpServer(): McpServer {
               ],
               tools: [
                 'ping',
-                'list_components',
-                'get_component',
-                'search_components',
-                'get_component_tokens',
                 'find_token',
-                'get_component_guidelines',
-                'list_by_status',
-                'list_accessibility_issues',
-                'get_component_issues',
-                'get_project_board_status',
+                'get_component',
                 'get_component_full',
+                'get_component_guidelines',
+                'get_component_issues',
+                'get_component_tokens',
+                'get_component_variant',
+                'get_project_board_status',
+                'list_accessibility_issues',
+                'list_by_status',
+                'list_components',
+                'search_components',
               ],
             },
             null,
@@ -88,6 +89,7 @@ function createMcpServer(): McpServer {
 
   registerListComponents(s)
   registerGetComponent(s)
+  registerGetComponentVariant(s)
   registerSearchComponents(s)
 
   registerGetComponentTokens(s)
