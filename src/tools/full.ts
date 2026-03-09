@@ -48,15 +48,18 @@ export function registerGetComponentFull(server: McpServer): void {
       // Load status first — needed for correct variants subfolder
       const statusData = await loadStatus(slug).catch(() => null)
 
+      // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
+      const canonicalSlug = statusData?.slug ?? slug
+
       // ── Parallel fetch from all sources ──────────────────────────────────────
       const [variants, rawTokens, guidelines, devKitEntry, devKitComponent, openIssues, dsMeta] =
         await Promise.allSettled([
-          loadVariants(slug, statusData?.sourceUrls.bsiDoc),  // now has correct subfolder
-          loadTokens(slug),
-          loadGuidelines(slug),
-          loadDevKitEntry(slug),
-          loadDevKitComponent(slug),
-          loadComponentIssues(slug),
+          loadVariants(canonicalSlug, statusData?.sourceUrls.bsiDoc),  // now has correct subfolder
+          loadTokens(canonicalSlug),
+          loadGuidelines(canonicalSlug),
+          loadDevKitEntry(canonicalSlug),
+          loadDevKitComponent(canonicalSlug),
+          loadComponentIssues(canonicalSlug),
           loadDsMeta(),
         ])
 
@@ -100,11 +103,11 @@ export function registerGetComponentFull(server: McpServer): void {
       }
 
       // ── Warnings for missing data ─────────────────────────────────────────────
-      if (!statusData) warnings.push(`Status not found for "${slug}" in components_status.json`)
-      if (variantsData.length === 0) warnings.push(`No HTML variants found for "${slug}"`)
-      if (!guidelinesData) warnings.push(`Component guidelines not found for "${slug}" in Designers Italia`)
-      if (!devKitEntryData) warnings.push(`"${slug}" not found in Dev Kit Italia`)
-      if (tokens.length === 0) warnings.push(`No CSS tokens found for "${slug}"`)
+      if (!statusData) warnings.push(`Status not found for "${canonicalSlug}" in components_status.json`)
+      if (variantsData.length === 0) warnings.push(`No HTML variants found for "${canonicalSlug}"`)
+      if (!guidelinesData) warnings.push(`Component guidelines not found for "${canonicalSlug}" in Designers Italia`)
+      if (!devKitEntryData) warnings.push(`"${canonicalSlug}" not found in Dev Kit Italia`)
+      if (tokens.length === 0) warnings.push(`No CSS tokens found for "${canonicalSlug}"`)
 
       // ── Alpha layer warning ───────────────────────────────────────────────────
       warnings.push(ALPHA_WARNING)
@@ -117,20 +120,20 @@ export function registerGetComponentFull(server: McpServer): void {
           statusData?.sourceUrls.bsiDoc
             ? subfolderFromDocUrl(statusData.sourceUrls.bsiDoc)
             : BSI_COMPONENT_DEFAULT_SUBFOLDER,
-          slug
+          canonicalSlug
         ),
         BSI_CUSTOM_PROPERTIES_URL,
-        DESIGNERS_COMPONENT_URL(slug),
+        DESIGNERS_COMPONENT_URL(canonicalSlug),
         DTI_VARIABLES_SCSS_URL,
         DEVKIT_INDEX_URL,
         ...(devKitEntryData ? [DEVKIT_STORIES_URL(devKitEntryData.importPath)] : []),
-        `${GITHUB_SEARCH_ISSUES_URL}?q=${slug}+${repoFilter}+is:open`,
+        `${GITHUB_SEARCH_ISSUES_URL}?q=${canonicalSlug}+${repoFilter}+is:open`,
       ]
 
       // ── Assemble ComponentFull response ──────────────────────────────────────
       const full: ComponentFull = {
-        name: statusData?.name ?? slug,
-        slug,
+        name: statusData?.name ?? canonicalSlug,
+        slug: canonicalSlug,
         status: statusData,
         variantsCount: variantsData.length,
         variantsAvailable: variantsData.map(v => v.name),

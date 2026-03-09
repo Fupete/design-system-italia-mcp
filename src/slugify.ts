@@ -39,31 +39,56 @@ export function slugFromStorybookTitle(title: string): string {
   return parts[parts.length - 1].toLowerCase().replace(/\s+/g, '-')
 }
 
-// ─── Cross-source aliases ─────────────────────────────────────────────────────
+// ─── Cross-source aliases + user-facing synonyms ──────────────────────────────
 //
-// Some sources use different slugs for the same component.
-// Add new cases as inconsistencies emerge.
+// Centralizes all slug variations in one place.
+// slugsToTry() resolves bidirectionally and transitively —
+// any alias can be used as input, regardless of which is the key.
 //
-//   'buttons' → Dev Kit uses "button" (without s)
-//   'modal'   → BSI saves the file as "modale.json"
-//
+// Three layers:
+//   1. Cross-source — BSI ↔ Dev Kit ↔ BSI JSON filenames (e.g. tables↔tabelle)
+//   2. EN plurals/synonyms — user writes "dialog", system finds "modal"
+//   3. IT synonyms — user writes "fisarmonica", system finds "accordion"
 const SLUG_ALIASES: Record<string, string[]> = {
-  'buttons': ['button', 'btn'],
-  'modal': ['modale'],
-  'tables': ['table', 'tabelle'],
-  'chips': ['chip'],
-  'sections': ['section'],
+  'accordion': ['accordions', 'fisarmonica'],
+  'alert': ['avviso'],
   'autocomplete': ['autocompletamento'],
   'back': ['torna-indietro'],
-  'back-to-top': ['torna-su'],
-  'datepicker': ['input-calendario'],
-  'form': ['introduzione'],
-  'list': ['liste'],
-  'notifications': ['notifiche'],
-  'number-input': ['input-numerico'],
-  'pagination': ['paginazione'],
+  'back-to-top': ['torna-su', 'scroll-to-top'],
+  'badge': ['etichetta'],
+  'breadcrumbs': ['breadcrumb', 'briciole', 'briciole-di-pane', 'percorso', 'path'],
+  'buttons': ['button', 'btn', 'bottone', 'pulsante', 'bottoni', 'pulsanti'],
+  'card': ['cards', 'scheda'],
+  'carousel': ['carousels', 'carosello'],
+  'chips': ['chip', 'tag'],
+  'collapse': ['collapses', 'espandibile'],
+  'datepicker': ['input-calendario', 'date-picker', 'calendar', 'input-data'],
+  'dropdown': ['dropdowns', 'menu-a-tendina'],
+  'footer': ['pie-di-pagina', 'piede'],
+  'form': ['introduzione', 'modulo'],
+  'header': ['headers', 'intestazione', 'testata'],
+  'hero': ['heroes', 'banner'],
+  'list': ['liste', 'lista'],
+  'megamenu': ['megamenus'],
+  'modal': ['modale', 'dialog', 'finestra-modale'],
+  'notifications': ['notifiche', 'notifica', 'toast', 'toasts'],
+  'number-input': ['input-numerico', 'numeric-input'],
+  'overlay': ['sovrapposizione'],
+  'pagination': ['paginazione', 'pages'],
+  'popover': ['popovers'],
+  'progress-indicators': ['progress', 'spinner', 'loader'],
+  'rating': ['valutazione', 'stelle'],
+  'sections': ['section', 'sezione'],
+  'sidebar': ['barra-laterale'],
+  'skiplinks': ['skip-links'],
+  'steppers': ['stepper', 'steps'],
+  'tables': ['table', 'tabelle', 'tabella'],
   'tabs': ['tab'],
-  'timepicker': ['input-ora'],
+  'timeline': ['timelines'],
+  'timepicker': ['input-ora', 'time-picker'],
+  'toggles': ['toggle', 'switch', 'switches'],
+  'tooltip': ['tooltips', 'suggerimento'],
+  'video-player': ['video', 'player'],
 }
 
 // Given a canonical slug, returns all known aliases

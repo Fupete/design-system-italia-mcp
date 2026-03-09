@@ -47,6 +47,7 @@ export function registerListComponents(server: McpServer): void {
           },
           devKit: devKitSlug
             ? {
+              slug: devKitIndex.get(devKitSlug)!.slug,
               tags: devKitIndex.get(devKitSlug)!.tags,
               storybookUrl: devKitIndex.get(devKitSlug)!.storybookUrl,
               pattern: devKitIndex.get(devKitSlug)!.pattern,
@@ -108,27 +109,31 @@ export function registerGetComponent(server: McpServer): void {
         loadDevKitIndex(),
       ])
 
-      const allVariants = await loadVariants(slug, status?.sourceUrls.bsiDoc)
+      // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
+      const canonicalSlug = status?.slug ?? slug
+
+      const allVariants = await loadVariants(canonicalSlug, status?.sourceUrls.bsiDoc)
 
       if (allVariants.length === 0) {
-        warnings.push(`No BSI variants found for "${slug}"`)
+        warnings.push(`No BSI variants found for "${canonicalSlug}"`)
       }
 
-      const devKitEntry = await loadDevKitEntry(slug)
+      const devKitEntry = await loadDevKitEntry(canonicalSlug)
       if (!devKitEntry) {
-        warnings.push(`Component not found in Dev Kit Italia for "${slug}"`)
+        warnings.push(`Component not found in Dev Kit Italia for "${canonicalSlug}"`)
       }
 
-      const storyVariants = await loadStoryVariants(slug)
+      const storyVariants = await loadStoryVariants(canonicalSlug)
 
       const output = {
-        name: slug,
-        slug,
+        name: status?.name ?? canonicalSlug,
+        slug: canonicalSlug,
         variantsCount: allVariants.length,
         variantsAvailable: allVariants.map(v => v.name),
         variants: allVariants.slice(0, maxVariants),
         devKit: devKitEntry
           ? {
+            slug: devKitEntry.slug,
             tags: devKitEntry.tags,
             storybookUrl: devKitEntry.storybookUrl,
             pattern: devKitEntry.pattern,
@@ -149,7 +154,7 @@ export function registerGetComponent(server: McpServer): void {
               status?.sourceUrls.bsiDoc
                 ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
                 : BSI_COMPONENT_DEFAULT_SUBFOLDER,
-              slug
+              canonicalSlug
             ),
             DEVKIT_INDEX_URL,
           ],
@@ -192,8 +197,9 @@ export function registerSearchComponents(server: McpServer): void {
         .filter((s) => {
           const devKitSlug = slugsToTry(s.slug).find(a => devKitIndex.has(a)) ?? null
           const devKit = devKitSlug ? devKitIndex.get(devKitSlug) : null
+          const allSlugs = slugsToTry(s.slug)
           return (
-            s.slug.includes(q) ||
+            allSlugs.some(a => a.includes(q)) ||
             s.name.toLowerCase().includes(q) ||
             devKit?.tags.some((t) => t.includes(q))
           )
@@ -209,6 +215,7 @@ export function registerSearchComponents(server: McpServer): void {
             bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
             devKit: devKit
               ? {
+                slug: devKit.slug,
                 tags: devKit.tags,
                 storybookUrl: devKit.storybookUrl,
                 pattern: devKit.pattern,
@@ -269,9 +276,12 @@ export function registerGetComponentVariant(server: McpServer): void {
       const warnings: string[] = []
 
       const status = await loadStatus(slug)
-      const allVariants = await loadVariants(slug, status?.sourceUrls.bsiDoc)
 
-      const storyVariants = await loadStoryVariants(slug)
+      // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
+      const canonicalSlug = status?.slug ?? slug
+
+      const allVariants = await loadVariants(canonicalSlug, status?.sourceUrls.bsiDoc)
+      const storyVariants = await loadStoryVariants(canonicalSlug)
 
       const results: Array<{ name: string; html: string; source: string }> = []
 
@@ -295,7 +305,7 @@ export function registerGetComponentVariant(server: McpServer): void {
 
       if (results.length > 0) {
         const output = {
-          component: slug,
+          component: canonicalSlug,
           variantName,
           results,
           meta: {
@@ -304,7 +314,7 @@ export function registerGetComponentVariant(server: McpServer): void {
               status?.sourceUrls.bsiDoc
                 ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
                 : BSI_COMPONENT_DEFAULT_SUBFOLDER,
-              slug
+              canonicalSlug
             )],
             warnings,
             stability: 'alpha' as const,

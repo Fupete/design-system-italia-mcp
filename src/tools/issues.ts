@@ -30,10 +30,12 @@ export function registerGetComponentIssues(server: McpServer): void {
         loadStatus(slug),
       ])
 
+      const canonicalSlug = status?.slug ?? slug
+
       if (issuesError) {
         warnings.push(`GitHub issues unavailable: ${issuesError}`)
       } else if (liveIssues.length === 0) {
-        warnings.push(`No open issues found for "${slug}"`)
+        warnings.push(`No open issues found for "${canonicalSlug}"`)
       }
 
       // Static known issues from components_status.json
@@ -52,8 +54,8 @@ export function registerGetComponentIssues(server: McpServer): void {
             type: 'text',
             text: JSON.stringify(
               {
-                component: slug,
-                name: status?.name ?? slug,
+                component: canonicalSlug,
+                name: status?.name ?? canonicalSlug,
                 issues: {
                   live: {
                     total: liveUnique.length,
@@ -68,7 +70,7 @@ export function registerGetComponentIssues(server: McpServer): void {
                 meta: {
                   fetchedAt: formatTimestamp(),
                   sourceUrls: [
-                    `${GITHUB_SEARCH_ISSUES_URL}?q=${slug}+${repoFilter}+is:open`,
+                    `${GITHUB_SEARCH_ISSUES_URL}?q=${canonicalSlug}+${repoFilter}+is:open`,
                     BSI_STATUS_URL,
                   ],
                   warnings,
