@@ -134,16 +134,15 @@ export function registerGetComponent(server: McpServer): void {
                   ? {
                     tags: devKitEntry.tags,
                     storybookUrl: devKitEntry.storybookUrl,
-                    variants: devKitEntry.variants,
                     pattern: devKitEntry.pattern,
                     componentType: devKitEntry.componentType,
-                  }
-                  : null,
-                storyVariants: storyVariants
-                  ? {
-                    count: storyVariants.length,
-                    available: storyVariants.map(v => v.name),
-                    variants: storyVariants.slice(0, maxVariants),
+                    storyVariants: storyVariants
+                      ? {
+                        count: storyVariants.length,
+                        available: storyVariants.map(v => v.name),
+                        variants: storyVariants.slice(0, maxVariants),
+                      }
+                      : null,
                   }
                   : null,
                 meta: {
@@ -212,9 +211,15 @@ export function registerSearchComponents(server: McpServer): void {
             status: s.libraryStatus.bootstrapItalia,
             tags: devKit?.tags ?? [],
             bsiDocUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(s.slug),
-            storybookUrl: devKit?.storybookUrl ?? null,
-            componentType: devKit?.componentType ?? null,
-            
+            devKit: devKit
+              ? {
+                tags: devKit.tags,
+                storybookUrl: devKit.storybookUrl,
+                pattern: devKit.pattern,
+                componentType: devKit.componentType,
+              }
+              : null,
+
           }
         })
 
