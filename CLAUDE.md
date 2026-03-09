@@ -144,8 +144,6 @@ usano lo slug BSI canonical, mai l'alias dell'input utente.
 
 ---
 
-## Dev Kit Italia — due pattern
-
 ## Dev Kit Italia — due pattern + story variants
 
 Dal `index.json` il campo `importPath` può essere:

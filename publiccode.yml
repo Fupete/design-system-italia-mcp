@@ -29,12 +29,12 @@ description:
       ufficiale e versioni correnti di Design System, Bootstrap Italia e Dev Kit Italia.
     documentation: "https://github.com/fupete/design-system-italia-mcp#readme"
     features:
-      - Espone 10 tool MCP per accesso strutturato al Design System .italia
+      - Espone 12 tool MCP per accesso strutturato al Design System .italia
       - Aggrega 9 sorgenti dati ufficiali in tempo reale
-      - Risoluzione catena token CSS (--bsi-* → --it-* → valore concreto)
+      - Risoluzione catena token CSS (--bsi-* → --it-* → valore concreto) (alpha BSI v3)
       - Linee guida d'uso e stato accessibilità per componente
       - Issue GitHub live sui repository del design system
-      - Versioni verificate di Design System, Bootstrap Italia e Dev Kit Italia
+      - Versioni verificate di Design system, Bootstrap Italia e Dev Kit Italia (alpha v1)
       - Cache con TTL configurabile per sorgente
       - Deploy universale via Docker (locale o VPS EU)
   en:
@@ -55,12 +55,12 @@ description:
       and Dev Kit Italia.
     documentation: "https://github.com/fupete/design-system-italia-mcp#readme"
     features:
-      - Exposes 10 MCP tools for structured access to Italy's Design System
+      - Exposes 12 MCP tools for structured access to Italy's Design System
       - Aggregates 9 official data sources in real time
-      - CSS token chain resolution (--bsi-* → --it-* → concrete value)
+      - CSS token chain resolution (--bsi-* → --it-* → concrete value) (alpha BSI v3)
       - Usage guidelines and accessibility status per component
       - Live GitHub issues from design system repositories
-      - Verified versions of Design System, Bootstrap Italia and Dev Kit Italia
+      - Verified versions of Design System, Bootstrap Italia and Dev Kit Italia (alpha v1)
       - Configurable TTL cache per data source
       - Universal Docker deploy (local or EU VPS)
 legal:

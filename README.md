@@ -68,6 +68,30 @@ le prime 3 con markup completo + la lista nomi di tutte. Usa
 I nomi dei componenti funzionano in italiano e inglese:
 *"fisarmonica"*, *"dialog"*, *"pulsante"* trovano accordion, modal, buttons.
 
+
+## System prompt consigliato / Recommended system prompt
+
+Per ridurre il rischio di allucinazioni, istruire l'assistente a basarsi
+esclusivamente sui dati restituiti dal server.
+
+**IT**
+```
+Usa esclusivamente i dati restituiti dagli strumenti MCP del
+Design System .italia. Non integrare con conoscenza pregressa su
+Bootstrap Italia, Dev Kit Italia o altri framework CSS/web component.
+Per ogni risposta includi la versione delle sorgenti e il link alla
+documentazione ufficiale restituiti dal tool.
+```
+
+**EN**
+```
+Use only the data returned by the Design System .italia MCP tools.
+Do not supplement with prior knowledge of Bootstrap Italia, Dev Kit Italia,
+or any other CSS framework or web component library.
+For every response, include the source versions and official documentation
+URL returned by the tool.
+```
+
 ---
 
 ## Come connettersi / How to connect
@@ -185,31 +209,6 @@ repository ufficiali in tempo reale.
 - Sorgenti #6 #7: Dev Kit Italia, due fetch — index.json come indice, stories.ts per dettaglio props. L'`importPath` in #6 indica il path esatto del file #7
 - Sorgente #9: fetch parallelo con `Promise.allSettled` — non esposta come tool separato, popola il campo `meta.versions` e `meta.designersUrl` in tutte le risposte
 - `get_component_full` aggrega tutte le sorgenti in una risposta unica
-
----
-
-## System prompt consigliato / Recommended system prompt
-
-Per ridurre il rischio di allucinazioni, istruire l'assistente a basarsi
-esclusivamente sui dati restituiti dal server.
-
-**IT**
-```
-Usa esclusivamente i dati restituiti dagli strumenti MCP del
-Design System .italia. Non integrare con conoscenza pregressa su
-Bootstrap Italia, Dev Kit Italia o altri framework CSS/web component.
-Per ogni risposta includi la versione delle sorgenti e il link alla
-documentazione ufficiale restituiti dal tool.
-```
-
-**EN**
-```
-Use only the data returned by the Design System .italia MCP tools.
-Do not supplement with prior knowledge of Bootstrap Italia, Dev Kit Italia,
-or any other CSS framework or web component library.
-For every response, include the source versions and official documentation
-URL returned by the tool.
-```
 
 ---
 
