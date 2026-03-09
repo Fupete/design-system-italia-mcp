@@ -34,6 +34,49 @@ export const ZGetComponentTokensOutput = z.object({
   }),
 })
 
+// ─── get_component ─────────────────────────────────────────────────────────
+
+export const ZStoryVariants = z.object({
+  count: z.number(),
+  available: z.array(z.string()),
+  variants: z.array(z.object({
+    name: z.string(),
+    html: z.string(),
+  })),
+})
+
+export const ZGetComponentOutput = z.object({
+  name: z.string(),
+  slug: z.string(),
+  variantsCount: z.number(),
+  variantsAvailable: z.array(z.string()),
+  variants: z.array(z.object({
+    name: z.string(),
+    html: z.string(),
+  })),
+  devKit: z.object({
+    tags: z.array(z.string()),
+    storybookUrl: z.string(),
+    pattern: z.enum(['dedicated', 'bundle']),
+    componentType: z.enum(['web-component', 'html-bsi']),
+    storyVariants: ZStoryVariants.nullable(),
+  }).nullable(),
+  meta: ZMeta,
+})
+
+// ─── get_component_variant ─────────────────────────────────────────────────
+
+export const ZGetComponentVariantOutput = z.object({
+  component: z.string(),
+  variantName: z.string(),
+  results: z.array(z.object({
+    name: z.string(),
+    html: z.string(),
+    source: z.enum(['bsi', 'devkit-story']),
+  })),
+  meta: ZMeta,
+})
+
 // ─── get_component_full ───────────────────────────────────────────────────────
 
 export const ZGetComponentFullOutput = z.object({

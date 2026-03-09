@@ -1,5 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
+import { ZGetComponentOutput, ZGetComponentVariantOutput } from '../schemas.js'
 import { formatTimestamp } from '../utils.js'
 import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
 import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants } from '../loaders/devkit.js'
@@ -95,6 +96,7 @@ export function registerGetComponent(server: McpServer): void {
         maxVariants: z.number().optional().default(3).describe('Maximum number of variants with full markup (default 3). Use get_component_variant to fetch others by name.'),
       },
       annotations: { readOnlyHint: true },
+      outputSchema: ZGetComponentOutput,
     },
     async ({ name, maxVariants }) => {
       name = name.trim()
@@ -119,52 +121,46 @@ export function registerGetComponent(server: McpServer): void {
 
       const storyVariants = await loadStoryVariants(slug)
 
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(
-              {
-                name: slug,
-                slug,
-                variantsCount: allVariants.length,
-                variantsAvailable: allVariants.map(v => v.name),
-                variants: allVariants.slice(0, maxVariants),
-                devKit: devKitEntry
-                  ? {
-                    tags: devKitEntry.tags,
-                    storybookUrl: devKitEntry.storybookUrl,
-                    pattern: devKitEntry.pattern,
-                    componentType: devKitEntry.componentType,
-                    storyVariants: storyVariants
-                      ? {
-                        count: storyVariants.length,
-                        available: storyVariants.map(v => v.name),
-                        variants: storyVariants.slice(0, maxVariants),
-                      }
-                      : null,
-                  }
-                  : null,
-                meta: {
-                  fetchedAt: formatTimestamp(),
-                  sourceUrls: [
-                    BSI_COMPONENT_URL(
-                      status?.sourceUrls.bsiDoc
-                        ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
-                        : BSI_COMPONENT_DEFAULT_SUBFOLDER,
-                      slug
-                    ),
-                    DEVKIT_INDEX_URL,
-                  ],
-                  warnings,
-                  stability: 'alpha' as const,
-                },
-              },
-              null,
-              2
+      const output = {
+        name: slug,
+        slug,
+        variantsCount: allVariants.length,
+        variantsAvailable: allVariants.map(v => v.name),
+        variants: allVariants.slice(0, maxVariants),
+        devKit: devKitEntry
+          ? {
+            tags: devKitEntry.tags,
+            storybookUrl: devKitEntry.storybookUrl,
+            pattern: devKitEntry.pattern,
+            componentType: devKitEntry.componentType,
+            storyVariants: storyVariants
+              ? {
+                count: storyVariants.length,
+                available: storyVariants.map(v => v.name),
+                variants: storyVariants.slice(0, maxVariants),
+              }
+              : null,
+          }
+          : null,
+        meta: {
+          fetchedAt: formatTimestamp(),
+          sourceUrls: [
+            BSI_COMPONENT_URL(
+              status?.sourceUrls.bsiDoc
+                ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
+                : BSI_COMPONENT_DEFAULT_SUBFOLDER,
+              slug
             ),
-          },
-        ],
+            DEVKIT_INDEX_URL,
+          ],
+          warnings,
+          stability: 'alpha' as const,
+        },
+      }
+
+      return {
+        content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )
@@ -264,6 +260,7 @@ export function registerGetComponentVariant(server: McpServer): void {
         variantName: z.string().describe('Variant name (e.g. "Base", "Tabella base")'),
       },
       annotations: { readOnlyHint: true },
+      outputSchema: ZGetComponentVariantOutput,
     },
     async ({ name, variantName }) => {
       name = name.trim()
@@ -297,26 +294,26 @@ export function registerGetComponentVariant(server: McpServer): void {
       }
 
       if (results.length > 0) {
+        const output = {
+          component: slug,
+          variantName,
+          results,
+          meta: {
+            fetchedAt: formatTimestamp(),
+            sourceUrls: [BSI_COMPONENT_URL(
+              status?.sourceUrls.bsiDoc
+                ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
+                : BSI_COMPONENT_DEFAULT_SUBFOLDER,
+              slug
+            )],
+            warnings,
+            stability: 'alpha' as const,
+          },
+        }
+
         return {
-          content: [{
-            type: 'text',
-            text: JSON.stringify({
-              component: slug,
-              variantName,
-              results,
-              meta: {
-                fetchedAt: formatTimestamp(),
-                sourceUrls: [BSI_COMPONENT_URL(
-                  status?.sourceUrls.bsiDoc
-                    ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
-                    : BSI_COMPONENT_DEFAULT_SUBFOLDER,
-                  slug
-                )],
-                warnings,
-                stability: 'alpha' as const,
-              },
-            }, null, 2),
-          }],
+          content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+          structuredContent: output,
         }
       }
 
@@ -330,19 +327,21 @@ export function registerGetComponentVariant(server: McpServer): void {
         `Available variants: ${allNames.join(', ') || 'none'}`
       )
 
+      const output = {
+        component: slug,
+        variantName,
+        results: [],
+        meta: {
+          fetchedAt: formatTimestamp(),
+          sourceUrls: [],
+          warnings,
+          stability: 'alpha' as const,
+        },
+      }
+
       return {
-        content: [{
-          type: 'text',
-          text: JSON.stringify({
-            component: slug,
-            variant: null,
-            meta: {
-              fetchedAt: formatTimestamp(),
-              warnings,
-              stability: 'alpha' as const,
-            },
-          }, null, 2),
-        }],
+        content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )
