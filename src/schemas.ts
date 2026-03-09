@@ -55,6 +55,7 @@ export const ZGetComponentOutput = z.object({
     html: z.string(),
   })),
   devKit: z.object({
+    slug: z.string(),
     tags: z.array(z.string()),
     storybookUrl: z.string(),
     pattern: z.enum(['dedicated', 'bundle']),

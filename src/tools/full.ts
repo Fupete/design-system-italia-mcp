@@ -82,7 +82,7 @@ export function registerGetComponentFull(server: McpServer): void {
       let storyVariantsData: import('../types.js').ComponentVariant[] | null = null
       if (devKitEntryData) {
         try {
-          storyVariantsData = await loadStoryVariants(slug)
+          storyVariantsData = await loadStoryVariants(canonicalSlug)
         } catch (err) {
           warnings.push(`Dev Kit story variants: ${(err as Error).message}`)
         }
@@ -157,7 +157,7 @@ export function registerGetComponentFull(server: McpServer): void {
           sourceUrls,
           warnings,
           versions: dsMetaData?.versions ?? undefined,
-          designersUrl: dsMetaData?.components.get(slug)?.absoluteUrl ?? null,
+          designersUrl: dsMetaData?.components.get(canonicalSlug)?.absoluteUrl ?? null,
           stability: 'alpha' as const,
         },
       }

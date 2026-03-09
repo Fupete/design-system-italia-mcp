@@ -333,12 +333,12 @@ export function registerGetComponentVariant(server: McpServer): void {
         ...(storyVariants?.map(v => v.name) ?? []),
       ]
       warnings.push(
-        `Variant "${variantName}" not found for "${slug}". ` +
+        `Variant "${variantName}" not found for "${canonicalSlug}". ` +
         `Available variants: ${allNames.join(', ') || 'none'}`
       )
 
       const output = {
-        component: slug,
+        component: canonicalSlug,
         variantName,
         results: [],
         meta: {
