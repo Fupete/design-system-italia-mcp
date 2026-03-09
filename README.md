@@ -23,10 +23,11 @@
 ## Strumenti esposti / Exposed tools
 
 ### Componenti
-* `list_components` — elenco di tutti i componenti con stato (Bootstrap Italia + Dev Kit Italia)
-* `get_component(name)` — markup HTML Bootstrap Italia, varianti e props web component Dev Kit Italia ⚠️ alpha
-* `search_components(query)` — ricerca per nome o caratteristica
-* **Tool principale:** `get_component_full(name)` — risposta aggregata: markup HTML + props Dev Kit Italia ⚠️ alpha + token CSS + linee guida per componente + stato + issue aperte in una sola query
+* `list_components` — elenco di tutti i componenti con stato (Bootstrap Italia + Dev Kit Italia), `componentType`
+* `get_component(name, maxVariants?)` — markup HTML Bootstrap Italia (troncato, default 3) + story variants Dev Kit Italia ⚠️ alpha
+* `get_component_variant(name, variantName)` — **nuovo** — markup completo di una variante specifica per nome (BSI o Dev Kit, trasparente)
+* `search_components(query)` — ricerca per nome, slug, alias IT/EN o tag Dev Kit
+* **Tool principale:** `get_component_full(name)` — risposta aggregata: markup HTML + story variants + props Dev Kit Italia ⚠️ alpha + token CSS + linee guida + stato + issue — una sola query
 
 ### Token e variabili CSS
 - `get_component_tokens(name)` — variabili CSS `--bsi-*` personalizzabili
@@ -59,6 +60,13 @@ eventuali note di accessibilità, issue GitHub aperte.
 
 Ogni risposta include le versioni delle sorgenti (Design System .italia, Bootstrap Italia,
 Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'ultimo fetch.
+
+Per componenti con molte varianti (es. Card con 30+), `get_component` restituisce
+le prime 3 con markup completo + la lista nomi di tutte. Usa
+`get_component_variant(name, variantName)` per richiederne altre per nome.
+
+I nomi dei componenti funzionano in italiano e inglese:
+*"fisarmonica"*, *"dialog"*, *"pulsante"* trovano accordion, modal, buttons.
 
 ---
 
@@ -151,7 +159,7 @@ repository ufficiali in tempo reale.
 | 4 | [designers.italia.it](https://github.com/italia/designers.italia.it) | `src/data/content/design-system/componenti/{slug}.yaml` | Linee guida d'uso, accessibilità, stato redazionale, quando/come usare | `get_component_guidelines` | Lunga (24h) |
 | 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | `dist/scss/_variables.scss` | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` per i designer | `get_component_tokens` (campo `valueResolved`) `find_token` | Lunga (24h) |
 | 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `italia.github.io/dev-kit-italia/index.json` | Indice Storybook: tag stato (`a11y-ok` `alpha` `new` `web-component`), varianti in italiano, URL docs, importPath → path esatto stories.ts ⚠️ alpha | `list_components` `search_components` `get_component_guidelines` | Breve (15-30 min) |
-| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti ⚠️ alpha | `get_component` `get_component_full` | Media (4h) |
+| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti ⚠️ alpha | `get_component` `get_component_variant` `get_component_full` | Media (4h) |
 | 8 | GitHub REST API | `search/issues?q={slug}+repo:italia/...+is:open` | Issue aperte sui repo: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` | Breve (15-30 min) |
 | 9 | [designers.italia.it](https://github.com/italia/designers.italia.it) + [bootstrap-italia](https://github.com/italia/bootstrap-italia) + [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `src/data/dsnav.yaml` + `package.json` (×2) | Versioni Design System / BSI / Dev Kit Italia. URL verificati pagine componenti e fondamenti su designers.italia.it | `meta` in tutte le risposte | Lunga (24h) |
 

@@ -34,14 +34,16 @@ design-system-italia-mcp/
 │   │   ├── meta.ts               # Sorgente #9 — versioni + designersUrl
 │   │   └── tokens.ts             # Sorgente #5 — DTI + bridge BSI→IT (valueResolved)
 │   └── tools/
-│       ├── components.ts         # list_components, get_component, search_components
+│       ├── components.ts         # list_components, get_component, search_components, get_component_variant
 │       ├── full.ts               # get_component_full
 │       ├── guidelines.ts         # get_component_guidelines, list_by_status, list_accessibility_issues
 │       ├── issues.ts             # get_component_issues, get_project_board_status
 │       └── tokens.ts             # get_component_tokens, find_token
 ├── scripts/
-│   ├── canary.ts                 # Canary check — 11 sorgenti upstream
+│   ├── canary.ts                 # Canary check — 12 sorgenti upstream
 │   ├── canary.config.ts          # Configurazione sorgenti canary
+│   ├── test-parser.ts            # Story variants parser tests (offline + --live)
+│   ├── find-slug-mismatches.ts   # Cross-source slug discovery
 │   └── check-version.ts         # Verifica allineamento package.json + publiccode.yml + tag
 ├── .github/workflows/
 │   ├── ci.yml                    # Typecheck + build su push/PR
@@ -54,7 +56,7 @@ design-system-italia-mcp/
 ```
 
 **Regola soglia**: se un file supera ~400 righe, spezzarlo per modulo.
-**Naming tool**: prefisso `dsi_*` previsto in v0.2.0 (breaking change).
+**Naming tool**: prefisso `dsi_*` previsto in v0.3.0 (breaking change).
 
 ---
 
@@ -129,40 +131,41 @@ le sorgenti che hanno risposto. Non fallire silenziosamente.
 
 ---
 
-## Slug aliases — inconsistenze cross-sorgente note
+## Slug aliases — cross-source + user-facing
 
-Alcune sorgenti usano slug diversi per lo stesso componente.
-Il mapping è centralizzato in `src/slugify.ts`:
+Tre livelli di alias centralizzati in `src/slugify.ts` (38 entry):
+1. Cross-source — BSI ↔ Dev Kit ↔ BSI JSON filenames (e.g. tables↔tabelle)
+2. EN plurals/synonyms — user writes "dialog", system finds "modal"
+3. IT synonyms — user writes "fisarmonica", system finds "accordion"
 
-```typescript
-const SLUG_ALIASES: Record<string, string[]> = {
-  'buttons': ['button'],  // Dev Kit usa "button", BSI usa "buttons"
-  'modal':   ['modale'],  // BSI salva il file come "modale.json"
-}
-```
-
-Usare `slugsToTry(slug)` nei loader per il fallback automatico.
-Aggiungere nuovi alias qui quando emergono nuove inconsistenze —
-non gestire il fallback inline nei loader.
+`slugsToTry()` risolve bidirezionalmente e transitivamente.
+Canonical slug risolto via `loadStatus()` — tutte le risposte
+usano lo slug BSI canonical, mai l'alias dell'input utente.
 
 ---
 
 ## Dev Kit Italia — due pattern
 
+## Dev Kit Italia — due pattern + story variants
+
 Dal `index.json` il campo `importPath` può essere:
+```
+./packages/accordion/stories/it-accordion.stories.ts   → dedicated (web-component)
+./packages/dev-kit-italia/stories/components/alert.stories.ts  → bundle (html-bsi)
+```
 
-```
-./packages/accordion/stories/it-accordion.stories.ts   → package dedicato (web-component)
-./packages/dev-kit-italia/stories/components/alert.stories.ts  → bundle BSI wrapper
-```
+`componentType`: `"web-component"` (dedicated) o `"html-bsi"` (bundle).
+Derivato da `pattern` in `loadDevKitIndex()`.
 
-Usare sempre `importPath` da `index.json` per costruire l'URL raw GitHub.
-Non assumere il pattern dal nome del componente.
+`parseStoryVariants()` estrae il markup HTML render da tutte le stories.ts
+(dedicated e bundle). Tre pattern: inline render, function body, variable reference.
+38/39 componenti parsati (sticky = args-driven, 0 varianti = corretto).
 
-URL raw GitHub da importPath:
-```
-https://raw.githubusercontent.com/italia/dev-kit-italia/main/{importPath senza ./}
-```
+`loadStoryVariants()` ritorna varianti con truncation unificata:
+stessa interfaccia di BSI variants (`count` + `available` + `variants` prime N).
+
+`get_component_variant(name, variantName)` pesca da BSI e story variants
+trasparentemente — restituisce tutti i match da entrambe le sorgenti.
 
 ---
 
@@ -217,7 +220,7 @@ potrebbe avere breaking changes.
 
 - Non integrare conoscenza pregressa di Bootstrap nella logica dei tool
 - Non parsare SCSS o TypeScript — usare solo i JSON e file pre-processati
-  (eccezione: parser leggero su stories.ts (regex per argTypes),
+  (eccezione: parser leggero su stories.ts (regex per argTypes + parseStoryVariants per render markup),
   _variables.scss (regex per $it-* con risoluzione ricorsiva),
   _root.scss branch 3.x (regex per bridge --bsi-* → --it-*))
 - Non usare `require()` — il progetto è ESM, usare sempre import statico
@@ -229,6 +232,23 @@ potrebbe avere breaking changes.
 - Non dichiarare VERSION manualmente — viene letta da `package.json` a runtime via `createRequire`
 - Non usare `server.tool()` — usare sempre `server.registerTool()` con `title`, `inputSchema`, `annotations`
 - Non duplicare l'oggetto output — costruirlo una volta e riusare per `content` e `structuredContent`
+
+---
+
+## Truncation varianti
+
+BSI variants e Dev Kit story variants usano la stessa interfaccia:
+```typescript
+{
+  variantsCount: number,
+  variantsAvailable: string[],  // tutti i nomi
+  variants: ComponentVariant[]  // prime N (default 3)
+}
+```
+
+`maxVariants` parametro opzionale in `get_component` (default 3).
+`get_component_variant` per richiederne una specifica per nome.
+`get_component_full` tronca a 3 sia BSI che storyVariants.
 
 ---
 
