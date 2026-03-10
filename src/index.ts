@@ -56,13 +56,7 @@ function createMcpServer(): McpServer {
               version: VERSION,
               timestamp: new Date().toISOString(),
               message: 'Unofficial MCP server for Design System .italia. Use list_components to get started.',
-              warnings: [
-                'Unofficial experimental project — data provided as-is.',
-                'Token layer alpha: Bootstrap Italia 3.x and Dev Kit Italia are in alpha. ' +
-                'HTML markup and component status are almost stable (APIs also present in BSI 2.x). ' +
-                'CSS tokens (--bsi-*) and Dev Kit web components may have breaking changes before stable release. ' +
-                'Do not use the token layer in production without checking upstream status.',
-              ],
+              warnings: ALPHA_WARNING,
               tools: [
                 'ping',
                 'find_token',
@@ -99,7 +93,7 @@ function createMcpServer(): McpServer {
   registerGetProjectBoardStatus(s)
   registerListAccessibilityIssues(s)
   registerListByStatus(s)
-  
+
   registerListComponents(s)
   registerSearchComponents(s)
 
