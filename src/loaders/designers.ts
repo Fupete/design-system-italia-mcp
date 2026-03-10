@@ -1,6 +1,6 @@
 import yaml from 'js-yaml'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
-import { slugify } from '../slugify.js'
+import { slugify, slugsToTry } from '../slugify.js'
 import type { ComponentGuidelines } from '../types.js'
 import { DESIGNERS_COMPONENT_URL, DESIGNERS_SITE_BASE } from '../constants.js'
 
@@ -71,21 +71,24 @@ function parseYaml(raw: unknown): ComponentGuidelines {
 // ─── Public loader ────────────────────────────────────────────────────────────
 
 export async function loadGuidelines(slug: string): Promise<ComponentGuidelines | null> {
-  const normalized = slugify(slug)
-  const key = CACHE_KEYS.designers(normalized)
-  const cached = cache.get<ComponentGuidelines>(key)
-  if (cached) return cached
+  for (const s of slugsToTry(slug)) {
+    const normalized = slugify(s)
+    const key = CACHE_KEYS.designers(normalized)
+    const cached = cache.get<ComponentGuidelines>(key)
+    if (cached) return cached
 
-  const url = DESIGNERS_COMPONENT_URL(normalized)
-  try {
-    const raw = await fetchYaml(url)
-    const guidelines = parseYaml(raw)
-    cache.set(key, guidelines, TTL.designers)
-    return guidelines
-  } catch (err) {
-    console.warn(`Designers Italia: guidelines fetch/parse failed for "${slug}": ${(err as Error).message}`)
-    return null
+    const url = DESIGNERS_COMPONENT_URL(normalized)
+    try {
+      const raw = await fetchYaml(url)
+      const guidelines = parseYaml(raw)
+      cache.set(key, guidelines, TTL.designers)
+      return guidelines
+    } catch {
+      continue
+    }
   }
+  console.warn(`Designers Italia: guidelines not found for "${slug}" (tried: ${slugsToTry(slug).join(', ')})`)
+  return null
 }
 
 export function designersUrl(slug: string): string {
