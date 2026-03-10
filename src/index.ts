@@ -87,22 +87,21 @@ function createMcpServer(): McpServer {
     })
   )
 
-  registerListComponents(s)
-  registerGetComponent(s)
-  registerGetComponentVariant(s)
-  registerSearchComponents(s)
-
-  registerGetComponentTokens(s)
   registerFindToken(s)
 
-  registerGetComponentGuidelines(s)
-  registerListByStatus(s)
-  registerListAccessibilityIssues(s)
-
-  registerGetComponentIssues(s)
-  registerGetProjectBoardStatus(s)
-
+  registerGetComponent(s)
   registerGetComponentFull(s)
+  registerGetComponentGuidelines(s)
+  registerGetComponentIssues(s)
+  registerGetComponentTokens(s)
+  registerGetComponentVariant(s)
+
+  registerGetProjectBoardStatus(s)
+  registerListAccessibilityIssues(s)
+  registerListByStatus(s)
+  
+  registerListComponents(s)
+  registerSearchComponents(s)
 
   return s
 }
