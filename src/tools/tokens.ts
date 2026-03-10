@@ -16,7 +16,7 @@ export function registerGetComponentTokens(server: McpServer): void {
       title: 'Get Component Tokens',
       description: 'Returns customizable CSS --bsi-* variables for a component, ' +
         'with semantic description and resolved value (e.g. var(--bsi-spacing-m) → 1.5rem). ' +
-        'Useful for designers who want to know the concrete token values.',
+        'Useful to understand concrete values behind CSS custom properties or design tokens.',
       inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
       outputSchema: ZGetComponentTokensOutput,

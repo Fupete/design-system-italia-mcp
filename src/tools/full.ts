@@ -35,7 +35,8 @@ export function registerGetComponentFull(server: McpServer): void {
       description: 'Aggregated response for a Design System .italia component: ' +
         'HTML markup + CSS tokens with resolved values + usage guidelines + ' +
         'library status + it-* web component props + open GitHub issues. ' +
-        'Killer feature of the server — one call for everything.',
+        'Use only when you need data from multiple sources in a single response.' +
+        'For specific queries, prefer get_component, get_component_guidelines, get_component_tokens, or get_component_issues.',
       inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
       outputSchema: ZGetComponentFullOutput,

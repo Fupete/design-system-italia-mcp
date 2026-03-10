@@ -94,9 +94,8 @@ export function registerGetProjectBoardStatus(server: McpServer): void {
     'get_project_board_status',
     {
       title: 'Get Project Board Status',
-      description: 'Returns the aggregated status of Design System .italia GitHub boards. ' +
-        'Includes links to open issues for each repository. ' +
-        'Note: GitHub Projects v2 (project #17) is not integrated — ' +
+      description: 'Returns the aggregated status of Design System .italia GitHub boards. ' + 
+        'Includes links to open issues for each repository.' +
         'use get_component_issues for component-specific issues.',
       inputSchema: {},
       annotations: { readOnlyHint: true },

@@ -22,7 +22,8 @@ export function registerListComponents(server: McpServer): void {
     {
       title: 'List Components',
       description: 'Lists all Design System .italia components with library status ' +
-        '(Bootstrap Italia, UI Kit, ...) and accessibility status.',
+        '(Bootstrap Italia, UI Kit, ...) and accessibility status.' + 
+        'Start here for a broad overview before drilling into specific components.',
       inputSchema: {},
       annotations: { readOnlyHint: true },
     },
@@ -91,7 +92,8 @@ export function registerGetComponent(server: McpServer): void {
     {
       title: 'Get Component',
       description: 'Returns HTML markup for all variants of a Bootstrap Italia component ' +
-        'and web component it-* props from Dev Kit Italia.',
+        'and web component it-* props from Dev Kit Italia.' +
+        'Start here for markup and variants. Use get_component_full only if you also need tokens, guidelines, and issues together.',
       inputSchema: {
         name: z.string().describe('Component name or slug (e.g. "accordion", "Accordion")'),
         maxVariants: z.number().optional().default(3).describe('Maximum number of variants with full markup (default 3). Use get_component_variant to fetch others by name.'),
