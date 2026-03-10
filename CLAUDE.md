@@ -214,6 +214,42 @@ potrebbe avere breaking changes.
 
 ---
 
+## Pipeline consigliata per i tool
+
+I tool sono organizzati per progressive disclosure: inizia dal meno
+costoso e aggrega solo quando necessario.
+```
+1. DISCOVERY
+   ping                        → verifica connessione + lista tool
+   list_components             → panoramica tutti i componenti con stato
+   search_components(query)    → trova per nome / alias IT-EN / tag Dev Kit
+   list_by_status(status)      → filtra per stato BSI / Dev Kit
+   list_accessibility_issues   → componenti con note a11y aperte
+
+2. TOOL SPECIFICO  (usa il tool più mirato per la domanda)
+   get_component(name) → markup HTML + story variants
+   get_component_variant(name, variantName) → markup completo di una variante
+   get_component_guidelines(name) → linee guida d'uso e accessibilità
+   get_component_tokens(name) → token CSS --bsi-* con valueResolved
+   get_component_issues(name) → issue GitHub aperte
+   find_token(query) → ricerca token per nome o descrizione
+   get_project_board_status → stato aggregato board GitHub
+
+3. AGGREGAZIONE  (solo se servono dati da più sorgenti insieme)
+   get_component_full(name) → tutte le sorgenti in una risposta unica
+```
+
+Regola: non usare `get_component_full` come prima chiamata di default.
+Usarlo solo quando la risposta richiede dati aggregati da più sorgenti.
+I tool al livello 2 sono il livello corretto per la maggior parte delle query.
+
+**Nota WAI-ARIA**: i dati Dev Kit (props `it-*`, argTypes) riguardano
+i web component — non trasferire attributi WAI-ARIA o props Dev Kit in
+contesto BSI puro (HTML classico). Le sorgenti sono complementari,
+non intercambiabili.
+
+---
+
 ## Cosa NON fare
 
 - Non integrare conoscenza pregressa di Bootstrap nella logica dei tool
