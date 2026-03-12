@@ -85,6 +85,30 @@ test('P3 variable ref', p3, 1)
 test('Skip !dev', skip, 1)
 test('Sticky args-driven (0 is correct)', sticky, 0)
 
+// P4 — renderComponent / buildTemplate → html null, args extracted
+const p4 = `
+import { html } from 'lit';
+type Story = any;
+export const AvatarConImmagine: Story = {
+  name: 'Avatar con immagine',
+  render: () => html\`
+    <div>
+      \${renderComponent({ type: 'image', src: '...', alt: 'Luisa Neri', size: 'xs' })}
+      \${renderComponent({ type: 'image', src: '...', alt: 'Mario Rossi', size: 'sm' })}
+    </div>
+  \`
+};
+`
+
+function testP4() {
+  const variants = parseStoryVariants(p4)
+  for (const v of variants) {
+    console.log(v)
+  }
+}
+
+testP4()
+
 // ─── Live check — real upstream stories.ts ───────────────────────────────────
 
 if (process.argv.includes('--live')) {
@@ -93,6 +117,15 @@ if (process.argv.includes('--live')) {
 
   const index = await loadDevKitIndex()
   let passed = 0, failed = 0
+
+  const counts = {
+    resolved: 0,
+    argsOnly: 0,
+    unP1: 0,
+    unP2: 0,
+    unP3: 0,
+    unknown: 0,
+  }
 
   for (const [slug, entry] of index) {
     const url = DEVKIT_STORIES_URL(entry.importPath)
@@ -104,6 +137,53 @@ if (process.argv.includes('--live')) {
       if (variants.length > 0) {
         console.log(`✅ ${slug} (${entry.pattern}): ${variants.length} story variants`)
         passed++
+
+        // --audit: check rendered html quality
+        if (process.argv.includes('--audit')) {
+
+          for (const [i, v] of variants.entries()) {
+            const storySource = source.split(`export const ${v.name}`)[1] ?? ''
+            let label = ''
+
+            // P4: args-only → renderComponent / buildTemplate
+            if (/renderComponent\(/.test(storySource) || /buildTemplate\(/.test(storySource)) {
+              label = `🔵 args-only (P4)`
+              counts.argsOnly++
+            }
+            // unresolved — ci interessa html con ${...} non risolto
+            else if (v.html && /\$\{/.test(v.html)) {
+              const trimmed = v.html.trim()
+
+              // P1 — inline `${…}` dentro html`...`
+              if (/html`[\s\S]*\$\{['"`]/.test(trimmed)) {
+                label = `🟡 unresolved P1 (inline)`
+                counts.unP1++
+              }
+              // P2 — function body `${() => …}`
+              else if (/html`[\s\S]*\$\{ *\(\) *=>/.test(trimmed)) {
+                label = `🟡 unresolved P2 (function body)`
+                counts.unP2++
+              }
+              // P3 — variable reference `${varName}`
+              else if (/html`[\s\S]*\$\{[a-zA-Z_]\w*\}/.test(trimmed)) {
+                label = `🟡 unresolved P3 (variable ref)`
+                counts.unP3++
+              }
+              else {
+                label = `🟡 unresolved unknown (P1-P4 or else)`
+                counts.unknown++
+              }
+            }
+            // resolved
+            else {
+              label = `🟢 resolved html`
+              counts.resolved++
+            }
+
+            console.log(`  ${i + 1}. ${v.name}: ${label}`)
+          }
+        }
+
       } else {
         console.log(`❌ ${slug} (${entry.pattern}): 0 story variants — possible new pattern (or not)`)
         failed++
@@ -114,5 +194,15 @@ if (process.argv.includes('--live')) {
   }
 
   console.log(`\n${passed}/${passed + failed} components parsed`)
+
+  console.log(`\nVariants markup:\n
+    🟢 resolved: ${counts.resolved}
+    🟡 unresolved P1: ${counts.unP1}
+    🟡 unresolved P2: ${counts.unP2}
+    🟡 unresolved P3: ${counts.unP3}
+    🟡 unresolved unknown: ${counts.unknown} [P1-P4 or else]
+    🔵 args-only: ${counts.argsOnly} (0 if trimmed via devkit loader filter)\n
+  `)
+
   if (failed > 0) process.exitCode = 1
 }
