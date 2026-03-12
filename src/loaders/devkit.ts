@@ -457,7 +457,7 @@ export function parseStoryVariants(source: string): ComponentVariant[] {
     // Extract name
     const name = extractStoryName(block, exportName)
 
-    // Find render function and extract HTML
+    // Find render function and extract HTML (raw, dirty not rendered)
     let html: string | null = null
 
     // Pattern 1: render: () => html`...`
@@ -484,6 +484,15 @@ export function parseStoryVariants(source: string): ComponentVariant[] {
       const resolved = resolveVariableRef(html, source)
       if (resolved !== null) html = resolved
     }
+
+    // Skip Pattern 4: render delegates to a helper function call - variant defined onl via props
+    // e.g. html`${renderComponent({...})}` or html`${buildTemplate({...})}`
+    // if (html && /^\$\{[a-zA-Z]\w*\s*\(/.test(html.trim())) continue
+    // if (html && (/renderComponent\(/.test(html.trim()) || /buildTemplate\(/.test(html.trim()))) continue 
+
+    // Do we need also:
+    // P5	template factory + args	props ?
+    // P6	meta.render + args	props ?
 
     if (html) {
       variants.push({ name, html: html.trim() })
