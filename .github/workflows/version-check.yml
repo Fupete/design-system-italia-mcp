@@ -1,0 +1,69 @@
+# .github/workflows/version-check.yml
+#
+# Nightly lightweight version check.
+# Compares upstream versions (npm + dsnav) with snapshot-meta.json.
+# Triggers upstream-snapshot.yml if any version has changed.
+#
+# Triggers:
+#   - Nightly at 03:00 UTC
+#   - Manual via workflow_dispatch
+
+name: Version check
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout data-fetched branch
+        uses: actions/checkout@v4
+        with:
+          ref: data-fetched
+
+      - name: Check upstream versions
+        id: versions
+        run: |
+          # Fetch current upstream versions
+          BSI=$(curl -sf https://registry.npmjs.org/bootstrap-italia/latest | jq -r '.version')
+          DK=$(curl -sf "https://registry.npmjs.org/@italia%2Fdev-kit-italia/latest" | jq -r '.version')
+          DS=$(curl -sf https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/dsnav.yaml \
+               | grep "^  label:" | head -1 | sed 's/.*label: *//')
+
+          echo "bsi=$BSI" >> "$GITHUB_OUTPUT"
+          echo "dk=$DK" >> "$GITHUB_OUTPUT"
+          echo "ds=$DS" >> "$GITHUB_OUTPUT"
+
+          # Read previous versions from snapshot-meta.json
+          PREV_BSI=$(jq -r '.versions.bootstrapItalia // "?"' snapshot-meta.json)
+          PREV_DK=$(jq -r '.versions.devKitItalia // "?"' snapshot-meta.json)
+          PREV_DS=$(jq -r '.versions.designSystem // "?"' snapshot-meta.json)
+
+          echo "prev_bsi=$PREV_BSI" >> "$GITHUB_OUTPUT"
+          echo "prev_dk=$PREV_DK" >> "$GITHUB_OUTPUT"
+          echo "prev_ds=$PREV_DS" >> "$GITHUB_OUTPUT"
+
+          # Compare
+          CHANGED=false
+          if [ "$BSI" != "$PREV_BSI" ]; then echo "🆕 BSI: $PREV_BSI → $BSI"; CHANGED=true; fi
+          if [ "$DK" != "$PREV_DK" ]; then echo "🆕 Dev Kit: $PREV_DK → $DK"; CHANGED=true; fi
+          if [ "$DS" != "$PREV_DS" ]; then echo "🆕 Design System: $PREV_DS → $DS"; CHANGED=true; fi
+
+          if [ "$CHANGED" = "false" ]; then echo "✅ No version changes detected"; fi
+          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger snapshot if versions changed
+        if: steps.versions.outputs.changed == 'true'
+        run: |
+          gh workflow run upstream-snapshot.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
