@@ -1,0 +1,47 @@
+{
+  "slug": "form-checkbox",
+  "fetchedAt": "2026-03-14T15:30:26.608Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-checkbox--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-checkbox name=\"esempio\">\n  <span slot=\"label\">Checkbox di esempio</span>\n</it-checkbox>"
+    },
+    {
+      "name": "stato-disabilitato",
+      "html": "<it-checkbox-group name=\"esempio\" disabled=\"\">\n  <span slot=\"legend\">Gruppo di checkbox</span>\n  <it-checkbox name=\"esempio\" class=\"mb-2\">\n    <span slot=\"label\">Checkbox non selezionato</span>\n  </it-checkbox>\n  <it-checkbox name=\"esempio\" checked=\"\">\n    <span slot=\"label\">Checkbox selezionato</span>\n  </it-checkbox>\n</it-checkbox-group>"
+    },
+    {
+      "name": "stato-indeterminato-mixed",
+      "html": "<it-checkbox name=\"esempio\" indeterminate=\"\">\n  <span slot=\"label\">Checkbox indeterminato</span>\n</it-checkbox>"
+    },
+    {
+      "name": "allineati-in-colonna",
+      "html": "<div class=\"row\">\n  <it-checkbox-group class=\"col-12 col-md-6\" name=\"esempio\" group=\"\">\n    <span slot=\"legend\">Gruppo di checkbox</span>\n    <it-checkbox checked=\"\">\n      <span slot=\"label\">Checkbox selezionato</span>\n    </it-checkbox>\n    <it-checkbox>\n      <span slot=\"label\">Checkbox non selezionato</span>\n    </it-checkbox>\n    <it-checkbox disabled=\"\">\n      <span slot=\"label\">Checkbox disabilitato non selezionato</span>\n    </it-checkbox>\n  </it-checkbox-group>\n\n  <it-checkbox-group class=\"col-12 col-md-6\" name=\"esempio\" group=\"\">\n    <span slot=\"legend\">Gruppo di checkbox</span>\n    <it-checkbox\n      checked=\"\"\n      support-text=\"Testo descrittivo di supporto per l'opzione selezionabile\"\n    >\n      <span slot=\"label\">Checkbox selezionato</span>\n    </it-checkbox>\n    <it-checkbox\n      support-text=\"Testo descrittivo di supporto per l'opzione selezionabile\"\n    >\n      <span slot=\"label\">Checkbox non selezionato</span>\n    </it-checkbox>\n    <it-checkbox\n      disabled=\"\"\n      support-text=\"Testo descrittivo di supporto per l'opzione selezionabile\"\n    >\n      <span slot=\"label\">Checkbox disabilitato non selezionato</span>\n    </it-checkbox>\n  </it-checkbox-group>\n</div>"
+    },
+    {
+      "name": "inline",
+      "html": "<it-checkbox-group name=\"esempio\" inline=\"\">\n  <span slot=\"legend\">Gruppo di checkbox</span>\n  <it-checkbox>\n    <span slot=\"label\">Checkbox non selezionato</span>\n  </it-checkbox>\n  <it-checkbox checked=\"\">\n    <span slot=\"label\">Checkbox selezionato</span>\n  </it-checkbox>\n</it-checkbox-group>"
+    },
+    {
+      "name": "valore-di-default-del-gruppo",
+      "html": "<it-checkbox-group value='[\"opt_1\",\"opt_3\"]' name=\"checkboxgroup\" group=\"\">\n  <span slot=\"legend\">Gruppo di checkbox</span>\n  <it-checkbox value=\"opt_1\">\n    <span slot=\"label\">Opzione numero 1</span>\n  </it-checkbox>\n  <it-checkbox value=\"opt_2\">\n    <span slot=\"label\">Opzione numero 2</span>\n  </it-checkbox>\n  <it-checkbox value=\"opt_3\">\n    <span slot=\"label\">Opzione numero 3</span>\n  </it-checkbox>\n</it-checkbox-group>"
+    },
+    {
+      "name": "testo-di-supporto",
+      "html": "<it-checkbox\n  name=\"esempio\"\n  support-text=\"Testo descrittivo di supporto per l'opzione selezionabile\"\n>\n  <span slot=\"label\">Checkbox con testo di supporto selezionato</span>\n</it-checkbox>"
+    },
+    {
+      "name": "validazione-e-gestione-degli-errori",
+      "html": "<form>\n  <div class=\"row mb-4\">\n    <div class=\"col-md-6 d-flex align-items-center\">\n      <it-checkbox\n        id=\"single-required-example\"\n        name=\"single-required-example\"\n        required=\"\"\n      >\n        <span slot=\"label\">Checkbox singola obbligatoria</span>\n      </it-checkbox>\n    </div>\n    <div class=\"col-md-6\">\n      <it-checkbox-group name=\"multiple-required-example\" required=\"\">\n        <span slot=\"legend\">Gruppo di checkbox obbligatorio</span>\n        <it-checkbox value=\"valore_1\">\n          <span slot=\"label\">Valore 1</span>\n        </it-checkbox>\n        <it-checkbox value=\"valore_2\">\n          <span slot=\"label\">Valore 2</span>\n        </it-checkbox>\n        <it-checkbox value=\"valore_3\">\n          <span slot=\"label\">Valore 3</span>\n        </it-checkbox>\n      </it-checkbox-group>\n    </div>\n  </div>\n  <div class=\"text-center\">\n    <it-button type=\"submit\" variant=\"primary\">Invia</it-button>\n  </div>\n</form>"
+    },
+    {
+      "name": "validazione-esterna-validazione-custom",
+      "html": "<form>\n  <div class=\"row\">\n    <div class=\"col-md-6 d-flex align-items-center\">\n      <it-checkbox\n        id=\"external-validation-single-example\"\n        name=\"external-validation-single-example\"\n        custom-validation=\"\"\n        validity-message=\"Questo campo è obbligatorio!!!\"\n      >\n        <span slot=\"label\">Checkbox singola obbligatoria</span>\n      </it-checkbox>\n    </div>\n    <div class=\"col-md-6\">\n      <it-checkbox-group\n        name=\"external-validation-multiple-example\"\n        custom-validation=\"\"\n        validity-message=\"Questo campo è obbligatorio!!!\"\n      >\n        <span slot=\"legend\">Gruppo di checkbox obbligatorio</span>\n        <it-checkbox value=\"valore_1\">\n          <span slot=\"label\">Valore 1</span>\n        </it-checkbox>\n        <it-checkbox value=\"valore_2\">\n          <span slot=\"label\">Valore 2</span>\n        </it-checkbox>\n        <it-checkbox value=\"valore_3\">\n          <span slot=\"label\">Valore 3</span>\n        </it-checkbox>\n      </it-checkbox-group>\n    </div>\n  </div>\n</form>"
+    },
+    {
+      "name": "gestione-degli-eventi",
+      "html": "<script>\n  document.querySelector('it-checkbox#event-checkbox-example').addEventListener('it-change', (event) => {\n    console.log('Checkbox event:', event);\n    alert('Checkbox event');\n  });\n  document.querySelector('it-checkbox#event-checkbox-example').addEventListener('it-input-ready', (event) => {\n    console.log('Checkbox ready:', event);\n  });\n</script>\n<it-checkbox id=\"event-checkbox-example\" name=\"event-checkbox-example\">\n  <span slot=\"label\">Prova evento di change</span>\n</it-checkbox>"
+    }
+  ]
+}

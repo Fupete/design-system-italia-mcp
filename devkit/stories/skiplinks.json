@@ -1,0 +1,15 @@
+{
+  "slug": "skiplinks",
+  "fetchedAt": "2026-03-14T15:30:50.552Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-skiplinks--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-skiplinks it-aria-label=\"Vai a:\">\n  <a href=\"#menu\">Vai al menu</a>\n  <a href=\"#main-content\">Vai al contenuto principale</a>\n  <a href=\"#satisfaction\">Questa pagina ti è stata utile?</a>\n  <a href=\"#footer\">Vai al piè di pagina</a>\n  <a href=\"https://form.agid.gov.it/view/xyz\"\n    >Dichiarazione di accessibilità (link esterno su sito AgID</a\n  >\n</it-skiplinks>"
+    },
+    {
+      "name": "numero-ridotto-di-link",
+      "html": "<it-skiplinks>\n  <a href=\"#menu\">Vai al menu</a>\n  <a href=\"#main-content\">Vai al contenuto principale</a>\n</it-skiplinks>"
+    }
+  ]
+}

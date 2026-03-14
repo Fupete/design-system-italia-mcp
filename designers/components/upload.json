@@ -1,0 +1,493 @@
+{
+  "metadata": {
+    "json": "bsi/form/upload.json",
+    "template": {
+      "name": "design-system-component"
+    }
+  },
+  "seo": {
+    "name": "Upload - Designers Italia",
+    "description": "Campo per la selezione e il caricamento di file.",
+    "canonical": null,
+    "pathname": "/design-system/componenti/upload/"
+  },
+  "components": {
+    "hero": {
+      "specialKangarooComponent": true,
+      "background": null,
+      "title": "Upload",
+      "tag": {
+        "label": "Componenti",
+        "addonClasses": "mt-3 text-uppercase"
+      },
+      "column": true,
+      "subtitle": "Campo per la selezione e il caricamento di file",
+      "imgRatio": "1x1",
+      "noBorder": true,
+      "kangaroo": {
+        "id": "kangarooHero",
+        "noPadding": true,
+        "titleSr": "Metadati e link per approfondire",
+        "tagsDesignSystemLabel": "Utile per",
+        "color": "secondary",
+        "icon": {
+          "icon": "sprites.svg#it-horn",
+          "size": "sm",
+          "color": "secondary"
+        },
+        "tagsDesignSystem": [
+          "Form"
+        ]
+      }
+    },
+    "tab": [
+      {
+        "full": true
+      }
+    ]
+  },
+  "tabs": [
+    {
+      "title": "Uso e accessibilità",
+      "componentVariant": {
+        "id": "preview-use",
+        "title": "Anteprima",
+        "viewerHeight": 0,
+        "accordionUrl": "https://italia.github.io/bootstrap-italia/docs/form/upload/",
+        "accordionOpen": false,
+        "accordionShow": false
+      },
+      "sectionsEditorial": [
+        {
+          "full": true,
+          "noSpace": true,
+          "paddingLeft": true,
+          "components": [
+            {
+              "name": "TextImageCta",
+              "noSpace": false,
+              "title": "Quando usarlo",
+              "headingLevel": 2,
+              "text": "Usa il componente Upload quando è necessario permettere agli utenti di caricare file o immagini. Questo componente è utile in contesti come:\n\n- form di registrazione o profili utente dove si richiede una foto del profilo;\n- form per la richiesta di servizi online che prevedono il caricamento di documenti singoli o multipli;\n- piattaforme di condivisione di contenuti dove gli utenti possono caricare documenti, immagini o altri file multimediali;\n- form di supporto tecnico che richiedono allegati di screenshot o messaggi di errore per diagnosticare problemi;\n- qualsiasi altro contesto in cui è necessario raccogliere file direttamente dagli utenti.\n"
+            }
+          ]
+        },
+        {
+          "full": true,
+          "noSpace": true,
+          "paddingLeft": true,
+          "components": [
+            {
+              "name": "TextImageCta",
+              "noSpace": false,
+              "title": "Come usarlo",
+              "headingLevel": 2,
+              "text": "Per usare correttamente il componente Upload, è importante comprendere le diverse varianti disponibili e come ciascuna può essere utilizzata per migliorare l'esperienza utente.\n\n### Variante Lista file\n\nQuesta è la variante più comune e semplice di upload e funziona bene per tutti i tipi di file, inclusi documenti, immagini e altri tipi di media.\n\n### Variante Drag and Drop\n\nQuesta variante permette agli utenti di trascinare direttamente i file in un'area designata per il caricamento. \n\nQuesto metodo è particolarmente utile per caricare rapidamente più file ed è raccomandata per interfacce dedicate a dispositivi con trackpad o mouse. Non è invece consigliato per interfacce dedicate principalmente a dispositivi mobile. \n\nSe usi questa variante assiccurati che l'area di caricamento sia ben visibile e definita, e fornisci la possibilità di annullare il caricamento appena effettuato e caricare un nuovo file.\n\n### Variante Avatar\n\nQuesta variante è particolarmente utile nelle applicazioni dove si caricano foto del profilo o immagini specifiche. Gli utenti cliccano su un'icona o su una miniatura dell'immagine per aprire il dialogo di selezione file. Se usi questa variante, attenzione a rendere chiaro che l'area dell'immagine è cliccabile.\n\n### Variante Galleria\n\nQuesta variante è dedicata al caricamento di immagini per un galleria. Le miniature (thumbnail) mostrate indicano che il caricamento è andato a buon fine. Se usi questa variante, indica chiaramente i formati, le dimensioni e il peso massimo supportati.\n"
+            }
+          ]
+        },
+        {
+          "full": true,
+          "noSpace": true,
+          "paddingLeft": true,
+          "components": [
+            {
+              "name": "TextImageCta",
+              "noSpace": true,
+              "title": "Accessibilità",
+              "headingLevel": 2,
+              "text": "Lo stato delle verifiche di accessibilità effettuate sul componente Bootstrap Italia"
+            },
+            {
+              "name": "Table",
+              "responsive": "table-responsive-md",
+              "head": [
+                {
+                  "text": "Caratteristica"
+                },
+                {
+                  "text": "Stato"
+                },
+                {
+                  "text": "Descrizione"
+                }
+              ],
+              "rows": [
+                {
+                  "cols": [
+                    {
+                      "text": "Visivamente accessibile",
+                      "scope": "row"
+                    },
+                    {
+                      "tag": {
+                        "label": "Pronto",
+                        "addonClasses": "bg-success"
+                      }
+                    },
+                    {
+                      "text": "Uso e contrasto dei colori, leggibilità"
+                    }
+                  ]
+                },
+                {
+                  "cols": [
+                    {
+                      "text": "Amichevole con lettori di schermo",
+                      "scope": "row"
+                    },
+                    {
+                      "tag": {
+                        "label": "Pronto",
+                        "addonClasses": "bg-success"
+                      }
+                    },
+                    {
+                      "text": "Struttura titolazioni, etichette e testi alternativi"
+                    }
+                  ]
+                },
+                {
+                  "cols": [
+                    {
+                      "text": "Navigabile",
+                      "scope": "row"
+                    },
+                    {
+                      "tag": {
+                        "label": "Pronto",
+                        "addonClasses": "bg-success"
+                      }
+                    },
+                    {
+                      "text": "Focus, struttura, navigazione da tastiera o altri device"
+                    }
+                  ]
+                },
+                {
+                  "cols": [
+                    {
+                      "text": "Comprensibile",
+                      "scope": "row"
+                    },
+                    {
+                      "tag": {
+                        "label": "Pronto",
+                        "addonClasses": "bg-success"
+                      }
+                    },
+                    {
+                      "text": "Comprensibile, prevedibile, gestione semplice dell’errore"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TextImageCta",
+              "ctas": [
+                {
+                  "label": "Apri una issue sul repository Bootstrap Italia",
+                  "screenReaderText": " (si apre in una nuova finestra)",
+                  "url": "https://github.com/italia/bootstrap-italia/issues/new",
+                  "blank": true,
+                  "icon": {
+                    "icon": "sprites.svg#it-github",
+                    "color": "primary",
+                    "align": "middle",
+                    "hidden": true,
+                    "size": "sm",
+                    "addonClasses": "ms-2"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "full": true,
+          "noSpace": true,
+          "paddingLeft": true,
+          "components": [
+            {
+              "name": "TextImageCta",
+              "noSpace": false,
+              "title": "Stato del componente",
+              "headingLevel": 2,
+              "text": "Lo stato del presente componente nelle diverse librerie di design e sviluppo del design system"
+            },
+            {
+              "name": "Table",
+              "responsive": "table-responsive-md",
+              "head": [
+                {
+                  "text": "Libreria"
+                },
+                {
+                  "text": "Stato componente"
+                },
+                {
+                  "text": "Link"
+                }
+              ],
+              "rows": [
+                {
+                  "cols": [
+                    {
+                      "text": "UI Kit Italia (design)",
+                      "scope": "row"
+                    },
+                    {
+                      "tag": {
+                        "label": "Pronto",
+                        "addonClasses": "bg-success"
+                      }
+                    },
+                    {
+                      "simpleCta": {
+                        "label": "Kit",
+                        "url": "https://www.figma.com/community/file/1105848677422572920",
+                        "blank": true,
+                        "screenReaderText": "UI Kit Italia su Figma (si apre in una nuova finestra)",
+                        "icon": {
+                          "icon": "sprites.svg#it-figma",
+                          "size": "sm"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "cols": [
+                    {
+                      "text": "Bootstrap Italia",
+                      "scope": "row"
+                    },
+                    {
+                      "tag": {
+                        "label": "Pronto",
+                        "addonClasses": "bg-success"
+                      }
+                    },
+                    {
+                      "simpleCta": {
+                        "label": "Scheda documentazione",
+                        "blank": true,
+                        "url": "https://italia.github.io/bootstrap-italia/docs/form/upload/",
+                        "screenReaderText": " (si apre in una nuova finestra)",
+                        "icon": {
+                          "icon": "sprites.svg#it-external-link",
+                          "size": "sm"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "cols": [
+                    {
+                      "text": "React",
+                      "scope": "row"
+                    },
+                    {
+                      "tag": {
+                        "label": "Non presente",
+                        "addonClasses": "neutral-2-bg text-secondary"
+                      }
+                    },
+                    {
+                      "simpleCta": {
+                        "label": "Scheda Storybook",
+                        "blank": true,
+                        "screenReaderText": " (si apre in una nuova finestra)",
+                        "icon": {
+                          "icon": "sprites.svg#it-external-link",
+                          "size": "sm"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "cols": [
+                    {
+                      "text": "Angular",
+                      "scope": "row"
+                    },
+                    {
+                      "tag": {
+                        "label": "Pronto",
+                        "addonClasses": "bg-success"
+                      }
+                    },
+                    {
+                      "simpleCta": {
+                        "label": "Scheda documentazione",
+                        "url": "https://italia.github.io/design-angular-kit/design-angular-kit#/componenti/upload",
+                        "blank": true,
+                        "screenReaderText": " (si apre in una nuova finestra)",
+                        "icon": {
+                          "icon": "sprites.svg#it-external-link",
+                          "size": "sm"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TextImageCta",
+              "ctas": [
+                {
+                  "label": "Apri una issue sul repository Bootstrap Italia",
+                  "screenReaderText": " (si apre in una nuova finestra)",
+                  "url": "https://github.com/italia/bootstrap-italia/issues/new",
+                  "blank": true,
+                  "icon": {
+                    "icon": "sprites.svg#it-github",
+                    "color": "primary",
+                    "align": "middle",
+                    "hidden": true,
+                    "size": "sm",
+                    "addonClasses": "ms-2"
+                  }
+                },
+                {
+                  "label": "Apri una issue sul repository UI Kit Italia",
+                  "screenReaderText": " (si apre in una nuova finestra)",
+                  "url": "https://github.com/italia/design-ui-kit/issues/new",
+                  "blank": true,
+                  "icon": {
+                    "icon": "sprites.svg#it-github",
+                    "color": "primary",
+                    "align": "middle",
+                    "hidden": true,
+                    "size": "sm",
+                    "addonClasses": "ms-2"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Progettazione",
+      "sectionsEditorial": [
+        {
+          "full": true,
+          "noSpace": true,
+          "paddingLeft": true,
+          "components": [
+            {
+              "name": "TextImageCta",
+              "noSpace": false,
+              "title": "Anatomia",
+              "headingLevel": 2,
+              "text": "### Variante Lista file\n![Gli elementi che formano la variante lista file di upload](/images/design-system/componenti/upload-list-anatomy.png)\n1. **pulsante**, necessario per avviare il caricamento di un file;\n2. **nome del file**, coincide con il nome originale e può essere accompagnato da un'icona;\n3. **dimensioni del file**, può essere espresso in vari formati a seconda del peso;\n4. **icona stato caricamento**, indica lo stato del caricamento;\n5. **barra progresso**, mostra la percentuale di avanzamento;\n6. **stato di errore**, tutti gli elementi vengono colorati di rosso in caso di problemi durante il caricamento.\n\n### Variante Avatar\n![Gli elementi che formano la variante avatar di upload](/images/design-system/componenti/upload-avatar-anatomy.png)\n1. **immagine**, è l'immagine attualmente caricata;\n2. **etichetta e icona**, fanno parte dell'azione di modifica e caricamento di una nuova immagine;\n3. **forma di sfondo**, copre l'immagine per metà e contiene gli elementi del punto 2.\n\n### Variante Galleria\n![Gli elementi che formano la variante galleria di upload](/images/design-system/componenti/upload-gallery-anatomy.png)\n1. **lista di immagini**, le immagini attualmente present in una galleria;\n2. **pulsante**, ha la stesse dimensioni di un'immagine presente nella lista e permette il caricamento di un nuovo file.\n\n### Variante Drag and Drop\n![Gli elementi che formano la variante drag and drop di upload](/images/design-system/componenti/upload-dragdrop-anatomy.png)\n1. **icona**, rappresenta l'immagine di un file;\n2. **testo di supporto**, indica cosa fare per iniziare il caricamento di un file;\n3. **link**, permette il caricamento classico tramite selezione manuale;\n4. **barra di progresso**, mostra l'avanzamento e circonda l'icona rappresentativa;\n5. **percentuale**, indica l'avanzamento in termini percentuali;\n6. **dettagli file**, mostra formato e dimensioni del file;\n7. **nome del file**, il nome del file nel formato originale;\n8. **stato**, indicazione di avanzamento in formato testuale.\n"
+            }
+          ]
+        },
+        {
+          "full": true,
+          "noSpace": true,
+          "paddingLeft": true,
+          "components": [
+            {
+              "name": "TextImageCta",
+              "noSpace": false,
+              "title": "Comportamento",
+              "headingLevel": 2,
+              "text": "### Variante Lista file\n\n- Cliccando sul pulsante è possibile selezionare uno o più file e confermare la selezione.\n- Durante il caricamento viene mostrata una barra di progresso per ciascun file.\n- Nel caso ci sia un problema con il caricamento di un file, questo viene indicato con il colore di stato di errore.\n- L’utente può annullare il caricamento di un file cliccando sull’icona “X” ad esso correlata.\n- Al termine di un caricamento andato a buon fine, viene mostrata un’icona di conferma.\n\n### Variante Drag and Drop\n\n- Trascinando uno o più file dalla finestra di sistema del dispositivo e rilasciandoli nell'area preposta, inizia il caricamento.\n- Durante il caricamento viene mostrato il progresso tramite un’indicazione espressa in termini percentuali, in sovraimpressione rispetto all’icona di sfondo.\n- Al termine del caricamento, l’icona di sfondo mostra un simbolo di conferma.\n\n### Variante Avatar\n\n- Cliccando sulla miniatura dell'immagine, viene mostrata la finestra di sistema per selezionare l’immagine desiderata.\n- Al termine del caricamento, l’immagine si aggiorna.\n\n### Variante Galleria\n\n- Cliccando sul riquadro con etichetta “Carica immagine” è possibile selezionare un’immagine e confermare il caricamento.\n- Al termine del caricamento, l’immagine viene aggiunta alla lista delle miniature (thumbnail) visualizzate.\n"
+            }
+          ]
+        },
+        {
+          "full": true,
+          "noSpace": true,
+          "paddingLeft": true,
+          "components": [
+            {
+              "name": "TextImageCta",
+              "noSpace": false,
+              "title": "Specifiche di design",
+              "headingLevel": 2,
+              "text": "Tutte le misure indicate sono espresse in `px`\n\n### Variante Lista \n![Specifiche di design di upload variante lista](/images/design-system/componenti/upload-list-specs.png)\n\n### Variante Galleria \n![Specifiche di design di upload variante galleria](/images/design-system/componenti/upload-gallery-specs.png)\n\n### Variante Drag and Drop \n![Specifiche di design di upload variante drag and drop](/images/design-system/componenti/upload-dragdrop-specs.png)\n"
+            }
+          ]
+        },
+        {
+          "full": true,
+          "noSpace": true,
+          "paddingLeft": true,
+          "components": [
+            {
+              "name": "TextImageCta",
+              "title": "Come iniziare",
+              "headingLevel": 2,
+              "text": "Scopri come utilizzare tutti gli strumenti pensati per progettare interfacce ed esperienze dei servizi pubblici",
+              "ctas": [
+                {
+                  "label": "Vai alla scheda per designer",
+                  "url": "/design-system/come-iniziare/per-designer/",
+                  "blank": false,
+                  "icon": {
+                    "icon": "sprites.svg#it-arrow-right",
+                    "color": "primary",
+                    "align": "middle",
+                    "hidden": true,
+                    "size": "sm",
+                    "addonClasses": "ms-2"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Sviluppo",
+      "componentVariant": {
+        "id": "preview-dev",
+        "title": "Anteprima",
+        "viewerHeight": 0,
+        "accordionUrl": "https://italia.github.io/bootstrap-italia/docs/form/upload/",
+        "accordionOpen": true,
+        "accordionShow": true
+      },
+      "sectionsEditorial": [
+        {
+          "full": true,
+          "noSpace": true,
+          "paddingLeft": true,
+          "components": [
+            {
+              "name": "TextImageCta",
+              "title": "Come iniziare",
+              "headingLevel": 2,
+              "text": "Scopri come utilizzare tutti gli strumenti pensati per progettare interfacce ed esperienze dei servizi pubblici",
+              "ctas": [
+                {
+                  "label": "Vai alla scheda per sviluppatori",
+                  "url": "/design-system/come-iniziare/per-sviluppatori/",
+                  "blank": false,
+                  "icon": {
+                    "icon": "sprites.svg#it-arrow-right",
+                    "color": "primary",
+                    "align": "middle",
+                    "hidden": true,
+                    "size": "sm",
+                    "addonClasses": "ms-2"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

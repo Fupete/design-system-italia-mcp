@@ -1,0 +1,11 @@
+{
+  "slug": "forward",
+  "fetchedAt": "2026-03-14T15:30:31.448Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-forward--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<script type=\"module\">\n  document.querySelectorAll('a.forward').forEach(link => {\n    link.addEventListener('click', (e) => {\n      e.preventDefault();\n      const targetId = link.getAttribute('href');\n      const targetElement = document.querySelector(targetId);\n      if (targetElement) {\n        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n        targetElement.scrollIntoView({\n          behavior: prefersReducedMotion ? 'auto' : 'smooth',\n          block: 'start'\n        });\n        targetElement.setAttribute('tabindex', '-1');\n        targetElement.focus({ preventScroll: true });\n      }\n    });\n  });\n</script>\n\n<a href=\"#sezione-di-esempio\" class=\"forward\" aria-label=\"Vai a: Sezione di esempio\">\n  <it-icon name=\"it-expand\" size=\"lg\" color=\"primary\"></it-icon>\n</a>\n\n<div id=\"sezione-di-esempio\">\n  <h2>Sezione di esempio</h2>\n  <p>Et et consectetur ipsum labore excepteur...</p>\n</div>"
+    }
+  ]
+}

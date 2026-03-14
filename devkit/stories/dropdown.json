@@ -1,0 +1,55 @@
+{
+  "slug": "dropdown",
+  "fetchedAt": "2026-03-14T15:30:18.121Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-dropdown--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-dropdown label=\"Apri dropdown\" variant=\"primary\">\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "varianti",
+      "html": "<it-dropdown label=\"Apri dropdown\" variant=\"primary\">\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>\n\n<it-dropdown label=\"Apri dropdown\" variant=\"secondary\">\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>\n\n<it-dropdown label=\"Apri dropdown\" variant=\"success\">\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>\n\n<it-dropdown label=\"Apri dropdown\" variant=\"danger\">\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "posizionamento",
+      "html": "<it-dropdown\n  label=\"Apri dropdown\"\n  alignment=\"bottom-start\"\n  style=\"grid-column:2\"\n>\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>\n\n<it-dropdown\n  label=\"Apri dropup\"\n  alignment=\"top-start\"\n  style=\"grid-row:3;grid-column:2\"\n>\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>\n\n<it-dropdown\n  label=\"Apri dropstart\"\n  alignment=\"left\"\n  style=\"grid-row:2;grid-column:3\"\n>\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>\n\n<it-dropdown\n  label=\"Apri dropend\"\n  alignment=\"right\"\n  style=\"grid-row:2;grid-column:1\"\n>\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-disabilitato",
+      "html": "<it-dropdown label=\"Apri dropdown\" disabled=\"\" variant=\"primary\">\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-voci-attive",
+      "html": "<it-dropdown label=\"Apri dropdown\" variant=\"primary\">\n  <it-dropdown-item href=\"#\" active=\"\">Attivo</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Non attivo</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Non attivo</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-voci-disabilitate",
+      "html": "<it-dropdown label=\"Apri dropdown\" variant=\"primary\">\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\" disabled=\"\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-con-intestazioni-e-separatori",
+      "html": "<it-dropdown label=\"Apri dropdown\" variant=\"primary\">\n  <h4 slot=\"header\" class=\"link-list-heading dropdown-header\">Intestazione</h4>\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item separator=\"\"></it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-con-voci-grandi",
+      "html": "<it-dropdown label=\"Apri dropdown\" variant=\"primary\">\n  <it-dropdown-item href=\"#\" large=\"\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\" large=\"\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\" large=\"\">Azione 3</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-a-tutta-larghezza",
+      "html": "<it-dropdown\n  style=\"width: 100%;\"\n  label=\"Apri dropdown\"\n  variant=\"primary\"\n  full-width=\"\"\n>\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-con-icona-a-destra",
+      "html": "<it-dropdown label=\"Apri dropdown\" variant=\"primary\">\n  <it-dropdown-item href=\"#\">\n    Azione 1\n    <it-icon\n      slot=\"suffix\"\n      name=\"it-star-outline\"\n      size=\"sm\"\n      color=\"primary\"\n    ></it-icon>\n  </it-dropdown-item>\n  <it-dropdown-item href=\"#\">\n    Azione 2\n    <it-icon\n      slot=\"suffix\"\n      name=\"it-star-outline\"\n      size=\"sm\"\n      color=\"primary\"\n    ></it-icon>\n  </it-dropdown-item>\n  <it-dropdown-item href=\"#\">\n    Azione 3\n    <it-icon\n      slot=\"suffix\"\n      name=\"it-star-outline\"\n      size=\"sm\"\n      color=\"primary\"\n    ></it-icon>\n  </it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-con-icona-a-sinistra",
+      "html": "<it-dropdown label=\"Apri dropdown\" variant=\"primary\">\n  <it-dropdown-item href=\"#\">\n    <it-icon\n      slot=\"prefix\"\n      name=\"it-star-outline\"\n      size=\"sm\"\n      color=\"primary\"\n    ></it-icon>\n    Azione 1\n  </it-dropdown-item>\n  <it-dropdown-item href=\"#\">\n    <it-icon\n      slot=\"prefix\"\n      name=\"it-star-outline\"\n      size=\"sm\"\n      color=\"primary\"\n    ></it-icon>\n    Azione 2\n  </it-dropdown-item>\n  <it-dropdown-item href=\"#\">\n    <it-icon\n      slot=\"prefix\"\n      name=\"it-star-outline\"\n      size=\"sm\"\n      color=\"primary\"\n    ></it-icon>\n    Azione 3\n  </it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-dark",
+      "html": "<it-dropdown dark=\"\" label=\"Apri dropdown\" variant=\"primary\">\n  <h4 slot=\"header\" class=\"link-list-heading dropdown-header\">Intestazione</h4>\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>"
+    }
+  ]
+}

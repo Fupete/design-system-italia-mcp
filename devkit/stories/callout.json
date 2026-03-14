@@ -1,0 +1,55 @@
+{
+  "slug": "callout",
+  "fetchedAt": "2026-03-14T15:30:13.136Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-callout--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-callout variant=\"\" heading-level=\"h2\">\n  <it-icon slot=\"icon\" size=\"md\" name=\"it-info-circle\"></it-icon>\n  <span slot=\"title\">Titolo callout</span>\n  <p>\n    Maecenas vulputate ante dictum vestibulum volutpat. Lorem ipsum dolor sit\n    amet, consectetur adipiscing elit. Aenean non augue non purus vestibulum\n    varius.\n  </p>\n</it-callout>"
+    },
+    {
+      "name": "dimensione-del-testo",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"\" big-text=\"\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-info-circle\"></it-icon>\n    <span slot=\"title\">Titolo callout</span>\n    <p>\n      Maecenas vulputate ante dictum vestibulum volutpat. Lorem ipsum dolor sit\n      amet, consectetur adipiscing elit. Aenean non augue non purus vestibulum\n      varius.\n    </p>\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "callout-primario",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"primary\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-info-circle\"></it-icon>\n    <span slot=\"title\">Note a riguardo</span>\n\n    Maecenas at erat id\n    <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n    eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n    efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n    odio mauris semper dolor.\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "callout-success",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"success\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-check-circle\"></it-icon>\n    <span slot=\"title\">Titolo di conferma</span>\n\n    Maecenas at erat id\n    <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n    eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n    efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n    odio mauris semper dolor.\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "callout-warning",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"warning\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-warning-circle\"></it-icon>\n    <span slot=\"title\">Titolo di attenzione</span>\n\n    Maecenas at erat id\n    <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n    eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n    efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n    odio mauris semper dolor.\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "callout-danger",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"danger\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-close-circle\"></it-icon>\n    <span slot=\"title\">Titolo di allerta</span>\n\n    Maecenas at erat id\n    <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n    eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n    efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n    odio mauris semper dolor.\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "highlight-base",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"\" highlight=\"\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-info-circle\"></it-icon>\n    <span slot=\"title\">Titolo callout</span>\n\n    Maecenas at erat id\n    <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n    eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n    efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n    odio mauris semper dolor.\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "highlight-primario",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"primary\" highlight=\"\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-info-circle\"></it-icon>\n    <span slot=\"title\">Titolo callout</span>\n\n    Maecenas at erat id\n    <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n    eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n    efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n    odio mauris semper dolor.\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "highlight-success",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"success\" highlight=\"\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-check-circle\"></it-icon>\n    <span slot=\"title\">Titolo di conferma</span>\n\n    Maecenas at erat id\n    <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n    eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n    efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n    odio mauris semper dolor.\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "highlight-warning",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"warning\" highlight=\"\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-warning-circle\"></it-icon>\n    <span slot=\"title\">Titolo di attenzione</span>\n\n    Maecenas at erat id\n    <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n    eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n    efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n    odio mauris semper dolor.\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "highlight-danger",
+      "html": "<div class=\"row\">\n  <it-callout variant=\"danger\" highlight=\"\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-close-circle\"></it-icon>\n    <span slot=\"title\">Titolo di allerta</span>\n\n    Maecenas at erat id\n    <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n    eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n    efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n    odio mauris semper dolor.\n  </it-callout>\n</div>"
+    },
+    {
+      "name": "callout-di-approfondimento",
+      "html": "<div class=\"row\" style=\"background-color: #fff; padding: 2rem\">\n  <!-- START CALLOUT APPROFONDIMENTO -->\n\n  <it-callout variant=\"\" callout-more=\"\" heading-level=\"h2\">\n    <it-icon slot=\"icon\" size=\"md\" name=\"it-info-circle\"></it-icon>\n    <span slot=\"title\">Approfondimento</span>\n\n    <p>\n      Quisque suscipit interdum augue non volutpat. Cras tristique arcu tortor.\n      Mauris eu magna nibh. Curabitur malesuada neque in lectus sagittis\n      accumsan. In vitae justo eros. Maecenas pellentesque lacinia ipsum vitae\n      rhoncus. Vestibulum pretium tempor turpis, nec gravida eros viverra in.\n      Proin dictum nibh ut semper tristique.\n    </p>\n    <p>\n      Maecenas at erat id\n      <strong>sem interdum efficitur eu sed nunc.</strong> Mauris sit amet erat\n      eget augue molestie malesuada ut sed ex. In sed dignissim elit. Donec\n      efficitur, sem eget vestibulum auctor, sem erat interdum magna, eu commodo\n      odio mauris semper dolor.\n    </p>\n    <p>\n      Maecenas vulputate ante dictum <a href=\"#\">vestibulum volutpat</a>. Lorem\n      ipsum dolor sit amet, <strong>consectetur adipiscing elit.</strong> Aenean\n      non augue non purus vestibulum varius. Maecenas ullamcorper tincidunt\n      nulla quis laoreet.\n    </p>\n\n    <it-callout-more>\n      <span slot=\"label\">Leggi tutto</span>\n      <div slot=\"content\">\n        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim\n        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea\n        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate\n        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint\n        occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n        mollit anim id est laborum\n      </div>\n      <a slot=\"extra\" class=\"callout-more-download\" href=\"#\">\n        <it-icon name=\"it-download\" color=\"primary\" size=\"sm\"></it-icon>\n        <span class=\"visually-hidden\">Scarica il contenuto in PDF </span>\n        Download\n      </a>\n    </it-callout-more>\n  </it-callout>\n\n  <!-- END CALLOUT APPROFONDIMENTO -->\n</div>"
+    }
+  ]
+}

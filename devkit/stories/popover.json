@@ -1,0 +1,35 @@
+{
+  "slug": "popover",
+  "fetchedAt": "2026-03-14T15:30:46.965Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-popover--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-popover placement=\"right\">\n  <it-button slot=\"trigger\" variant=\"primary\">\n    Opzioni utente, clicca per aprire\n  </it-button>\n  <div slot=\"content\" class=\"popover\">\n    <h4 class=\"popover-header\">Titolo del popover</h4>\n    <div class=\"popover-body\">\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel finibus\n      augue.\n    </div>\n  </div>\n</it-popover>"
+    },
+    {
+      "name": "posizione",
+      "html": "<it-popover placement=\"bottom-start\" style=\"grid-column:2\">\n  <it-button slot=\"trigger\" variant=\"primary\">Giù</it-button>\n  <div slot=\"content\" class=\"popover\">\n    <h4 class=\"popover-header\">Titolo del popover</h4>\n    <div class=\"popover-body\">\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel finibus\n      augue.\n    </div>\n  </div>\n</it-popover>\n\n<it-popover placement=\"top-start\" style=\"grid-row:3;grid-column:2\">\n  <it-button slot=\"trigger\" variant=\"primary\">Su</it-button>\n  <div slot=\"content\" class=\"popover\">\n    <h4 class=\"popover-header\">Titolo del popover</h4>\n    <div class=\"popover-body\">\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel finibus\n      augue.\n    </div>\n  </div>\n</it-popover>\n\n<it-popover placement=\"left\" style=\"grid-row:2;grid-column:3\">\n  <it-button slot=\"trigger\" variant=\"primary\">Sinistra</it-button>\n  <div slot=\"content\" class=\"popover\">\n    <h4 class=\"popover-header\">Titolo del popover</h4>\n    <div class=\"popover-body\">\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel finibus\n      augue.\n    </div>\n  </div>\n</it-popover>\n\n<it-popover placement=\"right\" style=\"grid-row:2;grid-column:1\">\n  <it-button slot=\"trigger\" variant=\"primary\">Destra</it-button>\n  <div slot=\"content\" class=\"popover\">\n    <h4 class=\"popover-header\">Titolo del popover</h4>\n    <div class=\"popover-body\">\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel finibus\n      augue.\n    </div>\n  </div>\n</it-popover>"
+    },
+    {
+      "name": "titolo-con-icona-e-link",
+      "html": "<it-popover>\n  <it-button slot=\"trigger\" variant=\"primary\">\n    Popover con icona e link\n  </it-button>\n  <div slot=\"content\" class=\"popover\">\n    <h4 class=\"popover-header\">\n      <it-icon name=\"it-help-circle\" size=\"sm\"></it-icon>\n      Titolo con icona\n    </h4>\n    <div class=\"popover-body\">\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel finibus\n      augue.\n      <a href=\"#\" class=\"popover-inner-link\">\n        Leggi tutto\n        <it-icon name=\"it-arrow-right\" size=\"xs\" color=\"primary\"></it-icon>\n      </a>\n    </div>\n  </div>\n</it-popover>"
+    },
+    {
+      "name": "elementi-disabilitati",
+      "html": "<it-popover placement=\"right\">\n  <it-button slot=\"trigger\" variant=\"primary\" disabled=\"\">\n    Pulsante disabilitato, il popover non si apre\n  </it-button>\n  <div slot=\"content\" class=\"popover\">\n    <div class=\"popover-body\">Popover disabilitato</div>\n  </div>\n</it-popover>"
+    },
+    {
+      "name": "attivazione-tramite-hover-e-focus",
+      "html": "<it-popover placement=\"right\">\n  <it-button slot=\"trigger\" variant=\"primary\" disabled=\"\">\n    Pulsante disabilitato\n  </it-button>\n  <div slot=\"content\" class=\"popover\">\n    <div class=\"popover-body\">\n      Pulsante disabilitato, qui puoi spiegare il perché\n    </div>\n  </div>\n</it-popover>"
+    },
+    {
+      "name": "attivazione-controllata",
+      "html": "<it-popover controlled=\"\" placement=\"right\">\n  <it-button slot=\"trigger\" variant=\"primary\" id=\"controlled-trigger\">\n    Popover controllato\n  </it-button>\n  <div slot=\"content\" class=\"popover\">\n    <div class=\"popover-inner\">\n      <div class=\"popover-body\">\n        Questo popover non si aprirà e questo testo non si vedrà.\n      </div>\n    </div>\n  </div>\n</it-popover>"
+    },
+    {
+      "name": "eventi",
+      "html": "<it-popover placement=\"right\">\n  <it-button slot=\"trigger\" variant=\"primary\">Popover con eventi</it-button>\n  <div slot=\"content\" class=\"popover\">\n    <h4 class=\"popover-header\">Eventi del Popover</h4>\n    <div class=\"popover-body\">\n      Apri e chiudi questo popover per vedere gli eventi nella console.\n    </div>\n  </div>\n</it-popover>"
+    }
+  ]
+}
