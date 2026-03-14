@@ -103,7 +103,9 @@ export async function loadDsMeta(): Promise<DsMeta> {
     versions,
     components,
     foundations,
-    fetchedAt: new Date().toISOString(),
+    fetchedAt: snapshotMetaResult.status === 'fulfilled'
+      ? snapshotMetaResult.value.fetchedAt  // ← from snapshot-meta.json
+      : new Date().toISOString(),           // ← fallback
   }
 
   cache.set(CACHE_KEYS.dsMeta(), meta, TTL.snapshot)

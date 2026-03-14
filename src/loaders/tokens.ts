@@ -84,17 +84,20 @@ async function loadTokenMap(): Promise<TokenMap> {
   const bridge = parseBridge(rootScss)
   const dtiRaw = parseDesignTokens(variablesScss)
 
-  cache.set(CACHE_KEYS.designTokens(), dtiRaw, TTL.snapshot)
+  cache.set(CACHE_KEYS.designTokensDti(), dtiRaw, TTL.snapshot)
 
+  // Recursive DTI resolution: $it-spacing-base → --it-spacing-base → 1.5rem (24px)
   function resolveIt(name: string, visited = new Set<string>()): string | null {
     if (visited.has(name)) return null
     visited.add(name)
     const val = dtiRaw.get(name)
     if (!val) return null
+    // If still a reference to $it-* (parseDesignTokens saves it as --it-*)
     if (val.startsWith('--it-')) return resolveIt(val, visited)
     return val
   }
 
+  // Final map: --bsi-* → concrete value
   const map: TokenMap = new Map()
   for (const [bsiName, itName] of bridge) {
     const resolved = resolveIt(itName)
@@ -107,8 +110,9 @@ async function loadTokenMap(): Promise<TokenMap> {
 
 // DTI map cached separately for --it-* token search
 async function loadDtiMap(): Promise<DtiMap> {
-  const cached = cache.get<DtiMap>(CACHE_KEYS.designTokens())
+  const cached = cache.get<DtiMap>(CACHE_KEYS.designTokensDti())
   if (cached) return cached
+  // Not yet cached — trigger loadTokenMap which populates it as a side effect
   await loadTokenMap()
   return cache.get<DtiMap>(CACHE_KEYS.designTokens()) ?? new Map()
 }

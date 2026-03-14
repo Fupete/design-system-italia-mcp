@@ -1,7 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentOutput, ZGetComponentVariantOutput } from '../schemas.js'
-import { formatTimestamp } from '../utils.js'
 import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
 import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants } from '../loaders/devkit.js'
 import { slugify, slugsToTry } from '../slugify.js'
@@ -68,7 +67,7 @@ export function registerListComponents(server: McpServer): void {
                 total: components.length,
                 components,
                 meta: {
-                  fetchedAt: formatTimestamp(),
+                  dataFetchedAt: dsMeta?.fetchedAt ?? null,
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   versions: dsMeta.versions,
                   stability: 'alpha' as const,
@@ -106,9 +105,10 @@ export function registerGetComponent(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      const [status, devKitIndex] = await Promise.all([
+      const [status, devKitIndex, dsMeta] = await Promise.all([
         loadStatus(slug),
         loadDevKitIndex(),
+        loadDsMeta(),
       ])
 
       // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
@@ -150,7 +150,7 @@ export function registerGetComponent(server: McpServer): void {
           }
           : null,
         meta: {
-          fetchedAt: formatTimestamp(),
+          dataFetchedAt: dsMeta?.fetchedAt ?? null,
           sourceUrls: [
             BSI_COMPONENT_URL(
               status?.sourceUrls.bsiDoc
@@ -238,7 +238,7 @@ export function registerSearchComponents(server: McpServer): void {
                 total: results.length,
                 results,
                 meta: {
-                  fetchedAt: formatTimestamp(),
+                  dataFetchedAt: dsMeta?.fetchedAt ?? null,
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   versions: dsMeta.versions,
                   stability: 'alpha' as const,
@@ -277,7 +277,10 @@ export function registerGetComponentVariant(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      const status = await loadStatus(slug)
+      const [status, dsMeta] = await Promise.all([
+        loadStatus(slug),
+        loadDsMeta(),
+      ])
 
       // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
       const canonicalSlug = status?.slug ?? slug
@@ -311,7 +314,7 @@ export function registerGetComponentVariant(server: McpServer): void {
           variantName,
           results,
           meta: {
-            fetchedAt: formatTimestamp(),
+            dataFetchedAt: dsMeta?.fetchedAt ?? null,
             sourceUrls: [BSI_COMPONENT_URL(
               status?.sourceUrls.bsiDoc
                 ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
@@ -344,7 +347,7 @@ export function registerGetComponentVariant(server: McpServer): void {
         variantName,
         results: [],
         meta: {
-          fetchedAt: formatTimestamp(),
+          dataFetchedAt: dsMeta?.fetchedAt ?? null,
           sourceUrls: [],
           warnings,
           stability: 'alpha' as const,

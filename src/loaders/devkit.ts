@@ -272,7 +272,7 @@ function parseStories(source: string): DevKitComponent | null {
 }
 
 export async function loadDevKitComponent(slug: string): Promise<DevKitComponent | null> {
-  const key = CACHE_KEYS.devKitStories(slug)
+  const key = CACHE_KEYS.devKitComponent(slug)
   const cached = cache.get<DevKitComponent>(key)
   if (cached) return cached
 

@@ -208,7 +208,7 @@ export interface ComponentFull {
 
   // always present
   meta: {
-    fetchedAt: string
+    dataFetchedAt: string | null // sources snapshot date
     sourceUrls: string[]
     warnings: string[]
     stability: StabilityLevel

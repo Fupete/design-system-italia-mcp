@@ -68,7 +68,7 @@ export function registerGetComponentIssues(server: McpServer): void {
                   },
                 },
                 meta: {
-                  fetchedAt: formatTimestamp(),
+                  dataFetchedAt: formatTimestamp(),
                   sourceUrls: [
                     `${GITHUB_SEARCH_ISSUES_URL}?q=${canonicalSlug}+${repoFilter}+is:open`,
                     BSI_STATUS_URL,
@@ -115,7 +115,7 @@ export function registerGetProjectBoardStatus(server: McpServer): void {
                   note: board.note,
                 },
                 meta: {
-                  fetchedAt: formatTimestamp(),
+                  dataFetchedAt: formatTimestamp(),
                   stability: 'stable' as const,
                 },
               },
