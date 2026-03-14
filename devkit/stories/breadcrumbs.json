@@ -1,0 +1,23 @@
+{
+  "slug": "breadcrumbs",
+  "fetchedAt": "2026-03-14T15:18:53.589Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-breadcrumbs--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-breadcrumbs it-aria-label=\"Percorso di navigazione\">\n  <it-breadcrumb-item><a href=\"#\">Home</a></it-breadcrumb-item>\n  <it-breadcrumb-item><a href=\"#\">Sezione</a></it-breadcrumb-item>\n  <it-breadcrumb-item>Voce corrente</it-breadcrumb-item>\n</it-breadcrumbs>"
+    },
+    {
+      "name": "con-icona",
+      "html": "<it-breadcrumbs it-aria-label=\"Percorso di navigazione\">\n  <it-breadcrumb-item>\n    <a href=\"#\"\n      ><it-icon\n        name=\"it-link\"\n        color=\"secondary\"\n        size=\"sm\"\n        class=\"me-1\"\n      ></it-icon\n      >Home</a\n    >\n  </it-breadcrumb-item>\n  <it-breadcrumb-item>\n    <a href=\"#\"\n      ><it-icon\n        name=\"it-link\"\n        color=\"secondary\"\n        size=\"sm\"\n        class=\"me-1\"\n      ></it-icon\n      >Sezione</a\n    >\n  </it-breadcrumb-item>\n  <it-breadcrumb-item>\n    <a href=\"#\"\n      ><it-icon\n        name=\"it-link\"\n        color=\"secondary\"\n        size=\"sm\"\n        class=\"me-1\"\n      ></it-icon\n      >Voce corrente</a\n    >\n  </it-breadcrumb-item>\n</it-breadcrumbs>"
+    },
+    {
+      "name": "separatore-personalizzato",
+      "html": "<it-breadcrumbs\n  label=\"Breadcrumb con separatore personalizzato\"\n  separator=\"&gt;\"\n>\n  <it-breadcrumb-item><a href=\"#\">Home</a></it-breadcrumb-item>\n  <it-breadcrumb-item><a href=\"#\">Sezione</a></it-breadcrumb-item>\n  <it-breadcrumb-item>Voce corrente</it-breadcrumb-item>\n</it-breadcrumbs>\n\n<it-breadcrumbs\n  it-aria-label=\"Percorso di navigazione con icona come separatore\"\n  class=\"mt-3\"\n>\n  <it-breadcrumb-item>\n    <a href=\"#\">Home</a>\n    <it-icon\n      name=\"it-chevron-right\"\n      color=\"secondary\"\n      size=\"sm\"\n      slot=\"separator\"\n      class=\"my-separator\"\n    ></it-icon>\n  </it-breadcrumb-item>\n  <it-breadcrumb-item>\n    <a href=\"#\">Sezione</a>\n    <it-icon\n      name=\"it-chevron-right\"\n      color=\"secondary\"\n      size=\"sm\"\n      slot=\"separator\"\n      class=\"my-separator\"\n    ></it-icon>\n  </it-breadcrumb-item>\n  <it-breadcrumb-item>Voce corrente</it-breadcrumb-item>\n</it-breadcrumbs>\n\n<style>\n  .my-separator {\n    margin-inline: -4px;\n  }\n</style>"
+    },
+    {
+      "name": "sfondo-scuro",
+      "html": "<it-breadcrumbs it-aria-label=\"Percorso di navigazione\" dark=\"\">\n  <it-breadcrumb-item><a href=\"#\">Home</a></it-breadcrumb-item>\n  <it-breadcrumb-item><a href=\"#\">Sezione</a></it-breadcrumb-item>\n  <it-breadcrumb-item>Voce corrente</it-breadcrumb-item>\n</it-breadcrumbs>\n<it-breadcrumbs it-aria-label=\"Percorso di navigazione2\" dark=\"\">\n  <it-breadcrumb-item>\n    <a href=\"#\">Home</a>\n    <it-icon\n      name=\"it-chevron-right\"\n      color=\"inverse\"\n      size=\"sm\"\n      slot=\"separator\"\n      class=\"my-separator\"\n    ></it-icon>\n  </it-breadcrumb-item>\n  <it-breadcrumb-item>\n    <a href=\"#\">Sezione</a>\n    <it-icon\n      name=\"it-chevron-right\"\n      color=\"inverse\"\n      size=\"sm\"\n      slot=\"separator\"\n      class=\"my-separator\"\n    ></it-icon>\n  </it-breadcrumb-item>\n  <it-breadcrumb-item>Voce corrente</it-breadcrumb-item>\n</it-breadcrumbs>\n<it-breadcrumbs it-aria-label=\"Percorso di navigazione3\" dark=\"\">\n  <it-breadcrumb-item>\n    <a href=\"#\">\n      <it-icon name=\"it-link\" color=\"inverse\" size=\"sm\" class=\"me-1\"></it-icon>\n      Home\n    </a>\n  </it-breadcrumb-item>\n  <it-breadcrumb-item>\n    <a href=\"#\">\n      <it-icon name=\"it-link\" color=\"inverse\" size=\"sm\" class=\"me-1\"></it-icon>\n      Sezione\n    </a>\n  </it-breadcrumb-item>\n  <it-breadcrumb-item>\n    <it-icon name=\"it-link\" color=\"inverse\" size=\"sm\" class=\"me-1\"></it-icon>\n    Voce corrente\n  </it-breadcrumb-item>\n</it-breadcrumbs>\n<style>\n  .my-separator {\n    margin-inline: -4px;\n  }\n</style>"
+    }
+  ]
+}

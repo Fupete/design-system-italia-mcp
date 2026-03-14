@@ -1,0 +1,59 @@
+{
+  "slug": "form-input",
+  "fetchedAt": "2026-03-14T15:19:07.393Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-input--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-input id=\"exampleInputText\" type=\"text\" name=\"testo\">\n  <span slot=\"label\">Campo di testo</span>\n</it-input>\n<it-input id=\"exampleInputEmail\" type=\"email\" name=\"email\">\n  <span slot=\"label\">Campo email</span>\n</it-input>\n<it-input id=\"exampleInputNumber\" type=\"number\" name=\"number\">\n  <span slot=\"label\">Campo numerico</span>\n</it-input>\n<it-input id=\"exampleInputTel\" type=\"tel\" name=\"telefono\">\n  <span slot=\"label\">Campo telefonico</span>\n</it-input>\n<it-input id=\"exampleInputTime\" type=\"time\" name=\"orario\">\n  <span slot=\"label\">Campo orario</span>\n</it-input>\n<it-input id=\"exampleInputDate\" type=\"date\" name=\"data\">\n  <span slot=\"label\">Campo data</span>\n</it-input>"
+    },
+    {
+      "name": "testo-segnaposto",
+      "html": "<it-input\n  id=\"placeholder-example\"\n  type=\"text\"\n  name=\"placeholder-example\"\n  placeholder=\"Testo segnaposto\"\n>\n  <span slot=\"label\">Etichetta</span>\n</it-input>"
+    },
+    {
+      "name": "testo-di-supporto",
+      "html": "<it-input\n  id=\"supportText-example\"\n  type=\"text\"\n  name=\"supportText-example\"\n  placeholder=\"Testo segnaposto\"\n  support-text=\"Testo di supporto\"\n>\n  <span slot=\"label\">Etichetta</span>\n</it-input>"
+    },
+    {
+      "name": "etichetta-nascosta",
+      "html": "<it-input type=\"text\" name=\"nome\" placeholder=\"Cerca...\" label-hidden=\"\">\n  <span slot=\"label\">Cerca nel sito</span>\n</it-input>"
+    },
+    {
+      "name": "icone-o-pulsanti",
+      "html": "<it-input\n  id=\"field-icon-example\"\n  type=\"text\"\n  name=\"field-icon-example\"\n  placeholder=\"Icone o pulsanti\"\n  support-text=\"Testo di supporto\"\n>\n  <span slot=\"label\">Campo con icona</span>\n  <it-icon name=\"it-pencil\" slot=\"prepend\" size=\"sm\"></it-icon>\n  <it-button variant=\"primary\" slot=\"append\">Invio</it-button>\n</it-input>"
+    },
+    {
+      "name": "dimensioni",
+      "html": "<it-input\n  id=\"field-big-example\"\n  type=\"text\"\n  name=\"field-big-example\"\n  placeholder=\"Testo segnaposto\"\n  size=\"lg\"\n>\n  <span slot=\"label\">Campo di dimensione grande</span>\n  <it-icon name=\"it-pencil\" slot=\"prepend\" size=\"md\"></it-icon>\n  <it-button variant=\"primary\" slot=\"append\">Invio</it-button>\n</it-input>\n<it-input\n  id=\"field-sizebase-example\"\n  type=\"text\"\n  name=\"field-sizebase-example\"\n  placeholder=\"Testo segnaposto\"\n>\n  <span slot=\"label\">Campo di dimensione base</span>\n  <it-icon name=\"it-pencil\" slot=\"prepend\" size=\"sm\"></it-icon>\n  <it-button variant=\"primary\" slot=\"append\">Invio</it-button>\n</it-input>\n<it-input\n  id=\"field-small-example\"\n  type=\"text\"\n  name=\"field-small-example\"\n  placeholder=\"Testo segnaposto\"\n  size=\"sm\"\n>\n  <span slot=\"label\">Campo di dimensione piccola</span>\n  <it-icon name=\"it-pencil\" slot=\"prepend\" size=\"xs\"></it-icon>\n  <it-button variant=\"primary\" slot=\"append\">Invio</it-button>\n</it-input>"
+    },
+    {
+      "name": "stato-disabilitato",
+      "html": "<it-input\n  id=\"field-disabled-example\"\n  type=\"text\"\n  name=\"field-disabled-example\"\n  disabled=\"\"\n>\n  <span slot=\"label\">Campo disabilitato</span>\n</it-input>"
+    },
+    {
+      "name": "readonly-normalizzato",
+      "html": "<it-input\n  id=\"field-readonly-example\"\n  type=\"text\"\n  name=\"field-readonly-example\"\n  value=\"Contenuto in sola lettura\"\n  readonly=\"\"\n>\n  <span slot=\"label\">Campo readonly</span>\n</it-input>\n<it-input\n  id=\"field-readonlyplaintext-example\"\n  type=\"text\"\n  name=\"field-readonlyplaintext-example\"\n  value=\"Contenuto in sola lettura\"\n  readonly=\"\"\n  plaintext=\"\"\n>\n  <span slot=\"label\">Campo readonly normalizzato come plaintext</span>\n</it-input>"
+    },
+    {
+      "name": "misuratore-sicurezza-e-suggerimenti",
+      "html": "<it-input\n  id=\"field-password-example\"\n  type=\"password\"\n  name=\"field-password-example\"\n  minlength=\"8\"\n  support-text=\"Inserisci almeno 8 caratteri e alcuni caratteri speciali.\"\n>\n  <span slot=\"label\">Campo password</span>\n</it-input>\n<it-input\n  id=\"field-password-strength-example\"\n  type=\"password\"\n  name=\"field-password-strength-example\"\n  minlength=\"8\"\n  support-text=\"Inserisci almeno 8 caratteri e alcuni caratteri speciali.\"\n  strength-meter=\"\"\n  suggestions=\"\"\n>\n  <span slot=\"label\">Campo password</span>\n</it-input>"
+    },
+    {
+      "name": "area-di-testo",
+      "html": "<it-input\n  id=\"textarea-example\"\n  type=\"textarea\"\n  name=\"textarea-example\"\n  placeholder=\"Testo segnaposto\"\n>\n  <span slot=\"label\">Area di testo</span>\n</it-input>"
+    },
+    {
+      "name": "validazione-e-gestione-degli-errori",
+      "html": "<it-input\n  id=\"required-example\"\n  type=\"text\"\n  name=\"required-example\"\n  required=\"\"\n  placeholder=\"Testo segnaposto\"\n>\n  <span slot=\"label\">Campo obbligatorio</span>\n</it-input>"
+    },
+    {
+      "name": "validazione-esterna-validazione-custom",
+      "html": "<it-input\n  id=\"external-validation-example\"\n  type=\"text\"\n  name=\"external-validation-example\"\n  custom-validation=\"\"\n  validity-message=\"Questo campo è obbligatorio!!!\"\n  placeholder=\"Testo segnaposto\"\n>\n  <span slot=\"label\">Validazione esterna</span>\n</it-input>"
+    },
+    {
+      "name": "gestione-degli-eventi",
+      "html": "<script>\n  document.querySelector('it-input#event-input-example').addEventListener('it-input', (event) => {\n    console.log('Input event:', event);\n    alert('Input event');\n  });\n  document.querySelector('it-input#event-input-example').addEventListener('it-input-ready', (event) => {\n    console.log('Input ready:', event);\n  });\n</script>\n<it-input\n  id=\"event-input-example\"\n  type=\"text\"\n  name=\"event-input-example\"\n  placeholder=\"Testo segnaposto\"\n>\n  <span slot=\"label\">Prova evento di input</span>\n</it-input>"
+    }
+  ]
+}

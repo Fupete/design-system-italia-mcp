@@ -1,0 +1,35 @@
+{
+  "slug": "form-radio-button",
+  "fetchedAt": "2026-03-14T15:19:15.542Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-radio-button--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-radio-group name=\"gruppo1\">\n  <span slot=\"label\">Esempio interattivo</span>\n  <it-radio id=\"radio1\" value=\"opzione1\">\n    <span slot=\"label\">Radio di esempio 1</span>\n  </it-radio>\n  <it-radio id=\"radio2\" value=\"opzione2\">\n    <span slot=\"label\">Radio di esempio 2</span>\n  </it-radio>\n  <it-radio id=\"radio3\" value=\"opzione3\">\n    <span slot=\"label\">Radio di esempio 3</span>\n  </it-radio>\n</it-radio-group>"
+    },
+    {
+      "name": "definizione-delletichetta",
+      "html": "<it-radio-group name=\"gruppo-label\">\n  <span slot=\"label\">Gruppo con label formattate</span>\n  <it-radio id=\"radio-label1\" value=\"opzione1\">\n    <span slot=\"label\">Etichetta semplice</span>\n  </it-radio>\n  <it-radio id=\"radio-label2\" value=\"opzione2\">\n    <span slot=\"label\"\n      ><strong>Etichetta</strong> con <em>formattazione</em></span\n    >\n  </it-radio>\n  <it-radio id=\"radio-label3\" value=\"opzione3\">\n    <span slot=\"label\">Etichetta semplice</span>\n  </it-radio>\n</it-radio-group>"
+    },
+    {
+      "name": "testo-di-supporto",
+      "html": "<it-radio-group name=\"gruppo-support\">\n  <span slot=\"label\">Esempio con testo di supporto</span>\n  <it-radio\n    id=\"radio-support1\"\n    value=\"opzione1\"\n    support-text=\"Questo è un testo di supporto per il radio button\"\n  >\n    <span slot=\"label\">Radio con testo di supporto</span>\n  </it-radio>\n  <it-radio id=\"radio-support2\" value=\"opzione2\">\n    <span slot=\"label\">Altro radio</span>\n  </it-radio>\n</it-radio-group>"
+    },
+    {
+      "name": "inline",
+      "html": "<it-radio-group name=\"gruppo-inline\" inline=\"\">\n  <span slot=\"label\">Esempio inline</span>\n  <it-radio id=\"radio-inline1\" value=\"opzione1\" checked=\"\">\n    <span slot=\"label\">Radio inline 1</span>\n  </it-radio>\n  <it-radio id=\"radio-inline2\" value=\"opzione2\">\n    <span slot=\"label\">Radio inline 2</span>\n  </it-radio>\n  <it-radio id=\"radio-inline3\" value=\"opzione3\">\n    <span slot=\"label\">Radio inline 3</span>\n  </it-radio>\n</it-radio-group>"
+    },
+    {
+      "name": "gruppo-di-radio-disabilitato",
+      "html": "<div class=\"row\">\n  <div class=\"col-12 col-md-6\">\n    <it-radio-group name=\"gruppo-alcuni-disabled\" value=\"opzione1\">\n      <span slot=\"label\">Esempio con alcuni disabilitati</span>\n      <it-radio id=\"radio-disabled1\" value=\"opzione1\" disabled=\"\">\n        <span slot=\"label\">Radio selezionato e disabilitato</span>\n      </it-radio>\n      <it-radio id=\"radio-disabled2\" value=\"opzione2\" disabled=\"\">\n        <span slot=\"label\">Radio disabilitato</span>\n      </it-radio>\n      <it-radio id=\"radio-disabled3\" value=\"opzione3\">\n        <span slot=\"label\">Radio abilitato</span>\n      </it-radio>\n    </it-radio-group>\n  </div>\n  <div class=\"col-12 col-md-6\">\n    <it-radio-group name=\"gruppo-tutti-disabled\" value=\"opzione2\" disabled=\"\">\n      <span slot=\"label\">Esempio con tutti disabilitati</span>\n      <it-radio id=\"radio-disabled4\" value=\"opzione1\">\n        <span slot=\"label\">Radio selezionato e disabilitato</span>\n      </it-radio>\n      <it-radio id=\"radio-disabled5\" value=\"opzione2\">\n        <span slot=\"label\">Radio disabilitato</span>\n      </it-radio>\n      <it-radio id=\"radio-disabled6\" value=\"opzione3\">\n        <span slot=\"label\">Radio abilitato</span>\n      </it-radio>\n    </it-radio-group>\n  </div>\n</div>"
+    },
+    {
+      "name": "raggruppati-visivamente",
+      "html": "<div>\n  <div class=\"row\">\n    <div class=\"col-12 col-md-6\">\n      <it-radio-group name=\"gruppo-visual\" grouped=\"\">\n        <span slot=\"label\">Esempio grouped senza testo di supporto</span>\n        <it-radio id=\"radio-group1\" value=\"opzione1\" checked=\"\">\n          <span slot=\"label\">Opzione 1</span>\n        </it-radio>\n        <it-radio id=\"radio-group2\" value=\"opzione2\">\n          <span slot=\"label\">Opzione 2</span>\n        </it-radio>\n        <it-radio id=\"radio-group3\" value=\"opzione3\">\n          <span slot=\"label\">Opzione 3</span>\n        </it-radio>\n      </it-radio-group>\n    </div>\n    <div class=\"col-12 col-md-6\">\n      <it-radio-group name=\"gruppo-visual2\" grouped=\"\">\n        <span slot=\"label\">Esempio grouped con testo di supporto</span>\n        <it-radio\n          id=\"radio-group4\"\n          value=\"opzione1\"\n          checked=\"\"\n          support-text=\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas molestie libero\"\n        >\n          <span slot=\"label\">Opzione 1</span>\n        </it-radio>\n        <it-radio\n          id=\"radio-group5\"\n          value=\"opzione2\"\n          support-text=\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas molestie libero\"\n        >\n          <span slot=\"label\">Opzione 2</span>\n        </it-radio>\n        <it-radio\n          id=\"radio-group6\"\n          value=\"opzione3\"\n          support-text=\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas molestie libero\"\n        >\n          <span slot=\"label\">Opzione 3</span>\n        </it-radio>\n      </it-radio-group>\n    </div>\n  </div>\n</div>"
+    },
+    {
+      "name": "personalizzazione-dei-messaggi-di-errore",
+      "html": "<form id=\"demo-form\">\n  <it-radio-group name=\"scelta\" required=\"\">\n    <span slot=\"label\">Esempio con validazione</span>\n    <it-radio value=\"si\">\n      <span slot=\"label\">Sì, accetto</span>\n    </it-radio>\n    <it-radio value=\"no\">\n      <span slot=\"label\">No, non accetto</span>\n    </it-radio>\n    <it-radio value=\"forse\">\n      <span slot=\"label\">Forse</span>\n    </it-radio>\n  </it-radio-group>\n  <it-button type=\"submit\" class=\"mt-3\" variant=\"primary\">Invia</it-button>\n  <p class=\"form-text mt-2\">\n    Prova a inviare il form senza selezionare nulla per vedere la validazione.\n  </p>\n</form>"
+    }
+  ]
+}

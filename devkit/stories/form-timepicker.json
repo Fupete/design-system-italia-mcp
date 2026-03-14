@@ -1,0 +1,15 @@
+{
+  "slug": "form-timepicker",
+  "fetchedAt": "2026-03-14T15:19:14.078Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-timepicker--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-input type=\"time\" id=\"exampleTimepicker\" name=\"timepicker\" value=\"10:00\">\n  <span slot=\"label\">Input Ora</span>\n</it-input>"
+    },
+    {
+      "name": "limiti-e-step",
+      "html": "<it-input\n  type=\"time\"\n  id=\"inputTimeLimits\"\n  name=\"inputTimeLimits\"\n  value=\"10:00\"\n  min=\"09:00\"\n  max=\"12:00\"\n  step=\"1800\"\n>\n  <span slot=\"label\">Min, Max &amp; Step</span>\n</it-input>"
+    }
+  ]
+}

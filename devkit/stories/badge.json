@@ -1,0 +1,27 @@
+{
+  "slug": "badge",
+  "fetchedAt": "2026-03-14T15:18:52.519Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-badge--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-del-componente",
+      "html": "<div class=\"h1\">\n  Titolo di esempio h1<span class=\"badge badge-secondary\">New</span>\n</div>\n<div class=\"h2\">\n  Titolo di esempio h2<span class=\"badge badge-secondary\">New</span>\n</div>\n<div class=\"h3\">\n  Titolo di esempio h3<span class=\"badge badge-secondary\">New</span>\n</div>\n<div class=\"h4\">\n  Titolo di esempio h4<span class=\"badge badge-secondary\">New</span>\n</div>\n<div class=\"h5\">\n  Titolo di esempio h5<span class=\"badge badge-secondary\">New</span>\n</div>\n<div class=\"h6\">\n  Titolo di esempio h6<span class=\"badge badge-secondary\">New</span>\n</div>"
+    },
+    {
+      "name": "bottoni-e-link",
+      "html": "<it-button variant=\"primary\">\n  Notifiche\n  <span class=\"badge badge-sm badge-inverse\">4</span>\n  <span class=\"visually-hidden\">Messaggi non letti</span>\n</it-button>"
+    },
+    {
+      "name": "variazioni-di-colore",
+      "html": "<span class=\"badge badge-primary\">Primary</span>\n<span class=\"badge badge-secondary\">Secondary</span>\n<span class=\"badge badge-success\">Success</span>\n<span class=\"badge badge-danger\">Danger</span>\n<span class=\"badge badge-warning\">Warning</span>"
+    },
+    {
+      "name": "badges-arrotondati",
+      "html": "<span class=\"badge rounded-pill badge-primary\">Primary</span>\n<span class=\"badge rounded-pill badge-secondary\">Secondary</span>\n<span class=\"badge rounded-pill badge-success\">Success</span>\n<span class=\"badge rounded-pill badge-danger\">Danger</span>\n<span class=\"badge rounded-pill badge-warning\">Warning</span>"
+    },
+    {
+      "name": "link",
+      "html": "<a href=\"#\" class=\"badge badge-primary\">Primary</a>\n<a href=\"#\" class=\"badge badge-secondary\">Secondary</a>\n<a href=\"#\" class=\"badge badge-success\">Success</a>\n<a href=\"#\" class=\"badge badge-danger\">Danger</a>\n<a href=\"#\" class=\"badge badge-warning\">Warning</a>"
+    }
+  ]
+}

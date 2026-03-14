@@ -1,0 +1,39 @@
+{
+  "slug": "hero",
+  "fetchedAt": "2026-03-14T15:19:20.095Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-hero--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-hero it-aria-label=\"In evidenza\">\n  <img\n    title=\"titolo immagine\"\n    alt=\"descrizione immagine\"\n    slot=\"background\"\n    src=\"https://animals.sandiegozoo.org/sites/default/files/2016-08/animals_hero_mountains.jpg\"\n  />\n</it-hero>"
+    },
+    {
+      "name": "con-immagine",
+      "html": "<it-hero it-aria-label=\"In evidenza\">\n  <img\n    title=\"titolo immagine\"\n    alt=\"descrizione immagine\"\n    slot=\"background\"\n    src=\"https://animals.sandiegozoo.org/sites/default/files/2016-08/animals_hero_mountains.jpg\"\n  />\n</it-hero>"
+    },
+    {
+      "name": "con-contenuti-testuali",
+      "html": "<it-hero>\n  <div slot=\"text\" class=\"it-hero-text-wrapper bg-dark\">\n    <span class=\"it-category\">Titolo occhiello</span>\n    <h2>Titolo della sezione</h2>\n    <p class=\"d-none d-lg-block\">\n      Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper\n      dignissim cras. Dictum sit amet justo donec enim diam vulputate ut. Eu\n      nisl nunc mi ipsum faucibus.\n    </p>\n    <div class=\"my-btn-container\">\n      <a class=\"btn btn-sm btn-outline-primary\" href=\"#\">Azione primaria </a>\n    </div>\n  </div>\n</it-hero>"
+    },
+    {
+      "name": "con-contenuti-testuali-centrati",
+      "html": "<it-hero center=\"\">\n  <div slot=\"text\" class=\"it-hero-text-wrapper bg-dark\">\n    <span class=\"it-category\">Titolo occhiello</span>\n    <h2>Titolo della sezione</h2>\n    <p class=\"d-none d-lg-block\">\n      Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper\n      dignissim cras. Dictum sit amet justo donec enim diam vulputate ut. Eu\n      nisl nunc mi ipsum faucibus.\n    </p>\n    <div class=\"my-btn-container\">\n      <a class=\"btn btn-sm btn-outline-primary\" href=\"#\">Azione primaria </a>\n    </div>\n  </div>\n</it-hero>"
+    },
+    {
+      "name": "con-testi-ed-immagine-di-sfondo",
+      "html": "<it-hero>\n  <img\n    title=\"titolo immagine\"\n    alt=\"descrizione immagine\"\n    slot=\"background\"\n    src=\"https://animals.sandiegozoo.org/sites/default/files/2016-08/animals_hero_mountains.jpg\"\n  />\n  <div slot=\"text\" class=\"it-hero-text-wrapper bg-dark\">\n    <span class=\"it-category\">Titolo occhiello</span>\n    <h2>Titolo della sezione</h2>\n    <p class=\"d-none d-lg-block\">\n      Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper\n      dignissim cras. Dictum sit amet justo donec enim diam vulputate ut. Eu\n      nisl nunc mi ipsum faucibus.\n    </p>\n    <div class=\"my-btn-container\">\n      <a class=\"btn btn-sm btn-outline-primary\" href=\"#\">Azione primaria </a>\n    </div>\n  </div>\n</it-hero>"
+    },
+    {
+      "name": "con-overlay-di-colore-primario",
+      "html": "<it-hero overlay-color=\"primary\">\n  <img\n    title=\"titolo immagine\"\n    alt=\"descrizione immagine\"\n    slot=\"background\"\n    src=\"https://animals.sandiegozoo.org/sites/default/files/2016-08/animals_hero_mountains.jpg\"\n  />\n  <div slot=\"text\" class=\"it-hero-text-wrapper bg-dark\">\n    <span class=\"it-category\">Titolo occhiello</span>\n    <h2>Titolo della sezione</h2>\n    <p class=\"d-none d-lg-block\">\n      Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper\n      dignissim cras. Dictum sit amet justo donec enim diam vulputate ut. Eu\n      nisl nunc mi ipsum faucibus.\n    </p>\n    <div class=\"my-btn-container\">\n      <a class=\"btn btn-sm btn-outline-primary\" href=\"#\">Azione primaria </a>\n    </div>\n  </div>\n</it-hero>"
+    },
+    {
+      "name": "con-overlay-e-filtro-di-colore-primario",
+      "html": "<it-hero it-aria-label=\"In evidenza\" overlay-color=\"filter\">\n  <img\n    title=\"titolo immagine\"\n    alt=\"descrizione immagine\"\n    slot=\"background\"\n    src=\"https://animals.sandiegozoo.org/sites/default/files/2016-08/animals_hero_mountains.jpg\"\n  />\n</it-hero>"
+    },
+    {
+      "name": "con-immagine-e-margine-negativo-per-contenuti-sovrapposti",
+      "html": "<it-hero overlap=\"\">\n  <img\n    title=\"titolo immagine\"\n    alt=\"descrizione immagine\"\n    slot=\"background\"\n    src=\"https://animals.sandiegozoo.org/sites/default/files/2016-08/animals_hero_mountains.jpg\"\n  />\n  <div slot=\"text\" class=\"it-hero-text-wrapper bg-dark\">\n    <span class=\"it-category\">Titolo occhiello</span>\n    <h2>Titolo della sezione</h2>\n    <p class=\"d-none d-lg-block\">\n      Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper\n      dignissim cras. Dictum sit amet justo donec enim diam vulputate ut. Eu\n      nisl nunc mi ipsum faucibus.\n    </p>\n    <div class=\"my-btn-container\">\n      <a class=\"btn btn-sm btn-outline-primary\" href=\"#\">Azione primaria </a>\n    </div>\n  </div>\n</it-hero>\n\n<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <!-- <div class=\"col-12 col-lg-10 offset-lg-1\"> e card-space nel wrapper>-->\n      <div class=\"col-12 mb-3 mb-md-4\">\n        <!--start it-card-->\n        <article class=\"it-card rounded shadow border px-5 py-4\">\n          <!--card first child is the title (link)-->\n          <h3 class=\"it-card-title no_toc h4\">Titolo del contenuto</h3>\n          <!--card body content-->\n          <div class=\"it-card-body\">\n            <p class=\"it-card-text\">\n              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do\n              eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem\n              ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n              tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum\n              dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\n              incididunt ut labore et dolore magna aliqua.\n            </p>\n          </div>\n          <div class=\"it-card-footer border-0\" aria-label=\"Link correlati:\">\n            <a href=\"#\" class=\"it-card-link\"\n              >Scopri di più\n              <span class=\"visually-hidden\">su Titolo del contenuto</span></a\n            >\n          </div>\n        </article>\n        <!--end it-card-->\n      </div>\n    </div>\n  </div>\n</div>"
+    }
+  ]
+}

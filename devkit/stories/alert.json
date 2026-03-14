@@ -1,0 +1,23 @@
+{
+  "slug": "alert",
+  "fetchedAt": "2026-03-14T15:18:50.270Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-alert--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-del-componente",
+      "html": "<div class=\"alert alert-primary\" role=\"alert\">\n  <it-icon name=\"it-info-circle\" class=\"alert-icon\"></it-icon>Questo è un alert\n  di tipo \"<b>primary</b>\".\n</div>\n\n<div class=\"alert alert-secondary\" role=\"alert\">\n  <it-icon name=\"it-info-circle\" class=\"alert-icon\"></it-icon>Questo è un alert\n  di tipo \"<b>info</b>\".\n</div>\n\n<div class=\"alert alert-success\" role=\"alert\">\n  <it-icon name=\"it-check-circle\" class=\"alert-icon\"></it-icon>Questo è un alert\n  di tipo \"<b>success</b>\".\n</div>\n\n<div class=\"alert alert-warning\" role=\"alert\">\n  <it-icon name=\"it-info-circle\" class=\"alert-icon\"></it-icon>Questo è un alert\n  di tipo \"<b>warning</b>\".\n</div>\n\n<div class=\"alert alert-danger\" role=\"alert\">\n  <it-icon name=\"it-info-circle\" class=\"alert-icon\"></it-icon>Questo è un alert\n  di tipo \"<b>danger</b>\".\n</div>"
+    },
+    {
+      "name": "link-evidenziato",
+      "html": "<div class=\"alert alert-danger\" role=\"alert\">\n  Questo è un alert con un esempio di\n  <a href=\"#\" class=\"alert-link\">link</a> evidenziato.\n</div>"
+    },
+    {
+      "name": "contenuto-aggiuntivo",
+      "html": "<div class=\"alert alert-success\" role=\"alert\">\n  <h4 class=\"alert-heading\">Avviso di successo!</h4>\n  <p>\n    Stai leggendo questo importante messaggio di avviso di successo. Questo\n    testo di esempio sarà più lungo in modo da poter vedere come funzioni la\n    spaziatura all'interno di un avviso con questo tipo di contenuto.\n  </p>\n  <hr />\n  <p class=\"mb-0\">\n    Quando necessario, assicurarti di inserire le utilità di margine per\n    mantenere gli spazi equilibrati.\n  </p>\n</div>"
+    },
+    {
+      "name": "chiusura",
+      "html": "<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n  <strong>Attenzione</strong> Alcuni campi inseriti sono da controllare.\n  <it-button type=\"button\" class=\"btn-close\" it-aria-label=\"Chiudi avviso\">\n    <it-icon name=\"it-close\"></it-icon>\n  </it-button>\n</div>"
+    }
+  ]
+}

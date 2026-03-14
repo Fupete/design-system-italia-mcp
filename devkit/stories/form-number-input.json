@@ -1,0 +1,39 @@
+{
+  "slug": "form-number-input",
+  "fetchedAt": "2026-03-14T15:19:15.473Z",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-number-input--documentazione&viewMode=docs",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-input type=\"number\" id=\"exampleInputNumber\" name=\"inputNumber\" value=\"100\">\n  <span slot=\"label\">Input Numerico</span>\n</it-input>"
+    },
+    {
+      "name": "esempi",
+      "html": "<div class=\"w-100\">\n  <it-input\n    type=\"number\"\n    id=\"inputNumberFull\"\n    name=\"inputNumberFull\"\n    value=\"100\"\n  >\n    <span slot=\"label\"\n      >Input Numerico inserito in una colonna a tutta larghezza</span\n    >\n  </it-input>\n</div>\n<div class=\"w-50\">\n  <it-input\n    type=\"number\"\n    id=\"inputNumberHalf\"\n    name=\"inputNumberHalf\"\n    value=\"100\"\n  >\n    <span slot=\"label\"\n      >Input Numerico inserito in una colonna di larghezza 50%</span\n    >\n  </it-input>\n</div>"
+    },
+    {
+      "name": "limiti-e-step",
+      "html": "<it-input\n  type=\"number\"\n  id=\"inputNumberLimits\"\n  name=\"inputNumberLimits\"\n  value=\"100\"\n  max=\"200\"\n  step=\"10\"\n>\n  <span slot=\"label\">Min, Max &amp; Step</span>\n</it-input>"
+    },
+    {
+      "name": "valuta",
+      "html": "<it-input\n  type=\"number\"\n  id=\"inputNumberCurrency\"\n  name=\"inputNumberCurrency\"\n  value=\"3.50\"\n  step=\"0.01\"\n>\n  <span slot=\"label\">Currency</span\n  ><span slot=\"prepend\" class=\"fw-semibold\">€</span>\n</it-input>"
+    },
+    {
+      "name": "percentuale",
+      "html": "<it-input\n  type=\"number\"\n  id=\"inputNumberPercent\"\n  name=\"inputNumberPercent\"\n  value=\"50\"\n  max=\"100\"\n  step=\"10\"\n>\n  <span slot=\"label\">Percentage</span\n  ><span slot=\"prepend\" class=\"fw-semibold\">%</span>\n</it-input>"
+    },
+    {
+      "name": "disabilitato",
+      "html": "<it-input\n  type=\"number\"\n  id=\"inputNumberDisabled\"\n  name=\"inputNumberDisabled\"\n  value=\"50\"\n  disabled=\"\"\n>\n  <span slot=\"label\">Disabled</span>\n</it-input>"
+    },
+    {
+      "name": "stato-read-only",
+      "html": "<it-input\n  type=\"number\"\n  id=\"inputNumberReadonly\"\n  name=\"inputNumberReadonly\"\n  value=\"50\"\n  readonly=\"\"\n>\n  <span slot=\"label\">Contenuto in sola lettura</span>\n</it-input>"
+    },
+    {
+      "name": "ridimensionamento",
+      "html": "<it-input\n  type=\"number\"\n  id=\"inputNumberAdaptive\"\n  name=\"inputNumberAdaptive\"\n  value=\"99999\"\n  adaptive=\"\"\n>\n  <span slot=\"label\">Adattivo</span>\n</it-input>"
+    }
+  ]
+}
