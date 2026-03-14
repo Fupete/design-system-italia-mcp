@@ -23,7 +23,9 @@ import { resolve } from 'node:path'
 
 const DEVKIT_BASE = 'https://italia.github.io/dev-kit-italia'
 const INDEX_URL = `${DEVKIT_BASE}/index.json`
-const DEFAULT_OUT = resolve(import.meta.dirname, '../data-fetched/devkit/stories')
+const PROJECT_ROOT = resolve(import.meta.dirname, '..')
+const DEFAULT_OUT = resolve(PROJECT_ROOT, 'data-fetched/devkit/stories')
+
 
 /** Max concurrent Playwright pages — gentle on GitHub Pages CDN */
 const CONCURRENCY = 4
@@ -46,6 +48,9 @@ const outDir = args.includes('--out')
 const resolvedOut = resolve(outDir)
 const projectParent = resolve(PROJECT_ROOT, '..')
 if (!resolvedOut.startsWith(PROJECT_ROOT) && !resolvedOut.startsWith(projectParent)) {
+  console.error(`PROJECT_ROOT: ${PROJECT_ROOT}`)
+  console.error(`projectParent: ${projectParent}`)
+  console.error(`resolvedOut: ${resolvedOut}`)
   console.error('❌ Output directory must be within the project or its parent')
   process.exit(1)
 }
