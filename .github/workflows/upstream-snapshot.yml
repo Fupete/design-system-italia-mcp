@@ -27,7 +27,7 @@ jobs:
       - name: Checkout main (scripts + src)
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: resources-snapshot  # temporary — change to main before merge
           path: main
 
       - name: Checkout data-fetched branch
