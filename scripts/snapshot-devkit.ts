@@ -48,9 +48,6 @@ const outDir = args.includes('--out')
 const resolvedOut = resolve(outDir)
 const projectParent = resolve(PROJECT_ROOT, '..')
 if (!resolvedOut.startsWith(PROJECT_ROOT) && !resolvedOut.startsWith(projectParent)) {
-  console.error(`PROJECT_ROOT: ${PROJECT_ROOT}`)
-  console.error(`projectParent: ${projectParent}`)
-  console.error(`resolvedOut: ${resolvedOut}`)
   console.error('❌ Output directory must be within the project or its parent')
   process.exit(1)
 }
@@ -95,6 +92,9 @@ async function processSlug(slug: string, browser: Browser): Promise<ProcessResul
   try {
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30_000 })
 
+    // wait for page to fully render before looking for buttons
+    await page.waitForTimeout(1000)
+
     // click all "Show code" buttons — ElementHandle snapshot,
     // stable across DOM reflows caused by panel expansion
     const buttons = await page.$$('button')
@@ -117,7 +117,7 @@ async function processSlug(slug: string, browser: Browser): Promise<ProcessResul
         (expected: number) =>
           document.querySelectorAll('.sbdocs-preview pre').length >= expected,
         clicked,
-        { timeout: 5_000 }
+        { timeout: 10_000 }
       ).catch(() => null) // fallback: some panels may genuinely have no code
     }
 

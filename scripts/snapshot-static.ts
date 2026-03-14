@@ -62,9 +62,6 @@ const outDir = args.includes('--out')
 const resolvedOut = resolve(outDir)
 const projectParent = resolve(PROJECT_ROOT, '..')
 if (!resolvedOut.startsWith(PROJECT_ROOT) && !resolvedOut.startsWith(projectParent)) {
-    console.error(`PROJECT_ROOT: ${PROJECT_ROOT}`)
-    console.error(`projectParent: ${projectParent}`)
-    console.error(`resolvedOut: ${resolvedOut}`)
     console.error('❌ Output directory must be within the project or its parent')
     process.exit(1)
 }
