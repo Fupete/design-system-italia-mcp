@@ -16,7 +16,7 @@
  */
 
 import { chromium, type Browser } from 'playwright'
-import { writeFileSync, mkdirSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 // ── Config ────────────────────────────────────────────────────────────────────
@@ -164,16 +164,28 @@ async function processSlug(slug: string, browser: Browser): Promise<ProcessResul
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 // Step 1 — fetch and validate index
+// Use local index.json if available (written by snapshot-static.ts)
+// to guarantee consistency between static and devkit snapshots.
 
-console.log('📡 Fetching Dev Kit index...')
+console.log('📡 Loading Dev Kit index...')
 
-const res = await fetch(INDEX_URL, { signal: AbortSignal.timeout(15_000) })
-if (!res.ok) {
-  console.error(`❌ Index fetch failed: HTTP ${res.status}`)
-  process.exit(1)
+const localIndexPath = resolve(resolvedOut, '../index.json')
+let indexRaw: string
+
+if (existsSync(localIndexPath)) {
+  console.log('  using local devkit/index.json from snapshot-static')
+  indexRaw = readFileSync(localIndexPath, 'utf8')
+} else {
+  console.log('  fetching from upstream')
+  const res = await fetch(INDEX_URL, { signal: AbortSignal.timeout(15_000) })
+  if (!res.ok) {
+    console.error(`❌ Index fetch failed: HTTP ${res.status}`)
+    process.exit(1)
+  }
+  indexRaw = await res.json()
 }
 
-const index = await res.json() as {
+const index = JSON.parse(indexRaw) as {
   entries?: Record<string, {
     id: string
     type: string
