@@ -1,0 +1,101 @@
+# .github/workflows/upstream-snapshot.yml
+#
+# Full upstream snapshot — runs both snapshot-static.ts and snapshot-devkit.ts,
+# commits results to the dedicated `data-fetched` branch.
+#
+# Triggers:
+#   - Weekly on Sunday at 03:00 UTC (safety net for non-versioned changes)
+#   - On-demand via workflow_dispatch
+#   - Triggered automatically by version-check.yml on version change
+
+name: Upstream snapshot
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout main (scripts + src)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout data-fetched branch
+        uses: actions/checkout@v4
+        with:
+          ref: data-fetched
+          path: data-fetched
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: main/package-lock.json
+
+      - name: Install dependencies
+        working-directory: main
+        run: npm ci
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ hashFiles('main/package-lock.json') }}
+
+      - name: Install Playwright Chromium
+        working-directory: main
+        run: npx playwright install chromium --with-deps
+
+      - name: Run snapshot-static
+        working-directory: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx tsx scripts/snapshot-static.ts --out ../data-fetched
+
+      - name: Run snapshot-devkit
+        working-directory: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx tsx scripts/snapshot-devkit.ts --out ../data-fetched/devkit/stories
+
+      - name: Validate snapshot integrity
+        working-directory: data-fetched
+        run: |
+          echo "Validating snapshot integrity..."
+          jq -e '.versions.bootstrapItalia and .versions.devKitItalia' snapshot-meta.json
+          BSI_COUNT=$(ls bsi/components/*.json 2>/dev/null | wc -l)
+          DK_COUNT=$(ls devkit/stories/*.json 2>/dev/null | wc -l)
+          echo "BSI components: $BSI_COUNT"
+          echo "Dev Kit stories: $DK_COUNT"
+          test "$BSI_COUNT" -ge 50
+          test "$DK_COUNT" -ge 35
+          jq -e '.variants | length > 0' devkit/stories/accordion.json
+          jq -e '. | length > 0' bsi/components/accordion.json
+          echo "✅ Validation passed"
+
+      - name: Commit snapshot to data-fetched branch
+        working-directory: data-fetched
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            BSI=$(jq -r '.versions.bootstrapItalia // "?"' snapshot-meta.json)
+            DK=$(jq -r '.versions.devKitItalia // "?"' snapshot-meta.json)
+            git commit -m "chore: snapshot $(date -u '+%Y-%m-%dT%H:%M:%SZ') — BSI $BSI / DK $DK"
+            git push origin data-fetched
+          fi
