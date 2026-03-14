@@ -25,20 +25,20 @@ jobs:
 
     steps:
       - name: Checkout main (scripts + src)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: resources-snapshot  # temporary — change to main before merge
           path: main
 
       - name: Checkout data-fetched branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: data-fetched
           path: data-fetched
           fetch-depth: 1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'npm'
@@ -49,7 +49,7 @@ jobs:
         run: npm ci
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/ms-playwright
           key: playwright-chromium-${{ hashFiles('main/package-lock.json') }}
@@ -62,13 +62,14 @@ jobs:
         working-directory: main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx tsx scripts/snapshot-static.ts --out ../data-fetched
+        run: npx tsx scripts/snapshot-static.ts --out ${{ github.workspace }}/data-fetched
 
       - name: Run snapshot-devkit
         working-directory: main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx tsx scripts/snapshot-devkit.ts --out ../data-fetched/devkit/stories
+        run: npx tsx scripts/snapshot-devkit.ts --out ${{ github.workspace }}/data-fetched/devkit/stories
+
 
       - name: Validate snapshot integrity
         working-directory: data-fetched
