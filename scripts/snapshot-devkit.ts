@@ -42,11 +42,11 @@ const outDir = args.includes('--out')
   : DEFAULT_OUT
 
 // ── Security: output directory must be within the project ─────────────────────
-
-const PROJECT_ROOT = resolve(import.meta.dirname, '..')
+// Allow sibling directories of the project root (for CI dual-checkout pattern)
 const resolvedOut = resolve(outDir)
-if (!resolvedOut.startsWith(PROJECT_ROOT)) {
-  console.error('❌ Output directory must be within the project')
+const projectParent = resolve(PROJECT_ROOT, '..')
+if (!resolvedOut.startsWith(PROJECT_ROOT) && !resolvedOut.startsWith(projectParent)) {
+  console.error('❌ Output directory must be within the project or its parent')
   process.exit(1)
 }
 
