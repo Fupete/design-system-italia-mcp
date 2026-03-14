@@ -1,7 +1,11 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
-import { slugify, slugFromStatusTitle, slugsToTry } from '../slugify.js'
+import { slugify, slugsToTry } from '../slugify.js'
 import type { ComponentStatus, ComponentVariant, CssToken, StatusValue } from '../types.js'
-import { BSI_STATUS_URL, BSI_COMPONENT_URL, BSI_COMPONENT_DEFAULT_SUBFOLDER, BSI_CUSTOM_PROPERTIES_URL, subfolderFromDocUrl } from '../constants.js'
+import {
+  SNAPSHOT_BSI_STATUS_URL,
+  SNAPSHOT_BSI_COMPONENT_URL,
+  SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL,
+} from '../constants.js'
 
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
 
@@ -11,7 +15,7 @@ async function fetchJson<T>(url: string): Promise<T> {
   return res.json() as Promise<T>
 }
 
-// ─── Source #2 — components_status.json ──────────────────────────────────────
+// ─── Source #2 — bsi/components-status.json ──────────────────────────────────
 
 interface RawStatusEntry {
   'title': string
@@ -26,7 +30,7 @@ interface RawStatusEntry {
   'check completato'?: boolean
   'status a11y check'?: string
   'notes / More'?: string
-  'notes / Issues'?: string  // string with URLs separated by " — "
+  'notes / Issues'?: string
 }
 
 type RawStatusJson = { items: RawStatusEntry[] }
@@ -35,13 +39,16 @@ export async function loadAllStatuses(): Promise<Map<string, ComponentStatus>> {
   const cached = cache.get<Map<string, ComponentStatus>>(CACHE_KEYS.bsiStatus())
   if (cached) return cached
 
-  const url = BSI_STATUS_URL
-  const raw = await fetchJson<RawStatusJson>(url)
-
+  const raw = await fetchJson<RawStatusJson>(SNAPSHOT_BSI_STATUS_URL)
   const result = new Map<string, ComponentStatus>()
 
   for (const entry of raw.items) {
-    const slug = slugFromStatusTitle(entry.title)
+    const slug = slugify(
+      entry.title
+        .replace(/`/g, '')
+        .replace(/\s*-\s*check\s+a11y\s+e\s+status\s*/i, '')
+        .trim()
+    )
     const status: ComponentStatus = {
       slug,
       name: entry.title.replace(/`/g, '').replace(/\s*-\s*check\s+a11y\s+e\s+status\s*/i, '').trim(),
@@ -71,7 +78,7 @@ export async function loadAllStatuses(): Promise<Map<string, ComponentStatus>> {
     result.set(slug, status)
   }
 
-  cache.set(CACHE_KEYS.bsiStatus(), result, TTL.bsiStatus)
+  cache.set(CACHE_KEYS.bsiStatus(), result, TTL.snapshot)
   return result
 }
 
@@ -84,38 +91,30 @@ export async function loadStatus(slug: string): Promise<ComponentStatus | null> 
   return null
 }
 
-// ─── Source #1 — api/componenti/{slug}.json ───────────────────────────────────
+// ─── Source #1 — bsi/components/{slug}.json ───────────────────────────────────
 
 type RawVariantsJson = Array<{ name: string; content: string }>
 
-export async function loadVariants(
-  slug: string,
-  bsiDocUrl?: string | null
-): Promise<ComponentVariant[]> {
+export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
   const key = CACHE_KEYS.bsiMarkup(slug)
   const cached = cache.get<ComponentVariant[]>(key)
   if (cached) return cached
 
-  const subfolder = bsiDocUrl
-    ? subfolderFromDocUrl(bsiDocUrl)
-    : BSI_COMPONENT_DEFAULT_SUBFOLDER
-
   for (const s of slugsToTry(slug)) {
-    const url = BSI_COMPONENT_URL(subfolder, s)
+    const url = SNAPSHOT_BSI_COMPONENT_URL(s)
     try {
       const raw = await fetchJson<RawVariantsJson>(url)
       const variants = raw.map((v) => ({ name: v.name, html: v.content }))
-      cache.set(key, variants, TTL.bsiMarkup)
+      cache.set(key, variants, TTL.snapshot)
       return variants
-    } catch(err) {
-      console.warn(`BSI markup fetch failed for slug "${s}": ${(err as Error).message}`)
+    } catch {
       continue
     }
   }
   return []
 }
 
-// ─── Source #3 — api/custom_properties.json ──────────────────────────────────
+// ─── Source #3 — bsi/custom-properties.json ──────────────────────────────────
 
 type RawTokenEntry = { 'variable-name': string; value: string; description: string }
 type RawTokensJson = Record<string, RawTokenEntry[]>
@@ -130,17 +129,14 @@ async function loadAllTokens(): Promise<RawTokensJson> {
   const cached = cache.get<RawTokensJson>(CACHE_KEYS.bsiTokens())
   if (cached) return cached
 
-  const url = BSI_CUSTOM_PROPERTIES_URL
-  const raw = await fetchJson<RawTokensJson>(url)
-  cache.set(CACHE_KEYS.bsiTokens(), raw, TTL.bsiTokens)
+  const raw = await fetchJson<RawTokensJson>(SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL)
+  cache.set(CACHE_KEYS.bsiTokens(), raw, TTL.snapshot)
   return raw
 }
 
 export async function loadTokens(slug: string): Promise<CssToken[]> {
   const all = await loadAllTokens()
 
-  // Try canonical slug first, then all known aliases
-  // e.g. "buttons" → tries "buttons", "button", "btn"
   for (const s of slugsToTry(slug)) {
     const entries = all[s]
     if (entries && entries.length > 0) {

@@ -55,7 +55,7 @@ export function registerGetComponentFull(server: McpServer): void {
       // ── Parallel fetch from all sources ──────────────────────────────────────
       const [variants, rawTokens, guidelines, devKitEntry, devKitComponent, openIssues, dsMeta] =
         await Promise.allSettled([
-          loadVariants(canonicalSlug, statusData?.sourceUrls.bsiDoc),  // now has correct subfolder
+          loadVariants(canonicalSlug),
           loadTokens(canonicalSlug),
           loadGuidelines(canonicalSlug),
           loadDevKitEntry(canonicalSlug),

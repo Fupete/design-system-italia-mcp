@@ -1,27 +1,16 @@
-import yaml from 'js-yaml'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import type { ComponentGuidelines } from '../types.js'
-import { DESIGNERS_COMPONENT_URL, DESIGNERS_SITE_BASE } from '../constants.js'
+import { SNAPSHOT_DESIGNERS_COMPONENT_URL, DESIGNERS_SITE_BASE } from '../constants.js'
 
-// ─── Fetch helper ─────────────────────────────────────────────────────────────
-
-async function fetchYaml(url: string): Promise<unknown> {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`Designers fetch failed: ${res.status} ${url}`)
-  const text = await res.text()
-  return yaml.load(text, { schema: yaml.JSON_SCHEMA })
-}
-
-// ─── Designers Italia YAML structure ─────────────────────────────────────────
+// ─── Snapshot JSON structure ──────────────────────────────────────────────────
 //
-// src/data/content/design-system/componenti/{slug}.yaml
+// data-fetched/designers/components/{slug}.json
 //
-// Relevant fields are nested in Jekyll CMS structures.
-// Empirically verified on accordion.yaml — adapt if other components
-// have different structure.
+// Raw YAML parsed to JSON by snapshot-static.ts at fetch time.
+// Same structure as the original YAML — no runtime yaml parsing needed.
 
-interface RawDesignersYaml {
+interface RawDesignersJson {
   components?: {
     hero?: {
       subtitle?: string
@@ -44,12 +33,11 @@ interface RawDesignersYaml {
 
 // ─── Parser ───────────────────────────────────────────────────────────────────
 
-function parseYaml(raw: unknown): ComponentGuidelines {
-  const data = raw as RawDesignersYaml
-  const hero = data?.components?.hero
+function parseGuidelines(raw: RawDesignersJson): ComponentGuidelines {
+  const hero = raw?.components?.hero
 
   // "Uso e accessibilità" tab is always the first [0]
-  const allComponents = data?.tabs?.[0]?.sectionsEditorial
+  const allComponents = raw?.tabs?.[0]?.sectionsEditorial
     ?.flatMap(s => s.components ?? []) ?? []
 
   function findText(titleMatch: string): string | null {
@@ -77,11 +65,13 @@ export async function loadGuidelines(slug: string): Promise<ComponentGuidelines 
     const cached = cache.get<ComponentGuidelines>(key)
     if (cached) return cached
 
-    const url = DESIGNERS_COMPONENT_URL(normalized)
+    const url = SNAPSHOT_DESIGNERS_COMPONENT_URL(normalized)
     try {
-      const raw = await fetchYaml(url)
-      const guidelines = parseYaml(raw)
-      cache.set(key, guidelines, TTL.designers)
+      const res = await fetch(url)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const raw = await res.json() as RawDesignersJson
+      const guidelines = parseGuidelines(raw)
+      cache.set(key, guidelines, TTL.snapshot)
       return guidelines
     } catch {
       continue

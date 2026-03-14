@@ -1,6 +1,6 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import type { CssToken } from '../types.js'
-import { DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
+import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL } from '../constants.js'
 
 // Map 1: --bsi-* → --it-* (from BSI scss/base/root.scss (v3))
 // Map 2: $it-* → value or another $it-* (from design-tokens-italia > _variables.scss)
@@ -75,46 +75,42 @@ async function loadTokenMap(): Promise<TokenMap> {
   const cached = cache.get<TokenMap>(CACHE_KEYS.designTokens())
   if (cached) return cached
 
-  // Parallel fetch
+  // Parallel fetch from snapshot branch
   const [rootScss, variablesScss] = await Promise.all([
-    fetchText(BSI_ROOT_SCSS_URL),
-    fetchText(DTI_VARIABLES_SCSS_URL),
+    fetchText(SNAPSHOT_BSI_ROOT_SCSS_URL),
+    fetchText(SNAPSHOT_DTI_VARIABLES_SCSS_URL),
   ])
 
-  const bridge = parseBridge(rootScss)       // --bsi-* → --it-*
-  const dtiRaw = parseDesignTokens(variablesScss) // --it-* → value or $it-* ref
+  const bridge = parseBridge(rootScss)
+  const dtiRaw = parseDesignTokens(variablesScss)
 
-  cache.set(CACHE_KEYS.designTokensDti(), dtiRaw, TTL.designTokensDti)
+  cache.set(CACHE_KEYS.designTokens(), dtiRaw, TTL.snapshot)
 
-  // Recursive DTI resolution: $it-spacing-base → --it-spacing-base → 1.5rem (24px)
   function resolveIt(name: string, visited = new Set<string>()): string | null {
-    if (visited.has(name)) return null  // loop protection
+    if (visited.has(name)) return null
     visited.add(name)
     const val = dtiRaw.get(name)
     if (!val) return null
-    // If still a reference to $it-* (parseDesignTokens saves it as --it-*)
     if (val.startsWith('--it-')) return resolveIt(val, visited)
     return val
   }
 
-  // Final map: --bsi-* → concrete value
   const map: TokenMap = new Map()
   for (const [bsiName, itName] of bridge) {
     const resolved = resolveIt(itName)
     if (resolved) map.set(bsiName, { value: resolved, via: itName })
   }
 
-  cache.set(CACHE_KEYS.designTokens(), map, TTL.designTokens)
+  cache.set(CACHE_KEYS.designTokens(), map, TTL.snapshot)
   return map
 }
 
 // DTI map cached separately for --it-* token search
 async function loadDtiMap(): Promise<DtiMap> {
-  const cached = cache.get<DtiMap>(CACHE_KEYS.designTokensDti())
+  const cached = cache.get<DtiMap>(CACHE_KEYS.designTokens())
   if (cached) return cached
-  // Not yet cached — trigger loadTokenMap which populates it as a side effect
   await loadTokenMap()
-  return cache.get<DtiMap>(CACHE_KEYS.designTokensDti()) ?? new Map()
+  return cache.get<DtiMap>(CACHE_KEYS.designTokens()) ?? new Map()
 }
 
 // ─── Token value enrichment with resolved value ───────────────────────────────

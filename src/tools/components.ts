@@ -114,7 +114,7 @@ export function registerGetComponent(server: McpServer): void {
       // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
       const canonicalSlug = status?.slug ?? slug
 
-      const allVariants = await loadVariants(canonicalSlug, status?.sourceUrls.bsiDoc)
+      const allVariants = await loadVariants(canonicalSlug)
 
       if (allVariants.length === 0) {
         warnings.push(`No BSI variants found for "${canonicalSlug}"`)
@@ -282,7 +282,7 @@ export function registerGetComponentVariant(server: McpServer): void {
       // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
       const canonicalSlug = status?.slug ?? slug
 
-      const allVariants = await loadVariants(canonicalSlug, status?.sourceUrls.bsiDoc)
+      const allVariants = await loadVariants(canonicalSlug)
       const storyVariants = await loadStoryVariants(canonicalSlug)
 
       const results: Array<{ name: string; html: string; source: string }> = []
