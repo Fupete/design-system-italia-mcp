@@ -1,0 +1,58 @@
+{
+  "slug": "icon",
+  "fetchedAt": "2026-03-15T16:46:46.659Z",
+  "tagName": "it-icon",
+  "props": [
+    {
+      "name": "name",
+      "type": "select",
+      "description": "Nome dell'icona da visualizzare",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "size",
+      "type": "select",
+      "description": "Dimensione dell'icona: 'xs' | 'sm' | (stringa vuota) | 'lg' | 'xl'",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "align",
+      "type": "select",
+      "description": "Allineamento verticale dell'icona: 'top' | 'middle' | 'bottom'",
+      "default": "middle",
+      "options": []
+    },
+    {
+      "name": "color",
+      "type": "select",
+      "description": "Varianti di colore",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Testo accessibile per le tecnologie assistive (A11Y)",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "src",
+      "type": "text",
+      "description": "Attributo per caricare un SVG esterno",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "padded",
+      "type": "boolean",
+      "description": "Crea un padding attorno all'icona, proporzionale alla dimensione dell’icona",
+      "default": "false",
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

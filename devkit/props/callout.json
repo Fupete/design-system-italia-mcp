@@ -1,0 +1,51 @@
+{
+  "slug": "callout",
+  "fetchedAt": "2026-03-15T16:46:46.406Z",
+  "tagName": "it-callout",
+  "props": [
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Variante di colore del callout",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "highlight",
+      "type": "boolean",
+      "description": "Applica lo stile highlight (bordo solo a sinistra)",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "callout-more",
+      "type": "boolean",
+      "description": "Applica lo stile \"Approfondimento\" all callout. Aggiungi eventuale contenuto collassabile da mostrare nello slot `more-content`",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "big-text",
+      "type": "boolean",
+      "description": "Applica lo stile per testo più grande all'interno del callout",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "heading-level",
+      "type": "select",
+      "description": "Livello di intestazione semantica per il titolo del callout",
+      "default": "h2",
+      "options": [
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6"
+      ]
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

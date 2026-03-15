@@ -1,0 +1,37 @@
+{
+  "slug": "navscroll",
+  "fetchedAt": "2026-03-15T16:46:46.656Z",
+  "tagName": "it-navscroll",
+  "props": [
+    {
+      "name": "for",
+      "type": "text",
+      "description": "Selettore del contenitore scrollabile da monitorare per determinare l'elemento attivo corrente ed eventualmente aggioranre la progress bar. Se non definito, viene usato document.scrollingElement",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "position",
+      "type": "select",
+      "description": "Posizione dello navscroll su mobile quando è chiuso",
+      "default": "bottom",
+      "options": []
+    },
+    {
+      "name": "sticky",
+      "type": "boolean",
+      "description": "Quando abilitato, il nav viene fissato in alto durante lo scroll della pagina (su desktop)",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "breakpoint",
+      "type": "number",
+      "description": "Breakpoint sotto il quale la navigazione viene collassata",
+      "default": "991",
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": "<Description>Lista di link con àncore per navigare velocemente a una sezione specifica della pagina in cui è contenuto il componente.</Description>"
+}

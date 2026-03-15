@@ -1,0 +1,8 @@
+{
+  "slug": "skiplinks",
+  "fetchedAt": "2026-03-15T16:46:46.834Z",
+  "tagName": "it-skiplinks",
+  "props": [],
+  "subcomponents": [],
+  "description": "<Description>Gli skiplinks sono scorciatoie di navigazione che consentono agli utenti di andare direttamente ai contenuti principali della pagina, soprattutto se questa è particolarmente complessa da navigare.</Description>\n\nQuesto componente permette a chi naviga sequenzialmente i contenuti di accedere a tutti i contenuti principali della pagina in modo più semplice. È particolarmente utile per chi usa la tastiera o tecnologie assistive come i lettori di schermo.\n\nDeve essere il primo contenuto della pagina. Se è presente l’elemento \\"
+}

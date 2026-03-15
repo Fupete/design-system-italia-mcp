@@ -1,0 +1,53 @@
+{
+  "slug": "card",
+  "fetchedAt": "2026-03-15T16:46:46.408Z",
+  "tagName": "it-card",
+  "props": [
+    {
+      "name": "full-height",
+      "type": "boolean",
+      "description": "La card riempie l'altezza del contenitore padre",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Variante di layout della card",
+      "default": "default",
+      "options": []
+    },
+    {
+      "name": "border-top",
+      "type": "select",
+      "description": "Aggiunge un bordo superiore colorato alla card per evidenziarla",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "heading-level",
+      "type": "select",
+      "description": "Livello di heading da usare per il titolo della card. Se non specificato, viene usato h3. Vedi la sezione \"Accessibilità\" della documentazione per maggiori dettagli.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "shadow",
+      "type": "select",
+      "description": "Modifica l'ombra della card.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "border",
+      "type": "select",
+      "description": "Imposta il valore 0 per rimuovere il bordo della card.",
+      "default": null,
+      "options": [
+        "0"
+      ]
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

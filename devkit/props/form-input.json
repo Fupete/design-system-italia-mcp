@@ -1,0 +1,184 @@
+{
+  "slug": "form-input",
+  "fetchedAt": "2026-03-15T16:46:46.558Z",
+  "tagName": "it-input",
+  "props": [
+    {
+      "name": "id",
+      "type": "text",
+      "description": "ID del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Etichetta del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "type",
+      "type": "select",
+      "description": null,
+      "default": "text",
+      "options": []
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "description": null,
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "value",
+      "type": "text",
+      "description": "Valore del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "form",
+      "type": "text",
+      "description": "ID html del form a cui è associato il campo, se il campo non si trova all'interno di una form",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "custom-validation",
+      "type": "boolean",
+      "description": "Se la validazione del campo è fatta esternamente (lato server o con plugin js - validazione custom), impostare questo attributo a `true`.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "validity-message",
+      "type": "text",
+      "description": "Messaggio da mostrare quando il campo è invalido nel caso di validazione esterna (validazione custom). Se impostato a '' (stringa vuota) il campo viene considerato valido.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "pattern",
+      "type": "text",
+      "description": "Pattern di validazione del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "min",
+      "type": "text",
+      "description": "Valore minimo consentito per un campo di tipo numerico o di tipo data",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "max",
+      "type": "text",
+      "description": "Valore massimo consentito per un campo di tipo numerico o di tipo data",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "description": "Incremento per ogni step (tramite i pulsanti +/-) nel caso di input di tipo numerico o di tipo data",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "minlength",
+      "type": "text",
+      "description": "Lunghezza minima del valore da inserire. Usato anche per validare la robustezza della password",
+      "default": "undefined. Se type=",
+      "options": []
+    },
+    {
+      "name": "maxlength",
+      "type": "text",
+      "description": "Lunghezza massima del valore da inserire.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "readonly",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "plaintext",
+      "type": "boolean",
+      "description": "Se il campo è readonly, con l'attributo 'plaintext' il campo assume l'aspetto di testo normalizzato.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "placeholder",
+      "type": "text",
+      "description": "Testo segnaposto",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "support-text",
+      "type": "text",
+      "description": "Testo di supporto",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "label-hidden",
+      "type": "boolean",
+      "description": "Se si vuole nascondere la label. Risulterà comunque accessibile per i lettori di schermo.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "size",
+      "type": "select",
+      "description": "Dimensione del campo: 'sm' | (non definito) | 'lg'",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "adaptive",
+      "type": "boolean",
+      "description": "Se il campo è `type=\"number\"`, con l\\",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "strength-meter",
+      "type": "boolean",
+      "description": "Se si vuole mostrare o meno il misuratore di robustezza della password nel caso di type='password'",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "suggestions",
+      "type": "boolean",
+      "description": "Se si vogliono mostrare i suggerimenti per l'insderimento di una password sicura.",
+      "default": "false",
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": "<Description>Campi per l'inserimento di dati testuali e numerici, in forma libera o in formati specifici, all'interno di un form</Description>\n\nPer il corretto funzionamento degli elementi di tipo \\"
+}

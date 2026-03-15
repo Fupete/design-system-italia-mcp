@@ -1,0 +1,70 @@
+{
+  "slug": "accordion",
+  "fetchedAt": "2026-03-15T16:46:46.418Z",
+  "tagName": "it-accordion",
+  "props": [
+    {
+      "name": "mode",
+      "type": "select",
+      "description": "Se impostato a `single`, solo un elemento dell'accordion può essere aperto contemporaneamente. Il default è `multiple`.",
+      "default": "multiple",
+      "options": []
+    },
+    {
+      "name": "background-active",
+      "type": "boolean",
+      "description": "Applica sfondo primario agli elementi attivi (quando il contenuto è visibile)",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "background-hover",
+      "type": "boolean",
+      "description": "Applica sfondo primario agli elementi al passaggio del mouse",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "left-icon",
+      "type": "boolean",
+      "description": "Mostra icone plus/minus a sinistra invece della freccia a destra",
+      "default": "false",
+      "options": []
+    }
+  ],
+  "subcomponents": [
+    {
+      "tagName": "it-accordion-item",
+      "props": [
+        {
+          "name": "Intestazione",
+          "type": "text",
+          "description": "Testo dell'header dell'Elemento richiudibile per l'esempio interattivo, inserito nello `slot heading`",
+          "default": "Elemento richiudibile",
+          "options": []
+        },
+        {
+          "name": "as",
+          "type": "select",
+          "description": "Livello di heading per l'header (h2-h6)",
+          "default": "h2",
+          "options": [
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6"
+          ]
+        },
+        {
+          "name": "default-open",
+          "type": "boolean",
+          "description": "Se true, l'elemento è aperto di default (stato iniziale)",
+          "default": "false",
+          "options": []
+        }
+      ]
+    }
+  ],
+  "description": "<Description>Costruisci accordion richiudibili verticalmente.</Description>\nPer ottimizzare l'ingombro dei contenuti di una pagina a volte è necessario usare degli elementi richiudibili (in gergo definiti richiudibili o collapse), che possono essere attivati indipendentemente l'uno dall'altro oppure in modo esclusivo con l'attivazione di solo un blocco alla volta (in gergo definiti fisarmoniche o accordion).\n\nIl componente Accordion è basato su [Collapse](?path=/docs/componenti-collapse--documentazione).\n\n<div class=\"callout callout-success\"><div class=\"callout-inner\"><div class=\"callout-title\"><span class=\"text\">Accessibilità</span></div>\n<p>\nL'accordion implementa le specifiche ARIA [WAI-ARIA Authoring Practices 1.1 accordion pattern](https://www.w3.org/TR/wai-aria-practices-1.1/#accordion) per garantire piena accessibilità:\\n\n• Navigazione da tastiera con tasti freccia per spostarsi tra gli elementi\\n\n• Supporto per <code>Space</code> ed <code>Enter</code> per attivare/disattivare elementi\\n\n• Attributi ARIA appropriati per comunicare lo stato agli screen reader\\n\n• Heading semantici configurabili per una corretta struttura del documento\\n\n• Rispetto delle preferenze di riduzione del movimento definite dall'utente per le animazioni di apertura/chiusura\n</p></div></div>\n\n### Differenza tra Collapse, Accordion e Tabs\n\nI componenti Accordion, Tabs e Collapse funzionano tutti nascondendo sezioni di contenuto che l’utente può scegliere di visualizzare. Evitare di usare questi componenti l’uno all’interno dell’altro.\n\nSe decidi di usare uno di questi componenti, considera quanto segue:\n\n- L’utente ha bisogno di visualizzare più di una sezione alla volta? L’accordion può mostrare più sezioni contemporaneamente, a differenza dei tabs.\n\n- L’utente deve passare rapidamente tra le sezioni? I tabs permettono di cambiare contenuto senza spostare le altre sezioni nella pagina, a differenza dell’accordion.\n\n- Ci sono molte sezioni di contenuto? L’accordion può contenere più sezioni perché sono disposte verticalmente, mentre i tabs sono disposti orizzontalmente.\n\n- Ci sono solo uno o due contenuti brevi e meno importanti? Il componente Collapse è più adatto perché visivamente più piccolo e meno prominente rispetto a un accordion o ai tabs.\n\n<br/>\n\n| Componente | Contenuti multipli | Visibilità | Esclusività | Uso tipico | Esempi |\n|----------|--------------------|-------------|--------------|-------------|---------|\n| **Collapse** | No | Singolo contenuto mostrato o nascosto | N/A | Mostrare o nascondere dettagli secondari | “Mostra dettagli”, “Visualizza termini” |\n| **Accordion** | Sì | Più sezioni espandibili | Solo una aperta alla volta *(consigliato)* | Raggruppare contenuti correlati in blocchi espandibili | FAQ, elenchi informativi |\n| **Tabs** | Sì | Una sezione visibile alla volta | Sempre esclusiva | Organizzare viste equivalenti o alternative | Schede di impostazioni, pannelli di dati |\n\n\n### Gruppi di elementi richiudibili\nGli elementi richiudibili sono molto spesso mostrati in gruppo, tipicamente usati per approfondire voci o argomenti mostrati nelle singole barre cliccabili."
+}

@@ -1,0 +1,86 @@
+{
+  "slug": "avatar",
+  "fetchedAt": "2026-03-15T16:46:46.437Z",
+  "tagName": "it-avatar",
+  "props": [
+    {
+      "name": "type",
+      "type": "select",
+      "description": "Tipo di contenuto dell'avatar. Se vuoto, viene determinato automaticamente: src → image, icon → icon, altrimenti text.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "size",
+      "type": "select",
+      "description": "Dimensione dell'avatar.",
+      "default": "md",
+      "options": []
+    },
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Colore di sfondo dell'avatar per avatar con testo.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "presence",
+      "type": "select",
+      "description": "Indicatore di presenza dell'utente.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "status",
+      "type": "select",
+      "description": "Indicatore di stato dell'account utente.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "src",
+      "type": "text",
+      "description": "URL dell'immagine per avatar di tipo immagine.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "alt",
+      "type": "text",
+      "description": "Testo alternativo per l'immagine dell'avatar.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "text",
+      "type": "text",
+      "description": "Testo per generare le iniziali dell'avatar.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "icon",
+      "type": "text",
+      "description": "Nome dell'icona per avatar di tipo icona.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "href",
+      "type": "text",
+      "description": "URL del link se l'avatar deve essere cliccabile.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "avatarTitle",
+      "type": "text",
+      "description": "Titolo per accessibilità e tooltip.",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": "<Description>Rappresentazione grafica di un utente.</Description>\n\nL'elemento avatar è la rappresentazione grafica di un utente e può includere un'immagine, un testo, un'icona o essere utilizzato come link.\n\nSono disponibili sei dimensioni: \\"
+}

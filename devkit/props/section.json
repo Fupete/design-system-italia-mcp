@@ -1,0 +1,30 @@
+{
+  "slug": "section",
+  "fetchedAt": "2026-03-15T16:46:46.817Z",
+  "tagName": "it-section",
+  "props": [
+    {
+      "name": "string",
+      "type": "select",
+      "description": "Variante grafica del componente, corrisponde alle classi di Bootstrap Italia",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "image",
+      "type": "text",
+      "description": "URL immagine di sfondo, ad esempio https://picsum.photos/1600/500",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "inverse",
+      "type": "boolean",
+      "description": "Applica il colore bianco ai testi. È utile quando la sezione ha un'immagine di sfondo scura, così da garantire il corretto contrasto e la leggibilità dei contenuti. Non è necessario con le varianti `emphasis` e `primary`, che applicano già automaticamente il testo bianco.",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": "<Description>Sezione per raggruppare contenuti coerenti e con sfondi dedicati</Description>\n\nIl componente \\"
+}

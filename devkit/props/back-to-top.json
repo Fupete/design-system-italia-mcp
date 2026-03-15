@@ -1,0 +1,79 @@
+{
+  "slug": "back-to-top",
+  "fetchedAt": "2026-03-15T16:46:46.420Z",
+  "tagName": "it-back-to-top",
+  "props": [
+    {
+      "name": "offset",
+      "type": "number",
+      "description": "Posizione Y espressa in pixel alla quale ritornarne al click sull'elemento",
+      "default": "0",
+      "options": []
+    },
+    {
+      "name": "scroll-limit",
+      "type": "number",
+      "description": "Posizione Y espressa in pixel alla quale far comparire l'elemento",
+      "default": "100",
+      "options": []
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "description": "Durata dell'animazione di scroll espressa in millisecondi",
+      "default": "800",
+      "options": []
+    },
+    {
+      "name": "small",
+      "type": "boolean",
+      "description": "Dimensione ridotta",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "inverse",
+      "type": "boolean",
+      "description": "Variante di colore invertito",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "shadow",
+      "type": "boolean",
+      "description": "Aggiunge un'ombra al pulsante",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "border",
+      "type": "boolean",
+      "description": "Abilita / disabilita il bordo sul bottone per garantire il contrasto del pulsante su sfondi non a contrasto",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "border-color",
+      "type": "text",
+      "description": "Colore del bordo",
+      "default": "Default: ",
+      "options": []
+    },
+    {
+      "name": "icon-color",
+      "type": "text",
+      "description": "Colore dell'icona",
+      "default": "inverse",
+      "options": []
+    },
+    {
+      "name": "it-aria-label",
+      "type": "text",
+      "description": "Etichetta aria per l'accessibilità",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

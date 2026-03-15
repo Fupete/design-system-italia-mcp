@@ -1,0 +1,37 @@
+{
+  "slug": "modal",
+  "fetchedAt": "2026-03-15T16:46:46.660Z",
+  "tagName": "it-modal",
+  "props": [
+    {
+      "name": "size",
+      "type": "select",
+      "description": "Dimensione della modale",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "position",
+      "type": "select",
+      "description": "Posizionamento della modale",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "scrollable",
+      "type": "boolean",
+      "description": "Abilita scroll interno al body",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Variante della modale",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

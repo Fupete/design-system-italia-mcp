@@ -1,0 +1,78 @@
+{
+  "slug": "video-player",
+  "fetchedAt": "2026-03-15T16:46:46.910Z",
+  "tagName": "it-video",
+  "props": [
+    {
+      "name": "src",
+      "type": "text",
+      "description": "Sorgente del video",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "poster",
+      "type": "text",
+      "description": "Sorgente dell'immagine di anteprima",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "type",
+      "type": "text",
+      "description": "Tipo del video.",
+      "default": "video/mp4",
+      "options": []
+    },
+    {
+      "name": "options",
+      "type": "object",
+      "description": "Opzioni per il video player. https://videojs.com/guides/options/ qui tutte le opzioni disponibili.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "track",
+      "type": "text",
+      "description": "Tracce per didascalie, sottotitoli, capitoli e descrizioni. Nel campo `kind`, indica la tipologia di traccia fra <ul><li>captions</li><li>subtitles</li><li>description</li><li>chapters</li><li>metadata</li></ul>",
+      "default": "[{kind:",
+      "options": []
+    },
+    {
+      "name": "consent-options",
+      "type": "object",
+      "description": "Oggetto per la configurazione del consenso dei cookie. <br/>Di default viene salvata una variabile nel localstorage con lo stesso nome del type del video, ma puoi personalizzarla passando in `consentOptions` un valore per `consentKey`. <br/>Inoltre, quando viene dato il consenso permanente per i cookie, puoi personalizzare il comportamento passando in questo oggetto due funzioni specifiche per la gestione della memorizzazione del consenso: `onAccept` e `isAccepted`.",
+      "default": "{}",
+      "options": []
+    },
+    {
+      "name": "lang",
+      "type": "select",
+      "description": "Lingua del player di cui verrano usate le corrispondenti 'translations'",
+      "default": "it",
+      "options": [
+        "it",
+        "en",
+        "fr",
+        "de",
+        "es"
+      ]
+    },
+    {
+      "name": "translations",
+      "type": "object",
+      "description": "Traduzioni del player per le diverse lingue. Di base è disponibile solo la lingua italiana. Usa questa prop per aggiungere le traduzioni in altre lingue.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "init-plugins",
+      "type": "text",
+      "description": "Nome della propria funzione presente nella window che verrà invocata da video.js per inizializzare eventuali plug-in aggiuntivi definiti dallo sviluppatore.",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

@@ -1,0 +1,114 @@
+{
+  "slug": "form-autocomplete",
+  "fetchedAt": "2026-03-15T16:46:46.587Z",
+  "tagName": "it-autocomplete",
+  "props": [
+    {
+      "name": "id",
+      "type": "text",
+      "description": "ID del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Etichetta del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "description": "Nome del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "value",
+      "type": "text",
+      "description": "Valore corrente del campo: non modificare direttamente, usare gli eventi e/o default-value per inizializzazione con valore preimpostato.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "form",
+      "type": "text",
+      "description": "ID html del form a cui è associato il campo, se il campo non si trova all'interno di una form",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "custom-validation",
+      "type": "boolean",
+      "description": "Se la validazione del campo è fatta esternamente (lato server o con plugin js - validazione custom), impostare questo attributo a `true`.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "validity-message",
+      "type": "text",
+      "description": "Messaggio da mostrare quando il campo è invalido nel caso di validazione esterna (validazione custom). Se impostato a '' (stringa vuota) il campo viene considerato valido.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "placeholder",
+      "type": "text",
+      "description": "Testo segnaposto",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "support-text",
+      "type": "text",
+      "description": "Testo di supporto",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "label-hidden",
+      "type": "boolean",
+      "description": "Nasconde visivamente l'etichetta",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "min-length",
+      "type": "number",
+      "description": "Numero minimo di caratteri prima di mostrare i suggerimenti",
+      "default": "0",
+      "options": []
+    },
+    {
+      "name": "defaultValue",
+      "type": "text",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "source",
+      "type": "object",
+      "description": "Sorgente di dati: array di oggetti `{value:string, label:string}` o funzione asincrona. Consulta la sezione \"Opzioni dinamiche\" per maggiori dettagli.",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

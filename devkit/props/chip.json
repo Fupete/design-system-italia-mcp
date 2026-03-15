@@ -1,0 +1,86 @@
+{
+  "slug": "chip",
+  "fetchedAt": "2026-03-15T16:46:46.416Z",
+  "tagName": "it-chip",
+  "props": [
+    {
+      "name": "size",
+      "type": "select",
+      "description": "Dimensione del chip (`sm` o `lg`).",
+      "default": "sm",
+      "options": []
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Testo mostrato all'interno della chip.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "href",
+      "type": "text",
+      "description": "Se valorizzato, la chip sarà un link (elemento `<a>`).",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Colore della chip, secondo le varianti di Bootstrap Italia.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "dismissable",
+      "type": "boolean",
+      "description": "Indica che la chip può essere chiusa, ma non inserisce alcun pulsante automaticamente. Il pulsante deve essere inserito nello slot `dismiss-button` dall'utilizzatore, comprensivo di eventuale JavaScript per handling di eventi. Per un esempio completo con Javascript, vedi la story [Chip con chiusura](?path=/story/componenti-chip--chip-con-chiusura).",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "isDisabled",
+      "type": "boolean",
+      "description": "Disabilita la chip. Utile in contesti non interattivi o di sola lettura.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "avatar",
+      "type": "text",
+      "description": "Percorso a un'immagine da mostrare come avatar, es. [randomuser.me](https://randomuser.me/api/portraits/men/46.jpg).",
+      "default": "https://randomuser.me/api/portraits/men/46.jpg",
+      "options": []
+    },
+    {
+      "name": "avatarAlt",
+      "type": "text",
+      "description": "Testo alternativo per l'immagine dell'avatar, utile per l'accessibilità.",
+      "default": "Alt avatar",
+      "options": []
+    },
+    {
+      "name": "a11yDescription",
+      "type": "text",
+      "description": "Testo descrittivo aggiuntivo per la chip, utile per l'accessibilità. Viene inserito come contenuto visivamente nascosto all'inizio della chip, ad esempio per specificare a che contenuto si fa riferimento, o assegnare una dicitur come \"Argomento:\".",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "withIcon",
+      "type": "boolean",
+      "description": "Simula la presenza di un'icona nella chip. Non è una proprietà del componente, ma serve per mostrare composizioni nel playground interattivo.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "withDismissButton",
+      "type": "boolean",
+      "description": "Simula la presenza di un pulsante di rimozione nella chip. Non è una proprietà del componente, ma serve per mostrare composizioni nel playground interattivo.",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

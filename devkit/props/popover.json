@@ -1,0 +1,29 @@
+{
+  "slug": "popover",
+  "fetchedAt": "2026-03-15T16:46:46.652Z",
+  "tagName": "it-popover",
+  "props": [
+    {
+      "name": "placement",
+      "type": "select",
+      "description": null,
+      "default": "bottom-start",
+      "options": [
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "top-start",
+        "top-end",
+        "right-start",
+        "right-end",
+        "bottom-start",
+        "bottom-end",
+        "left-start",
+        "left-end"
+      ]
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

@@ -1,0 +1,76 @@
+{
+  "slug": "button",
+  "fetchedAt": "2026-03-15T16:46:46.479Z",
+  "tagName": "it-button",
+  "props": [
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Varianti di colore",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "size",
+      "type": "select",
+      "description": "Dimensione del pulsante",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "block",
+      "type": "boolean",
+      "description": "Quando abilitato, estende il componente Button fino a prendere tutta la larghezza disponibile",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "outline",
+      "type": "boolean",
+      "description": "Applica il colore solamente al bordo, usando il colore di sfondo come colore interno del pulsante.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "icon",
+      "type": "boolean",
+      "description": "Se il pulsante mostra un'icona, è necessario aggiungere questo attributo.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "slot",
+      "type": "text",
+      "description": "Testo del pulsante",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "type",
+      "type": "select",
+      "description": "Tipologia di pulsante",
+      "default": "button",
+      "options": [
+        "button",
+        "submit",
+        "reset"
+      ]
+    },
+    {
+      "name": "value",
+      "type": "text",
+      "description": null,
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

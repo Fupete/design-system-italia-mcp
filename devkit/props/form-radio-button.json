@@ -1,0 +1,79 @@
+{
+  "slug": "form-radio-button",
+  "fetchedAt": "2026-03-15T16:46:46.566Z",
+  "tagName": "it-radio-group",
+  "props": [
+    {
+      "name": "id",
+      "type": "text",
+      "description": "ID del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "description": "Nome del campo. I radio dello stesso gruppo devono avere lo stesso name.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "grouped",
+      "type": "boolean",
+      "description": "Se il radio-group deve avere i suoi elementi raggruppati visivamente",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Se il gruppo di radio è disabilitato. Per l'omonimo attributo del componente it-radio, vedi la sezione dedicata",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "inline",
+      "type": "boolean",
+      "description": "Se il radio-group deve avere i suoi elementi visualizzati in linea",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "support-text",
+      "type": "text",
+      "description": "Testo di supporto per un singolo componente it-radio",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "form",
+      "type": "text",
+      "description": "ID html del form a cui è associato il componente it-radio-group, se non si trova all'interno di una form",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "custom-validation",
+      "type": "boolean",
+      "description": "Se la validazione del radio group è fatta esternamente (lato server o con plugin js - validazione custom), impostare questo attributo a `true`.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "validity-message",
+      "type": "text",
+      "description": "Messaggio da mostrare quando il radio group è invalido nel caso di validazione esterna (validazione custom). Se impostato a '' (stringa vuota) il campo viene considerato valido.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "description": "Se il radio group è obbligatorio",
+      "default": "false",
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

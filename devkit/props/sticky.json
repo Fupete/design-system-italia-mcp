@@ -1,0 +1,40 @@
+{
+  "slug": "sticky",
+  "fetchedAt": "2026-03-15T16:46:46.837Z",
+  "tagName": "it-sticky",
+  "props": [
+    {
+      "name": "stackable",
+      "type": "boolean",
+      "description": "Attiva/disattiva la possibilità di rendere l'elemento impilabile su altri elementi sticky presenti in pagina",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "paddingTop",
+      "type": "number",
+      "description": "Indica la distanza dall'elemento in sticky dal margine superiore",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "stickyClassName",
+      "type": "text",
+      "description": "Classi CSS da applicare all'elemento quando viene attivata la funzionalità sticky",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "positionType",
+      "type": "select",
+      "description": "Indica il valore della proprietà CSS `position`. I valori ammessi sono `sticky` o `fixed`",
+      "default": "sticky",
+      "options": [
+        "sticky",
+        "fixed"
+      ]
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

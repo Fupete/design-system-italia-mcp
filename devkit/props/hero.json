@@ -1,0 +1,23 @@
+{
+  "slug": "hero",
+  "fetchedAt": "2026-03-15T16:46:46.654Z",
+  "tagName": "it-hero",
+  "props": [
+    {
+      "name": "center",
+      "type": "boolean",
+      "description": "Allinea al centro il testo dello slot `text`.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "overlap",
+      "type": "boolean",
+      "description": "Sovrappone l'elemento che segue al componente Hero.",
+      "default": "false",
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

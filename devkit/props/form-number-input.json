@@ -1,0 +1,130 @@
+{
+  "slug": "form-number-input",
+  "fetchedAt": "2026-03-15T16:46:46.548Z",
+  "tagName": "it-input",
+  "props": [
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Etichetta del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "type",
+      "type": "select",
+      "description": null,
+      "default": "number",
+      "options": [
+        "number"
+      ]
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "description": null,
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "value",
+      "type": "text",
+      "description": "Valore del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "custom-validation",
+      "type": "boolean",
+      "description": "Se la validazione del campo è fatta esternamente (lato server o con plugin js), impostare questo attributo a `true`.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "validity-message",
+      "type": "text",
+      "description": "Messaggio da mostrare quando il campo è invalido nel caso di validazione esterna (validazione custom). Se impostato a '' (stringa vuota) il campo viene considerato valido.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "description": "Valore minimo consentito",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "description": "Valore massimo consentito",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "description": "Incremento per ogni step (utilizzato dai pulsanti +/-)",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "readonly",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "plaintext",
+      "type": "boolean",
+      "description": "Se il campo è `readonly`, con l'attributo 'plaintext' il campo assume l'aspetto di testo normalizzato.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "placeholder",
+      "type": "text",
+      "description": "Testo segnaposto",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "support-text",
+      "type": "text",
+      "description": "Testo di supporto",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "size",
+      "type": "select",
+      "description": "Dimensione del campo: 'sm' | (non definito) | 'lg'",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "adaptive",
+      "type": "boolean",
+      "description": "Se il campo è `type=\"number\"`, con l\\",
+      "default": "false",
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

@@ -1,0 +1,58 @@
+{
+  "slug": "rating",
+  "fetchedAt": "2026-03-15T16:46:46.825Z",
+  "tagName": "it-rating",
+  "props": [
+    {
+      "name": "name",
+      "type": "text",
+      "description": "Nome del campo per l'invio del form",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "value",
+      "type": "number",
+      "description": "Valore corrente della valutazione (0-5, 0 = nessuna stella selezionata)",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "icon",
+      "type": "text",
+      "description": "Nome dell'icona da utilizzare per gli item del rating",
+      "default": "it-star-outline",
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Se il rating è disabilitato",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "read-only",
+      "type": "boolean",
+      "description": "Se il rating è in sola lettura (non interattivo)",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "description": "Se la selezione è obbligatoria",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "max-elements",
+      "type": "number",
+      "description": "Numero massimo di elementi nel rating, per messaggi di supporto e accessibilità, modificare rispetto al default solo se si cambia il numero di elementi visualizzati rispetto al default di 5",
+      "default": "5",
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

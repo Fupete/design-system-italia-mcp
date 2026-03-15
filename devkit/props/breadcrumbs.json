@@ -1,0 +1,16 @@
+{
+  "slug": "breadcrumbs",
+  "fetchedAt": "2026-03-15T16:46:46.405Z",
+  "tagName": "it-breadcrumbs",
+  "props": [
+    {
+      "name": "dark",
+      "type": "boolean",
+      "description": "Imposta la variante a tema scuro.",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}

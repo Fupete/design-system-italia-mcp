@@ -1,0 +1,75 @@
+{
+  "slug": "dropdown",
+  "fetchedAt": "2026-03-15T16:46:46.549Z",
+  "tagName": "it-dropdown",
+  "props": [
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Testo del pulsante che apre il dropdown",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Disabilita il dropdown",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "alignment",
+      "type": "select",
+      "description": "Posizionamento del menu rispetto al pulsante",
+      "default": "bottom-start",
+      "options": [
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "top-start",
+        "top-end",
+        "right-start",
+        "right-end",
+        "bottom-start",
+        "bottom-end",
+        "left-start",
+        "left-end"
+      ]
+    },
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Variante grafica del pulsante",
+      "default": "primary",
+      "options": [
+        "primary",
+        "secondary",
+        "success",
+        "danger",
+        "warning",
+        "light",
+        "link"
+      ]
+    },
+    {
+      "name": "size",
+      "type": "select",
+      "description": "Dimensione del pulsante",
+      "default": null,
+      "options": [
+        "sm",
+        "lg"
+      ]
+    },
+    {
+      "name": "dark",
+      "type": "boolean",
+      "description": "Stile scuro per il menu dropdown",
+      "default": "false",
+      "options": []
+    }
+  ],
+  "subcomponents": [],
+  "description": null
+}
