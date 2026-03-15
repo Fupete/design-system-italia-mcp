@@ -20,39 +20,40 @@ Riferimento tecnico: [italia/dati-semantic-mcp](https://github.com/italia/dati-s
 design-system-italia-mcp/
 ├── src/
 │   ├── index.ts                  # Entry point — HTTP + stdio transport, /health, /cache/invalidate
-│   ├── cache.ts                  # In-memory cache con TTL per sorgente
-│   ├── constants.ts              # URL e costanti condivise — unica source of truth
+│   ├── cache.ts                  # In-memory cache — two TTL buckets: snapshot (24h) + githubIssues (15min)
+│   ├── constants.ts              # URL e costanti condivise — upstream (SNAPSHOT_* + upstream) — unica source of truth
+│   ├── fetch.ts                  # Shared fetch helpers (fetchJson, fetchText) per i loader
 │   ├── schemas.ts                # Zod output schemas per structuredContent
 │   ├── slugify.ts                # Normalizzazione slug + SLUG_ALIASES + slugsToTry()
 │   ├── types.ts                  # Tipi TypeScript condivisi
 │   ├── utils.ts                  # Utility condivise (formatTimestamp)
 │   ├── loaders/
-│   │   ├── bsi.ts                # Sorgenti #1 #2 #3 — markup, status, token BSI
-│   │   ├── designers.ts          # Sorgente #4 — YAML linee guida
-│   │   ├── devkit.ts             # Sorgenti #6 #7 — index + stories Dev Kit
-│   │   ├── github.ts             # Sorgente #8 — GitHub Issues REST API
-│   │   ├── meta.ts               # Sorgente #9 — versioni + designersUrl
-│   │   └── tokens.ts             # Sorgente #5 — DTI + bridge BSI→IT (valueResolved)
+│   │   ├── bsi.ts                # Sorgenti #1 #2 #3 — markup, status, token BSI (da snapshot)
+│   │   ├── designers.ts          # Sorgente #4 — JSON linee guida (da snapshot, no yaml a runtime)
+│   │   ├── devkit.ts             # Sorgenti #6 #7 — index + stories + props Dev Kit (da snapshot)
+│   │   ├── devkit-parser.ts      # Parser argTypes/props da stories.ts — usato da devkit.ts e snapshot-static.ts
+│   │   ├── github.ts             # Sorgente #8 — GitHub Issues REST API (unica sorgente live)
+│   │   ├── meta.ts               # Sorgente #9 — versioni + designersUrl (da snapshot)
+│   │   └── tokens.ts             # Sorgente #5 — DTI + bridge BSI→IT (da snapshot)
 │   └── tools/
 │       ├── components.ts         # list_components, get_component, search_components, get_component_variant
 │       ├── full.ts               # get_component_full
 │       ├── guidelines.ts         # get_component_guidelines, list_by_status, list_accessibility_issues
+│       ├── helpers.ts            # resolveSlug(), buildMeta() — shared tool helpers
 │       ├── issues.ts             # get_component_issues, get_project_board_status
 │       └── tokens.ts             # get_component_tokens, find_token
 ├── scripts/
-│   ├── canary.ts                 # Canary check — 12 sorgenti upstream
-│   ├── canary.config.ts          # Configurazione sorgenti canary
-│   ├── test-parser.ts            # Story variants parser tests (offline + --live)
+│   ├── canary.ts                 # Canary runner — upstream health + snapshot freshness
+│   ├── canary.config.ts          # Config canary: UPSTREAM_HEALTH + SNAPSHOT_FRESHNESS
+│   ├── snapshot-static.ts        # CI: fetch sorgenti statiche + props DevKit → data-fetched/
+│   ├── snapshot-devkit.ts        # CI: Playwright → markup HTML da Storybook → data-fetched/devkit/stories/
 │   ├── find-slug-mismatches.ts   # Cross-source slug discovery
-│   └── check-version.ts         # Verifica allineamento package.json + publiccode.yml + tag
+│   └── check-version.ts          # Verifica allineamento package.json + publiccode.yml + tag
 ├── .github/workflows/
 │   ├── ci.yml                    # Typecheck + build su push/PR
 │   ├── release.yml               # Docker multiarch + npm publish su tag
-│   └── upstream-canary.yml       # Daily canary 07:00 UTC — apre issue su failure
-├── Dockerfile
-├── publiccode.yml
-├── package.json                  # Version source of truth — letta da index.ts a runtime
-└── tsconfig.json
+│   ├── upstream-snapshot.yml     # Weekly safety-net 04:00 UTC + workflow_dispatch → popola data-fetched branch
+│   └── version-check.yml         # Nightly 03:00 UTC: controlla versioni npm/dsnav, triggera snapshot se cambiate
 ```
 
 **Regola soglia**: se un file supera ~400 righe, spezzarlo per modulo.
@@ -60,33 +61,33 @@ design-system-italia-mcp/
 
 ---
 
-## Sorgenti dati — 9 fonti, tutte read-only
+## Sorgenti dati — snapshot nightly + GitHub Issues live
 
-| # | Sorgente | URL / path | TTL cache | Note |
-|---|----------|------------|-----------|------|
-| 1 | BSI markup | `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/componenti/{slug}.json` | 24h | Stabile (esiste anche in 2.x) |
-| 2 | BSI status | `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/components_status.json` | 4h | Stabile (esiste anche in 2.x) |
-| 3 | BSI tokens | `https://raw.githubusercontent.com/italia/bootstrap-italia/3.x/api/custom_properties.json` | 24h | ⚠️ Alpha — introdotto in 3.x |
-| 4 | Designers YAML | `https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/content/design-system/componenti/{slug}.yaml` | 24h | Stabile |
-| 5 | Design Tokens | `https://raw.githubusercontent.com/italia/design-tokens-italia/main/dist/scss/_variables.scss` | 24h | Stabile |
-| 6 | Dev Kit index | `https://italia.github.io/dev-kit-italia/index.json` | 15 min | ⚠️ Alpha — basato su BSI 3.x |
-| 7 | Dev Kit stories | raw GitHub, path da importPath in #6 | 4h | ⚠️ Alpha — basato su BSI 3.x |
-| 8 | GitHub Issues | `https://api.github.com/search/issues?q={slug}+repo:italia/bootstrap-italia+repo:italia/design-ui-kit+repo:italia/dev-kit-italia+repo:italia/design-tokens-italia+is:open` | 15 min | Stabile |
-| 9 | DS meta/nav | `dsnav.yaml` (Designers Italia) + `package.json` (BSI 3.x) + `package.json` (Dev Kit `packages/dev-kit-italia/`) | 24h | Stabile |
+Tutte le sorgenti tranne GitHub Issues sono lette dal branch `data-fetched`,
+popolato nightly dal workflow `upstream-snapshot.yml` o on-demand da
+`version-check.yml` quando rileva una nuova versione upstream.
 
-**Perché BSI 3.x e non 2.x?**
-BSI 2.x è stabile e ha le API di stato componenti (#2) e markup HTML (#1).
-BSI 3.x aggiunge i token CSS strutturati per componente (`custom_properties.json` — sorgente #3)
-e `_root.scss` con i bridge `--bsi-* → --it-*`, necessari per la risoluzione `valueResolved`.
-Senza la 3.x non sarebbe possibile esporre il layer token. Dev Kit Italia è costruito su BSI 3.x.
+| # | Sorgente | Snapshot path | Note |
+|---|----------|--------------|------|
+| 1 | BSI markup | `data-fetched/bsi/components/{slug}.json` | Stabile |
+| 2 | BSI status | `data-fetched/bsi/components-status.json` | Stabile |
+| 3 | BSI tokens | `data-fetched/bsi/custom-properties.json` | ⚠️ Alpha |
+| 3b | BSI root.scss | `data-fetched/bsi/root.scss` | Bridge --bsi-* → --it-* |
+| 4 | Designers JSON | `data-fetched/designers/components/{slug}.json` | YAML→JSON in CI, stabile |
+| 5 | Design Tokens | `data-fetched/design-tokens/variables.scss` | Stabile |
+| 6 | Dev Kit index | `data-fetched/devkit/index.json` | ⚠️ Alpha |
+| 7 | Dev Kit stories | `data-fetched/devkit/stories/{slug}.json` | ⚠️ Alpha — Playwright extracted |
+| 7b | Dev Kit props | `data-fetched/devkit/props/{slug}.json` | ⚠️ Alpha — argTypes parsed in CI |
+| 8 | GitHub Issues | live fetch runtime | Unica sorgente live — TTL 15min |
+| 9 | DS meta/nav | `data-fetched/dsnav.json` + `snapshot-meta.json` | Versioni + nav |
 
-**Regola**: non modificare mai le URL upstream. Se una sorgente cambia
-struttura, aggiornare solo il loader corrispondente, non i tool.
+URL snapshot: costanti `SNAPSHOT_*` in `src/constants.ts`.
+URL upstream (canary + script): costanti esistenti in `src/constants.ts`.
 
-**Nota sorgente #9**: Dev Kit Italia è un monorepo workspace. Il `package.json`
-root ha `"version": "0.0.0"` — usare sempre `packages/dev-kit-italia/package.json`
-per la versione reale. Il `dsnav.yaml` espone anche `foundations[]` con URL delle
-pagine dei fondamenti — base per futuro tool `list_foundations`.
+**Perché branch data-fetched invece di fetch live?**
+Elimina dipendenze di rete a runtime per le sorgenti core. Diff nightly
+visibili su GitHub — cambio upstream rilevato prima di impattare il server.
+`dataFetchedAt` nelle risposte riflette la data dell'ultimo snapshot CI.
 
 ---
 
@@ -169,9 +170,11 @@ trasparentemente — restituisce tutti i match da entrambe le sorgenti.
 
 ## Cache
 
-Implementazione: in-memory Map con TTL per entry.
-TTL separati per sorgente (vedi tabella sopra).
-In sviluppo: TTL ridotti a 1h per tutte le sorgenti.
+Due bucket TTL:
+- `TTL.snapshot` — 24h (tutte le sorgenti da data-fetched branch)
+- `TTL.githubIssues` — 15 min (unica sorgente live)
+
+In sviluppo: `TTL.snapshot` ridotto a 1h.
 
 Endpoint di invalidazione manuale:
 ```
@@ -180,20 +183,18 @@ Authorization: Bearer <CACHE_INVALIDATION_TOKEN>
 Body: { "source": "all" | "bsi" | "designers" | "tokens" | "devkit" | "github" | "meta" }
 ```
 
-Non implementare invalidazione automatica per ora.
-
 ---
 
 ## Ogni risposta tool deve includere
 
 ```typescript
 meta: {
-  fetchedAt: string,           // ISO timestamp di assemblaggio risposta
-  sourceUrls: string[],        // URL delle sorgenti usate
-  warnings: string[],          // sorgenti mancanti o errori non fatali
-  versions?: DsVersions,       // designSystem / bootstrapItalia / devKitItalia
-  designersUrl?: string | null // URL verificato da dsnav.yaml, non dedotto
-  stability: 'alpha' | 'stable',  // alpha se include token BSI 3.x o Dev Kit
+  dataFetchedAt: string | null,  // data snapshot CI — null per Issues (live = formatTimestamp())
+  sourceUrls: string[],          // URL upstream delle sorgenti (non URL snapshot interni)
+  warnings: string[],            // sorgenti mancanti o errori non fatali
+  versions?: DsVersions,         // designSystem / bootstrapItalia / devKitItalia
+  designersUrl?: string | null,  // URL verificato da dsnav.json, non dedotto
+  stability: 'alpha' | 'stable', // alpha se include token BSI 3.x o Dev Kit
 }
 ```
 
@@ -253,12 +254,7 @@ non intercambiabili.
 ## Cosa NON fare
 
 - Non integrare conoscenza pregressa di Bootstrap nella logica dei tool
-- Non parsare SCSS o TypeScript — usare solo i JSON e file pre-processati
-  (eccezione: parser leggero su stories.ts (regex per argTypes + parseStoryVariants per render markup),
-  _variables.scss (regex per $it-* con risoluzione ricorsiva),
-  _root.scss branch 3.x (regex per bridge --bsi-* → --it-*))
 - Non usare `require()` — il progetto è ESM, usare sempre import statico
-- Non usare Playwright o browser headless — parsing statico soltanto
 - Non aggiungere dipendenze pesanti senza discuterne prima
 - Non duplicare la logica di slug matching fuori da `slugify.ts`
 - Non fallire silenziosamente se una sorgente non risponde
@@ -266,6 +262,13 @@ non intercambiabili.
 - Non dichiarare VERSION manualmente — viene letta da `package.json` a runtime via `createRequire`
 - Non usare `server.tool()` — usare sempre `server.registerTool()` con `title`, `inputSchema`, `annotations`
 - Non duplicare l'oggetto output — costruirlo una volta e riusare per `content` e `structuredContent`
+- Non leggere sorgenti upstream direttamente nei loader —
+  usare sempre le costanti SNAPSHOT_* che puntano al branch data-fetched
+- Non rimuovere parseStories() in devkit-parser.ts — serve per estrarre
+  props/argTypes dei web component nel CI snapshot (snapshot-static.ts)
+- Non usare Playwright nei loader o tool — Playwright è solo per snapshot-devkit.ts (CI)
+- Non committare manualmente nel branch data-fetched — popolato solo dal CI
+- Non parsare YAML a runtime — la conversione YAML→JSON avviene nel CI (snapshot-static.ts)
 
 ---
 
@@ -291,10 +294,12 @@ BSI variants e Dev Kit story variants usano la stessa interfaccia:
 ```json
 {
   "@modelcontextprotocol/sdk": "^1.12.0",
-  "js-yaml": "^4.1.0",
   "zod": "^3.23.0"
 }
 ```
+
+`js-yaml` è in devDependencies — usato solo dagli script snapshot CI, non a runtime.
+`playwright` è in devDependencies — usato solo da snapshot-devkit.ts in CI.
 
 Evitare dipendenze aggiuntive se possibile. Preferire API native Node.js.
 
