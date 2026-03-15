@@ -118,11 +118,57 @@ export const DEVKIT_STORIES_URL = (importPath: string): string =>
 export const DEVKIT_PACKAGE_JSON_URL =
   `${DEVKIT_RAW_BASE}/packages/dev-kit-italia/package.json`
 
+// ─── Snapshot branch — data-fetched ──────────────────────────────────────────
+// Loaders read from here instead of upstream live sources.
+// Populated nightly by upstream-snapshot workflow.
+// Only GitHub Issues remain live at runtime.
+
+const DATA_FETCHED_RAW_BASE =
+  'https://raw.githubusercontent.com/fupete/design-system-italia-mcp/data-fetched'
+
+export const SNAPSHOT_BSI_STATUS_URL =
+  `${DATA_FETCHED_RAW_BASE}/bsi/components-status.json`
+
+export const SNAPSHOT_BSI_COMPONENT_URL = (slug: string): string =>
+  `${DATA_FETCHED_RAW_BASE}/bsi/components/${slug}.json`
+
+export const SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL =
+  `${DATA_FETCHED_RAW_BASE}/bsi/custom-properties.json`
+
+export const SNAPSHOT_BSI_ROOT_SCSS_URL =
+  `${DATA_FETCHED_RAW_BASE}/bsi/root.scss`
+
+export const SNAPSHOT_DTI_VARIABLES_SCSS_URL =
+  `${DATA_FETCHED_RAW_BASE}/design-tokens/variables.scss`
+
+export const SNAPSHOT_DEVKIT_INDEX_URL =
+  `${DATA_FETCHED_RAW_BASE}/devkit/index.json`
+
+export const SNAPSHOT_DEVKIT_PROPS_URL = (slug: string): string =>
+  `${DATA_FETCHED_RAW_BASE}/devkit/props/${slug}.json`
+
+export const SNAPSHOT_DEVKIT_STORY_URL = (slug: string): string =>
+  `${DATA_FETCHED_RAW_BASE}/devkit/stories/${slug}.json`
+
+export const SNAPSHOT_DESIGNERS_COMPONENT_URL = (slug: string): string =>
+  `${DATA_FETCHED_RAW_BASE}/designers/components/${slug}.json`
+
+export const SNAPSHOT_DSNAV_URL =
+  `${DATA_FETCHED_RAW_BASE}/dsnav.json`
+
+export const SNAPSHOT_META_URL =
+  `${DATA_FETCHED_RAW_BASE}/snapshot-meta.json`
+
 // ─── GitHub REST API — source #8 ─────────────────────────────────────────────
 
 /** Issues search endpoint */
 export const GITHUB_SEARCH_ISSUES_URL =
   'https://api.github.com/search/issues'
+
+/** Canary: Dev Kit stories file count in data-fetched branch
+*  Note: requires GITHUB_TOKEN for reliable rate limits (60/h without, 5000/h with) */
+export const GITHUB_CONTENTS_DEVKIT_STORIES_URL =
+  'https://api.github.com/repos/fupete/design-system-italia-mcp/contents/devkit/stories?ref=data-fetched'
 
 /**
  * Monitored repos for issues
