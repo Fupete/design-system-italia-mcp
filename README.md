@@ -1,7 +1,8 @@
 # MCP Server per Design system .italia
 
 > ⚠️ **Progetto non ufficiale e sperimentale**
-> I dati sono forniti così come sono e potrebbero essere incompleti > o non aggiornati. Utilizzare a proprio rischio.
+> I dati sono forniti così come sono e potrebbero essere incompleti
+> o non aggiornati. Utilizzare a proprio rischio.
 
 > ⚠️ **Unofficial & experimental personal sandbox project**
 > Data is provided as-is and may be outdated or incomplete.
@@ -24,10 +25,10 @@
 
 ### Componenti
 * `list_components` — elenco di tutti i componenti con stato (Bootstrap Italia + Dev Kit Italia), `componentType`
-* `get_component(name, maxVariants?)` — markup HTML Bootstrap Italia (troncato, default 3) + story variants Dev Kit Italia ⚠️ alpha
-* `get_component_variant(name, variantName)` — **nuovo** — markup completo di una variante specifica per nome (BSI o Dev Kit, trasparente)
+* `get_component(name, maxVariants?)` — markup HTML Bootstrap Italia (troncato, default 3) + varianti Dev Kit Italia ⚠️ alpha
+* `get_component_variant(name, variantName)` — markup completo di una variante specifica per nome (BSI o Dev Kit, trasparente)
 * `search_components(query)` — ricerca per nome, slug, alias IT/EN o tag Dev Kit
-* **Tool principale:** `get_component_full(name)` — risposta aggregata: markup HTML + story variants + props Dev Kit Italia ⚠️ alpha + token CSS + linee guida + stato + issue — una sola query
+* **Tool principale:** `get_component_full(name)` — risposta aggregata: markup HTML + varianti + props Dev Kit Italia ⚠️ alpha + token CSS + linee guida + stato + issue — una sola query
 
 ### Token e variabili CSS
 - `get_component_tokens(name)` — variabili CSS `--bsi-*` personalizzabili
@@ -36,7 +37,7 @@
 
 ### Linee guida componenti e stato accessibilità (documentazione su Designers Italia)
 - `get_component_guidelines(name)` — linee guida d'uso, quando/come usarlo,
-  stato verifiche accessibilità complete 
+  stato verifiche accessibilità complete
 - `list_by_status(status)` — componenti per stato (…)
 - `list_accessibility_issues` — componenti con note di accessibilità aperte (liste manuali)
 
@@ -51,7 +52,7 @@
 Il valore principale del server è la **combinazione contestuale**
 delle sorgenti. Usa `get_component_full(name)` per ottenere in
 una singola chiamata: stato del componente, markup HTML, variabili CSS
-personalizzabili, componente da Dev Kit Italia, linee guida d'uso 
+personalizzabili, componente da Dev Kit Italia, linee guida d'uso
 e issue GitHub aperte.
 
 Esempio: *"Dimmi tutto sul componente Alert"* → stato del componente,
@@ -69,6 +70,7 @@ le prime 3 con markup completo + la lista nomi di tutte. Usa
 I nomi dei componenti funzionano in italiano e inglese:
 *"fisarmonica"*, *"dialog"*, *"pulsante"* trovano accordion, modal, buttons.
 
+---
 
 ## System prompt consigliato / Recommended system prompt
 
@@ -96,7 +98,6 @@ URL returned by the tool.
 ---
 
 ## Come connettersi / How to connect
-
 
 ### Claude Desktop / Cursor / VS Code (via NPX — consigliato)
 
@@ -138,7 +139,6 @@ Aggiungi al file di configurazione MCP del tuo client:
 > ```
 > Sostituisci `tuonome` e `v22.12.0` con i tuoi valori.
 
-
 #### Oppure via CLI (Claude Desktop):
 ```bash
 claude mcp add design-system-italia \
@@ -160,7 +160,6 @@ docker run -e GITHUB_TOKEN=your_token -p 8080:8080 \
   ghcr.io/fupete/design-system-italia-mcp
 ```
 
-
 > ⚠️ **Docker multiarch** — se `docker pull` scarica un'architettura incompatibile,
 > fai una build locale: `docker build -t design-system-italia-mcp .`
 
@@ -172,7 +171,8 @@ docker run -e GITHUB_TOKEN=your_token -p 8080:8080 \
 
 ## Sorgenti dati / Data sources
 
-I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch `data-fetched`.
+I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch
+[`data-fetched`](https://github.com/Fupete/design-system-italia-mcp/tree/data-fetched).
 Solo le GitHub Issues sono fetchate live a runtime.
 
 | # | Repo | Contenuto | Tool MCP |
@@ -183,7 +183,7 @@ Solo le GitHub Issues sono fetchate live a runtime.
 | 4 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `get_component_guidelines` |
 | 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` | `get_component_tokens` `find_token` |
 | 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti in italiano, importPath ⚠️ alpha | `list_components` `search_components` |
-| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML copia-incolla per variante, estratto da Storybook source panel ⚠️ alpha | `get_component` `get_component_variant` `get_component_full` |
+| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML per variante, estratto da Storybook source panel ⚠️ alpha | `get_component` `get_component_variant` `get_component_full` |
 | 7b | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni ⚠️ alpha | `get_component` `get_component_full` |
 | 8 | GitHub REST API | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` |
 | 9 | designers.italia.it + BSI + Dev Kit | Versioni Design System / BSI / Dev Kit. URL verificati pagine componenti | `meta` in tutte le risposte |
@@ -226,7 +226,6 @@ npm run dev
 npx tsx scripts/canary.ts
 ```
 
-
 Server disponibile su `http://localhost:8080/mcp`
 
 Testare con [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
@@ -261,7 +260,7 @@ Designers Italia — all **BSD-3-Clause**. Editorial content from Designers Ital
 (usage guidelines, accessibility notes) is licensed under **CC-BY-SA 4.0**.
 Derivatives of that content inherit the ShareAlike requirement.
 
-Dettagli completi, link agli autori upstream e riferimenti alle licenze: / 
+Dettagli completi, link agli autori upstream e riferimenti alle licenze: /
 Full provenance details, upstream author links and license references:
 [data-fetched branch README](https://github.com/Fupete/design-system-italia-mcp/blob/data-fetched/README.md)
 
