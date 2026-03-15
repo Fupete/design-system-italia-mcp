@@ -57,13 +57,17 @@ const outDir = args.includes('--out')
     ? args[args.indexOf('--out') + 1]!
     : DEFAULT_OUT
 
-// ── Security: output directory must be within the project ─────────────────────
-// Allow sibling directories of the project root (for CI dual-checkout pattern)
+// ── Security: output directory allowlist ──────────────────────────────────────
+// Only data-fetched/ (local) or sibling data-fetched/ (CI dual-checkout pattern)
+// are valid output targets. Prevents path traversal via --out argument.
 const resolvedOut = resolve(outDir)
-const projectParent = resolve(PROJECT_ROOT, '..')
-if (!resolvedOut.startsWith(PROJECT_ROOT) && !resolvedOut.startsWith(projectParent)) {
-    console.error('❌ Output directory must be within the project or its parent')
-    process.exit(1)
+const ALLOWED_OUT_DIRS = [
+  resolve(PROJECT_ROOT, 'data-fetched'),
+  resolve(PROJECT_ROOT, '..', 'data-fetched'),  // CI dual-checkout pattern
+]
+if (!ALLOWED_OUT_DIRS.some(d => resolvedOut === d || resolvedOut.startsWith(d + '/'))) {
+  console.error('❌ Output directory must be data-fetched/ or a subdirectory of it')
+  process.exit(1)
 }
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -184,6 +188,16 @@ const slugsWithSubfolder = statusJson.items.map(i => ({
         : BSI_COMPONENT_DEFAULT_SUBFOLDER,
 }))
 const slugs = slugsWithSubfolder.map(s => s.slug)
+
+// Slug sanitization
+const SLUG_RE = /^[a-z0-9-]+$/
+for (const s of slugs) {
+    if (!SLUG_RE.test(s)) {
+        console.error(`❌ Invalid slug "${s}" — must match /^[a-z0-9-]+$/`)
+        process.exit(1)
+    }
+}
+
 console.log(`  → ${slugs.length} component slugs`)
 
 // Step 2 — BSI per-component markup

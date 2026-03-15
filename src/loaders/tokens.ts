@@ -114,7 +114,7 @@ async function loadDtiMap(): Promise<DtiMap> {
   if (cached) return cached
   // Not yet cached — trigger loadTokenMap which populates it as a side effect
   await loadTokenMap()
-  return cache.get<DtiMap>(CACHE_KEYS.designTokens()) ?? new Map()
+  return cache.get<DtiMap>(CACHE_KEYS.designTokensDti()) ?? new Map()
 }
 
 // ─── Token value enrichment with resolved value ───────────────────────────────
