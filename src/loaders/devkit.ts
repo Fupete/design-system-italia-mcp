@@ -1,6 +1,6 @@
 import { fetchJson, fetchText } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
-import { slugFromStorybookTitle, slugsToTry } from '../slugify.js'
+import { slugFromStorybookTitle, slugsToTry, slugify } from '../slugify.js'
 import type { DevKitEntry, DevKitComponent, WebComponentProp, ComponentVariant, DevKitStorySnapshot } from '../types.js'
 import { SNAPSHOT_DEVKIT_INDEX_URL, SNAPSHOT_DEVKIT_STORY_URL, DEVKIT_STORYBOOK_BASE, DEVKIT_STORIES_URL } from '../constants.js'
 
@@ -61,7 +61,7 @@ export async function loadDevKitIndex(): Promise<DevKitIndex> {
 
 export async function loadDevKitEntry(slug: string): Promise<DevKitEntry | null> {
   const index = await loadDevKitIndex()
-  for (const s of slugsToTry(slug)) {
+  for (const s of slugsToTry(slugify(slug))) {
     const entry = index.get(s)
     if (entry) return entry
   }
@@ -75,11 +75,11 @@ export async function loadDevKitEntry(slug: string): Promise<DevKitEntry | null>
 export async function loadStoryVariants(
   slug: string
 ): Promise<ComponentVariant[] | null> {
-  const key = CACHE_KEYS.devKitStories(slug)
+  const normalized = slugify(slug)
+  const key = CACHE_KEYS.devKitStories(normalized)
   const cached = cache.get<ComponentVariant[]>(key)
   if (cached) return cached
-
-  for (const s of slugsToTry(slug)) {
+  for (const s of slugsToTry(normalized)) {
     const url = SNAPSHOT_DEVKIT_STORY_URL(s)
     try {
       const snapshot = await fetchJson<DevKitStorySnapshot>(url)

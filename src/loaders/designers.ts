@@ -60,13 +60,12 @@ function parseGuidelines(raw: RawDesignersJson): ComponentGuidelines {
 // ─── Public loader ────────────────────────────────────────────────────────────
 
 export async function loadGuidelines(slug: string): Promise<ComponentGuidelines | null> {
-  for (const s of slugsToTry(slug)) {
-    const normalized = slugify(s)
-    const key = CACHE_KEYS.designers(normalized)
+  const normalized = slugify(slug)
+  for (const s of slugsToTry(normalized)) {
+    const key = CACHE_KEYS.designers(s)
     const cached = cache.get<ComponentGuidelines>(key)
     if (cached) return cached
-
-    const url = SNAPSHOT_DESIGNERS_COMPONENT_URL(normalized)
+    const url = SNAPSHOT_DESIGNERS_COMPONENT_URL(s)
     try {
       const raw = await fetchJson<RawDesignersJson>(url)
       const guidelines = parseGuidelines(raw)
