@@ -1,6 +1,6 @@
 {
   "slug": "form-datepicker",
-  "fetchedAt": "2026-03-14T15:30:20.373Z",
+  "fetchedAt": "2026-03-15T11:26:53.789Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-datepicker--documentazione&viewMode=docs",
   "variants": [
     {
@@ -9,7 +9,7 @@
     },
     {
       "name": "limitare-la-selezione-a-un-intervallo-specifico",
-      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-03-14\" max=\"2026-03-17\">\n  <span slot=\"label\">Scegli una data nel periodo</span>\n</it-input>"
+      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-03-15\" max=\"2026-03-18\">\n  <span slot=\"label\">Scegli una data nel periodo</span>\n</it-input>"
     },
     {
       "name": "limitare-la-selezione-a-intervalli-regolari",
