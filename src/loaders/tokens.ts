@@ -1,17 +1,10 @@
+import { fetchText } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import type { CssToken } from '../types.js'
 import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL } from '../constants.js'
 
 // Map 1: --bsi-* → --it-* (from BSI scss/base/root.scss (v3))
 // Map 2: $it-* → value or another $it-* (from design-tokens-italia > _variables.scss)
-
-// ─── Fetch helper ─────────────────────────────────────────────────────────────
-
-async function fetchText(url: string): Promise<string> {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`Tokens fetch failed: ${res.status} ${url}`)
-  return res.text()
-}
 
 // ─── Design Tokens Italia _variables.scss parser ───────────────────────────────
 //

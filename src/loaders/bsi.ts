@@ -1,3 +1,4 @@
+import { fetchJson } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import type { ComponentStatus, ComponentVariant, CssToken, StatusValue } from '../types.js'
@@ -6,14 +7,6 @@ import {
   SNAPSHOT_BSI_COMPONENT_URL,
   SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL,
 } from '../constants.js'
-
-// ─── Fetch helper ─────────────────────────────────────────────────────────────
-
-async function fetchJson<T>(url: string): Promise<T> {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`BSI fetch failed: ${res.status} ${url}`)
-  return res.json() as Promise<T>
-}
 
 // ─── Source #2 — bsi/components-status.json ──────────────────────────────────
 

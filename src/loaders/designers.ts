@@ -1,3 +1,4 @@
+import { fetchJson } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import type { ComponentGuidelines } from '../types.js'
@@ -67,9 +68,7 @@ export async function loadGuidelines(slug: string): Promise<ComponentGuidelines 
 
     const url = SNAPSHOT_DESIGNERS_COMPONENT_URL(normalized)
     try {
-      const res = await fetch(url)
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const raw = await res.json() as RawDesignersJson
+      const raw = await fetchJson<RawDesignersJson>(url)
       const guidelines = parseGuidelines(raw)
       cache.set(key, guidelines, TTL.snapshot)
       return guidelines

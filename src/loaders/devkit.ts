@@ -1,21 +1,8 @@
+import { fetchJson, fetchText } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugFromStorybookTitle, slugsToTry } from '../slugify.js'
 import type { DevKitEntry, DevKitComponent, WebComponentProp, ComponentVariant, DevKitStorySnapshot } from '../types.js'
 import { SNAPSHOT_DEVKIT_INDEX_URL, SNAPSHOT_DEVKIT_STORY_URL, DEVKIT_STORYBOOK_BASE, DEVKIT_STORIES_URL } from '../constants.js'
-
-// ─── Fetch helpers ────────────────────────────────────────────────────────────
-
-async function fetchJson<T>(url: string): Promise<T> {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`DevKit fetch failed: ${res.status} ${url}`)
-  return res.json() as Promise<T>
-}
-
-async function fetchText(url: string): Promise<string> {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`DevKit fetch failed: ${res.status} ${url}`)
-  return res.text()
-}
 
 // ─── Source #6 — devkit/index.json ───────────────────────────────────────────
 
