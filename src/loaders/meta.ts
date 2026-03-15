@@ -1,23 +1,9 @@
-import yaml from 'js-yaml'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
-import { DESIGNERS_DSNAV_URL, BSI_PACKAGE_JSON_URL, DEVKIT_PACKAGE_JSON_URL, DESIGNERS_SITE_BASE } from '../constants.js'
-import type { DsVersions, DsNavEntry, DsMeta } from '../types.js'
+import { SNAPSHOT_DSNAV_URL, SNAPSHOT_META_URL, DESIGNERS_SITE_BASE } from '../constants.js'
+import type { DsVersions, DsNavEntry, DsMeta, SnapshotMeta } from '../types.js'
 
-// ─── Fetch helpers ────────────────────────────────────────────────────────────
-
-async function fetchJson<T>(url: string): Promise<T> {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`meta fetch failed: ${res.status} ${url}`)
-  return res.json() as Promise<T>
-}
-
-async function fetchText(url: string): Promise<string> {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`meta fetch failed: ${res.status} ${url}`)
-  return res.text()
-}
-
-// ─── Internal types for dsnav.yaml ───────────────────────────────────────────
+// ─── Internal types for dsnav.json ───────────────────────────────────────────
+// Snapshot is already parsed JSON — no yaml needed.
 
 interface RawNavItem {
   label: string
@@ -50,34 +36,39 @@ export async function loadDsMeta(): Promise<DsMeta> {
   if (cached) return cached
 
   // Parallel fetch — graceful fallback on single source error
-  const [dsnavText, bsiPackage, devKitPackage] = await Promise.allSettled([
-    fetchText(DESIGNERS_DSNAV_URL),
-    fetchJson<{ version: string }>(BSI_PACKAGE_JSON_URL),
-    fetchJson<{ version: string }>(DEVKIT_PACKAGE_JSON_URL),
+  const [dsnavResult, snapshotMetaResult] = await Promise.allSettled([
+    fetch(SNAPSHOT_DSNAV_URL).then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`)
+      return r.json() as Promise<RawDsnav>
+    }),
+    fetch(SNAPSHOT_META_URL).then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`)
+      return r.json() as Promise<SnapshotMeta>
+    }),
   ])
 
-  // Versions
+  // Versions — from snapshot-meta.json (already resolved at fetch time)
   const versions: DsVersions = {
     designSystem: '',
     bootstrapItalia: '',
     devKitItalia: '',
   }
 
-  if (bsiPackage.status === 'fulfilled') {
-    versions.bootstrapItalia = bsiPackage.value.version
-  }
-  if (devKitPackage.status === 'fulfilled') {
-    versions.devKitItalia = devKitPackage.value.version
+  if (snapshotMetaResult.status === 'fulfilled') {
+    versions.designSystem = snapshotMetaResult.value.versions.designSystem ?? ''
+    versions.bootstrapItalia = snapshotMetaResult.value.versions.bootstrapItalia ?? ''
+    versions.devKitItalia = snapshotMetaResult.value.versions.devKitItalia ?? ''
   }
 
-  // Navigation
+  // Navigation — from dsnav.json
   const components = new Map<string, DsNavEntry>()
   const foundations: DsNavEntry[] = []
 
-  if (dsnavText.status === 'fulfilled') {
-    const dsnav = yaml.load(dsnavText.value, { schema: yaml.JSON_SCHEMA }) as RawDsnav
+  if (dsnavResult.status === 'fulfilled') {
+    const dsnav = dsnavResult.value
 
-    if (dsnav.tag?.label) {
+    // fallback: if snapshot-meta failed, extract DS version from dsnav
+    if (!versions.designSystem && dsnav.tag?.label) {
       versions.designSystem = dsnav.tag.label
     }
 
@@ -112,10 +103,12 @@ export async function loadDsMeta(): Promise<DsMeta> {
     versions,
     components,
     foundations,
-    fetchedAt: new Date().toISOString(),
+    fetchedAt: snapshotMetaResult.status === 'fulfilled'
+      ? snapshotMetaResult.value.fetchedAt  // ← from snapshot-meta.json
+      : new Date().toISOString(),           // ← fallback
   }
 
-  cache.set(CACHE_KEYS.dsMeta(), meta, TTL.dsMeta)
+  cache.set(CACHE_KEYS.dsMeta(), meta, TTL.snapshot)
   return meta
 }
 

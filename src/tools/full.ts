@@ -1,7 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentFullOutput } from '../schemas.js'
-import { formatTimestamp } from '../utils.js'
 import { loadStatus, loadVariants, loadTokens } from '../loaders/bsi.js'
 import { loadGuidelines } from '../loaders/designers.js'
 import { resolveTokenValues } from '../loaders/tokens.js'
@@ -46,7 +45,9 @@ export function registerGetComponentFull(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      // Load status first — needed for correct variants subfolder
+      // Load status first — needed for correct sourceUrls assembly and canonical slug resolution.
+      // Note: get_component_full keeps its own loadStatus call instead of using resolveSlug()
+      // because it needs the full status object (sourceUrls.bsiDoc) for BSI URL construction.
       const statusData = await loadStatus(slug).catch(() => null)
 
       // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
@@ -55,7 +56,7 @@ export function registerGetComponentFull(server: McpServer): void {
       // ── Parallel fetch from all sources ──────────────────────────────────────
       const [variants, rawTokens, guidelines, devKitEntry, devKitComponent, openIssues, dsMeta] =
         await Promise.allSettled([
-          loadVariants(canonicalSlug, statusData?.sourceUrls.bsiDoc),  // now has correct subfolder
+          loadVariants(canonicalSlug),
           loadTokens(canonicalSlug),
           loadGuidelines(canonicalSlug),
           loadDevKitEntry(canonicalSlug),
@@ -104,9 +105,14 @@ export function registerGetComponentFull(server: McpServer): void {
       }
 
       // ── Warnings for missing data ─────────────────────────────────────────────
+
       if (!statusData) warnings.push(`Status not found for "${canonicalSlug}" in components_status.json`)
       if (variantsData.length === 0) warnings.push(`No HTML variants found for "${canonicalSlug}"`)
+
       if (!guidelinesData) warnings.push(`Component guidelines not found for "${canonicalSlug}" in Designers Italia`)
+      // License for Designers Italia contents
+      else warnings.push('Guidelines content © Designers Italia — CC-BY-SA 4.0. Derivatives inherit ShareAlike requirement. See https://designers.italia.it')
+
       if (!devKitEntryData) warnings.push(`"${canonicalSlug}" not found in Dev Kit Italia`)
       if (tokens.length === 0) warnings.push(`No CSS tokens found for "${canonicalSlug}"`)
 
@@ -154,7 +160,7 @@ export function registerGetComponentFull(server: McpServer): void {
         },
         openIssues: issuesData,
         meta: {
-          fetchedAt: formatTimestamp(),
+          dataFetchedAt: dsMetaData?.fetchedAt ?? null,
           sourceUrls,
           warnings,
           versions: dsMetaData?.versions ?? undefined,

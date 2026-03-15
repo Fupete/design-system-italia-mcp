@@ -24,6 +24,7 @@
 import {
   STATIC_SOURCES,
   PIPELINE_CHECKS,
+  UPSTREAM_HEALTH,
   type StaticSource,
   type PipelineCheck,
   type CheckResult,
@@ -121,23 +122,35 @@ const results: CheckResult[] = await Promise.all([
   ...PIPELINE_CHECKS.map(runPipeline),
 ]);
 
+const upstreamResults = results.slice(0, UPSTREAM_HEALTH.length);
+const snapshotResults = results.slice(UPSTREAM_HEALTH.length);
+
 const failed = results.filter((r) => !r.ok);
 const passed = results.length - failed.length;
 
-for (const r of results) {
+console.log("\n── Upstream health ──────────────────────────────────────────");
+for (const r of upstreamResults) {
   const icon = r.ok ? "✅" : "❌";
   const ms   = `${r.ms}ms`.padStart(6);
   const err  = r.error ? `  ${r.error}` : "";
   console.log(`${icon} [${ms}] ${r.name}${err}`);
 }
 
-console.log(`\n${passed}/${results.length} sources healthy`);
+console.log("\n── Snapshot freshness ───────────────────────────────────────");
+for (const r of snapshotResults) {
+  const icon = r.ok ? "✅" : "❌";
+  const ms   = `${r.ms}ms`.padStart(6);
+  const err  = r.error ? `  ${r.error}` : "";
+  console.log(`${icon} [${ms}] ${r.name}${err}`);
+}
+
+console.log(`\n${passed}/${results.length} checks passed`);
 
 if (process.env.GITHUB_OUTPUT) {
   const { appendFileSync } = await import("node:fs");
-  const lines = failed.map((r) => `- ${r.name}: ${r.error} (${r.url})`).join("\n");
+  const lines = failed.map((r) => `- ${r.name}: ${r.error ?? 'unknown'} (${r.url})`).join("\n");
   appendFileSync(process.env.GITHUB_OUTPUT, `HAS_FAILURES=${failed.length > 0}\n`);
-  appendFileSync(process.env.GITHUB_OUTPUT, `FAILED_SOURCES<<EOF\n${lines}\nEOF\n`);
+  appendFileSync(process.env.GITHUB_OUTPUT, `FAILED_SOURCES<<EOF\n${lines || 'none'}\nEOF\n`);
 }
 
 process.exit(failed.length > 0 ? 1 : 0);
