@@ -28,6 +28,7 @@ import { slugFromStatusTitle, slugsToTry } from '../src/slugify.js'
 import { writeFileSync, mkdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 import yaml from 'js-yaml'
+import { parseStories as parseDevKitStories } from '../src/loaders/devkit-parser.js'
 import {
     BSI_STATUS_URL,
     BSI_CUSTOM_PROPERTIES_URL,
@@ -40,6 +41,7 @@ import {
     DTI_VARIABLES_SCSS_URL,
     DEVKIT_INDEX_URL,
     DEVKIT_PACKAGE_JSON_URL,
+    DEVKIT_STORIES_URL,
     subfolderFromDocUrl,
 } from '../src/constants.js'
 
@@ -57,13 +59,17 @@ const outDir = args.includes('--out')
     ? args[args.indexOf('--out') + 1]!
     : DEFAULT_OUT
 
-// ── Security: output directory must be within the project ─────────────────────
-// Allow sibling directories of the project root (for CI dual-checkout pattern)
+// ── Security: output directory allowlist ──────────────────────────────────────
+// Only data-fetched/ (local) or sibling data-fetched/ (CI dual-checkout pattern)
+// are valid output targets. Prevents path traversal via --out argument.
 const resolvedOut = resolve(outDir)
-const projectParent = resolve(PROJECT_ROOT, '..')
-if (!resolvedOut.startsWith(PROJECT_ROOT) && !resolvedOut.startsWith(projectParent)) {
-    console.error('❌ Output directory must be within the project or its parent')
-    process.exit(1)
+const ALLOWED_OUT_DIRS = [
+  resolve(PROJECT_ROOT, 'data-fetched'),
+  resolve(PROJECT_ROOT, '..', 'data-fetched'),  // CI dual-checkout pattern
+]
+if (!ALLOWED_OUT_DIRS.some(d => resolvedOut === d || resolvedOut.startsWith(d + '/'))) {
+  console.error('❌ Output directory must be data-fetched/ or a subdirectory of it')
+  process.exit(1)
 }
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -184,6 +190,16 @@ const slugsWithSubfolder = statusJson.items.map(i => ({
         : BSI_COMPONENT_DEFAULT_SUBFOLDER,
 }))
 const slugs = slugsWithSubfolder.map(s => s.slug)
+
+// Slug sanitization
+const SLUG_RE = /^[a-z0-9-]+$/
+for (const s of slugs) {
+    if (!SLUG_RE.test(s)) {
+        console.error(`❌ Invalid slug "${s}" — must match /^[a-z0-9-]+$/`)
+        process.exit(1)
+    }
+}
+
 console.log(`  → ${slugs.length} component slugs`)
 
 // Step 2 — BSI per-component markup
@@ -235,6 +251,46 @@ results.push(await fetchAndSave(BSI_ROOT_SCSS_URL, 'bsi/root.scss'))
 
 console.log('  devkit/index.json')
 results.push(await fetchAndSave(DEVKIT_INDEX_URL, 'devkit/index.json'))
+
+// Step 4b — Dev Kit props
+// Reuse already-fetched index content instead of reading from disk
+// (disk read fails in --dry-run mode since files are not written)
+console.log('  devkit/props/ (web-component props from stories.ts)')
+
+const devkitIndexRaw = await fetchText(DEVKIT_INDEX_URL)
+const devkitIndex = JSON.parse(devkitIndexRaw) as {
+  entries?: Record<string, { id: string; type: string; importPath: string; storiesImports?: string[] }>
+}
+
+const propsItems = Object.values(devkitIndex.entries ?? {})
+  .filter(e => e.type === 'docs' && e.id.startsWith('componenti-'))
+  .map(e => {
+    const slug = e.id.replace(/^componenti-/, '').replace(/--.*$/, '')
+    const importPath = e.storiesImports?.[0] ?? e.importPath
+    // only dedicated (web-component) — bundle has no argTypes
+    const isDedicated = !importPath.includes('/dev-kit-italia/stories/components/')
+    return isDedicated ? { slug, importPath } : null
+  })
+  .filter(Boolean) as { slug: string; importPath: string }[]
+
+results.push(...await batchedFetchAndSave(
+  propsItems.map(({ slug, importPath }) => ({
+    url: DEVKIT_STORIES_URL(importPath),
+    path: `devkit/props/${slug}.json`,
+    transform: (raw: string) => {
+      const component = parseDevKitStories(raw)
+      if (!component) return JSON.stringify({ slug, fetchedAt: new Date().toISOString(), tagName: null, props: [], subcomponents: [], description: null }, null, 2)
+      return JSON.stringify({
+        slug,
+        fetchedAt: new Date().toISOString(),
+        tagName: component.tagName,
+        props: component.props,
+        subcomponents: component.subcomponents,
+        description: component.description,
+      } satisfies import('../src/types.js').DevKitPropsSnapshot, null, 2)
+    },
+  }))
+))
 
 // Step 5 — Design Tokens Italia
 
