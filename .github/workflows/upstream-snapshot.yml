@@ -12,7 +12,7 @@ name: Upstream snapshot
 
 on:
   schedule:
-    - cron: '0 3 * * 0'
+    - cron: '0 4 * * 0'  
   workflow_dispatch:
 
 permissions:
@@ -27,7 +27,7 @@ jobs:
       - name: Checkout main (scripts + src)
         uses: actions/checkout@v6
         with:
-          ref: resources-snapshot  # temporary — change to main before merge
+          ref: main
           path: main
 
       - name: Checkout data-fetched branch
