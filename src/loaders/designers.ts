@@ -37,8 +37,17 @@ interface RawDesignersJson {
 function parseGuidelines(raw: RawDesignersJson): ComponentGuidelines {
   const hero = raw?.components?.hero
 
-  // "Uso e accessibilità" tab is always the first [0]
-  const allComponents = raw?.tabs?.[0]?.sectionsEditorial
+  // "Uso e accessibilità" tab — find by title, fallback to first tab if renamed upstream
+  const usageTab = raw?.tabs?.find(t =>
+    t.title?.toLowerCase().includes('uso') ||
+    t.title?.toLowerCase().includes('accessibilit')
+  ) ?? raw?.tabs?.[0]  // fallback to first tab if title match fails
+
+  if (!usageTab && raw?.tabs?.length) {
+    console.warn('parseGuidelines: usage tab not found by title, no fallback available')
+  }
+
+  const allComponents = usageTab?.sectionsEditorial
     ?.flatMap(s => s.components ?? []) ?? []
 
   function findText(titleMatch: string): string | null {
