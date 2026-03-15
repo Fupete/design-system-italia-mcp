@@ -36,3 +36,18 @@ data-fetched/
 ## Last snapshot
 
 See `snapshot-meta.json` for versions and fetch timestamp.
+
+## License and data provenance
+
+All data in this branch is automatically fetched from public upstream repositories.
+No original content is added. Refer to each upstream repository for authoritative
+license terms and authors.
+
+| Source | Repository | Authors | License |
+|--------|-----------|---------|---------|
+| Bootstrap Italia | [italia/bootstrap-italia](https://github.com/italia/bootstrap-italia) | [AUTHORS](https://github.com/italia/bootstrap-italia/blob/main/AUTHORS) | [BSD-3-Clause](https://github.com/italia/bootstrap-italia/blob/main/LICENSE) |
+| Design Tokens Italia | [italia/design-tokens-italia](https://github.com/italia/design-tokens-italia) | [AUTHORS](https://github.com/italia/design-tokens-italia/blob/main/AUTHORS) | [BSD-3-Clause](https://github.com/italia/design-tokens-italia/blob/main/LICENSE) |
+| Dev Kit Italia | [italia/dev-kit-italia](https://github.com/italia/dev-kit-italia) | [AUTHORS](https://github.com/italia/dev-kit-italia/blob/main/AUTHORS) | [BSD-3-Clause](https://github.com/italia/dev-kit-italia/blob/main/LICENSE) |
+| Designers Italia | [italia/designers.italia.it](https://github.com/italia/designers.italia.it) | [AUTHORS](https://github.com/italia/designers.italia.it/blob/main/AUTHORS) | [BSD-3-Clause](https://github.com/italia/designers.italia.it/blob/main/LICENSE) (code), CC-BY-SA 4.0 (content) |
+
+> **Note on CC-BY-SA 4.0**: Editorial content from Designers Italia website (usage guidelines, accessibility notes, when/how to use) is licensed under CC-BY-SA 4.0. Derivatives of this content inherit the ShareAlike requirement.
