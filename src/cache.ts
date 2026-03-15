@@ -58,6 +58,7 @@ export const CACHE_KEYS = {
   designTokensDti: () => `tokens:dti`,
   devKitIndex: () => `devkit:index`,
   devKitStories: (slug: string) => `devkit:stories:${slug}`,
+  devKitProps: (slug: string) => `devkit:props:${slug}`,
   devKitComponent: (slug: string) => `devkit:component:${slug}`,
   githubIssues: (slug: string) => `github:issues:${slug}`,
   dsMeta: () => `ds:meta`,

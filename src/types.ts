@@ -170,6 +170,20 @@ export interface DevKitStorySnapshot {
   variants: DevKitStoryVariant[]
 }
 
+// ─── Dev Kit props snapshot — data-fetched/devkit/props/{slug}.json ───────────
+
+export interface DevKitPropsSnapshot {
+  slug: string
+  fetchedAt: string
+  tagName: string
+  props: WebComponentProp[]
+  subcomponents: Array<{
+    tagName: string
+    props: WebComponentProp[]
+  }>
+  description: string | null
+}
+
 // ─── Aggregated response get_component_full ───────────────────────────────────
 
 export type StabilityLevel = 'alpha' | 'stable'

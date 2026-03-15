@@ -144,6 +144,9 @@ export const SNAPSHOT_DTI_VARIABLES_SCSS_URL =
 export const SNAPSHOT_DEVKIT_INDEX_URL =
   `${DATA_FETCHED_RAW_BASE}/devkit/index.json`
 
+export const SNAPSHOT_DEVKIT_PROPS_URL = (slug: string): string =>
+  `${DATA_FETCHED_RAW_BASE}/devkit/props/${slug}.json`
+
 export const SNAPSHOT_DEVKIT_STORY_URL = (slug: string): string =>
   `${DATA_FETCHED_RAW_BASE}/devkit/stories/${slug}.json`
 
