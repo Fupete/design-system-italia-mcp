@@ -256,6 +256,26 @@ npx @modelcontextprotocol/inspector http://localhost:8080/mcp
 
 ---
 
+## Provenienza dei dati e licenze / Data provenance & licenses
+
+Il server recupera e serve dati da repository pubblici upstream.
+Le sorgenti includono Bootstrap Italia, Dev Kit Italia, Design Tokens Italia e
+Designers Italia — tutte **BSD-3-Clause**. I contenuti editoriali di Designers Italia
+(linee guida d'uso, note di accessibilità) sono licenziati sotto **CC-BY-SA 4.0**.
+I lavori derivati ereditano il requisito ShareAlike.
+
+This server fetches and serves data from public upstream repositories.
+Sources include Bootstrap Italia, Dev Kit Italia, Design Tokens Italia and
+Designers Italia — all **BSD-3-Clause**. Editorial content from Designers Italia
+(usage guidelines, accessibility notes) is licensed under **CC-BY-SA 4.0**.
+Derivatives of that content inherit the ShareAlike requirement.
+
+Dettagli completi, link agli autori upstream e riferimenti alle licenze: / 
+Full provenance details, upstream author links and license references:
+[data-fetched branch README](https://github.com/Fupete/design-system-italia-mcp/blob/data-fetched/README.md)
+
+---
+
 ## Licenza / License
 
 BSD 3-Clause — © 2026 Daniele Tabellini (Fupete)

@@ -42,6 +42,8 @@ export function registerGetComponentGuidelines(server: McpServer): void {
         warnings.push(`Component status not found for "${canonicalSlug}"`)
       }
 
+      warnings.push('Guidelines content © Designers Italia — CC-BY-SA 4.0. Derivatives inherit ShareAlike requirement. See https://designers.italia.it')
+      
       warnings.push(ALPHA_WARNING)
 
       return {
