@@ -162,6 +162,11 @@ export const SNAPSHOT_META_URL =
 export const GITHUB_SEARCH_ISSUES_URL =
   'https://api.github.com/search/issues'
 
+/** Canary: Dev Kit stories file count in data-fetched branch
+*  Note: requires GITHUB_TOKEN for reliable rate limits (60/h without, 5000/h with) */
+export const GITHUB_CONTENTS_DEVKIT_STORIES_URL =
+  'https://api.github.com/repos/fupete/design-system-italia-mcp/contents/devkit/stories?ref=data-fetched'
+
 /**
  * Monitored repos for issues
  * Order: main → kit → dependencies
