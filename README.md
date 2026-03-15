@@ -14,7 +14,8 @@ data-fetched/
 │   └── root.scss                  — bridge --bsi-* → --it-*
 ├── devkit/
 │   ├── index.json                 — Storybook index
-│   └── stories/{slug}.json        — copy-paste HTML markup per component
+│   ├── stories/{slug}.json        — copy-paste HTML markup per component
+│   └── props/{slug}.json          — web component props (argTypes, it-* attributes)
 ├── design-tokens/
 │   └── variables.scss             — global --it-* tokens
 ├── designers/
