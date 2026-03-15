@@ -30,12 +30,12 @@ description:
     documentation: "https://github.com/fupete/design-system-italia-mcp#readme"
     features:
       - Espone 12 tool MCP per accesso strutturato al Design System .italia
-      - Aggrega 9 sorgenti dati ufficiali in tempo reale
+      - Aggrega 9 sorgenti dati tramite snapshot CI nightly (solo GitHub Issues live)
       - Risoluzione catena token CSS (--bsi-* → --it-* → valore concreto) (alpha BSI v3)
       - Linee guida d'uso e stato accessibilità per componente
       - Issue GitHub live sui repository del design system
+      - Cache con due bucket TTL. Snapshot 24h, GitHub Issues 15min
       - Versioni verificate di Design system, Bootstrap Italia e Dev Kit Italia (alpha v1)
-      - Cache con TTL configurabile per sorgente
       - Deploy universale via Docker (locale o VPS EU)
   en:
     localisedName: "MCP Server for Design System .italia"
