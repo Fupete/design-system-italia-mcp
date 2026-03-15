@@ -1,10 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
-import { formatTimestamp } from '../utils.js'
 import { ZGetComponentTokensOutput } from '../schemas.js'
 import { loadStatus, loadTokens, searchTokens } from '../loaders/bsi.js'
 import { resolveTokenValues, searchDesignTokens } from '../loaders/tokens.js'
 import { slugify } from '../slugify.js'
+import { loadDsMeta } from '../loaders/meta.js'
+import { buildMeta } from './helpers.js'
 import { ALPHA_WARNING, BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
 
 // ─── Tool: get_component_tokens ───────────────────────────────────────────────
@@ -26,7 +27,10 @@ export function registerGetComponentTokens(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      const status = await loadStatus(slug)
+      const [status, dsMeta] = await Promise.all([
+        loadStatus(slug),
+        loadDsMeta(),
+      ])
       const canonicalSlug = status?.slug ?? slug
 
       // Load BSI tokens
@@ -69,13 +73,15 @@ export function registerGetComponentTokens(server: McpServer): void {
           scssExpression: byType.scssExpression.length,
         },
         meta: {
-          fetchedAt: formatTimestamp(),
-          sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
+          ...buildMeta({
+            dsMeta,
+            sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
+            warnings,
+            stability: 'alpha',
+          }),
           note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
             'resolvedVia: intermediate --it-* token in the resolution chain (--bsi-* → --it-* → value). ' +
             'null = resolution not available, value is already literal or another --bsi-* variable.',
-          warnings,
-          stability: 'alpha' as const,
         },
       }
 
@@ -103,6 +109,7 @@ export function registerFindToken(server: McpServer): void {
     async ({ query }) => {
       query = query.trim()
       const warnings: string[] = []
+      const dsMeta = await loadDsMeta()
 
       warnings.push(ALPHA_WARNING)
 
@@ -140,12 +147,12 @@ export function registerFindToken(server: McpServer): void {
                   total: globalResults.length,
                   results: globalResults,
                 },
-                meta: {
-                  fetchedAt: formatTimestamp(),
+                meta: buildMeta({
+                  dsMeta,
                   sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL],
                   warnings,
-                  stability: 'alpha' as const,
-                },
+                  stability: 'alpha',
+                }),
               },
               null,
               2

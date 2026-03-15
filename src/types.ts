@@ -137,6 +137,39 @@ export interface DsMeta {
   fetchedAt: string
 }
 
+// ─── Snapshot metadata — data-fetched/snapshot-meta.json ─────────────────────
+
+export interface SnapshotSourceMeta {
+  ok: boolean
+  fetchedAt: string
+  error?: string
+}
+
+export interface SnapshotMeta {
+  fetchedAt: string
+  versions: DsVersions
+  stats: {
+    total: number
+    ok: number
+    failed: number
+  }
+  sources: Record<string, SnapshotSourceMeta>
+}
+
+// ─── Dev Kit story snapshot — data-fetched/devkit/stories/{slug}.json ─────────
+
+export interface DevKitStoryVariant {
+  name: string   // heading id, e.g. "elemento-richiudibile"
+  html: string   // clean copy-paste HTML markup
+}
+
+export interface DevKitStorySnapshot {
+  slug: string
+  fetchedAt: string
+  devkitUrl: string
+  variants: DevKitStoryVariant[]
+}
+
 // ─── Aggregated response get_component_full ───────────────────────────────────
 
 export type StabilityLevel = 'alpha' | 'stable'
@@ -175,7 +208,7 @@ export interface ComponentFull {
 
   // always present
   meta: {
-    fetchedAt: string
+    dataFetchedAt: string | null // sources snapshot date
     sourceUrls: string[]
     warnings: string[]
     stability: StabilityLevel

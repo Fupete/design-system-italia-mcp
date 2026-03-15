@@ -1,11 +1,11 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
-import { formatTimestamp } from '../utils.js'
 import { loadAllStatuses, loadStatus } from '../loaders/bsi.js'
 import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
+import { buildMeta } from './helpers.js'
 import { ALPHA_WARNING, BSI_STATUS_URL, DESIGNERS_COMPONENT_URL, DEVKIT_INDEX_URL } from '../constants.js'
 
 // ─── Tool: get_component_guidelines ──────────────────────────────────────────
@@ -82,7 +82,7 @@ export function registerGetComponentGuidelines(server: McpServer): void {
                   figma: status?.sourceUrls.figma ?? null,
                 },
                 meta: {
-                  fetchedAt: formatTimestamp(),
+                  dataFetchedAt: dsMeta?.fetchedAt ?? null,
                   sourceUrls: [DESIGNERS_COMPONENT_URL(canonicalSlug), BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   warnings,
                   stability: 'alpha' as const,
@@ -118,7 +118,10 @@ export function registerListByStatus(server: McpServer): void {
     },
     async ({ library, status }) => {
       status = status.trim()
-      const allStatuses = await loadAllStatuses()
+      const [allStatuses, dsMeta] = await Promise.all([
+        loadAllStatuses(),
+        loadDsMeta(),
+      ])
       const statusUpper = status.toUpperCase().trim()
 
       const results = [...allStatuses.values()]
@@ -140,11 +143,12 @@ export function registerListByStatus(server: McpServer): void {
                 status: statusUpper,
                 total: results.length,
                 results,
-                meta: {
-                  fetchedAt: formatTimestamp(),
+                meta: buildMeta({
+                  dsMeta,
                   sourceUrls: [BSI_STATUS_URL],
-                  stability: 'stable' as const,
-                },
+                  warnings: [],
+                  stability: 'stable',
+                }),
               },
               null,
               2
@@ -169,7 +173,10 @@ export function registerListAccessibilityIssues(server: McpServer): void {
       annotations: { readOnlyHint: true },
     },
     async () => {
-      const allStatuses = await loadAllStatuses()
+      const [allStatuses, dsMeta] = await Promise.all([
+        loadAllStatuses(),
+        loadDsMeta(),
+      ])
 
       const results = [...allStatuses.values()]
         .filter((s) => {
@@ -199,11 +206,12 @@ export function registerListAccessibilityIssues(server: McpServer): void {
               {
                 total: results.length,
                 results,
-                meta: {
-                  fetchedAt: formatTimestamp(),
+                meta: buildMeta({
+                  dsMeta,
                   sourceUrls: [BSI_STATUS_URL],
-                  stability: 'stable' as const,
-                },
+                  warnings: [],
+                  stability: 'stable',
+                }),
               },
               null,
               2

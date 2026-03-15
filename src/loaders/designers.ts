@@ -1,27 +1,17 @@
-import yaml from 'js-yaml'
+import { fetchJson } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import type { ComponentGuidelines } from '../types.js'
-import { DESIGNERS_COMPONENT_URL, DESIGNERS_SITE_BASE } from '../constants.js'
+import { SNAPSHOT_DESIGNERS_COMPONENT_URL, DESIGNERS_SITE_BASE } from '../constants.js'
 
-// ─── Fetch helper ─────────────────────────────────────────────────────────────
-
-async function fetchYaml(url: string): Promise<unknown> {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`Designers fetch failed: ${res.status} ${url}`)
-  const text = await res.text()
-  return yaml.load(text, { schema: yaml.JSON_SCHEMA })
-}
-
-// ─── Designers Italia YAML structure ─────────────────────────────────────────
+// ─── Snapshot JSON structure ──────────────────────────────────────────────────
 //
-// src/data/content/design-system/componenti/{slug}.yaml
+// data-fetched/designers/components/{slug}.json
 //
-// Relevant fields are nested in Jekyll CMS structures.
-// Empirically verified on accordion.yaml — adapt if other components
-// have different structure.
+// Raw YAML parsed to JSON by snapshot-static.ts at fetch time.
+// Same structure as the original YAML — no runtime yaml parsing needed.
 
-interface RawDesignersYaml {
+interface RawDesignersJson {
   components?: {
     hero?: {
       subtitle?: string
@@ -44,12 +34,20 @@ interface RawDesignersYaml {
 
 // ─── Parser ───────────────────────────────────────────────────────────────────
 
-function parseYaml(raw: unknown): ComponentGuidelines {
-  const data = raw as RawDesignersYaml
-  const hero = data?.components?.hero
+function parseGuidelines(raw: RawDesignersJson): ComponentGuidelines {
+  const hero = raw?.components?.hero
 
-  // "Uso e accessibilità" tab is always the first [0]
-  const allComponents = data?.tabs?.[0]?.sectionsEditorial
+  // "Uso e accessibilità" tab — find by title, fallback to first tab if renamed upstream
+  const usageTab = raw?.tabs?.find(t =>
+    t.title?.toLowerCase().includes('uso') ||
+    t.title?.toLowerCase().includes('accessibilit')
+  ) ?? raw?.tabs?.[0]  // fallback to first tab if title match fails
+
+  if (!usageTab && raw?.tabs?.length) {
+    console.warn('parseGuidelines: usage tab not found by title, no fallback available')
+  }
+
+  const allComponents = usageTab?.sectionsEditorial
     ?.flatMap(s => s.components ?? []) ?? []
 
   function findText(titleMatch: string): string | null {
@@ -71,17 +69,16 @@ function parseYaml(raw: unknown): ComponentGuidelines {
 // ─── Public loader ────────────────────────────────────────────────────────────
 
 export async function loadGuidelines(slug: string): Promise<ComponentGuidelines | null> {
-  for (const s of slugsToTry(slug)) {
-    const normalized = slugify(s)
-    const key = CACHE_KEYS.designers(normalized)
+  const normalized = slugify(slug)
+  for (const s of slugsToTry(normalized)) {
+    const key = CACHE_KEYS.designers(s)
     const cached = cache.get<ComponentGuidelines>(key)
     if (cached) return cached
-
-    const url = DESIGNERS_COMPONENT_URL(normalized)
+    const url = SNAPSHOT_DESIGNERS_COMPONENT_URL(s)
     try {
-      const raw = await fetchYaml(url)
-      const guidelines = parseYaml(raw)
-      cache.set(key, guidelines, TTL.designers)
+      const raw = await fetchJson<RawDesignersJson>(url)
+      const guidelines = parseGuidelines(raw)
+      cache.set(key, guidelines, TTL.snapshot)
       return guidelines
     } catch {
       continue

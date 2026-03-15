@@ -3,7 +3,7 @@ import { z } from 'zod'
 // ─── Shared ───────────────────────────────────────────────────────────────────
 
 export const ZMeta = z.object({
-  fetchedAt: z.string(),
+  dataFetchedAt: z.string().nullable(),
   sourceUrls: z.array(z.string()),
   warnings: z.array(z.string()),
   stability: z.enum(['alpha', 'stable']),

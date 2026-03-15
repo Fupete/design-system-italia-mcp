@@ -1,17 +1,10 @@
+import { fetchText } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import type { CssToken } from '../types.js'
-import { DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
+import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL } from '../constants.js'
 
 // Map 1: --bsi-* → --it-* (from BSI scss/base/root.scss (v3))
 // Map 2: $it-* → value or another $it-* (from design-tokens-italia > _variables.scss)
-
-// ─── Fetch helper ─────────────────────────────────────────────────────────────
-
-async function fetchText(url: string): Promise<string> {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`Tokens fetch failed: ${res.status} ${url}`)
-  return res.text()
-}
 
 // ─── Design Tokens Italia _variables.scss parser ───────────────────────────────
 //
@@ -75,20 +68,20 @@ async function loadTokenMap(): Promise<TokenMap> {
   const cached = cache.get<TokenMap>(CACHE_KEYS.designTokens())
   if (cached) return cached
 
-  // Parallel fetch
+  // Parallel fetch from snapshot branch
   const [rootScss, variablesScss] = await Promise.all([
-    fetchText(BSI_ROOT_SCSS_URL),
-    fetchText(DTI_VARIABLES_SCSS_URL),
+    fetchText(SNAPSHOT_BSI_ROOT_SCSS_URL),
+    fetchText(SNAPSHOT_DTI_VARIABLES_SCSS_URL),
   ])
 
-  const bridge = parseBridge(rootScss)       // --bsi-* → --it-*
-  const dtiRaw = parseDesignTokens(variablesScss) // --it-* → value or $it-* ref
+  const bridge = parseBridge(rootScss)
+  const dtiRaw = parseDesignTokens(variablesScss)
 
-  cache.set(CACHE_KEYS.designTokensDti(), dtiRaw, TTL.designTokensDti)
+  cache.set(CACHE_KEYS.designTokensDti(), dtiRaw, TTL.snapshot)
 
   // Recursive DTI resolution: $it-spacing-base → --it-spacing-base → 1.5rem (24px)
   function resolveIt(name: string, visited = new Set<string>()): string | null {
-    if (visited.has(name)) return null  // loop protection
+    if (visited.has(name)) return null
     visited.add(name)
     const val = dtiRaw.get(name)
     if (!val) return null
@@ -104,7 +97,7 @@ async function loadTokenMap(): Promise<TokenMap> {
     if (resolved) map.set(bsiName, { value: resolved, via: itName })
   }
 
-  cache.set(CACHE_KEYS.designTokens(), map, TTL.designTokens)
+  cache.set(CACHE_KEYS.designTokens(), map, TTL.snapshot)
   return map
 }
 

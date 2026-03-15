@@ -1,7 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentFullOutput } from '../schemas.js'
-import { formatTimestamp } from '../utils.js'
 import { loadStatus, loadVariants, loadTokens } from '../loaders/bsi.js'
 import { loadGuidelines } from '../loaders/designers.js'
 import { resolveTokenValues } from '../loaders/tokens.js'
@@ -55,7 +54,7 @@ export function registerGetComponentFull(server: McpServer): void {
       // ── Parallel fetch from all sources ──────────────────────────────────────
       const [variants, rawTokens, guidelines, devKitEntry, devKitComponent, openIssues, dsMeta] =
         await Promise.allSettled([
-          loadVariants(canonicalSlug, statusData?.sourceUrls.bsiDoc),  // now has correct subfolder
+          loadVariants(canonicalSlug),
           loadTokens(canonicalSlug),
           loadGuidelines(canonicalSlug),
           loadDevKitEntry(canonicalSlug),
@@ -154,7 +153,7 @@ export function registerGetComponentFull(server: McpServer): void {
         },
         openIssues: issuesData,
         meta: {
-          fetchedAt: formatTimestamp(),
+          dataFetchedAt: dsMetaData?.fetchedAt ?? null,
           sourceUrls,
           warnings,
           versions: dsMetaData?.versions ?? undefined,

@@ -36,20 +36,15 @@ class Cache {
 export const cache = new Cache()
 
 // ─── Per-source TTL (ms) ──────────────────────────────────────────────────────
+// Two buckets:
+//   snapshot — all sources from data-fetched branch (updated nightly)
+//   issues   — GitHub Issues (only live source at runtime)
 
 const DEV = process.env.NODE_ENV !== 'production'
 
 export const TTL = {
-  bsiMarkup: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
-  bsiStatus: DEV ? 60 * 60_000 : 4 * 60 * 60_000,  // 1h dev,  4h prod
-  bsiTokens: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
-  designers: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
-  designTokens: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
-  designTokensDti: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
-  devKitIndex: DEV ? 15 * 60_000 : 15 * 60_000,        // 15 min sempre
-  devKitStories: DEV ? 60 * 60_000 : 4 * 60 * 60_000,  // 1h dev,  4h prod
-  githubIssues: DEV ? 15 * 60_000 : 15 * 60_000,        // 15 min sempre
-  dsMeta: DEV ? 60 * 60_000 : 24 * 60 * 60_000,   // 1h dev, 24h prod
+  snapshot: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
+  githubIssues: 15 * 60_000,                         // 15 min always
 }
 
 // ─── Cache key prefixes ───────────────────────────────────────────────────────
@@ -63,7 +58,7 @@ export const CACHE_KEYS = {
   designTokensDti: () => `tokens:dti`,
   devKitIndex: () => `devkit:index`,
   devKitStories: (slug: string) => `devkit:stories:${slug}`,
-  devKitStoryVariants: (slug: string) => `devkit:story-variants:${slug}`,
+  devKitComponent: (slug: string) => `devkit:component:${slug}`,
   githubIssues: (slug: string) => `github:issues:${slug}`,
   dsMeta: () => `ds:meta`,
 }
