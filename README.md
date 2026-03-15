@@ -14,9 +14,9 @@
 
 ## Cos'è / What it is
 
-**IT** — Server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia, web component e props Dev Kit Italia ⚠️ alpha, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate.
+**IT** — Server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia, web component e props Dev Kit Italia ⚠️ alpha, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
 
-**EN** — An unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia components and HTML markup, Dev Kit Italia web components and props ⚠️ alpha, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues.
+**EN** — An unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia components and HTML markup, Dev Kit Italia web components and props ⚠️ alpha, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot on the `data-fetched` branch.
 
 ---
 
@@ -59,7 +59,8 @@ markup HTML con varianti, variabili CSS con valori risolti, web component e prop
 eventuali note di accessibilità, issue GitHub aperte.
 
 Ogni risposta include le versioni delle sorgenti (Design System .italia, Bootstrap Italia,
-Dev Kit Italia), URL verificato della documentazione ufficiale e timestamp dell'ultimo fetch.
+Dev Kit Italia), URL verificato della documentazione ufficiale e `dataFetchedAt` —
+la data dell'ultimo snapshot CI, non il momento della richiesta.
 
 Per componenti con molte varianti (es. Card con 30+), `get_component` restituisce
 le prime 3 con markup completo + la lista nomi di tutte. Usa
@@ -171,44 +172,33 @@ docker run -e GITHUB_TOKEN=your_token -p 8080:8080 \
 
 ## Sorgenti dati / Data sources
 
-Il server non ospita dati propri. Legge direttamente dai
-repository ufficiali in tempo reale.
+I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch `data-fetched`.
+Solo le GitHub Issues sono fetchate live a runtime.
 
+| # | Repo | Contenuto | Tool MCP |
+|---|------|-----------|----------|
+| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Markup HTML varianti per componente | `get_component` `list_components` `search_components` |
+| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Lista ~55 componenti, stato librerie (BSI/UI Kit), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` |
+| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Token CSS `--bsi-*` per-componente con descrizioni semantiche ⚠️ alpha | `get_component_tokens` `find_token` |
+| 4 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `get_component_guidelines` |
+| 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` | `get_component_tokens` `find_token` |
+| 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti in italiano, importPath ⚠️ alpha | `list_components` `search_components` |
+| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML copia-incolla per variante, estratto da Storybook source panel ⚠️ alpha | `get_component` `get_component_variant` `get_component_full` |
+| 7b | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni ⚠️ alpha | `get_component` `get_component_full` |
+| 8 | GitHub REST API | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` |
+| 9 | designers.italia.it + BSI + Dev Kit | Versioni Design System / BSI / Dev Kit. URL verificati pagine componenti | `meta` in tutte le risposte |
 
-| # | Repo | File / endpoint | Contenuto | Tool MCP | TTL cache |
-|---|------|-----------------|-----------|----------|-----------|
-| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/componenti/{slug}.json` | Markup HTML varianti per componente | `get_component` `list_components` `search_components` | Lunga (per release) |
-| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/components_status.json` | Lista ~55 componenti, stato per libreria (BSI/UI Kit), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` | Media (4h) |
-| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | `api/custom_properties.json` | Token CSS `--bsi-*` per-componente con descrizioni semantiche. Prefisso canonico BSI v3 ⚠️ alpha | `get_component_tokens` `find_token` | Lunga (per release) |
-| 4 | [designers.italia.it](https://github.com/italia/designers.italia.it) | `src/data/content/design-system/componenti/{slug}.yaml` | Linee guida d'uso, accessibilità, stato redazionale, quando/come usare | `get_component_guidelines` | Lunga (24h) |
-| 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | `dist/scss/_variables.scss` | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` per i designer | `get_component_tokens` (campo `valueResolved`) `find_token` | Lunga (24h) |
-| 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `italia.github.io/dev-kit-italia/index.json` | Indice Storybook: tag stato (`a11y-ok` `alpha` `new` `web-component`), varianti in italiano, URL docs, importPath → path esatto stories.ts ⚠️ alpha | `list_components` `search_components` `get_component_guidelines` | Breve (15-30 min) |
-| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `packages/{slug}/stories/it-{slug}.stories.ts` (path da #6) | Props `it-*`: nome attributo HTML, tipo, descrizione IT, default, opzioni. Sottocomponenti ⚠️ alpha | `get_component` `get_component_variant` `get_component_full` | Media (4h) |
-| 8 | GitHub REST API | `search/issues?q={slug}+repo:italia/...+is:open` | Issue aperte sui repo: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` | Breve (15-30 min) |
-| 9 | [designers.italia.it](https://github.com/italia/designers.italia.it) + [bootstrap-italia](https://github.com/italia/bootstrap-italia) + [dev-kit-italia](https://github.com/italia/dev-kit-italia) | `src/data/dsnav.yaml` + `package.json` (×2) | Versioni Design System / BSI / Dev Kit Italia. URL verificati pagine componenti e fondamenti su designers.italia.it | `meta` in tutte le risposte | Lunga (24h) |
+Le sorgenti 1–7b e 9 sono aggiornate nightly e cached per 24h.
+La sorgente 8 (GitHub Issues) è l'unica fetchata live a runtime (cache 15 min).
+`dataFetchedAt` nelle risposte riflette la data dell'ultimo snapshot CI.
 
-> ⚠️ **Layer token in fase alpha** — Il server usa Bootstrap Italia 3.x (alpha) e Dev Kit Italia (alpha).
-> La 3.x è necessaria per accedere ai token CSS strutturati per componente (`custom_properties.json`,
-> `_root.scss`) e all'integrazione completa con Design Tokens Italia — funzionalità non presenti in BSI 2.x.
-> Le API di stato componenti e markup HTML esistono in entrambe le versioni e sono stabili,
-> ma token CSS e web component Dev Kit possono avere breaking changes prima della release stabile.
-> Non usare il layer token in produzione senza verificare lo stato upstream.
+> ⚠️ **Layer token e web component in fase alpha** — Il server usa Bootstrap Italia 3.x (alpha)
+> e Dev Kit Italia (alpha). Token CSS `--bsi-*` e web component `it-*` possono avere
+> breaking changes prima della release stabile.
 
-> ⚠️ **Token layer in alpha** — This server uses Bootstrap Italia 3.x (alpha) and Dev Kit Italia (alpha).
-> 3.x is required for structured per-component CSS tokens (`custom_properties.json`, `_root.scss`)
-> and full Design Tokens Italia integration — features not available in BSI 2.x.
-> Component status and markup HTML APIs exist in both versions and are stable,
-> but CSS tokens and Dev Kit web components may have breaking changes before stable release.
-> Do not use the token layer in production without checking upstream status.
-
-**Note:**
-- TTL indicativi: cache lunga (24h) per sorgenti stabili, breve (15 min) per sorgenti volatili (Dev Kit index, GitHub Issues). Endpoint di invalidazione manuale protetto da token disponibile
-- Sorgenti #1 #2: markup e stato componenti — presenti anche in BSI 2.x stabile, struttura consolidata
-- Sorgenti #3 #6 #7: token CSS per-componente e web component Dev Kit — introdotti in BSI 3.x ⚠️ alpha
-- Sorgenti #1 #2 #3: stesso repo BSI, loader condiviso con cache unica per repo
-- Sorgenti #6 #7: Dev Kit Italia, due fetch — index.json come indice, stories.ts per dettaglio props. L'`importPath` in #6 indica il path esatto del file #7
-- Sorgente #9: fetch parallelo con `Promise.allSettled` — non esposta come tool separato, popola il campo `meta.versions` e `meta.designersUrl` in tutte le risposte
-- `get_component_full` aggrega tutte le sorgenti in una risposta unica
+> ⚠️ **Token and web component layer in alpha** — This server uses Bootstrap Italia 3.x (alpha)
+> and Dev Kit Italia (alpha). CSS tokens `--bsi-*` and web components `it-*` may have
+> breaking changes before stable release.
 
 ---
 
@@ -218,6 +208,7 @@ repository ufficiali in tempo reale.
 - [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/typescript-sdk)
 - Streamable HTTP transport / stdio transport (via `TRANSPORT=stdio`)
 - Docker (self-hosting — locale o VPS)
+- Playwright (CI only — snapshot Dev Kit Storybook markup)
 
 ---
 
@@ -231,7 +222,7 @@ cp .env.example .env
 # aggiungi GITHUB_TOKEN in .env
 npm run dev
 
-# Verifica sorgenti upstream
+# Verifica sorgenti upstream e freschezza snapshot
 npx tsx scripts/canary.ts
 ```
 
