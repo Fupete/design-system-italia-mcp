@@ -5,6 +5,7 @@ import { loadStatus, loadTokens, searchTokens } from '../loaders/bsi.js'
 import { resolveTokenValues, searchDesignTokens } from '../loaders/tokens.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
+import { buildMeta } from './helpers.js'
 import { ALPHA_WARNING, BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
 
 // ─── Tool: get_component_tokens ───────────────────────────────────────────────
@@ -72,13 +73,15 @@ export function registerGetComponentTokens(server: McpServer): void {
           scssExpression: byType.scssExpression.length,
         },
         meta: {
-          dataFetchedAt: dsMeta?.fetchedAt ?? null,
-          sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
+          ...buildMeta({
+            dsMeta,
+            sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
+            warnings,
+            stability: 'alpha',
+          }),
           note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
             'resolvedVia: intermediate --it-* token in the resolution chain (--bsi-* → --it-* → value). ' +
             'null = resolution not available, value is already literal or another --bsi-* variable.',
-          warnings,
-          stability: 'alpha' as const,
         },
       }
 
@@ -144,12 +147,12 @@ export function registerFindToken(server: McpServer): void {
                   total: globalResults.length,
                   results: globalResults,
                 },
-                meta: {
-                  dataFetchedAt: dsMeta?.fetchedAt ?? null,
+                meta: buildMeta({
+                  dsMeta,
                   sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL],
                   warnings,
-                  stability: 'alpha' as const,
-                },
+                  stability: 'alpha',
+                }),
               },
               null,
               2

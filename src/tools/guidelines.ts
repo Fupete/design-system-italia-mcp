@@ -5,6 +5,7 @@ import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
+import { buildMeta } from './helpers.js'
 import { ALPHA_WARNING, BSI_STATUS_URL, DESIGNERS_COMPONENT_URL, DEVKIT_INDEX_URL } from '../constants.js'
 
 // ─── Tool: get_component_guidelines ──────────────────────────────────────────
@@ -142,11 +143,12 @@ export function registerListByStatus(server: McpServer): void {
                 status: statusUpper,
                 total: results.length,
                 results,
-                meta: {
-                  dataFetchedAt: dsMeta?.fetchedAt ?? null,
+                meta: buildMeta({
+                  dsMeta,
                   sourceUrls: [BSI_STATUS_URL],
-                  stability: 'stable' as const,
-                },
+                  warnings: [],
+                  stability: 'stable',
+                }),
               },
               null,
               2
@@ -204,11 +206,12 @@ export function registerListAccessibilityIssues(server: McpServer): void {
               {
                 total: results.length,
                 results,
-                meta: {
-                  dataFetchedAt: dsMeta?.fetchedAt ?? null,
+                meta: buildMeta({
+                  dsMeta,
                   sourceUrls: [BSI_STATUS_URL],
-                  stability: 'stable' as const,
-                },
+                  warnings: [],
+                  stability: 'stable',
+                }),
               },
               null,
               2

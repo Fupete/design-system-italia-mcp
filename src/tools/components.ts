@@ -5,6 +5,7 @@ import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
 import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants } from '../loaders/devkit.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
+import { buildMeta } from './helpers.js'
 import { BSI_STATUS_URL, BSI_COMPONENT_URL, DEVKIT_INDEX_URL, BSI_DOC_BASE, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl } from '../constants.js'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -149,8 +150,8 @@ export function registerGetComponent(server: McpServer): void {
               : null,
           }
           : null,
-        meta: {
-          dataFetchedAt: dsMeta?.fetchedAt ?? null,
+        meta: buildMeta({
+          dsMeta,
           sourceUrls: [
             BSI_COMPONENT_URL(
               status?.sourceUrls.bsiDoc
@@ -161,8 +162,8 @@ export function registerGetComponent(server: McpServer): void {
             DEVKIT_INDEX_URL,
           ],
           warnings,
-          stability: 'alpha' as const,
-        },
+          stability: 'alpha',
+        }),
       }
 
       return {
@@ -313,8 +314,8 @@ export function registerGetComponentVariant(server: McpServer): void {
           component: canonicalSlug,
           variantName,
           results,
-          meta: {
-            dataFetchedAt: dsMeta?.fetchedAt ?? null,
+          meta: buildMeta({
+            dsMeta,
             sourceUrls: [BSI_COMPONENT_URL(
               status?.sourceUrls.bsiDoc
                 ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
@@ -322,8 +323,8 @@ export function registerGetComponentVariant(server: McpServer): void {
               canonicalSlug
             )],
             warnings,
-            stability: 'alpha' as const,
-          },
+            stability: 'alpha',
+          }),
         }
 
         return {
@@ -346,12 +347,17 @@ export function registerGetComponentVariant(server: McpServer): void {
         component: canonicalSlug,
         variantName,
         results: [],
-        meta: {
-          dataFetchedAt: dsMeta?.fetchedAt ?? null,
-          sourceUrls: [],
+        meta: buildMeta({
+          dsMeta,
+          sourceUrls: [BSI_COMPONENT_URL(
+            status?.sourceUrls.bsiDoc
+              ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
+              : BSI_COMPONENT_DEFAULT_SUBFOLDER,
+            canonicalSlug
+          )],
           warnings,
-          stability: 'alpha' as const,
-        },
+          stability: 'alpha',
+        }),
       }
 
       return {
