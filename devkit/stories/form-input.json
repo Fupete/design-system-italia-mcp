@@ -1,6 +1,6 @@
 {
   "slug": "form-input",
-  "fetchedAt": "2026-03-16T09:23:24.185Z",
+  "fetchedAt": "2026-03-16T10:57:34.613Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-input--documentazione&viewMode=docs",
   "variants": [
     {
@@ -48,7 +48,7 @@
       "html": "<it-input\n  id=\"required-example\"\n  type=\"text\"\n  name=\"required-example\"\n  required=\"\"\n  placeholder=\"Testo segnaposto\"\n>\n  <span slot=\"label\">Campo obbligatorio</span>\n</it-input>"
     },
     {
-      "name": "validazione-esterna-validazione-custom",
+      "name": "campo-valido",
       "html": "<it-input\n  id=\"external-validation-example\"\n  type=\"text\"\n  name=\"external-validation-example\"\n  custom-validation=\"\"\n  validity-message=\"Questo campo è obbligatorio!!!\"\n  placeholder=\"Testo segnaposto\"\n>\n  <span slot=\"label\">Validazione esterna</span>\n</it-input>"
     },
     {

@@ -1,6 +1,6 @@
 {
   "slug": "sticky",
-  "fetchedAt": "2026-03-16T09:22:58.899Z",
+  "fetchedAt": "2026-03-16T10:57:08.741Z",
   "tagName": "it-sticky",
   "props": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "subcomponents": [],
-  "description": null
+  "description": "<Description>Rende un elemento della pagina costantemente visibile allo scorrere della pagina.</Description>\nTalvolta è necessario che uno o più elementi della pagina restino sempre visibili anche quando essa viene fatta scorrere. Questo comportamento viene comunemente definito “sticky”.\n<br>\n\n\nIl componente <code>&lt;it-sticky&gt;</code> consente di mantenere visibile un elemento della pagina durante lo scroll, applicando automaticamente il comportamento “sticky”.\n<br>\nPer utilizzarlo, basta racchiudere il contenuto da fissare all’interno del tag <code>&lt;it-sticky&gt;</code>.\nIl componente gestisce in autonomia anche casi avanzati, come elementi impilabili o con padding e classi personalizzate, attraverso specifiche proprietà.\n<br>\n\nÈ disponibile una <a href=\"iframe.html?globals=&id=esempi-sticky--single-sticky&viewMode=story\" target=\"_blank\" rel=\"noopener\">\n  pagina di esempio\n</a> dedicata a questa funzionalità per comprenderne appieno significato ed utilizzo."
 }

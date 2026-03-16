@@ -1,6 +1,6 @@
 {
   "slug": "avatar",
-  "fetchedAt": "2026-03-16T09:23:05.706Z",
+  "fetchedAt": "2026-03-16T10:57:17.951Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-avatar--documentazione&viewMode=docs",
   "variants": [
     {
@@ -48,7 +48,7 @@
       "html": "<div style=\"display: flex; flex-direction: column; gap: 3rem;\">\n  <div>\n    <ul class=\"avatar-group-stacked\">\n      <li>\n        <it-avatar\n          src=\"https://randomuser.me/api/portraits/women/44.jpg\"\n          alt=\"Giorgia Vicari\"\n          size=\"sm\"\n        ></it-avatar>\n      </li>\n      <li>\n        <it-avatar\n          src=\"https://randomuser.me/api/portraits/men/43.jpg\"\n          alt=\"Francesco Donati\"\n          size=\"sm\"\n        ></it-avatar>\n      </li>\n\n      <li>\n        <it-avatar\n          text=\"Tommaso Sordi\"\n          avatar-title=\"Tommaso Sordi\"\n          variant=\"primary\"\n          size=\"sm\"\n        ></it-avatar>\n      </li>\n      <li>\n        <it-avatar\n          text=\"Barbara Tosi\"\n          avatar-title=\"Barbara Tosi\"\n          size=\"sm\"\n        ></it-avatar>\n      </li>\n      <li>\n        <it-avatar\n          text=\"Barbara Tosti\"\n          avatar-title=\"Barbara Tosti\"\n          variant=\"secondary\"\n          size=\"sm\"\n        ></it-avatar>\n      </li>\n    </ul>\n  </div>\n</div>"
     },
     {
-      "name": "avatar-sovrapposti---varianti-di-dimensione",
+      "name": "avatar-sovrapposti---varianti-di-dimensione-2",
       "html": "<div style=\"display: flex; flex-direction: column; gap: 3rem;\">\n    <div>\n      <div>\n        <ul class=\"avatar-group-stacked\">\n          <li>\n            <it-avatar src=\"https://randomuser.me/api/portraits/women/44.jpg\" alt=\"Giorgia Vicari\" href=\"#\"></it-avatar>\n          </li>\n          <li>\n            <it-avatar src=\"https://randomuser.me/api/portraits/men/43.jpg\" alt=\"Francesco Donati\" href=\"#\"></it-avatar>\n          </li>\n          <li>\n            \n<it-avatar type=\"text\" variant=\"primary\" text=\"Giulia Neri\" href=\"#\" avatar-title=\"Giulia Neri\" slot=\"trigger\"></it-avatar>\n\n          </li>\n          <li><it-avatar text=\"Sandro Penna\" variant=\"secondary\" avatar-title=\"Sandro Penna\" \"=\"\"></it-avatar></li>\n          <li><it-avatar text=\"Sandro Pertini\" avatar-title=\"Sandro Pertini\"></it-avatar></li>\n        </ul>\n      </div>\n    </div>\n  </div>"
     },
     {

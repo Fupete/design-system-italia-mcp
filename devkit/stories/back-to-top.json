@@ -1,6 +1,6 @@
 {
   "slug": "back-to-top",
-  "fetchedAt": "2026-03-16T09:23:09.896Z",
+  "fetchedAt": "2026-03-16T10:57:20.516Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-back-to-top--documentazione&viewMode=docs",
   "variants": [
     {
@@ -12,7 +12,7 @@
       "html": "<div class=\"bg-primary text-white\">\n  <div style=\"height:100px; width:100px;\">\n    <it-back-to-top\n      scroll-limit=\"0\"\n      border=\"\"\n      it-aria-label=\"Torna su\"\n    ></it-back-to-top>\n  </div>\n</div>"
     },
     {
-      "name": "versione-con-bordo",
+      "name": "versione-con-bordo-2",
       "html": "<div style=\"height:100px; width:100px;\">\n  <it-back-to-top\n    scroll-limit=\"0\"\n    inverse=\"\"\n    border=\"\"\n    border-color=\"secondary\"\n    icon-color=\"secondary\"\n    it-aria-label=\"Torna su\"\n  ></it-back-to-top>\n</div>"
     },
     {
