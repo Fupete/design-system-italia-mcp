@@ -1,6 +1,6 @@
 {
   "slug": "video-player",
-  "fetchedAt": "2026-03-16T18:19:15.704Z",
+  "fetchedAt": "2026-03-16T22:24:26.889Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-video-player--documentazione&viewMode=docs",
   "description": "Lettore per mostrare video sul proprio sito o incorporarli da piattaforme terze rispettando privacy e accessibilità.",
   "variants": [

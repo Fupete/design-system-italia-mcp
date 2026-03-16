@@ -1,6 +1,6 @@
 {
   "slug": "form-number-input",
-  "fetchedAt": "2026-03-16T18:18:31.272Z",
+  "fetchedAt": "2026-03-16T22:23:43.626Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-number-input--documentazione&viewMode=docs",
   "description": "Campo di inserimento di un valore numerico, con pulsanti per incrementarlo o decrementarlo.",
   "variants": [
