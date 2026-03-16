@@ -139,7 +139,6 @@ export interface DsMeta {
 
 export interface SnapshotSourceMeta {
   ok: boolean
-  fetchedAt: string
   error?: string
 }
 
@@ -163,7 +162,6 @@ export interface DevKitStoryVariant {
 
 export interface DevKitStorySnapshot {
   slug: string
-  fetchedAt: string
   devkitUrl: string
   description: string | null
   variants: DevKitStoryVariant[]
@@ -173,7 +171,6 @@ export interface DevKitStorySnapshot {
 
 export interface DevKitPropsSnapshot {
   slug: string
-  fetchedAt: string
   tagName: string
   props: WebComponentProp[]
   subcomponents: Array<{

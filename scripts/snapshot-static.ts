@@ -64,12 +64,12 @@ const outDir = args.includes('--out')
 // are valid output targets. Prevents path traversal via --out argument.
 const resolvedOut = resolve(outDir)
 const ALLOWED_OUT_DIRS = [
-  resolve(PROJECT_ROOT, 'data-fetched'),
-  resolve(PROJECT_ROOT, '..', 'data-fetched'),  // CI dual-checkout pattern
+    resolve(PROJECT_ROOT, 'data-fetched'),
+    resolve(PROJECT_ROOT, '..', 'data-fetched'),  // CI dual-checkout pattern
 ]
 if (!ALLOWED_OUT_DIRS.some(d => resolvedOut === d || resolvedOut.startsWith(d + '/'))) {
-  console.error('❌ Output directory must be data-fetched/ or a subdirectory of it')
-  process.exit(1)
+    console.error('❌ Output directory must be data-fetched/ or a subdirectory of it')
+    process.exit(1)
 }
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -77,7 +77,6 @@ if (!ALLOWED_OUT_DIRS.some(d => resolvedOut === d || resolvedOut.startsWith(d + 
 interface SourceResult {
     path: string
     ok: boolean
-    fetchedAt: string
     error?: string
 }
 
@@ -123,15 +122,14 @@ async function fetchAndSave(
     relativePath: string,
     transform?: (raw: string) => string
 ): Promise<SourceResult> {
-    const fetchedAt = new Date().toISOString()
     try {
         const raw = await fetchText(url)
         const content = transform ? transform(raw) : raw
         save(relativePath, content)
-        return { path: relativePath, ok: true, fetchedAt }
+        return { path: relativePath, ok: true }
     } catch (err) {
         console.warn(`  ⚠️  ${relativePath}: ${(err as Error).message}`)
-        return { path: relativePath, ok: false, fetchedAt, error: (err as Error).message }
+        return { path: relativePath, ok: false, error: (err as Error).message }
     }
 }
 
@@ -147,7 +145,7 @@ async function batchedFetchAndSave(
         for (const r of batchResults) {
             results.push(r.status === 'fulfilled'
                 ? r.value
-                : { path: 'unknown', ok: false, fetchedAt: new Date().toISOString(), error: String(r.reason) }
+                : { path: 'unknown', ok: false, error: String(r.reason) }
             )
         }
     }
@@ -171,7 +169,6 @@ const results: SourceResult[] = []
 // Step 1 — components-status.json (required — provides slug list + subfolders)
 
 console.log('  bsi/components-status.json')
-const statusFetchedAt = new Date().toISOString()
 let statusRaw: string
 try {
     statusRaw = await fetchText(BSI_STATUS_URL)
@@ -180,7 +177,7 @@ try {
     process.exit(1)
 }
 save('bsi/components-status.json', statusRaw)
-results.push({ path: 'bsi/components-status.json', ok: true, fetchedAt: statusFetchedAt })
+results.push({ path: 'bsi/components-status.json', ok: true })
 
 const statusJson = JSON.parse(statusRaw) as RawStatusJson
 const slugsWithSubfolder = statusJson.items.map(i => ({
@@ -209,18 +206,17 @@ console.log(`  → ${slugs.length} component slugs`)
 console.log(`  bsi/components/ (${slugsWithSubfolder.length} components)`)
 
 async function fetchMarkup(slug: string, subfolder: string): Promise<SourceResult> {
-    const fetchedAt = new Date().toISOString()
     for (const s of slugsToTry(slug)) {
         const url = BSI_COMPONENT_URL(subfolder, s)
         try {
             const raw = await fetchText(url)
             // Wrap with resolvedSlug metadata
             const wrapped = JSON.stringify({
-              resolvedSlug: s,
-              data: JSON.parse(raw)
+                resolvedSlug: s,
+                data: JSON.parse(raw)
             }, null, 2)
             save(`bsi/components/${slug}.json`, wrapped)
-            return { path: `bsi/components/${slug}.json`, ok: true, fetchedAt }
+            return { path: `bsi/components/${slug}.json`, ok: true }
         } catch {
             continue
         }
@@ -229,7 +225,6 @@ async function fetchMarkup(slug: string, subfolder: string): Promise<SourceResul
     return {
         path: `bsi/components/${slug}.json`,
         ok: false,
-        fetchedAt,
         error: 'HTTP 404 for all slugsToTry',
     }
 }
@@ -264,36 +259,35 @@ console.log('  devkit/props/ (web-component props from stories.ts)')
 
 const devkitIndexRaw = await fetchText(DEVKIT_INDEX_URL)
 const devkitIndex = JSON.parse(devkitIndexRaw) as {
-  entries?: Record<string, { id: string; type: string; importPath: string; storiesImports?: string[] }>
+    entries?: Record<string, { id: string; type: string; importPath: string; storiesImports?: string[] }>
 }
 
 const propsItems = Object.values(devkitIndex.entries ?? {})
-  .filter(e => e.type === 'docs' && e.id.startsWith('componenti-'))
-  .map(e => {
-    const slug = e.id.replace(/^componenti-/, '').replace(/--.*$/, '')
-    const importPath = e.storiesImports?.[0] ?? e.importPath
-    // only dedicated (web-component) — bundle has no argTypes
-    const isDedicated = !importPath.includes('/dev-kit-italia/stories/components/')
-    return isDedicated ? { slug, importPath } : null
-  })
-  .filter(Boolean) as { slug: string; importPath: string }[]
+    .filter(e => e.type === 'docs' && e.id.startsWith('componenti-'))
+    .map(e => {
+        const slug = e.id.replace(/^componenti-/, '').replace(/--.*$/, '')
+        const importPath = e.storiesImports?.[0] ?? e.importPath
+        // only dedicated (web-component) — bundle has no argTypes
+        const isDedicated = !importPath.includes('/dev-kit-italia/stories/components/')
+        return isDedicated ? { slug, importPath } : null
+    })
+    .filter(Boolean) as { slug: string; importPath: string }[]
 
 results.push(...await batchedFetchAndSave(
-  propsItems.map(({ slug, importPath }) => ({
-    url: DEVKIT_STORIES_URL(importPath),
-    path: `devkit/props/${slug}.json`,
-    transform: (raw: string) => {
-      const component = parseDevKitStories(raw)
-      if (!component) return JSON.stringify({ slug, fetchedAt: new Date().toISOString(), tagName: null, props: [], subcomponents: []}, null, 2)
-      return JSON.stringify({
-        slug,
-        fetchedAt: new Date().toISOString(),
-        tagName: component.tagName,
-        props: component.props,
-        subcomponents: component.subcomponents,
-      } satisfies import('../src/types.js').DevKitPropsSnapshot, null, 2)
-    },
-  }))
+    propsItems.map(({ slug, importPath }) => ({
+        url: DEVKIT_STORIES_URL(importPath),
+        path: `devkit/props/${slug}.json`,
+        transform: (raw: string) => {
+            const component = parseDevKitStories(raw)
+            if (!component) return JSON.stringify({ slug, tagName: null, props: [], subcomponents: [] }, null, 2)
+            return JSON.stringify({
+                slug,
+                tagName: component.tagName,
+                props: component.props,
+                subcomponents: component.subcomponents,
+            } satisfies import('../src/types.js').DevKitPropsSnapshot, null, 2)
+        },
+    }))
 ))
 
 // Step 5 — Design Tokens Italia
@@ -317,16 +311,15 @@ results.push(...await batchedFetchAndSave(
 // Step 7 — dsnav YAML → JSON (also source for designSystem version)
 
 console.log('  dsnav.json')
-const dsnavFetchedAt = new Date().toISOString()
 let dsnavParsed: DsnavYaml | null = null
 try {
     const dsnavRaw = await fetchText(DESIGNERS_DSNAV_URL)
     dsnavParsed = yaml.load(dsnavRaw, { schema: yaml.JSON_SCHEMA }) as DsnavYaml
     save('dsnav.json', JSON.stringify(dsnavParsed, null, 2))
-    results.push({ path: 'dsnav.json', ok: true, fetchedAt: dsnavFetchedAt })
+    results.push({ path: 'dsnav.json', ok: true })
 } catch (err) {
     console.warn(`  ⚠️  dsnav.json: ${(err as Error).message}`)
-    results.push({ path: 'dsnav.json', ok: false, fetchedAt: dsnavFetchedAt, error: (err as Error).message })
+    results.push({ path: 'dsnav.json', ok: false, error: (err as Error).message })
 }
 
 // Step 8 — versions (BSI + Dev Kit from package.json, DS from dsnav)
@@ -375,7 +368,7 @@ const meta = {
     sources: Object.fromEntries(
         results.map(r => [
             r.path,
-            { ok: r.ok, fetchedAt: r.fetchedAt, ...(r.error ? { error: r.error } : {}) },
+            { ok: r.ok, ...(r.error ? { error: r.error } : {}) },
         ])
     ),
 }

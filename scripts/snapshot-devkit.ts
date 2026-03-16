@@ -65,7 +65,6 @@ interface StoryVariant {
 
 interface ComponentSnapshot {
   slug: string
-  fetchedAt: string
   devkitUrl: string
   description: string | null
   variants: StoryVariant[]
@@ -173,7 +172,6 @@ async function processSlug(slug: string, browser: Browser): Promise<ProcessResul
 
     const snapshot: ComponentSnapshot = {
       slug,
-      fetchedAt: new Date().toISOString(),
       devkitUrl: url,
       description,
       variants,
