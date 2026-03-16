@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentOutput, ZGetComponentVariantOutput } from '../schemas.js'
 import { loadAllStatuses, loadStatus, loadVariants, loadVariantsResolvedSlug } from '../loaders/bsi.js'
-import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants, loadStoryDescription} from '../loaders/devkit.js'
+import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants, loadStoryDescription } from '../loaders/devkit.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
@@ -287,14 +287,15 @@ export function registerGetComponentVariant(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      const [status, dsMeta, bsiResolvedSlug] = await Promise.all([
+      const [status, dsMeta] = await Promise.all([
         loadStatus(slug),
         loadDsMeta(),
-        loadVariantsResolvedSlug(slug)
       ])
 
       // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
       const canonicalSlug = status?.slug ?? slug
+
+      const bsiResolvedSlug = await loadVariantsResolvedSlug(canonicalSlug)
 
       const allVariants = await loadVariants(canonicalSlug)
       const storyVariants = await loadStoryVariants(canonicalSlug)
