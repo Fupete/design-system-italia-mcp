@@ -23,8 +23,18 @@ export const ALPHA_WARNING =
 /** Active branch with structured token APIs — not present in 2.x */
 export const BSI_BRANCH = '3.x'
 
+/**
+ * Branch containing updated API markup for BSI 3.x.
+ * Using feature/update-examples-api-v3 until it merges into 3.x.
+ * TODO: switch back to BSI_BRANCH when feature/update-examples-api-v3 is merged into 3.x
+ */
+export const BSI_API_MARKUP_BRANCH = 'feature/update-examples-api-v3'
+
 const BSI_RAW_BASE =
   `https://raw.githubusercontent.com/italia/bootstrap-italia/${BSI_BRANCH}`
+
+const BSI_API_MARKUP_BASE =
+  `https://raw.githubusercontent.com/italia/bootstrap-italia/${BSI_API_MARKUP_BRANCH}`
 
 /** List of ~55 components with status, accessibility, known issues */
 export const BSI_STATUS_URL =
@@ -34,9 +44,10 @@ export const BSI_STATUS_URL =
 export const BSI_CUSTOM_PROPERTIES_URL =
   `${BSI_RAW_BASE}/api/custom_properties.json`
 
+
 /** HTML markup variants per component — subfolder varies by category */
 export const BSI_COMPONENT_URL = (subfolder: string, slug: string): string =>
-  `${BSI_RAW_BASE}/api/${subfolder}/${slug}.json`
+  `${BSI_API_MARKUP_BASE}/api/${subfolder}/${slug}.json`
 
 /** Default subfolder for components without a bsiDocUrl */
 export const BSI_COMPONENT_DEFAULT_SUBFOLDER = 'componenti'
