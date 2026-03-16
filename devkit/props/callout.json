@@ -1,6 +1,6 @@
 {
   "slug": "callout",
-  "fetchedAt": "2026-03-16T10:57:08.057Z",
+  "fetchedAt": "2026-03-16T18:17:59.344Z",
   "tagName": "it-callout",
   "props": [
     {
@@ -46,6 +46,5 @@
       ]
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

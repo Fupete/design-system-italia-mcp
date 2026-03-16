@@ -1,7 +1,8 @@
 {
   "slug": "form-datepicker",
-  "fetchedAt": "2026-03-16T10:57:33.315Z",
+  "fetchedAt": "2026-03-16T18:18:22.443Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-datepicker--documentazione&viewMode=docs",
+  "description": "Campo per selezionare una data all'interno di un calendario o inserirla manualmente.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

@@ -1,6 +1,6 @@
 {
   "slug": "hero",
-  "fetchedAt": "2026-03-16T10:57:08.552Z",
+  "fetchedAt": "2026-03-16T18:17:59.852Z",
   "tagName": "it-hero",
   "props": [
     {
@@ -18,6 +18,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

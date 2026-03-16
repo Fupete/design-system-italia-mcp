@@ -1,7 +1,8 @@
 {
   "slug": "skiplinks",
-  "fetchedAt": "2026-03-16T10:58:02.403Z",
+  "fetchedAt": "2026-03-16T18:18:56.182Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-skiplinks--documentazione&viewMode=docs",
+  "description": "Link di accesso rapido ai contenuti di interesse su una pagina per la navigazione tramite tastiera o tecnologie assistive.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

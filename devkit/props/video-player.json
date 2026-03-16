@@ -1,6 +1,6 @@
 {
   "slug": "video-player",
-  "fetchedAt": "2026-03-16T10:57:08.731Z",
+  "fetchedAt": "2026-03-16T18:18:00.153Z",
   "tagName": "it-video",
   "props": [
     {
@@ -73,6 +73,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

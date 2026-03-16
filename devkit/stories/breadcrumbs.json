@@ -1,7 +1,8 @@
 {
   "slug": "breadcrumbs",
-  "fetchedAt": "2026-03-16T10:57:20.364Z",
+  "fetchedAt": "2026-03-16T18:18:09.873Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-breadcrumbs--documentazione&viewMode=docs",
+  "description": "Indicatori di un percorso di navigazione gerarchico che aiuta gli utenti a comprendere la loro posizione all'interno di un sito e a tornare facilmente ai livelli precedenti",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

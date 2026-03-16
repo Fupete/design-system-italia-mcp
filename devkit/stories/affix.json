@@ -1,7 +1,8 @@
 {
   "slug": "affix",
-  "fetchedAt": "2026-03-16T10:57:15.637Z",
+  "fetchedAt": "2026-03-16T18:18:06.703Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-affix--documentazione&viewMode=docs",
+  "description": "Elemento ancorato su schermata durante lo scorrere di una specifica sezione di pagina.",
   "variants": [
     {
       "name": "affix-top",

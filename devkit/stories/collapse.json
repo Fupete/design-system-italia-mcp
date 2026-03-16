@@ -1,7 +1,8 @@
 {
   "slug": "collapse",
-  "fetchedAt": "2026-03-16T10:57:29.181Z",
+  "fetchedAt": "2026-03-16T18:18:19.893Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-collapse--documentazione&viewMode=docs",
+  "description": "Funzionalità applicabile a elementi di interfaccia per espandere o comprimere sezioni di contenuto e ottimizzare spazio.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

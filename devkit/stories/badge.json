@@ -1,7 +1,8 @@
 {
   "slug": "badge",
-  "fetchedAt": "2026-03-16T10:57:21.226Z",
+  "fetchedAt": "2026-03-16T18:18:10.691Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-badge--documentazione&viewMode=docs",
+  "description": "Indicatore grafico affiancabile ad altri elementi per creare contatori ed etichette.",
   "variants": [
     {
       "name": "anteprima-del-componente",

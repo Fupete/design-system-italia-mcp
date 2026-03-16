@@ -1,7 +1,8 @@
 {
   "slug": "forward",
-  "fetchedAt": "2026-03-16T10:57:45.444Z",
+  "fetchedAt": "2026-03-16T18:18:38.604Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-forward--documentazione&viewMode=docs",
+  "description": "Pulsante per scorrere rapidamente a un contenuto specifico su una pagina lunga.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

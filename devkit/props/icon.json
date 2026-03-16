@@ -1,6 +1,6 @@
 {
   "slug": "icon",
-  "fetchedAt": "2026-03-16T10:57:08.554Z",
+  "fetchedAt": "2026-03-16T18:17:59.825Z",
   "tagName": "it-icon",
   "props": [
     {
@@ -53,6 +53,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

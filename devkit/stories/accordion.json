@@ -1,7 +1,8 @@
 {
   "slug": "accordion",
-  "fetchedAt": "2026-03-16T10:57:18.044Z",
+  "fetchedAt": "2026-03-16T18:18:06.997Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-accordion--documentazione&viewMode=docs",
+  "description": "Sezione di contenuti espandibile e richiudibile per ottimizzare spazio su pagina e creare collegamenti con contenuti correlati.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

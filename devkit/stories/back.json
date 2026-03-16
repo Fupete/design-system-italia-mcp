@@ -1,7 +1,8 @@
 {
   "slug": "back",
-  "fetchedAt": "2026-03-16T10:57:21.310Z",
+  "fetchedAt": "2026-03-16T18:18:09.793Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-back--documentazione&viewMode=docs",
+  "description": "Elemento di navigazione per tornare alla pagina o alla schermata precedente.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

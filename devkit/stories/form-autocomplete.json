@@ -1,7 +1,8 @@
 {
   "slug": "form-autocomplete",
-  "fetchedAt": "2026-03-16T10:57:34.619Z",
+  "fetchedAt": "2026-03-16T18:18:23.789Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-autocomplete--documentazione&viewMode=docs",
+  "description": "Campo di input che suggerisce automaticamente opzioni di completamento man mano che l'utente digita",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

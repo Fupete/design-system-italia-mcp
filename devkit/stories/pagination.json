@@ -1,7 +1,8 @@
 {
   "slug": "pagination",
-  "fetchedAt": "2026-03-16T10:57:51.402Z",
+  "fetchedAt": "2026-03-16T18:18:54.151Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-pagination--documentazione&viewMode=docs",
+  "description": "Barra di navigazione per scorrere una lista di contenuti disposti su più pagine.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

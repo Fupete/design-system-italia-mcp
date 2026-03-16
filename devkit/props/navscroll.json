@@ -1,6 +1,6 @@
 {
   "slug": "navscroll",
-  "fetchedAt": "2026-03-16T10:57:08.550Z",
+  "fetchedAt": "2026-03-16T18:17:59.874Z",
   "tagName": "it-navscroll",
   "props": [
     {
@@ -32,6 +32,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": "<Description>Lista di link con àncore per navigare velocemente a una sezione specifica della pagina in cui è contenuto il componente.</Description>"
+  "subcomponents": []
 }

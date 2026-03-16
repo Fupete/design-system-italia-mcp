@@ -1,6 +1,6 @@
 {
   "slug": "breadcrumbs",
-  "fetchedAt": "2026-03-16T10:57:08.093Z",
+  "fetchedAt": "2026-03-16T18:17:59.330Z",
   "tagName": "it-breadcrumbs",
   "props": [
     {
@@ -11,6 +11,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

@@ -1,7 +1,8 @@
 {
   "slug": "section",
-  "fetchedAt": "2026-03-16T10:57:58.194Z",
+  "fetchedAt": "2026-03-16T18:18:56.427Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-section--documentazione&viewMode=docs",
+  "description": "Sezione per creare raggruppamenti orizzontali di contenuti coerenti e con sfondi dedicati",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

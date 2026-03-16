@@ -1,7 +1,8 @@
 {
   "slug": "callout",
-  "fetchedAt": "2026-03-16T10:57:25.376Z",
+  "fetchedAt": "2026-03-16T18:18:13.969Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-callout--documentazione&viewMode=docs",
+  "description": "Box con uno stile visivo distintivo per evidenziare contenuti testuali importanti su pagine lunghe.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

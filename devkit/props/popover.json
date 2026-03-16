@@ -1,6 +1,6 @@
 {
   "slug": "popover",
-  "fetchedAt": "2026-03-16T10:57:08.522Z",
+  "fetchedAt": "2026-03-16T18:18:00.114Z",
   "tagName": "it-popover",
   "props": [
     {
@@ -24,6 +24,5 @@
       ]
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

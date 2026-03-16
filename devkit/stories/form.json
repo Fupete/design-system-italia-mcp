@@ -1,7 +1,8 @@
 {
   "slug": "form",
-  "fetchedAt": "2026-03-16T10:57:28.966Z",
+  "fetchedAt": "2026-03-16T18:18:22.979Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form--documentazione&viewMode=docs",
+  "description": "Campi input aggregati per la raccolta di dati e la configurazione di opzioni",
   "variants": [
     {
       "name": "dimensionamento-delle-colonne",

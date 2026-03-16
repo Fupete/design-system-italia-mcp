@@ -1,7 +1,8 @@
 {
   "slug": "form-checkbox",
-  "fetchedAt": "2026-03-16T10:57:38.814Z",
+  "fetchedAt": "2026-03-16T18:18:28.476Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-checkbox--documentazione&viewMode=docs",
+  "description": "Casella di controllo che consente di selezionare una o più opzioni da un elenco predefinito.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

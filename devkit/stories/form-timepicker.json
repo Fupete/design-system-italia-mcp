@@ -1,7 +1,8 @@
 {
   "slug": "form-timepicker",
-  "fetchedAt": "2026-03-16T10:57:41.868Z",
+  "fetchedAt": "2026-03-16T18:18:38.367Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-timepicker--documentazione&viewMode=docs",
+  "description": "Campo per selezionare un orario all'interno di un form.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

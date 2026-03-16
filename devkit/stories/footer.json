@@ -1,7 +1,8 @@
 {
   "slug": "footer",
-  "fetchedAt": "2026-03-16T10:57:28.883Z",
+  "fetchedAt": "2026-03-16T18:18:18.858Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-footer--documentazione&viewMode=docs",
+  "description": "Menu di navigazione secondaria posto in fondo alle pagine per presentare contenuti supplementari come contatti, informazioni legali e link alle sezioni di un sito",
   "variants": [
     {
       "name": "footer-completo",

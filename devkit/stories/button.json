@@ -1,7 +1,8 @@
 {
   "slug": "button",
-  "fetchedAt": "2026-03-16T10:57:24.515Z",
+  "fetchedAt": "2026-03-16T18:18:14.156Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-button--documentazione&viewMode=docs",
+  "description": "Pulsante con etichetta di testo o icona che al clic inizia un'azione o un evento",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

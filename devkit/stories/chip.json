@@ -1,7 +1,8 @@
 {
   "slug": "chip",
-  "fetchedAt": "2026-03-16T10:57:24.269Z",
+  "fetchedAt": "2026-03-16T18:18:19.085Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-chip--documentazione&viewMode=docs",
+  "description": "Etichetta cliccabile che contiene brevi testi (tag) e icone per classificare, ordinare e filtriare contenuti e altri elementi di interfaccia.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

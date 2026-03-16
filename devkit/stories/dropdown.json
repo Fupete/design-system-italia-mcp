@@ -1,7 +1,8 @@
 {
   "slug": "dropdown",
-  "fetchedAt": "2026-03-16T10:57:30.294Z",
+  "fetchedAt": "2026-03-16T18:18:20.198Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-dropdown--documentazione&viewMode=docs",
+  "description": "Elenco di azioni o link a comparsa per risparmiare spazio e organizzare opzioni in modo compatto e coerente",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

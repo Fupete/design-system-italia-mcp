@@ -1,6 +1,6 @@
 {
   "slug": "rating",
-  "fetchedAt": "2026-03-16T10:57:08.730Z",
+  "fetchedAt": "2026-03-16T18:18:00.123Z",
   "tagName": "it-rating",
   "props": [
     {
@@ -53,6 +53,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

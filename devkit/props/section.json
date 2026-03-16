@@ -1,6 +1,6 @@
 {
   "slug": "section",
-  "fetchedAt": "2026-03-16T10:57:08.722Z",
+  "fetchedAt": "2026-03-16T18:18:00.108Z",
   "tagName": "it-section",
   "props": [
     {
@@ -25,6 +25,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": "<Description>Sezione per raggruppare contenuti coerenti e con sfondi dedicati</Description>\n\nIl componente \\"
+  "subcomponents": []
 }

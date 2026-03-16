@@ -1,6 +1,6 @@
 {
   "slug": "collapse",
-  "fetchedAt": "2026-03-16T10:57:08.302Z",
+  "fetchedAt": "2026-03-16T18:17:59.623Z",
   "tagName": "it-collapse",
   "props": [
     {
@@ -46,6 +46,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

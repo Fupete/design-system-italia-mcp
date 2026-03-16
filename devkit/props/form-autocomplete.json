@@ -1,6 +1,6 @@
 {
   "slug": "form-autocomplete",
-  "fetchedAt": "2026-03-16T10:57:08.371Z",
+  "fetchedAt": "2026-03-16T18:17:59.651Z",
   "tagName": "it-autocomplete",
   "props": [
     {
@@ -109,6 +109,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

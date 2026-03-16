@@ -1,7 +1,8 @@
 {
   "slug": "popover",
-  "fetchedAt": "2026-03-16T10:57:59.213Z",
+  "fetchedAt": "2026-03-16T18:18:52.733Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-popover--documentazione&viewMode=docs",
+  "description": "Suggerimento a comparsa che può contenere testo e link per mostrare informazioni o funzionalità aggiuntive.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

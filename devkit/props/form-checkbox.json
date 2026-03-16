@@ -1,6 +1,6 @@
 {
   "slug": "form-checkbox",
-  "fetchedAt": "2026-03-16T10:57:08.312Z",
+  "fetchedAt": "2026-03-16T18:17:59.602Z",
   "tagName": "it-checkbox",
   "props": [
     {
@@ -102,6 +102,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

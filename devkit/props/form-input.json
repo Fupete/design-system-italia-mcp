@@ -1,6 +1,6 @@
 {
   "slug": "form-input",
-  "fetchedAt": "2026-03-16T10:57:08.315Z",
+  "fetchedAt": "2026-03-16T18:17:59.593Z",
   "tagName": "it-input",
   "props": [
     {
@@ -179,6 +179,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": "<Description>Campi per l'inserimento di dati testuali e numerici, in forma libera o in formati specifici, all'interno di un form</Description>\n\nPer il corretto funzionamento degli elementi di tipo \\"
+  "subcomponents": []
 }

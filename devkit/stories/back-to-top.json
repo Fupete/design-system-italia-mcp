@@ -1,7 +1,8 @@
 {
   "slug": "back-to-top",
-  "fetchedAt": "2026-03-16T10:57:20.516Z",
+  "fetchedAt": "2026-03-16T18:18:10.014Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-back-to-top--documentazione&viewMode=docs",
+  "description": "Pulsante per tornare rapidamente all'inizio di una pagina con contenuti lunghi",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

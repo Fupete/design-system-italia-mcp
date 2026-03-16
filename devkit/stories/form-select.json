@@ -1,6 +1,36 @@
 {
   "slug": "form-select",
-  "fetchedAt": "2026-03-16T10:57:40.717Z",
+  "fetchedAt": "2026-03-16T18:18:36.003Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-select--documentazione&viewMode=docs",
-  "variants": []
+  "description": "Campo di selezione di un form per scegliere una o più opzioni da una lista predefinita di valori.",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-select name=\"select-input\" placeholder=\"Seleziona un'opzione\">\n  <span slot=\"label\">Etichetta</span>\n  <option value=\"Value 1\">Opzione 1</option>\n  <option value=\"Value 2\">Opzione 2</option>\n  <option value=\"Value 3\">Opzione 3</option>\n  <option value=\"Value 4\">Opzione 4</option>\n  <option value=\"Value 5\">Opzione 5</option>\n</it-select>"
+    },
+    {
+      "name": "select-disabilitata",
+      "html": "<it-select name=\"select-input\" disabled=\"\" placeholder=\"Seleziona un'opzione\">\n  <span slot=\"label\">Etichetta</span>\n  <option value=\"Value 1\">Opzione 1</option>\n  <option value=\"Value 2\">Opzione 2</option>\n  <option value=\"Value 3\">Opzione 3</option>\n  <option value=\"Value 4\">Opzione 4</option>\n  <option value=\"Value 5\">Opzione 5</option>\n</it-select>"
+    },
+    {
+      "name": "select-con-gruppi",
+      "html": "<it-select name=\"select-input\" placeholder=\"Seleziona un'opzione\">\n  <span slot=\"label\">Etichetta</span>\n  <optgroup label=\"Gruppo 1\">\n    <option value=\"1\">Opzione 1</option>\n    <option value=\"2\">Opzione 2</option>\n  </optgroup>\n  <optgroup label=\"Gruppo 2\">\n    <option value=\"3\">Opzione 3</option>\n    <option value=\"4\">Opzione 4</option>\n  </optgroup>\n</it-select>"
+    },
+    {
+      "name": "testo-di-supporto",
+      "html": "<it-select\n  name=\"select-input\"\n  placeholder=\"Seleziona un'opzione\"\n  support-text=\"Questo è un testo di supporto alla select\"\n>\n  <span slot=\"label\">Etichetta</span>\n  <option value=\"Value 1\">Opzione 1</option>\n  <option value=\"Value 2\">Opzione 2</option>\n  <option value=\"Value 3\">Opzione 3</option>\n  <option value=\"Value 4\">Opzione 4</option>\n  <option value=\"Value 5\">Opzione 5</option>\n</it-select>"
+    },
+    {
+      "name": "validazione-e-gestione-degli-errori",
+      "html": "<form>\n  <it-select\n    id=\"required-example\"\n    name=\"required-example\"\n    required=\"\"\n    placeholder=\"Seleziona un'opzione\"\n  >\n    <span slot=\"label\">Select obbligatoria</span>\n    <option value=\"Value 1\">Opzione 1</option>\n    <option value=\"Value 2\">Opzione 2</option>\n    <option value=\"Value 3\">Opzione 3</option>\n    <option value=\"Value 4\">Opzione 4</option>\n    <option value=\"Value 5\">Opzione 5</option>\n  </it-select>\n\n  <div class=\"text-center\">\n    <it-button type=\"submit\" variant=\"primary\">Invia</it-button>\n  </div>\n</form>"
+    },
+    {
+      "name": "campo-invalido",
+      "html": "<it-select\n  id=\"external-validation-example\"\n  name=\"external-validation-example\"\n  custom-validation=\"\"\n  validity-message=\"Questo campo è obbligatorio!!!\"\n  placeholder=\"Seleziona un'opzione\"\n>\n  <span slot=\"label\">Select obbligatoria</span>\n  <option value=\"Value 1\">Opzione 1</option>\n  <option value=\"Value 2\">Opzione 2</option>\n  <option value=\"Value 3\">Opzione 3</option>\n  <option value=\"Value 4\">Opzione 4</option>\n  <option value=\"Value 5\">Opzione 5</option>\n</it-select>"
+    },
+    {
+      "name": "gestione-degli-eventi",
+      "html": "<script>\n  document.querySelector('it-select#event-select-example').addEventListener('it-change', (event) => {\n    console.log('Select event:', event);\n    alert('Select event');\n  });\n  document.querySelector('it-select#event-select-example').addEventListener('it-input-ready', (event) => {\n    console.log('Select ready:', event);\n  });\n</script>\n<it-select\n  id=\"event-select-example\"\n  name=\"event-select-example\"\n  placeholder=\"Seleziona un'opzione\"\n>\n  <span slot=\"label\">Prova evento di change</span>\n  <option value=\"Value 1\">Opzione 1</option>\n  <option value=\"Value 2\">Opzione 2</option>\n  <option value=\"Value 3\">Opzione 3</option>\n  <option value=\"Value 4\">Opzione 4</option>\n  <option value=\"Value 5\">Opzione 5</option>\n</it-select>"
+    }
+  ]
 }

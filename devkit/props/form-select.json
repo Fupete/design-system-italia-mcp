@@ -1,6 +1,6 @@
 {
   "slug": "form-select",
-  "fetchedAt": "2026-03-16T10:57:08.553Z",
+  "fetchedAt": "2026-03-16T18:17:59.884Z",
   "tagName": "it-select",
   "props": [
     {
@@ -88,6 +88,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": null
+  "subcomponents": []
 }

@@ -1,7 +1,8 @@
 {
   "slug": "hero",
-  "fetchedAt": "2026-03-16T10:57:44.948Z",
+  "fetchedAt": "2026-03-16T18:18:39.702Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-hero--documentazione&viewMode=docs",
+  "description": "Sezione a tutta larghezza per mettere in evidenza combinazioni di contenuti testuali, immagini e pulsanti",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

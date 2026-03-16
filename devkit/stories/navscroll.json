@@ -1,7 +1,8 @@
 {
   "slug": "navscroll",
-  "fetchedAt": "2026-03-16T10:57:52.362Z",
+  "fetchedAt": "2026-03-16T18:18:45.858Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-navscroll--documentazione&viewMode=docs",
+  "description": "Lista di link con ancore per navigare velocemente a una sezione specifica della pagina in cui è contenuto.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

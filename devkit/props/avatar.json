@@ -1,6 +1,6 @@
 {
   "slug": "avatar",
-  "fetchedAt": "2026-03-16T10:57:08.058Z",
+  "fetchedAt": "2026-03-16T18:17:59.417Z",
   "tagName": "it-avatar",
   "props": [
     {
@@ -81,6 +81,5 @@
       "options": []
     }
   ],
-  "subcomponents": [],
-  "description": "<Description>Rappresentazione grafica di un utente.</Description>\n\nL'elemento avatar è la rappresentazione grafica di un utente e può includere un'immagine, un testo, un'icona o essere utilizzato come link.\n\nSono disponibili sei dimensioni: \\"
+  "subcomponents": []
 }

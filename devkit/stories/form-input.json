@@ -1,7 +1,8 @@
 {
   "slug": "form-input",
-  "fetchedAt": "2026-03-16T10:57:34.613Z",
+  "fetchedAt": "2026-03-16T18:18:32.678Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-input--documentazione&viewMode=docs",
+  "description": "Campi per l'inserimento di dati testuali, numerici, in forma libera o in formati specifici, all'interno di un form",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

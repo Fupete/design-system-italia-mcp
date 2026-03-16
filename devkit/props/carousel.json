@@ -1,0 +1,61 @@
+{
+  "slug": "carousel",
+  "fetchedAt": "2026-03-16T18:17:59.364Z",
+  "tagName": "it-carousel",
+  "props": [
+    {
+      "name": "fullscreen",
+      "type": "boolean",
+      "description": "Se true, il carousel occupa tutta la larghezza disponibile.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "arrows",
+      "type": "boolean",
+      "description": "Se true, mostra le frecce di navigazione del carousel.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "separator",
+      "type": "boolean",
+      "description": "Se true, mostra un separatore verticale tra le slide.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Variante di layout del carousel.",
+      "default": "single",
+      "options": []
+    },
+    {
+      "name": "type",
+      "type": "select",
+      "description": "Tipo di scorrimento del carousel. Se non specificato, viene usato il default della variante.",
+      "default": "-",
+      "options": [
+        "slide",
+        "loop",
+        "fade"
+      ]
+    },
+    {
+      "name": "autoplay",
+      "type": "boolean",
+      "description": "Se true, abilita l'autoplay del carousel con modalità \\",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "config",
+      "type": "text",
+      "description": "Oggetto di configurazione avanzata da passare a Splide. Consulta la documentazione del componente Carousel e quella di Splide v4.x per conoscere le opzioni disponibili.",
+      "default": "-",
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

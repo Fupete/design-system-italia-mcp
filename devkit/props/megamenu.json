@@ -1,0 +1,36 @@
+{
+  "slug": "megamenu",
+  "fetchedAt": "2026-03-16T18:17:59.893Z",
+  "tagName": "it-megamenu",
+  "props": [
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Testo del pulsante che apre il dropdown del megamenu",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Disabilita il dropdown",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "description": "Imposta lo stato attivo del pulsante",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "columns",
+      "type": "number",
+      "description": "Numero di colonne su cui verranno suddivisi i link del menu",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}
