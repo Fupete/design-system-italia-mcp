@@ -1,7 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentOutput, ZGetComponentVariantOutput } from '../schemas.js'
-import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
+import { loadAllStatuses, loadStatus, loadVariants, loadVariantsResolvedSlug } from '../loaders/bsi.js'
 import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants, loadStoryDescription} from '../loaders/devkit.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
@@ -106,10 +106,11 @@ export function registerGetComponent(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      const [status, devKitIndex, dsMeta] = await Promise.all([
+      const [status, devKitIndex, dsMeta, bsiResolvedSlug] = await Promise.all([
         loadStatus(slug),
         loadDevKitIndex(),
         loadDsMeta(),
+        loadVariantsResolvedSlug(slug),
       ])
 
       // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
@@ -164,7 +165,7 @@ export function registerGetComponent(server: McpServer): void {
               status?.sourceUrls.bsiDoc
                 ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
                 : BSI_COMPONENT_DEFAULT_SUBFOLDER,
-              canonicalSlug
+              bsiResolvedSlug
             ),
             DEVKIT_INDEX_URL,
           ],
@@ -286,9 +287,10 @@ export function registerGetComponentVariant(server: McpServer): void {
       const slug = slugify(name)
       const warnings: string[] = []
 
-      const [status, dsMeta] = await Promise.all([
+      const [status, dsMeta, bsiResolvedSlug] = await Promise.all([
         loadStatus(slug),
         loadDsMeta(),
+        loadVariantsResolvedSlug(slug)
       ])
 
       // Resolve to canonical slug (e.g. "fisarmonica" → "accordion")
@@ -328,7 +330,7 @@ export function registerGetComponentVariant(server: McpServer): void {
               status?.sourceUrls.bsiDoc
                 ? subfolderFromDocUrl(status.sourceUrls.bsiDoc)
                 : BSI_COMPONENT_DEFAULT_SUBFOLDER,
-              canonicalSlug
+              bsiResolvedSlug
             )],
             warnings,
             stability: 'alpha',

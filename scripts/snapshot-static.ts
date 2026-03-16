@@ -214,7 +214,12 @@ async function fetchMarkup(slug: string, subfolder: string): Promise<SourceResul
         const url = BSI_COMPONENT_URL(subfolder, s)
         try {
             const raw = await fetchText(url)
-            save(`bsi/components/${slug}.json`, raw)
+            // Wrap with resolvedSlug metadata
+            const wrapped = JSON.stringify({
+              resolvedSlug: s,
+              data: JSON.parse(raw)
+            }, null, 2)
+            save(`bsi/components/${slug}.json`, wrapped)
             return { path: `bsi/components/${slug}.json`, ok: true, fetchedAt }
         } catch {
             continue

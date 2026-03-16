@@ -87,6 +87,7 @@ export async function loadStatus(slug: string): Promise<ComponentStatus | null> 
 // ─── Source #1 — bsi/components/{slug}.json ───────────────────────────────────
 
 type RawVariantsJson = Array<{ name: string; content: string }>
+type RawVariantsFile = { resolvedSlug: string; data: RawVariantsJson } | RawVariantsJson
 
 export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
   const key = CACHE_KEYS.bsiMarkup(slug)
@@ -96,8 +97,10 @@ export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
   for (const s of slugsToTry(slug)) {
     const url = SNAPSHOT_BSI_COMPONENT_URL(s)
     try {
-      const raw = await fetchJson<RawVariantsJson>(url)
-      const variants = raw.map((v) => ({ name: v.name.trim(), html: v.content }))
+      const raw = await fetchJson<RawVariantsFile>(url)
+      // Support both wrapped format (with resolvedSlug) and legacy array format
+      const items = Array.isArray(raw) ? raw : (raw as { resolvedSlug: string; data: RawVariantsJson }).data
+      const variants = items.map((v) => ({ name: v.name.trim(), html: v.content }))
       cache.set(key, variants, TTL.snapshot)
       return variants
     } catch {
@@ -105,6 +108,20 @@ export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
     }
   }
   return []
+}
+
+export async function loadVariantsResolvedSlug(slug: string): Promise<string> {
+  for (const s of slugsToTry(slug)) {
+    const url = SNAPSHOT_BSI_COMPONENT_URL(s)
+    try {
+      const raw = await fetchJson<RawVariantsFile>(url)
+      if (!Array.isArray(raw) && raw.resolvedSlug) return raw.resolvedSlug
+      return s
+    } catch {
+      continue
+    }
+  }
+  return slug
 }
 
 // ─── Source #3 — bsi/custom-properties.json ──────────────────────────────────

@@ -1,7 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentFullOutput } from '../schemas.js'
-import { loadStatus, loadVariants, loadTokens } from '../loaders/bsi.js'
+import { loadStatus, loadVariants, loadTokens, loadVariantsResolvedSlug } from '../loaders/bsi.js'
 import { loadGuidelines } from '../loaders/designers.js'
 import { resolveTokenValues } from '../loaders/tokens.js'
 import { loadDevKitEntry, loadDevKitComponent, loadStoryVariants, loadStoryDescription } from '../loaders/devkit.js'
@@ -54,7 +54,7 @@ export function registerGetComponentFull(server: McpServer): void {
       const canonicalSlug = statusData?.slug ?? slug
 
       // ── Parallel fetch from all sources ──────────────────────────────────────
-      const [variants, rawTokens, guidelines, devKitEntry, devKitComponent, openIssues, dsMeta] =
+      const [variants, rawTokens, guidelines, devKitEntry, devKitComponent, openIssues, dsMeta, bsiResolvedSlug] =
         await Promise.allSettled([
           loadVariants(canonicalSlug),
           loadTokens(canonicalSlug),
@@ -63,6 +63,7 @@ export function registerGetComponentFull(server: McpServer): void {
           loadDevKitComponent(canonicalSlug),
           loadComponentIssues(canonicalSlug),
           loadDsMeta(),
+          loadVariantsResolvedSlug(canonicalSlug)
         ])
 
       // ── Unwrap results with warnings on failure ───────────────────────────────
@@ -79,6 +80,7 @@ export function registerGetComponentFull(server: McpServer): void {
       const devKitComponentData = unwrap(devKitComponent, 'Dev Kit stories', null)
       const issuesResult = unwrap(openIssues, 'GitHub Issues', { issues: [] })
       const dsMetaData = unwrap(dsMeta, 'DS meta', null)
+      const bsiResolvedSlugData = unwrap(bsiResolvedSlug, 'BSI resolved slug', canonicalSlug)
 
       // ── Story variants (all components — depends on devKitEntry) ───────────
       let storyVariantsData: import('../types.js').ComponentVariant[] | null = null
@@ -133,7 +135,7 @@ export function registerGetComponentFull(server: McpServer): void {
           statusData?.sourceUrls.bsiDoc
             ? subfolderFromDocUrl(statusData.sourceUrls.bsiDoc)
             : BSI_COMPONENT_DEFAULT_SUBFOLDER,
-          canonicalSlug
+          bsiResolvedSlugData
         ),
         BSI_CUSTOM_PROPERTIES_URL,
         DESIGNERS_COMPONENT_URL(canonicalSlug),
