@@ -60,6 +60,7 @@ export const ZGetComponentOutput = z.object({
     storybookUrl: z.string(),
     pattern: z.enum(['dedicated', 'bundle']),
     componentType: z.enum(['web-component', 'html-bsi']),
+    description: z.string().nullable(),
     storyVariants: ZStoryVariants.nullable(),
   }).nullable(),
   meta: ZMeta,
