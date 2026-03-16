@@ -128,6 +128,10 @@ export function registerGetComponent(server: McpServer): void {
 
       const storyVariants = await loadStoryVariants(canonicalSlug)
 
+      if (storyVariants?.some(v => /-\d+$/.test(v.name))) {
+        warnings.push('Some Dev Kit variants have numeric suffixes (-2, -3): multiple examples of the same variant.')
+      }
+
       const output = {
         name: status?.name ?? canonicalSlug,
         slug: canonicalSlug,
@@ -264,7 +268,8 @@ export function registerGetComponentVariant(server: McpServer): void {
       title: 'Get Component Variant',
       description: 'Returns the full HTML markup of a specific variant by name. ' +
         'Use variantsAvailable from get_component to find variant names. ' +
-        'Searches BSI markup variants and Dev Kit story variants transparently.',
+        'Searches BSI markup variants and Dev Kit story variants transparently. ' +
+        'Dev Kit variant names with numeric suffixes (-2, -3) are multiple examples of the same variant.',
       inputSchema: {
         name: z.string().describe('Component name or slug (e.g. "accordion", "card")'),
         variantName: z.string().describe('Variant name (e.g. "Base", "Tabella base")'),

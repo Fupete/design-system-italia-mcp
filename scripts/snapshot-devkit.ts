@@ -125,9 +125,12 @@ async function processSlug(slug: string, browser: Browser): Promise<ProcessResul
       ).catch(() => null) // fallback: some panels may genuinely have no code
     }
 
-    // extract variants — each pre is preceded by its h2/h3 story title
+    // extract variants — each pre is preceded by its h2/h3/h4 story title
+    // multiple <pre> under the same heading get a numeric suffix (-2, -3, ...)
     const variants: StoryVariant[] = await page.evaluate(() => {
       const results: { name: string; html: string }[] = []
+      const nameCounts = new Map<string, number>()
+
       document.querySelectorAll('pre').forEach(el => {
         const html = (el as HTMLElement).innerText.trim()
         if (!html) return
@@ -135,11 +138,12 @@ async function processSlug(slug: string, browser: Browser): Promise<ProcessResul
         if (!preview) return
         let sibling = preview.previousElementSibling
         while (sibling) {
-          if (sibling.matches('h2, h3')) {
-            results.push({
-              name: (sibling as HTMLElement).id,
-              html,
-            })
+          if (sibling.matches('h2, h3, h4')) {
+            const baseName = (sibling as HTMLElement).id
+            const count = (nameCounts.get(baseName) ?? 0) + 1
+            nameCounts.set(baseName, count)
+            const name = count === 1 ? baseName : `${baseName}-${count}`
+            results.push({ name, html })
             break
           }
           sibling = sibling.previousElementSibling

@@ -85,6 +85,10 @@ export function registerGetComponentFull(server: McpServer): void {
       if (devKitEntryData) {
         try {
           storyVariantsData = await loadStoryVariants(canonicalSlug)
+          
+          if (storyVariantsData?.some(v => /-\d+$/.test(v.name))) {
+            warnings.push('Some Dev Kit variants have numeric suffixes (-2, -3): multiple examples of the same variant.')
+          }
         } catch (err) {
           warnings.push(`Dev Kit story variants: ${(err as Error).message}`)
         }
