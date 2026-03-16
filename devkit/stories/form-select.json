@@ -1,6 +1,6 @@
 {
   "slug": "form-select",
-  "fetchedAt": "2026-03-16T22:23:47.626Z",
+  "fetchedAt": "2026-03-16T22:30:42.592Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-select--documentazione&viewMode=docs",
   "description": "Campo di selezione di un form per scegliere una o più opzioni da una lista predefinita di valori.",
   "variants": [
