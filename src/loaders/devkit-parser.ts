@@ -132,10 +132,5 @@ export function parseStories(source: string): DevKitComponent | null {
     }
     if (subProps.length > 0) subcomponents.push({ tagName: subTagName, props: subProps })
   }
-  const descMatch = source.match(/component:\s*`([\s\S]*?)(?<!\\)`/)
-  const raw = descMatch?.[1]?.trim() ?? null
-  const desc = raw
-    ? (raw.match(/<Description>([\s\S]*?)<\/Description>/)?.[1]?.trim() ?? raw.slice(0, 200))
-    : null
-  return { tagName, props: mainProps, subcomponents, description: desc }
+  return { tagName, props: mainProps, subcomponents }
 }

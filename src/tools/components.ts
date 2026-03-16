@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { ZGetComponentOutput, ZGetComponentVariantOutput } from '../schemas.js'
 import { loadAllStatuses, loadStatus, loadVariants } from '../loaders/bsi.js'
-import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants } from '../loaders/devkit.js'
+import { loadDevKitIndex, loadDevKitEntry, loadStoryVariants, loadStoryDescription} from '../loaders/devkit.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
@@ -117,6 +117,8 @@ export function registerGetComponent(server: McpServer): void {
 
       const allVariants = await loadVariants(canonicalSlug)
 
+      const storyDescription = await loadStoryDescription(canonicalSlug)
+
       if (allVariants.length === 0) {
         warnings.push(`No BSI variants found for "${canonicalSlug}"`)
       }
@@ -145,6 +147,7 @@ export function registerGetComponent(server: McpServer): void {
             storybookUrl: devKitEntry.storybookUrl,
             pattern: devKitEntry.pattern,
             componentType: devKitEntry.componentType,
+            description: storyDescription,
             storyVariants: storyVariants
               ? {
                 count: storyVariants.length,

@@ -4,7 +4,7 @@ import { ZGetComponentFullOutput } from '../schemas.js'
 import { loadStatus, loadVariants, loadTokens } from '../loaders/bsi.js'
 import { loadGuidelines } from '../loaders/designers.js'
 import { resolveTokenValues } from '../loaders/tokens.js'
-import { loadDevKitEntry, loadDevKitComponent, loadStoryVariants } from '../loaders/devkit.js'
+import { loadDevKitEntry, loadDevKitComponent, loadStoryVariants, loadStoryDescription } from '../loaders/devkit.js'
 import { loadComponentIssues } from '../loaders/github.js'
 import { slugify } from '../slugify.js'
 import type { ComponentFull } from '../types.js'
@@ -82,10 +82,12 @@ export function registerGetComponentFull(server: McpServer): void {
 
       // ── Story variants (all components — depends on devKitEntry) ───────────
       let storyVariantsData: import('../types.js').ComponentVariant[] | null = null
+      let storyDescriptionData: string | null = null
       if (devKitEntryData) {
         try {
           storyVariantsData = await loadStoryVariants(canonicalSlug)
-          
+          storyDescriptionData = await loadStoryDescription(canonicalSlug)
+
           if (storyVariantsData?.some(v => /-\d+$/.test(v.name))) {
             warnings.push('Some Dev Kit variants have numeric suffixes (-2, -3): multiple examples of the same variant.')
           }
@@ -154,6 +156,7 @@ export function registerGetComponentFull(server: McpServer): void {
         devKit: {
           entry: devKitEntryData,
           component: devKitComponentData,
+          description: storyDescriptionData,
           storyVariants: storyVariantsData
             ? {
               count: storyVariantsData.length,

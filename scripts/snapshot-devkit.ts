@@ -31,7 +31,7 @@ const DEFAULT_OUT = resolve(PROJECT_ROOT, 'data-fetched/devkit/stories')
 const CONCURRENCY = 4
 
 /** Components known to have 0 variants upstream (not a bug) */
-const KNOWN_ZERO_VARIANTS = new Set(['form-select'])
+const KNOWN_ZERO_VARIANTS = new Set(['sticky'])
 
 // ── Args ──────────────────────────────────────────────────────────────────────
 
@@ -67,6 +67,7 @@ interface ComponentSnapshot {
   slug: string
   fetchedAt: string
   devkitUrl: string
+  description: string | null
   variants: StoryVariant[]
 }
 
@@ -125,12 +126,29 @@ async function processSlug(slug: string, browser: Browser): Promise<ProcessResul
       ).catch(() => null) // fallback: some panels may genuinely have no code
     }
 
-    // extract variants — each pre is preceded by its h2/h3/h4 story title
+    // extract description and variants from rendered Storybook page
+    // description: first <description> tag after <h1>
+    // variants: each <pre> preceded by its h2/h3/h4 story title
     // multiple <pre> under the same heading get a numeric suffix (-2, -3, ...)
-    const variants: StoryVariant[] = await page.evaluate(() => {
+    const { variants, description } = await page.evaluate((slugArg) => {
+
+      // ── Component description — <description> tag after <h1#{slug}> 
+      // or <h1> with class `sbdocs-title`
+      let description: string | null = null
+      const slugWithoutForm = slugArg.replace(/^form-/, '')
+      const h1 = document.querySelector(`h1#${slugArg}`)
+        ?? document.querySelector(`h1#${slugWithoutForm}`)
+        ?? document.querySelector('h1.sbdocs-title')
+      if (h1) {
+        const next = h1.nextElementSibling
+        if (next?.tagName.toLowerCase() === 'description') {
+          description = next.textContent?.trim() ?? null
+        }
+      }
+
+      // Variants
       const results: { name: string; html: string }[] = []
       const nameCounts = new Map<string, number>()
-
       document.querySelectorAll('pre').forEach(el => {
         const html = (el as HTMLElement).innerText.trim()
         if (!html) return
@@ -149,13 +167,15 @@ async function processSlug(slug: string, browser: Browser): Promise<ProcessResul
           sibling = sibling.previousElementSibling
         }
       })
-      return results
-    })
+
+      return { variants: results, description }
+    }, slug)
 
     const snapshot: ComponentSnapshot = {
       slug,
       fetchedAt: new Date().toISOString(),
       devkitUrl: url,
+      description,
       variants,
     }
 

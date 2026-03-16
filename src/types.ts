@@ -89,7 +89,6 @@ export interface DevKitComponent {
     tagName: string      // it-accordion-item
     props: WebComponentProp[]
   }>
-  description: string | null
 }
 
 // ─── GitHub Issues and board status ───────────────────────────────────────────
@@ -167,6 +166,7 @@ export interface DevKitStorySnapshot {
   slug: string
   fetchedAt: string
   devkitUrl: string
+  description: string | null
   variants: DevKitStoryVariant[]
 }
 
@@ -181,7 +181,6 @@ export interface DevKitPropsSnapshot {
     tagName: string
     props: WebComponentProp[]
   }>
-  description: string | null
 }
 
 // ─── Aggregated response get_component_full ───────────────────────────────────
@@ -210,6 +209,7 @@ export interface ComponentFull {
   devKit: {
     entry: DevKitEntry | null
     component: DevKitComponent | null
+    description: string | null
     storyVariants: {
       count: number
       available: string[]

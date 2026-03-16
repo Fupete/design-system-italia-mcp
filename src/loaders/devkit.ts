@@ -98,6 +98,20 @@ export async function loadStoryVariants(
   return null
 }
 
+export async function loadStoryDescription(slug: string): Promise<string | null> {
+  const normalized = slugify(slug)
+  for (const s of slugsToTry(normalized)) {
+    const url = SNAPSHOT_DEVKIT_STORY_URL(s)
+    try {
+      const snapshot = await fetchJson<DevKitStorySnapshot>(url)
+      return snapshot.description ?? null
+    } catch {
+      continue
+    }
+  }
+  return null
+}
+
 export async function loadDevKitComponent(slug: string): Promise<DevKitComponent | null> {
   const key = CACHE_KEYS.devKitProps(slugify(slug))
   const cached = cache.get<DevKitComponent>(key)
@@ -116,7 +130,6 @@ export async function loadDevKitComponent(slug: string): Promise<DevKitComponent
         tagName: snapshot.tagName,
         props: snapshot.props,
         subcomponents: snapshot.subcomponents,
-        description: snapshot.description,
       }
       cache.set(key, component, TTL.snapshot)
       return component

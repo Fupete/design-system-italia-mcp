@@ -279,14 +279,13 @@ results.push(...await batchedFetchAndSave(
     path: `devkit/props/${slug}.json`,
     transform: (raw: string) => {
       const component = parseDevKitStories(raw)
-      if (!component) return JSON.stringify({ slug, fetchedAt: new Date().toISOString(), tagName: null, props: [], subcomponents: [], description: null }, null, 2)
+      if (!component) return JSON.stringify({ slug, fetchedAt: new Date().toISOString(), tagName: null, props: [], subcomponents: []}, null, 2)
       return JSON.stringify({
         slug,
         fetchedAt: new Date().toISOString(),
         tagName: component.tagName,
         props: component.props,
         subcomponents: component.subcomponents,
-        description: component.description,
       } satisfies import('../src/types.js').DevKitPropsSnapshot, null, 2)
     },
   }))
