@@ -158,8 +158,8 @@ export const ZGetComponentFullOutput = z.object({
           options: z.array(z.string()),
         })),
       })),
-      description: z.string().nullable(),
     }).nullable(),
+    description: z.string().nullable(),
     storyVariants: ZStoryVariants.nullable(),
   }),
   openIssues: z.array(z.object({
