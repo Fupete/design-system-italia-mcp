@@ -59,7 +59,6 @@ export interface ComponentGuidelines {
   categories: string[]
   whenToUse: string | null
   howToUse: string | null
-  accessibilityNotes: string | null
 }
 
 // ─── Dev Kit Italia ───────────────────────────────────────────────────────────

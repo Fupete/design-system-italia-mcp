@@ -62,7 +62,6 @@ function parseGuidelines(raw: RawDesignersJson): ComponentGuidelines {
     categories: hero?.kangaroo?.tagsDesignSystem ?? [],
     whenToUse: findText('quando usarlo') ?? findText('quando usare'),
     howToUse: findText('come usarlo') ?? findText('come usare'),
-    accessibilityNotes: findText('accessibilit'),
   }
 }
 

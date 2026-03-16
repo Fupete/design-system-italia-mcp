@@ -68,7 +68,6 @@ export function registerGetComponentGuidelines(server: McpServer): void {
                   ? {
                     whenToUse: guidelines.whenToUse,
                     howToUse: guidelines.howToUse,
-                    accessibilityNotes: guidelines.accessibilityNotes,
                   }
                   : null,
                 devKit: devKitEntry

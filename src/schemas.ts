@@ -113,7 +113,6 @@ export const ZComponentGuidelines = z.object({
   categories: z.array(z.string()),
   whenToUse: z.string().nullable(),
   howToUse: z.string().nullable(),
-  accessibilityNotes: z.string().nullable(),
 })
 
 // ─── get_component_full ───────────────────────────────────────────────────────
