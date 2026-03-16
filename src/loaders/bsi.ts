@@ -97,7 +97,7 @@ export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
     const url = SNAPSHOT_BSI_COMPONENT_URL(s)
     try {
       const raw = await fetchJson<RawVariantsJson>(url)
-      const variants = raw.map((v) => ({ name: v.name, html: v.content }))
+      const variants = raw.map((v) => ({ name: v.name.trim(), html: v.content }))
       cache.set(key, variants, TTL.snapshot)
       return variants
     } catch {

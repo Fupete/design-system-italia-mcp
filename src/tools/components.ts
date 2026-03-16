@@ -293,7 +293,7 @@ export function registerGetComponentVariant(server: McpServer): void {
 
       // Search BSI variants
       const bsiMatch = allVariants.find(
-        v => v.name.toLowerCase() === variantName.toLowerCase()
+        v => v.name.trim().toLowerCase() === variantName.trim().toLowerCase()
       )
       if (bsiMatch) {
         results.push({ ...bsiMatch, source: 'bsi' })
@@ -302,7 +302,7 @@ export function registerGetComponentVariant(server: McpServer): void {
       // Search story variants
       if (storyVariants) {
         const storyMatch = storyVariants.find(
-          v => v.name.toLowerCase() === variantName.toLowerCase()
+          v => v.name.trim().toLowerCase() === variantName.trim().toLowerCase()
         )
         if (storyMatch) {
           results.push({ ...storyMatch, source: 'devkit-story' })
