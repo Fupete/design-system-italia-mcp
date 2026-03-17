@@ -1,6 +1,27 @@
 {
   "slug": "sticky",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-sticky--documentazione&viewMode=docs",
-  "description": null,
-  "variants": []
+  "description": "Comportamento che rende un elemento costantemente visibile allo scorrere della pagina.",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-sticky>\n  <div class=\"bg-primary text-white p-3\">Elemento Sticky</div>\n</it-sticky>"
+    },
+    {
+      "name": "offset",
+      "html": "<it-sticky padding-top=\"50\">\n  <div class=\"bg-primary text-white p-3\">Elemento Sticky</div>\n</it-sticky>"
+    },
+    {
+      "name": "position-fixed",
+      "html": "<it-sticky position-type=\"fixed\">\n  <div class=\"bg-primary text-white p-3\">Elemento Sticky</div>\n</it-sticky>"
+    },
+    {
+      "name": "classi-personalizzate",
+      "html": "<it-sticky sticky-class-name=\"bg-light text-black\">\n  <div class=\"bg-primary text-white p-3\">Elemento Sticky</div>\n</it-sticky>"
+    },
+    {
+      "name": "versione-impilabile",
+      "html": "<it-sticky stackable=\"\">\n  <div class=\"bg-primary text-white p-3\">Elemento Sticky</div>\n</it-sticky>"
+    }
+  ]
 }
