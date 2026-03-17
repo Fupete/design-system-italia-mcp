@@ -175,6 +175,7 @@ export const ZGetComponentFullOutput = z.object({
       designSystem: z.string(),
       bootstrapItalia: z.string(),
       devKitItalia: z.string(),
+      designTokensItalia: z.string(),
     }).optional(),
     designersUrl: z.string().nullable().optional(),
   }),
