@@ -5,6 +5,8 @@
 
 import type { DevKitComponent, WebComponentProp } from '../types.js'
 
+const MAX_ITERATIONS = 10_000
+
 function extractArgTypesBlock(source: string, exportName?: string): string | null {
   const pattern = exportName
     ? new RegExp(`export const ${exportName}[\\s\\S]*?argTypes:\\s*\\{`, 's')
@@ -12,8 +14,12 @@ function extractArgTypesBlock(source: string, exportName?: string): string | nul
   const startMatch = source.match(pattern)
   if (!startMatch) return null
   const startIdx = (startMatch.index ?? 0) + startMatch[0].length - 1
-  let depth = 0, i = startIdx
+  let depth = 0, i = startIdx, iterations = 0
   while (i < source.length) {
+    if (++iterations > MAX_ITERATIONS) {
+      console.warn(`[devkit-parser] MAX_ITERATIONS hit in extractArgTypesBlock (exportName=${exportName ?? 'meta'})`)
+      return null
+    }
     if (source[i] === '{') depth++
     if (source[i] === '}') { depth--; if (depth === 0) return source.slice(startIdx, i + 1) }
     i++
@@ -26,8 +32,12 @@ function extractExportBlock(source: string, exportName: string): string | null {
   if (start === -1) return null
   const braceStart = source.indexOf('{', start)
   if (braceStart === -1) return null
-  let depth = 0, i = braceStart
+  let depth = 0, i = braceStart, iterations = 0
   while (i < source.length) {
+    if (++iterations > MAX_ITERATIONS) {
+      console.warn(`[devkit-parser] MAX_ITERATIONS hit in extractExportBlock (exportName=${exportName})`)
+      return null
+    }
     if (source[i] === '{') depth++
     if (source[i] === '}') { depth--; if (depth === 0) return source.slice(braceStart, i + 1) }
     i++
@@ -39,8 +49,12 @@ function findArgTypesInBlock(block: string): string | null {
   const match = block.match(/argTypes:\s*\{/)
   if (!match) return null
   const startIdx = (match.index ?? 0) + match[0].length - 1
-  let depth = 0, i = startIdx
+  let depth = 0, i = startIdx, iterations = 0
   while (i < block.length) {
+    if (++iterations > MAX_ITERATIONS) {
+      console.warn(`[devkit-parser] MAX_ITERATIONS hit in findArgTypesInBlock`)
+      return null
+    }
     if (block[i] === '{') depth++
     if (block[i] === '}') { depth--; if (depth === 0) return block.slice(startIdx, i + 1) }
     i++
@@ -53,8 +67,12 @@ function parseProp(name: string, block: string): WebComponentProp | null {
   const startMatch = block.match(propPattern)
   if (!startMatch) return null
   const startIdx = (startMatch.index ?? 0) + startMatch[0].length - 1
-  let depth = 0, i = startIdx
+  let depth = 0, i = startIdx, iterations = 0
   while (i < block.length) {
+    if (++iterations > MAX_ITERATIONS) {
+      console.warn(`[devkit-parser] MAX_ITERATIONS hit in parseProp (name=${name})`)
+      break
+    }
     if (block[i] === '{') depth++
     if (block[i] === '}') { depth--; if (depth === 0) break }
     i++
