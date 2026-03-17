@@ -18,14 +18,20 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8080
 
+RUN addgroup --system app && adduser --system --ingroup app app
+
 COPY package*.json ./
 RUN npm ci --omit=dev
 
 COPY --from=builder /app/dist ./dist
 
+RUN chown -R app:app /app
+
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
   CMD wget -qO- http://localhost:8080/health || exit 1
+
+USER app
 
 CMD ["node", "dist/index.js"]
