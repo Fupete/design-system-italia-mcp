@@ -7,9 +7,9 @@ Leggere prima di modificare il codice.
 
 ## Contesto del progetto
 
-Server MCP remoto non ufficiale che espone i dati del Design System
+Filo è un server MCP remoto non ufficiale che espone i dati del Design system
 .italia ad assistenti AI (Claude, Cursor, VS Code). Progetto personale
-sperimentale di Daniele Tabellini — non affiliato a DTD o Designers Italia.
+sperimentale e non ufficiale a cura di Daniele Tabellini (Fupete).
 
 Riferimento tecnico: [italia/dati-semantic-mcp](https://github.com/italia/dati-semantic-mcp)
 
@@ -145,9 +145,10 @@ Ogni risposta include `meta.versions` con tre campi distinti:
 
 ```typescript
 versions: {
-  designSystem: string      // da snapshot-meta.json, es. "v1.10.1"
-  bootstrapItalia: string   // da snapshot-meta.json, es. "3.0.0-alpha.2"
-  devKitItalia: string      // da snapshot-meta.json
+  designSystem: string        // da snapshot-meta.json, es. "v1.10.1"
+  bootstrapItalia: string     // da snapshot-meta.json, es. "3.0.0-alpha.2"
+  devKitItalia: string        // da snapshot-meta.json, es. "1.0.0-alpha.5"
+  designTokensItalia: string  // da snapshot-meta.json, es. "1.3.2"
 }
 ```
 
@@ -242,7 +243,7 @@ meta: {
   dataFetchedAt: string | null,  // data snapshot CI — null per Issues (live = formatTimestamp())
   sourceUrls: string[],          // URL upstream delle sorgenti (non URL snapshot interni)
   warnings: string[],            // sorgenti mancanti o errori non fatali
-  versions?: DsVersions,         // designSystem / bootstrapItalia / devKitItalia
+  versions?: DsVersions,         // designSystem / bootstrapItalia / devKitItalia / designTokensItalia
   designersUrl?: string | null,  // URL verificato da dsnav.json, non dedotto
   stability: 'alpha' | 'stable', // alpha se include token BSI 3.x o Dev Kit
 }
