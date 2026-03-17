@@ -2,11 +2,19 @@ import { z } from 'zod'
 
 // ─── Shared ───────────────────────────────────────────────────────────────────
 
+const ZVersions = z.object({
+  designSystem: z.string(),
+  bootstrapItalia: z.string(),
+  devKitItalia: z.string(),
+  designTokensItalia: z.string(),
+})
+
 export const ZMeta = z.object({
   dataFetchedAt: z.string().nullable(),
   sourceUrls: z.array(z.string()),
   warnings: z.array(z.string()),
   stability: z.enum(['alpha', 'stable']),
+  versions: ZVersions.optional(),
 })
 
 export const ZCssToken = z.object({
@@ -31,6 +39,7 @@ export const ZGetComponentTokensOutput = z.object({
   }),
   meta: ZMeta.extend({
     note: z.string(),
+    versions: ZVersions.optional(),
   }),
 })
 
@@ -171,12 +180,6 @@ export const ZGetComponentFullOutput = z.object({
     labels: z.array(z.string()),
   })),
   meta: ZMeta.extend({
-    versions: z.object({
-      designSystem: z.string(),
-      bootstrapItalia: z.string(),
-      devKitItalia: z.string(),
-      designTokensItalia: z.string(),
-    }).optional(),
     designersUrl: z.string().nullable().optional(),
   }),
   sources_available: z.array(z.string()),
