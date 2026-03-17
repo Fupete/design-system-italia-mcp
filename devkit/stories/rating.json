@@ -1,6 +1,5 @@
 {
   "slug": "rating",
-  "fetchedAt": "2026-03-16T23:00:25.872Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-rating--documentazione&viewMode=docs",
   "description": "Scala di valori grafica a stelline per esprimere una valutazione su un servizio o un contenuto.",
   "variants": [

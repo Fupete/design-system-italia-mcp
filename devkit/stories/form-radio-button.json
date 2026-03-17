@@ -1,6 +1,5 @@
 {
   "slug": "form-radio-button",
-  "fetchedAt": "2026-03-16T23:00:04.309Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-radio-button--documentazione&viewMode=docs",
   "description": "Pulsante di selezione che consente di indicare un'unica scelta tra più elementi all'interno di un elenco di opzioni predefinite.",
   "variants": [

@@ -1,6 +1,5 @@
 {
   "slug": "carousel",
-  "fetchedAt": "2026-03-16T22:59:50.344Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-carousel--documentazione&viewMode=docs",
   "description": "Componente di presentazione per scorrere orizzontalmente una sequenza di elementi, immagini o diapositive di testo",
   "variants": [

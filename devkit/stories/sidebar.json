@@ -1,6 +1,5 @@
 {
   "slug": "sidebar",
-  "fetchedAt": "2026-03-16T23:00:29.917Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-sidebar--documentazione&viewMode=docs",
   "description": "Barra di navigazione laterale che include liste di link diretti o annidati.",
   "variants": [

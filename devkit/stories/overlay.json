@@ -1,6 +1,5 @@
 {
   "slug": "overlay",
-  "fetchedAt": "2026-03-16T23:00:25.726Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-overlay--documentazione&viewMode=docs",
   "description": "Etichetta opaca per aggiungere testo o icone in sovrimpressione a immagini.",
   "variants": [

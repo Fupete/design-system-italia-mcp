@@ -1,6 +1,5 @@
 {
   "slug": "card",
-  "fetchedAt": "2026-03-16T22:59:50.109Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-card--documentazione&viewMode=docs",
   "description": "Aiutano a presentare un gruppo di contenuti correlati, come articoli o sezioni di un sito web e permettono di continuare la navigazione verso le rispettive pagine di dettaglio",
   "variants": [

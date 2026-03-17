@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-03-16T22:59:36.047Z",
+  "fetchedAt": "2026-03-17T00:15:41.631Z",
   "versions": {
     "designSystem": "v1.10.1",
     "bootstrapItalia": "3.0.0-alpha.5",
@@ -12,592 +12,445 @@
   },
   "sources": {
     "bsi/components-status.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.581Z"
+      "ok": true
     },
     "bsi/components/accordion.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.741Z"
+      "ok": true
     },
     "bsi/components/affix.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.743Z"
+      "ok": true
     },
     "bsi/components/alert.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.745Z"
+      "ok": true
     },
     "bsi/components/autocomplete.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.747Z"
+      "ok": true
     },
     "bsi/components/avatar.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.749Z"
+      "ok": true
     },
     "bsi/components/back.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.750Z"
+      "ok": true
     },
     "bsi/components/back-to-top.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.751Z"
+      "ok": true
     },
     "bsi/components/badge.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.752Z"
+      "ok": true
     },
     "bsi/components/bottomnav.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.887Z"
+      "ok": true
     },
     "bsi/components/breadcrumbs.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.888Z"
+      "ok": true
     },
     "bsi/components/buttons.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.888Z"
+      "ok": true
     },
     "bsi/components/callout.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.888Z"
+      "ok": true
     },
     "bsi/components/card.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.888Z"
+      "ok": true
     },
     "bsi/components/carousel.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.888Z"
+      "ok": true
     },
     "bsi/components/checkbox.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.889Z"
+      "ok": true
     },
     "bsi/components/chips.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.889Z"
+      "ok": true
     },
     "bsi/components/collapse.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.956Z"
+      "ok": true
     },
     "bsi/components/datepicker.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.956Z"
+      "ok": true
     },
     "bsi/components/dimmer.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.957Z"
+      "ok": true
     },
     "bsi/components/dropdown.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.957Z"
+      "ok": true
     },
     "bsi/components/footer.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.957Z"
+      "ok": true
     },
     "bsi/components/form.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.957Z"
+      "ok": true
     },
     "bsi/components/forward.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.957Z"
+      "ok": true
     },
     "bsi/components/header.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:33.958Z"
+      "ok": true
     },
     "bsi/components/hero.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.088Z"
+      "ok": true
     },
     "bsi/components/input.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.089Z"
+      "ok": true
     },
     "bsi/components/list.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.089Z"
+      "ok": true
     },
     "bsi/components/megamenu.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.089Z"
+      "ok": true
     },
     "bsi/components/modal.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.089Z"
+      "ok": true
     },
     "bsi/components/navscroll.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.090Z"
+      "ok": true
     },
     "bsi/components/notifications.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.090Z"
+      "ok": true
     },
     "bsi/components/number-input.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.090Z"
+      "ok": true
     },
     "bsi/components/overlay.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.196Z"
+      "ok": true
     },
     "bsi/components/pagination.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.196Z"
+      "ok": true
     },
     "bsi/components/popover.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.197Z"
+      "ok": true
     },
     "bsi/components/progress-indicators.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.197Z"
+      "ok": true
     },
     "bsi/components/radio-button.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.197Z"
+      "ok": true
     },
     "bsi/components/rating.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.197Z"
+      "ok": true
     },
     "bsi/components/sections.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.197Z"
+      "ok": true
     },
     "bsi/components/select.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.198Z"
+      "ok": true
     },
     "bsi/components/sidebar.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.302Z"
+      "ok": true
     },
     "bsi/components/skiplinks.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.303Z"
+      "ok": true
     },
     "bsi/components/steppers.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.303Z"
+      "ok": true
     },
     "bsi/components/sticky.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.303Z"
+      "ok": true
     },
     "bsi/components/tables.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.303Z"
+      "ok": true
     },
     "bsi/components/tabs.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.303Z"
+      "ok": true
     },
     "bsi/components/thumbnav.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.303Z"
+      "ok": true
     },
     "bsi/components/timeline.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.304Z"
+      "ok": true
     },
     "bsi/components/timepicker.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.462Z"
+      "ok": true
     },
     "bsi/components/toggles.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.462Z"
+      "ok": true
     },
     "bsi/components/toolbar.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.463Z"
+      "ok": true
     },
     "bsi/components/tooltip.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.463Z"
+      "ok": true
     },
     "bsi/components/transfer.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.463Z"
+      "ok": true
     },
     "bsi/components/upload.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.463Z"
+      "ok": true
     },
     "bsi/components/video-player.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.463Z"
+      "ok": true
     },
     "bsi/custom-properties.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.560Z"
+      "ok": true
     },
     "bsi/root.scss": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.621Z"
+      "ok": true
     },
     "devkit/index.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.690Z"
+      "ok": true
     },
     "devkit/props/accordion.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.765Z"
+      "ok": true
     },
     "devkit/props/avatar.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.765Z"
+      "ok": true
     },
     "devkit/props/back-to-top.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.766Z"
+      "ok": true
     },
     "devkit/props/breadcrumbs.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.766Z"
+      "ok": true
     },
     "devkit/props/button.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.766Z"
+      "ok": true
     },
     "devkit/props/callout.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.766Z"
+      "ok": true
     },
     "devkit/props/card.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.766Z"
+      "ok": true
     },
     "devkit/props/carousel.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.767Z"
+      "ok": true
     },
     "devkit/props/chip.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.837Z"
+      "ok": true
     },
     "devkit/props/collapse.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.837Z"
+      "ok": true
     },
     "devkit/props/dropdown.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.838Z"
+      "ok": true
     },
     "devkit/props/form-autocomplete.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.838Z"
+      "ok": true
     },
     "devkit/props/form-checkbox.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.838Z"
+      "ok": true
     },
     "devkit/props/form-datepicker.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.838Z"
+      "ok": true
     },
     "devkit/props/form-input.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.838Z"
+      "ok": true
     },
     "devkit/props/form-number-input.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.838Z"
+      "ok": true
     },
     "devkit/props/form-radio-button.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.923Z"
+      "ok": true
     },
     "devkit/props/form-select.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.924Z"
+      "ok": true
     },
     "devkit/props/form-timepicker.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.924Z"
+      "ok": true
     },
     "devkit/props/hero.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.924Z"
+      "ok": true
     },
     "devkit/props/icon.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.924Z"
+      "ok": true
     },
     "devkit/props/megamenu.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.924Z"
+      "ok": true
     },
     "devkit/props/modal.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.924Z"
+      "ok": true
     },
     "devkit/props/navscroll.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:34.925Z"
+      "ok": true
     },
     "devkit/props/pagination.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.004Z"
+      "ok": true
     },
     "devkit/props/popover.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.004Z"
+      "ok": true
     },
     "devkit/props/rating.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.005Z"
+      "ok": true
     },
     "devkit/props/section.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.005Z"
+      "ok": true
     },
     "devkit/props/skiplinks.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.005Z"
+      "ok": true
     },
     "devkit/props/sticky.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.005Z"
+      "ok": true
     },
     "devkit/props/video-player.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.005Z"
+      "ok": true
     },
     "design-tokens/variables.scss": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.133Z"
+      "ok": true
     },
     "designers/components/accordion.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.326Z"
+      "ok": true
     },
     "designers/components/affix.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.326Z"
+      "ok": true
     },
     "designers/components/alert.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.326Z"
+      "ok": true
     },
     "designers/components/autocomplete.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.326Z"
+      "ok": true
     },
     "designers/components/avatar.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.327Z"
+      "ok": true
     },
     "designers/components/back.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.327Z"
+      "ok": true
     },
     "designers/components/back-to-top.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.327Z"
+      "ok": true
     },
     "designers/components/badge.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.327Z"
+      "ok": true
     },
     "designers/components/bottomnav.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.414Z"
+      "ok": true
     },
     "designers/components/breadcrumbs.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.414Z"
+      "ok": true
     },
     "designers/components/buttons.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.415Z"
+      "ok": true
     },
     "designers/components/callout.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.415Z"
+      "ok": true
     },
     "designers/components/card.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.415Z"
+      "ok": true
     },
     "designers/components/carousel.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.415Z"
+      "ok": true
     },
     "designers/components/checkbox.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.415Z"
+      "ok": true
     },
     "designers/components/chips.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.415Z"
+      "ok": true
     },
     "designers/components/collapse.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.490Z"
+      "ok": true
     },
     "designers/components/datepicker.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.490Z"
+      "ok": true
     },
     "designers/components/dimmer.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.491Z"
+      "ok": true
     },
     "designers/components/dropdown.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.491Z"
+      "ok": true
     },
     "designers/components/footer.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.491Z"
+      "ok": true
     },
     "designers/components/form.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.491Z"
+      "ok": true
     },
     "designers/components/forward.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.491Z"
+      "ok": true
     },
     "designers/components/header.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.491Z"
+      "ok": true
     },
     "designers/components/hero.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.574Z"
+      "ok": true
     },
     "designers/components/input.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.574Z"
+      "ok": true
     },
     "designers/components/list.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.574Z"
+      "ok": true
     },
     "designers/components/megamenu.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.574Z"
+      "ok": true
     },
     "designers/components/modal.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.575Z"
+      "ok": true
     },
     "designers/components/navscroll.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.575Z"
+      "ok": true
     },
     "designers/components/notifications.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.575Z"
+      "ok": true
     },
     "designers/components/number-input.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.575Z"
+      "ok": true
     },
     "designers/components/overlay.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.645Z"
+      "ok": true
     },
     "designers/components/pagination.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.645Z"
+      "ok": true
     },
     "designers/components/popover.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.645Z"
+      "ok": true
     },
     "designers/components/progress-indicators.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.646Z"
+      "ok": true
     },
     "designers/components/radio-button.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.646Z"
+      "ok": true
     },
     "designers/components/rating.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.646Z"
+      "ok": true
     },
     "designers/components/sections.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.646Z"
+      "ok": true
     },
     "designers/components/select.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.646Z"
+      "ok": true
     },
     "designers/components/sidebar.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.723Z"
+      "ok": true
     },
     "designers/components/skiplinks.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.723Z"
+      "ok": true
     },
     "designers/components/steppers.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.723Z"
+      "ok": true
     },
     "designers/components/sticky.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.723Z"
+      "ok": true
     },
     "designers/components/tables.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.724Z"
+      "ok": true
     },
     "designers/components/tabs.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.724Z"
+      "ok": true
     },
     "designers/components/thumbnav.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.724Z"
+      "ok": true
     },
     "designers/components/timeline.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.724Z"
+      "ok": true
     },
     "designers/components/timepicker.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.788Z"
+      "ok": true
     },
     "designers/components/toggles.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.789Z"
+      "ok": true
     },
     "designers/components/toolbar.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.789Z"
+      "ok": true
     },
     "designers/components/tooltip.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.789Z"
+      "ok": true
     },
     "designers/components/transfer.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.789Z"
+      "ok": true
     },
     "designers/components/upload.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.789Z"
+      "ok": true
     },
     "designers/components/video-player.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.789Z"
+      "ok": true
     },
     "dsnav.json": {
-      "ok": true,
-      "fetchedAt": "2026-03-16T22:59:35.863Z"
+      "ok": true
     }
   }
 }

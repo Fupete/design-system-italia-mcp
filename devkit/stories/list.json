@@ -1,6 +1,5 @@
 {
   "slug": "list",
-  "fetchedAt": "2026-03-16T23:00:19.418Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-list--documentazione&viewMode=docs",
   "description": "Lista di testi, link e altri elementi per presentare contenuti correlati o facilitare la navigazione.",
   "variants": [

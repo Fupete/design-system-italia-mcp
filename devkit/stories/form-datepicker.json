@@ -1,6 +1,5 @@
 {
   "slug": "form-datepicker",
-  "fetchedAt": "2026-03-16T22:59:56.045Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-datepicker--documentazione&viewMode=docs",
   "description": "Campo per selezionare una data all'interno di un calendario o inserirla manualmente.",
   "variants": [
@@ -10,7 +9,7 @@
     },
     {
       "name": "limitare-la-selezione-a-un-intervallo-specifico",
-      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-03-16\" max=\"2026-03-19\">\n  <span slot=\"label\">Scegli una data nel periodo</span>\n</it-input>"
+      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-03-17\" max=\"2026-03-20\">\n  <span slot=\"label\">Scegli una data nel periodo</span>\n</it-input>"
     },
     {
       "name": "limitare-la-selezione-a-intervalli-regolari",

@@ -1,6 +1,5 @@
 {
   "slug": "avatar",
-  "fetchedAt": "2026-03-16T22:59:41.681Z",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-avatar--documentazione&viewMode=docs",
   "description": "Rappresentazione grafica di un utente per identificare visivamente la persona online",
   "variants": [
