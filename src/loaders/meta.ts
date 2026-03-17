@@ -52,12 +52,14 @@ export async function loadDsMeta(): Promise<DsMeta> {
     designSystem: '',
     bootstrapItalia: '',
     devKitItalia: '',
+    designTokensItalia: '',
   }
 
   if (snapshotMetaResult.status === 'fulfilled') {
     versions.designSystem = snapshotMetaResult.value.versions.designSystem ?? ''
     versions.bootstrapItalia = snapshotMetaResult.value.versions.bootstrapItalia ?? ''
     versions.devKitItalia = snapshotMetaResult.value.versions.devKitItalia ?? ''
+    versions.designTokensItalia = snapshotMetaResult.value.versions.designTokensItalia ?? ''
   }
 
   // Navigation — from dsnav.json

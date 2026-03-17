@@ -39,6 +39,7 @@ import {
     DESIGNERS_COMPONENT_URL,
     DESIGNERS_DSNAV_URL,
     DTI_VARIABLES_SCSS_URL,
+    DTI_PACKAGE_JSON_URL,
     DEVKIT_INDEX_URL,
     DEVKIT_PACKAGE_JSON_URL,
     DEVKIT_STORIES_URL,
@@ -324,9 +325,10 @@ try {
 
 // Step 8 — versions (BSI + Dev Kit from package.json, DS from dsnav)
 
-console.log('  versions (BSI + Dev Kit + Design System)')
+console.log('  versions (BSI + Dev Kit + Design Tokens + Design System)')
 let bsiVersion = 'unknown'
 let devkitVersion = 'unknown'
+let dtiVersion = 'unknown'
 let dsVersion = 'unknown'
 
 try {
@@ -341,6 +343,13 @@ try {
     devkitVersion = dkPkg.version
 } catch (err) {
     console.warn(`  ⚠️  Dev Kit version: ${(err as Error).message}`)
+}
+
+try {
+    const dtiPkg = JSON.parse(await fetchText(DTI_PACKAGE_JSON_URL)) as { version: string }
+    dtiVersion = dtiPkg.version
+} catch (err) {
+    console.warn(`  ⚠️  Design Tokens version: ${(err as Error).message}`)
 }
 
 // reuse already-parsed dsnav — no second fetch or parse
@@ -359,6 +368,7 @@ const meta = {
         designSystem: dsVersion,
         bootstrapItalia: bsiVersion,
         devKitItalia: devkitVersion,
+        designTokensItalia: dtiVersion,
     },
     stats: {
         total: results.length,

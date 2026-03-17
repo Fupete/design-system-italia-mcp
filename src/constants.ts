@@ -152,6 +152,9 @@ export const SNAPSHOT_BSI_ROOT_SCSS_URL =
 export const SNAPSHOT_DTI_VARIABLES_SCSS_URL =
   `${DATA_FETCHED_RAW_BASE}/design-tokens/variables.scss`
 
+export const DTI_PACKAGE_JSON_URL =
+  'https://raw.githubusercontent.com/italia/design-tokens-italia/main/package.json'
+
 export const SNAPSHOT_DEVKIT_INDEX_URL =
   `${DATA_FETCHED_RAW_BASE}/devkit/index.json`
 

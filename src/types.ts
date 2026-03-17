@@ -119,7 +119,8 @@ export interface BoardStatus {
 export interface DsVersions {
   designSystem: string        // from dsnav.yaml, e.g. "v1.10.1"
   bootstrapItalia: string     // from BSI package.json, e.g. "3.0.0-alpha.2"
-  devKitItalia: string        // from Dev Kit package.json
+  devKitItalia: string        // from Dev Kit package.json, e.g. "1.0.0-alpha.5"
+  designTokensItalia: string  // from DTI package.json, e.g. "1.3.2"
 }
 
 export interface DsNavEntry {

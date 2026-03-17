@@ -22,6 +22,7 @@ import {
   DESIGNERS_COMPONENT_URL,
   DESIGNERS_DSNAV_URL,
   DTI_VARIABLES_SCSS_URL,
+  DTI_PACKAGE_JSON_URL,
   DEVKIT_INDEX_URL,
   DEVKIT_PACKAGE_JSON_URL,
   SNAPSHOT_META_URL,
@@ -109,6 +110,11 @@ export const UPSTREAM_HEALTH: StaticSource[] = [
   {
     name: "[upstream] Dev Kit package.json",
     url: DEVKIT_PACKAGE_JSON_URL,
+    jsonField: "version",
+  },
+    {
+    name: "[upstream] Design Tokens package.json",
+    url: DTI_PACKAGE_JSON_URL,
     jsonField: "version",
   },
 ];
