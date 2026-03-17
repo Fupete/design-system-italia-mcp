@@ -72,17 +72,18 @@ export function registerGetComponentTokens(server: McpServer): void {
           literal: byType.literal.length,
           scssExpression: byType.scssExpression.length,
         },
-        meta: {
-          ...buildMeta({
-            dsMeta,
-            sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
-            warnings,
-            stability: 'alpha',
-          }),
-          note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
-            'resolvedVia: intermediate --it-* token in the resolution chain (--bsi-* → --it-* → value). ' +
-            'null = resolution not available, value is already literal or another --bsi-* variable.',
-        },
+        meta: buildMeta({
+          dsMeta,
+          sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
+          warnings,
+          stability: 'alpha',
+          extra: {
+            versions: dsMeta?.versions ?? undefined,
+            note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
+              'resolvedVia: intermediate --it-* token in the resolution chain (--bsi-* → --it-* → value). ' +
+              'null = resolution not available, value is already literal or another --bsi-* variable.',
+          },
+        }),
       }
 
       return {
@@ -152,6 +153,7 @@ export function registerFindToken(server: McpServer): void {
                   sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL],
                   warnings,
                   stability: 'alpha',
+                  extra: { versions: dsMeta?.versions ?? undefined },
                 }),
               },
               null,

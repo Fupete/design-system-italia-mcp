@@ -43,7 +43,7 @@ export function registerGetComponentGuidelines(server: McpServer): void {
       }
 
       warnings.push('Guidelines content © Designers Italia — CC-BY-SA 4.0. Derivatives inherit ShareAlike requirement. See https://designers.italia.it')
-      
+
       warnings.push(ALPHA_WARNING)
 
       return {
@@ -82,13 +82,13 @@ export function registerGetComponentGuidelines(server: McpServer): void {
                   bsiDoc: status?.sourceUrls.bsiDoc ?? null,
                   figma: status?.sourceUrls.figma ?? null,
                 },
-                meta: {
-                  dataFetchedAt: dsMeta?.fetchedAt ?? null,
+                meta: buildMeta({
+                  dsMeta,
                   sourceUrls: [DESIGNERS_COMPONENT_URL(canonicalSlug), BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   warnings,
-                  stability: 'alpha' as const,
-                  versions: dsMeta.versions,
-                },
+                  stability: 'alpha',
+                  extra: { versions: dsMeta?.versions ?? undefined },
+                }),
               },
               null,
               2
@@ -149,6 +149,7 @@ export function registerListByStatus(server: McpServer): void {
                   sourceUrls: [BSI_STATUS_URL],
                   warnings: [],
                   stability: 'stable',
+                  extra: { versions: dsMeta?.versions ?? undefined },
                 }),
               },
               null,
@@ -212,6 +213,7 @@ export function registerListAccessibilityIssues(server: McpServer): void {
                   sourceUrls: [BSI_STATUS_URL],
                   warnings: [],
                   stability: 'stable',
+                  extra: { versions: dsMeta?.versions ?? undefined },
                 }),
               },
               null,

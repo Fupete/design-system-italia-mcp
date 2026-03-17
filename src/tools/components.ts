@@ -67,12 +67,13 @@ export function registerListComponents(server: McpServer): void {
               {
                 total: components.length,
                 components,
-                meta: {
-                  dataFetchedAt: dsMeta?.fetchedAt ?? null,
+                meta: buildMeta({
+                  dsMeta,
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
-                  versions: dsMeta.versions,
-                  stability: 'alpha' as const,
-                },
+                  warnings: [],
+                  stability: 'alpha',
+                  extra: { versions: dsMeta?.versions ?? undefined },
+                }),
               },
               null,
               2
@@ -171,6 +172,7 @@ export function registerGetComponent(server: McpServer): void {
           ],
           warnings,
           stability: 'alpha',
+          extra: { versions: dsMeta?.versions ?? undefined },
         }),
       }
 
@@ -246,12 +248,13 @@ export function registerSearchComponents(server: McpServer): void {
                 query,
                 total: results.length,
                 results,
-                meta: {
-                  dataFetchedAt: dsMeta?.fetchedAt ?? null,
+                meta: buildMeta({
+                  dsMeta,
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
-                  versions: dsMeta.versions,
-                  stability: 'alpha' as const,
-                },
+                  warnings: [],
+                  stability: 'alpha',
+                  extra: { versions: dsMeta?.versions ?? undefined },
+                }),
               },
               null,
               2

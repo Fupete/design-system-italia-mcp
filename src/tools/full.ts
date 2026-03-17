@@ -9,6 +9,7 @@ import { loadComponentIssues } from '../loaders/github.js'
 import { slugify } from '../slugify.js'
 import type { ComponentFull } from '../types.js'
 import { loadDsMeta } from '../loaders/meta.js'
+import { buildMeta } from './helpers.js'
 import {
   ALPHA_WARNING,
   BSI_STATUS_URL,
@@ -168,14 +169,16 @@ export function registerGetComponentFull(server: McpServer): void {
             : null,
         },
         openIssues: issuesData,
-        meta: {
-          dataFetchedAt: dsMetaData?.fetchedAt ?? null,
+        meta: buildMeta({
+          dsMeta: dsMetaData,
           sourceUrls,
           warnings,
-          versions: dsMetaData?.versions ?? undefined,
-          designersUrl: dsMetaData?.components.get(canonicalSlug)?.absoluteUrl ?? null,
-          stability: 'alpha' as const,
-        },
+          stability: 'alpha',
+          extra: {
+            versions: dsMetaData?.versions ?? undefined,
+            designersUrl: dsMetaData?.components.get(canonicalSlug)?.absoluteUrl ?? null,
+          },
+        }),
       }
 
       // ── Available sources for transparency ───────────────────────────────────
