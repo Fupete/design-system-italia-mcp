@@ -5,6 +5,7 @@ import { loadComponentIssues, getProjectBoardStatus } from '../loaders/github.js
 import { loadStatus } from '../loaders/bsi.js'
 import { slugify } from '../slugify.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS, BSI_STATUS_URL } from '../constants.js'
+import { buildMeta } from './helpers.js'
 
 // ─── Tool: get_component_issues ───────────────────────────────────────────────
 
@@ -67,15 +68,16 @@ export function registerGetComponentIssues(server: McpServer): void {
                     note: 'Known issues from components_status.json — manually updated, may not be live',
                   },
                 },
-                meta: {
-                  dataFetchedAt: formatTimestamp(),
+                meta: buildMeta({
+                  dsMeta: null,
                   sourceUrls: [
                     `${GITHUB_SEARCH_ISSUES_URL}?q=${canonicalSlug}+${repoFilter}+is:open`,
                     BSI_STATUS_URL,
                   ],
                   warnings,
-                  stability: 'stable' as const
-                },
+                  stability: 'stable',
+                  extra: { dataFetchedAt: formatTimestamp() },
+                }),
               },
               null,
               2
@@ -94,7 +96,7 @@ export function registerGetProjectBoardStatus(server: McpServer): void {
     'get_project_board_status',
     {
       title: 'Get Project Board Status',
-      description: 'Returns the aggregated status of Design System .italia GitHub boards. ' + 
+      description: 'Returns the aggregated status of Design System .italia GitHub boards. ' +
         'Includes links to open issues for each repository.' +
         'use get_component_issues for component-specific issues.',
       inputSchema: {},
