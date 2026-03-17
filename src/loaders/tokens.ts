@@ -1,123 +1,152 @@
-import { fetchText } from '../fetch.js'
+import { fetchText, fetchJson } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import type { CssToken } from '../types.js'
-import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL } from '../constants.js'
+import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL, SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, } from '../constants.js'
 
-// Map 1: --bsi-* → --it-* (from BSI scss/base/root.scss (v3))
-// Map 2: $it-* → value or another $it-* (from design-tokens-italia > _variables.scss)
-
-// ─── Design Tokens Italia _variables.scss parser ───────────────────────────────
+// Map 1: --bsi-* component tokens (custom-properties.json) — token-reference entries only
+// Map 2: --bsi-* → --it-* bridge (BSI scss/base/root.scss v3)
+// Map 3: --it-* → value or --it-* reference (design-tokens-italia > _variables.scss)
 //
+// Resolution chain: --bsi-accordion-padding → --bsi-spacing-m → --it-spacing-m → 1.5rem (24px)
+
+// ─── Parsers ──────────────────────────────────────────────────────────────────
+
+type DtiMap = Map<string, string>     // --it-* → value or --it-* reference
+type BridgeMap = Map<string, string>  // --bsi-* → --it-* (root.scss)
+type BsiMap = Map<string, string>     // --bsi-* → --bsi-* or --it-* (custom-properties.json, token-reference only)
+
 // Format: $it-spacing-m: 1.5rem; // 24px
-// Extract: name ($it-* → --it-*) and concrete value with comment
-
-type DtiMap = Map<string, string>           // --it-* → value (parseDesignTokens, invariato)
-type TokenMap = Map<string, { value: string; via: string }>  // --bsi-* → { value, via } (loadTokenMap)
-
 function parseDesignTokens(scss: string): DtiMap {
   const map: DtiMap = new Map()
-  const lines = scss.split('\n')
-
-  for (const line of lines) {
-    // $it-spacing-m: 1.5rem; // 24px
+  for (const line of scss.split('\n')) {
     const match = line.match(/^\$([a-z0-9-]+):\s*([^;]+);(?:\s*\/\/\s*(.+))?/)
     if (!match) continue
-
     const [, varName, rawValue, comment] = match
-    const cssName = `--${varName}`  // $it-spacing-m → --it-spacing-m
+    const cssName = `--${varName}`
     const value = rawValue.trim()
-
     const isRef = value.startsWith('$')
-    const resolved = isRef
-      ? `--${value.slice(1)}`          // $it-spacing-base → --it-spacing-base
-      : comment?.trim()
-        ? `${value} (${comment.trim()})`
-        : value
-
-    map.set(cssName, resolved)
+    map.set(cssName, isRef
+      ? `--${value.slice(1)}`
+      : comment?.trim() ? `${value} (${comment.trim()})` : value
+    )
   }
-
   return map
 }
 
-// ─── BSI _root.scss parser ────────────────────────────────────────────────────
-//
 // Format: --#{$prefix}spacing-m: var(--it-spacing-m);
-// Extract the bridge: --bsi-spacing-m → --it-spacing-m
-
-type BridgeMap = Map<string, string>  // --bsi-spacing-m → --it-spacing-m
-
 function parseBridge(scss: string): BridgeMap {
   const map: BridgeMap = new Map()
-  const lines = scss.split('\n')
-
-  for (const line of lines) {
-    // --#{$prefix}spacing-m: var(--it-spacing-m);
+  for (const line of scss.split('\n')) {
     const match = line.match(/--#\{\$prefix\}([a-z0-9-]+):\s*var\((--it-[a-z0-9-]+)\)/)
     if (!match) continue
     const [, bsiSuffix, itName] = match
     map.set(`--bsi-${bsiSuffix}`, itName)
   }
-
   return map
+}
+
+// Extract --bsi-* → var(--bsi-* | --it-*) from custom-properties.json
+// Only token-reference entries — literals are already concrete
+type RawTokensJson = Record<string, Array<{ 'variable-name': string; value: string }>>
+
+function parseBsiMap(raw: RawTokensJson): BsiMap {
+  const map: BsiMap = new Map()
+  for (const entries of Object.values(raw)) {
+    for (const e of entries) {
+      if (!e.value.startsWith('var(')) continue
+      const ref = e.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
+      if (ref) map.set(e['variable-name'], ref)
+    }
+  }
+  return map
+}
+
+// ─── Unified resolver ─────────────────────────────────────────────────────────
+//
+// Follows the full chain: --bsi-* → --bsi-* → --it-* → --it-* → concrete value
+// Returns { value, chain } where chain is every intermediate hop (excluding start and final value)
+
+interface ResolveResult {
+  value: string | null
+  chain: string[]
+}
+
+function resolveChain(
+  name: string,
+  bsiMap: BsiMap,
+  bridge: BridgeMap,
+  dtiRaw: DtiMap,
+  visited = new Set<string>()
+): ResolveResult {
+  if (visited.has(name)) return { value: null, chain: [] }
+  visited.add(name)
+
+  // --bsi-* → follow bsiMap (component tokens) or bridge (root.scss)
+  if (name.startsWith('--bsi-')) {
+    const next = bsiMap.get(name) ?? bridge.get(name)
+    if (!next) return { value: null, chain: [] }
+    const result = resolveChain(next, bsiMap, bridge, dtiRaw, visited)
+    return { value: result.value, chain: [next, ...result.chain] }
+  }
+
+  // --it-* → follow dtiRaw
+  if (name.startsWith('--it-')) {
+    const val = dtiRaw.get(name)
+    if (!val) return { value: null, chain: [] }
+    if (val.startsWith('--it-')) {
+      const result = resolveChain(val, bsiMap, bridge, dtiRaw, visited)
+      return { value: result.value, chain: [val, ...result.chain] }
+    }
+    return { value: val, chain: [] }
+  }
+
+  return { value: null, chain: [] }
 }
 
 // ─── Cache and loading ────────────────────────────────────────────────────────
 
-async function loadTokenMap(): Promise<TokenMap> {
-  const cached = cache.get<TokenMap>(CACHE_KEYS.designTokens())
+interface ResolvedMaps {
+  bsiMap: BsiMap
+  bridge: BridgeMap
+  dtiRaw: DtiMap
+}
+
+async function loadMaps(): Promise<ResolvedMaps> {
+  const cached = cache.get<ResolvedMaps>(CACHE_KEYS.designTokens())
   if (cached) return cached
 
-  // Parallel fetch from snapshot branch
-  const [rootScss, variablesScss] = await Promise.all([
+  const [rootScss, variablesScss, customPropsRaw] = await Promise.all([
     fetchText(SNAPSHOT_BSI_ROOT_SCSS_URL),
     fetchText(SNAPSHOT_DTI_VARIABLES_SCSS_URL),
+    fetchJson<RawTokensJson>(SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL),
   ])
 
   const bridge = parseBridge(rootScss)
   const dtiRaw = parseDesignTokens(variablesScss)
+  const bsiMap = parseBsiMap(customPropsRaw)
 
   cache.set(CACHE_KEYS.designTokensDti(), dtiRaw, TTL.snapshot)
 
-  // Recursive DTI resolution: $it-spacing-base → --it-spacing-base → 1.5rem (24px)
-  function resolveIt(name: string, visited = new Set<string>()): string | null {
-    if (visited.has(name)) return null
-    visited.add(name)
-    const val = dtiRaw.get(name)
-    if (!val) return null
-    // If still a reference to $it-* (parseDesignTokens saves it as --it-*)
-    if (val.startsWith('--it-')) return resolveIt(val, visited)
-    return val
-  }
-
-  // Final map: --bsi-* → concrete value
-  const map: TokenMap = new Map()
-  for (const [bsiName, itName] of bridge) {
-    const resolved = resolveIt(itName)
-    if (resolved) map.set(bsiName, { value: resolved, via: itName })
-  }
-
-  cache.set(CACHE_KEYS.designTokens(), map, TTL.snapshot)
-  return map
+  const maps: ResolvedMaps = { bsiMap, bridge, dtiRaw }
+  cache.set(CACHE_KEYS.designTokens(), maps, TTL.snapshot)
+  return maps
 }
 
-// DTI map cached separately for --it-* token search
 async function loadDtiMap(): Promise<DtiMap> {
   const cached = cache.get<DtiMap>(CACHE_KEYS.designTokensDti())
   if (cached) return cached
-  // Not yet cached — trigger loadTokenMap which populates it as a side effect
-  await loadTokenMap()
+  await loadMaps()
   return cache.get<DtiMap>(CACHE_KEYS.designTokensDti()) ?? new Map()
 }
 
-// ─── Token value enrichment with resolved value ───────────────────────────────
+// ─── Token value enrichment ───────────────────────────────────────────────────
 
 export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]> {
   if (tokens.length === 0) return tokens
 
-  let map: TokenMap
+  let maps: ResolvedMaps
   try {
-    map = await loadTokenMap()
+    maps = await loadMaps()
   } catch (err) {
     console.warn(`Design Tokens Italia: token resolution failed: ${(err as Error).message}`)
     return tokens
@@ -129,23 +158,25 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
     const ref = token.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
     if (!ref) return token
 
-    const entry = map.get(ref) ?? null
-    return { ...token, valueResolved: entry?.value ?? null, resolvedVia: entry?.via ?? null }
+    const { value, chain } = resolveChain(token.name, maps.bsiMap, maps.bridge, maps.dtiRaw)
+    return { ...token, valueResolved: value, resolvedVia: chain }
   })
 }
 
-// ─── Global search across all --bsi-* → resolved value pairs ───────────────────
+// ─── Global search across all --it-* tokens ───────────────────────────────────
 
 export async function searchDesignTokens(
   query: string
-): Promise<Array<{ name: string; value: string }>> {
-  const dtiMap = await loadDtiMap()
+): Promise<Array<{ name: string; value: string; resolvedVia: string[] }>> {
+  const { bsiMap, bridge, dtiRaw } = await loadMaps()
   const q = query.toLowerCase()
-  const results: Array<{ name: string; value: string }> = []
+  const results: Array<{ name: string; value: string; resolvedVia: string[] }> = []
 
-  for (const [name, value] of dtiMap) {
+  for (const [name] of dtiRaw) {
+    const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
+    if (!value) continue
     if (name.includes(q) || value.toLowerCase().includes(q)) {
-      results.push({ name, value })
+      results.push({ name, value, resolvedVia: chain })
     }
   }
 

@@ -14,7 +14,7 @@ export const ZCssToken = z.object({
   value: z.string(),
   valueType: z.enum(['token-reference', 'scss-expression', 'literal']),
   valueResolved: z.string().nullable(),
-  resolvedVia: z.string().nullable().optional(),
+  resolvedVia: z.array(z.string()),
   description: z.string().nullable(),
 })
 

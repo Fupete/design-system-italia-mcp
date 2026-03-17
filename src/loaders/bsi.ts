@@ -154,6 +154,7 @@ export async function loadTokens(slug: string): Promise<CssToken[]> {
         name: e['variable-name'],
         value: e.value,
         valueType: classifyValue(e.value),
+        resolvedVia: [],
         valueResolved: null,
         description: e.description || null,
       }))
@@ -180,6 +181,7 @@ export async function searchTokens(query: string): Promise<Array<CssToken & { co
           name: e['variable-name'],
           value: e.value,
           valueType: classifyValue(e.value),
+          resolvedVia: [],
           valueResolved: null,
           description: e.description || null,
         })
