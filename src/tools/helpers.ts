@@ -2,7 +2,6 @@
 // ─── Shared helpers for tool handlers ────────────────────────────────────────
 
 import { loadStatus } from '../loaders/bsi.js'
-import { loadDsMeta } from '../loaders/meta.js'
 import { slugify } from '../slugify.js'
 import type { DsMeta, StabilityLevel } from '../types.js'
 
@@ -25,13 +24,21 @@ export async function resolveSlug(input: string): Promise<string> {
 // Exception: GitHub Issues tool passes formatTimestamp() as dataFetchedAt
 // since issues are fetched live at runtime.
 
+export interface ToolMeta {
+  dataFetchedAt: string | null
+  sourceUrls: string[]
+  warnings: string[]
+  stability: StabilityLevel
+  [key: string]: unknown
+}
+
 export function buildMeta(opts: {
   dsMeta: DsMeta | null
   sourceUrls: string[]
   warnings: string[]
   stability: StabilityLevel
   extra?: Record<string, unknown>
-}): Record<string, unknown> {
+}): ToolMeta {
   return {
     dataFetchedAt: opts.dsMeta?.fetchedAt ?? null,
     sourceUrls: opts.sourceUrls,
