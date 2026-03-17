@@ -11,6 +11,7 @@ import type { DsMeta, StabilityLevel } from '../types.js'
 // e.g. "fisarmonica" → "accordion", "Alert" → "alert"
 // Note: get_component_full keeps its own loadStatus call — it needs
 // the full status object for sourceUrls assembly, not just the slug.
+// Note: BSI component in meta sources keeps its resolved url (not canonical). 
 
 export async function resolveSlug(input: string): Promise<string> {
   const slug = slugify(input.trim())
