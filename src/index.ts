@@ -57,7 +57,7 @@ function createMcpServer(): McpServer {
               server: 'design-system-italia-mcp',
               version: VERSION,
               timestamp: new Date().toISOString(),
-              message: 'Filo – unofficial MCP server for Design System .italia. Use list_components to get started.',
+              message: 'Filo – unofficial MCP server for Design System Italia. Use list_components to get started.',
               warnings: ALPHA_WARNING,
               tools: [
                 'ping',
