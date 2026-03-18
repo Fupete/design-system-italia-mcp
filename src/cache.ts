@@ -1,4 +1,6 @@
-// ─── In-memory cache with per-source TTL ─────────────────────────────────────
+// ─── In-memory cache with per-source TTL + LRU eviction ──────────────────────
+
+const MAX_CACHE_SIZE = 1000
 
 interface CacheEntry<T> {
   data: T
@@ -15,10 +17,27 @@ class Cache {
       this.store.delete(key)
       return null
     }
+    // LRU: promote entry to tail by deleting and re-inserting
+    this.store.delete(key)
+    this.store.set(key, entry)
     return entry.data as T
   }
 
   set<T>(key: string, data: T, ttlMs: number): void {
+    // If key already exists, remove first to reset LRU position
+    if (this.store.has(key)) {
+      this.store.delete(key)
+    }
+
+    // Evict least recently used entry when size limit is reached
+    if (this.store.size >= MAX_CACHE_SIZE) {
+      const oldest = this.store.keys().next().value
+      if (oldest !== undefined) {
+        this.store.delete(oldest)
+        console.log(`[cache] LRU eviction: removed "${oldest}" (size limit ${MAX_CACHE_SIZE})`)
+      }
+    }
+
     this.store.set(key, { data, expiresAt: Date.now() + ttlMs })
   }
 
@@ -30,6 +49,11 @@ class Cache {
 
   invalidateAll(): void {
     this.store.clear()
+  }
+
+  /** Exposed for debug/health check — current number of entries in cache */
+  get size(): number {
+    return this.store.size
   }
 }
 
