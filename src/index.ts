@@ -14,6 +14,7 @@ import { registerGetComponentGuidelines, registerListByStatus, registerListAcces
 import { registerGetComponentIssues, registerGetProjectBoardStatus } from './tools/issues.js'
 import { registerGetComponentFull } from './tools/full.js'
 import { cache } from './cache.js'
+import { getHealth } from './health.js'
 import { ALPHA_WARNING } from './constants.js'
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -24,6 +25,7 @@ const require = createRequire(import.meta.url)
 const VERSION: string = require('../package.json').version
 
 const CACHE_TOKEN = process.env.CACHE_INVALIDATION_TOKEN ?? ''
+const START_TIME = Date.now()
 
 // ─── MCP Server factory ───────────────────────────────────────────────────────
 //
@@ -123,8 +125,10 @@ const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse
 
   // Health check
   if (url.pathname === '/health') {
+    const uptimeSec = Math.floor((Date.now() - START_TIME) / 1000)
+    const health = await getHealth(uptimeSec)
     res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ status: 'ok', version: VERSION }))
+    res.end(JSON.stringify({ version: VERSION, ...health }, null, 2))
     return
   }
 

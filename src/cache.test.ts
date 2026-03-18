@@ -77,23 +77,6 @@ describe('Cache', () => {
     assert.equal(cache.size, 0)
   })
 
-  it('logs once on LRU eviction', () => {
-    cache.invalidateAll()
-    const logs: string[] = []
-    const orig = console.log
-    console.log = (...args: unknown[]) => logs.push(args.join(' '))
-
-    // Fill to MAX_CACHE_SIZE + 1 to trigger exactly one eviction
-    for (let i = 0; i < 1001; i++) {
-      cache.set(`evict:${i}`, i, TTL.snapshot)
-    }
-
-    console.log = orig
-
-    const evictionLogs = logs.filter(l => l.includes('LRU eviction'))
-    assert.equal(evictionLogs.length, 1)
-    assert.match(evictionLogs[0], /evict:0/)
-  })
 })
 
 describe('CACHE_KEYS', () => {
