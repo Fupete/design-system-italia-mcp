@@ -17,7 +17,8 @@
     "build": "tsc",
     "dev": "tsx watch --env-file=.env src/index.ts",
     "start": "node --env-file=.env dist/index.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "canary": "npx tsx scripts/canary.ts"
   },
   "repository": {
     "type": "git",

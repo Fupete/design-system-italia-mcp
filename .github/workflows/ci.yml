@@ -28,3 +28,6 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm run build
       - run: test -f dist/index.js && echo "✅ dist/index.js present"
+      - run: npx tsx --test src/loaders/devkit-parser.test.ts
+      - run: npx tsx --test src/cache.test.ts
+      - run: npx tsx --test src/health.test.ts
