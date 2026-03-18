@@ -1,4 +1,4 @@
-# Filo – MCP server per il Design system .italia
+# 🧵 Filo – MCP server per il Design system .italia
 
 *Non perdere il filo.*
 
