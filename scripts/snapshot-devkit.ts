@@ -31,7 +31,7 @@ const DEFAULT_OUT = resolve(PROJECT_ROOT, 'data-fetched/devkit/stories')
 const CONCURRENCY = 4
 
 /** Components known to have 0 variants upstream (not a bug) */
-const KNOWN_ZERO_VARIANTS = new Set(['sticky'])
+const KNOWN_ZERO_VARIANTS = new Set([''])
 
 // ── Args ──────────────────────────────────────────────────────────────────────
 
