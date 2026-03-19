@@ -6,3 +6,6 @@ dist
 .git
 .gitignore
 *.log
+**/*.test.ts
+**/*.test.js
+scripts/
