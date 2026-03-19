@@ -25,7 +25,7 @@ jobs:
           node-version: "24"
           cache: "npm"
       - run: npm ci
-      - run: npx tsc --noEmit
+      - run: npm run typecheck
       - run: npm run build
       - run: test -f dist/index.js && echo "✅ dist/index.js present"
       - run: npx tsx --test src/loaders/devkit-parser.test.ts
