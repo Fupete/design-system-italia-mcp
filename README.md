@@ -205,7 +205,7 @@ npx @modelcontextprotocol/inspector http://localhost:8080/mcp
 
 ## Riferimenti / References
 
-- [dati-semantic-mcp](https://github.com/italia/dati-semantic-mcp) progetto analogo per schema.gov.it iniziato da @mfortini, spunto iniziale
+- [dati-semantic-mcp](https://github.com/italia/dati-semantic-mcp) progetto analogo per schema.gov.it iniziato da [@mfortini](https://github.com/mfortini), spunto iniziale
 - [MCP Protocol](https://modelcontextprotocol.io)
 - [Design system .italia](https://designers.italia.it/design-system/come-iniziare/)
 - [Bootstrap Italia](https://italia.github.io/bootstrap-italia)
@@ -241,3 +241,7 @@ BSD 3-Clause — © 2026 Daniele Tabellini (Fupete)
 Documentazione: CC BY SA 4.0
 
 I dati esposti mantengono la licenza delle rispettive sorgenti.
+
+---
+
+Filo è un progetto sperimentale sviluppato da [@Fupete](https://github.com/fupete) anche litigando con qualche LLM. [Issue](https://github.com/Fupete/design-system-italia-mcp/issues) benvenute. / Filo is an experimental project developed by [@Fupete](https://github.com/fupete), partly by arguing with a few LLMs. [Issues](https://github.com/Fupete/design-system-italia-mcp/issues) welcome.
