@@ -4,6 +4,18 @@
   "description": "Filo – MCP server non ufficiale per il Design system .italia",
   "type": "module",
   "main": "dist/index.js",
+  "homepage": "https://github.com/Fupete/design-system-italia-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/Fupete/design-system-italia-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "design-system",
+    "design-tokens-italia",
+    "bootstrap-italia",
+    "dev-kit-italia",
+    "italia"
+  ],
   "bin": {
     "design-system-italia-mcp": "dist/index.js"
   },
