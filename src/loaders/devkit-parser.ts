@@ -110,7 +110,14 @@ function extractSubcomponentExports(source: string): string[] {
 }
 
 function extractTagName(source: string): string | null {
-  return source.match(/^\s*component:\s*['"`](it-[a-z0-9-]+)['"`]\s*,?$/m)?.[1] ?? null
+  // Primary: explicit component: 'it-foo' declaration
+  const direct = source.match(/^\s*component:\s*['"`](it-[a-z0-9-]+)['"`]/m)?.[1]
+  if (direct) return direct
+  // Fallback: derive from title 'Componenti/Foo Bar' → 'it-foo-bar'
+  // Covers components that omit component: in meta (e.g. Pagination)
+  const title = source.match(/title:\s*['"`]Componenti\/([^'"`]+)['"`]/)?.[1]
+  if (title) return `it-${title.toLowerCase().replace(/\s+/g, '-')}`
+  return null
 }
 
 function extractSubTagNames(source: string, exportName: string): string[] {
