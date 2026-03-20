@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Filo 🧵 — MCP Server per il Design System .italia</title>
-  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Bootstrap Italia CSS (include Titillium Web) -->
+  <link rel="stylesheet" href="assets/vendor/bsi/css/bootstrap-italia.min.css">
+  <!-- Roboto Mono per codice — non inclusa in BSI -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --blue:        #0059B3;
@@ -1724,5 +1727,9 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
 </script>
 
 <a href="#" id="back-to-top" aria-label="Torna in cima">↑</a>
+  <!-- Bootstrap Italia JS -->
+  <script src="assets/vendor/bsi/js/bootstrap-italia.bundle.min.js"></script>
+  <!-- Dev Kit Italia web components -->
+  <script type="module" src="assets/vendor/devkit/elements.js"></script>
 </body>
 </html>
