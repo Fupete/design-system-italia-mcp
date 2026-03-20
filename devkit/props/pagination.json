@@ -1,6 +1,56 @@
 {
   "slug": "pagination",
-  "tagName": null,
-  "props": [],
+  "tagName": "it-pagination",
+  "props": [
+    {
+      "name": "value",
+      "type": "text",
+      "description": "Pagina corrente selezionata",
+      "default": "1",
+      "options": []
+    },
+    {
+      "name": "total",
+      "type": "text",
+      "description": "Numero totale di pagine, se non specificato viene calcolato in base agli elementi `it-pagination-item` presenti. Utile per indicare un numero di pagine diverso rispetto agli elementi effettivamente presenti (es. con caricamento dinamico) e in modalità simple-mode",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "align",
+      "type": "select",
+      "description": "Allineamento della paginazione",
+      "default": "start",
+      "options": []
+    },
+    {
+      "name": "disable-responsive",
+      "type": "boolean",
+      "description": "Disabilita responsive mode (nasconde pagine non correnti su mobile)",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "simple-mode",
+      "type": "text",
+      "description": "Abilita simple mode (mostra solo pagina corrente / totale, ottimizzato per mobile). Vai alla storia dedicata per l'esempio.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "visible-pages",
+      "type": "number",
+      "description": "Numero di pagine visibili quando il totale (total) supera questo valore. Verranno mostrati i puntini '...' per indicare la presenza di ulteriori pagine.",
+      "default": "5",
+      "options": []
+    },
+    {
+      "name": "it-aria-label",
+      "type": "text",
+      "description": "Imposta l'attributo `aria-label` per il componente, utile per migliorare l'accessibilità.",
+      "default": "Paginazione",
+      "options": []
+    }
+  ],
   "subcomponents": []
 }
