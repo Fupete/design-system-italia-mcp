@@ -90,13 +90,47 @@ describe('parseStories — happy path', () => {
     assert.ok((result?.subcomponents?.length ?? 0) > 0)
   })
 
-  it('restituisce null se manca component:', () => {
+  it('estituisce null se sia component: che title: sono mancano', () => {
     const source = `
-const meta = {
-  argTypes: { label: { control: 'text' } },
+    const meta = {
+      argTypes: { label: { control: 'text' } },
+    }
+      `
+    assert.equal(parseStories(source), null)
+  })
+
+  it('extracts tagName from title when component: is absent (Pagination pattern)', () => {
+    const source = `
+const meta: Meta<PaginationProps> = {
+  title: 'Componenti/Pagination',
+  argTypes: {
+    value: {
+      description: 'Pagina corrente selezionata',
+      control: 'text',
+      table: { defaultValue: { summary: '1' } },
+    },
+    total: {
+      control: false,
+      description: 'Numero totale di pagine',
+      table: { defaultValue: { summary: undefined } },
+    },
+  },
 }
 `
-    assert.equal(parseStories(source), null)
+    const result = parseStories(source)
+    assert.equal(result?.tagName, 'it-pagination')
+    assert.ok(result?.props.find(p => p.name === 'value'))
+  })
+
+  it('normalizes multi-word title into hyphenated tagName', () => {
+    const source = `
+const meta = {
+  title: 'Componenti/Back To Top',
+  argTypes: {},
+}
+`
+    const result = parseStories(source)
+    assert.equal(result?.tagName, 'it-back-to-top')
   })
 })
 
@@ -130,9 +164,10 @@ describe('parseStories — MAX_ITERATIONS guard', () => {
 
   it('non crasha con brace mai chiuse nel source', () => {
     const source = `
-const meta = {
-  component: 'it-alert',
-  argTypes: ${unclosedBraces()},
+    const meta = {
+      component: 'it-alert',
+      argTypes: ${unclosedBraces()
+      },
 }
 `
     assert.doesNotThrow(() => parseStories(source))
@@ -178,9 +213,9 @@ const meta = {
   component: 'it-input',
   argTypes: {
     broken: ${unclosedBraces()},
-    label: {
-      description: 'Label',
-      control: 'text',
+label: {
+  description: 'Label',
+    control: 'text',
     },
   },
 }
@@ -205,7 +240,7 @@ describe('parseStories — input malformati', () => {
 const meta = {
   component: 'it-badge',
 }
-`
+  `
     const result = parseStories(source)
     assert.equal(result?.tagName, 'it-badge')
     assert.deepEqual(result?.props, [])
@@ -226,7 +261,7 @@ const meta = {
     },
   },
 }
-`
+  `
     const result = parseStories(source)
     const names = result?.props.map((p) => p.name) ?? []
     assert.ok(!names.includes('hidden'))
