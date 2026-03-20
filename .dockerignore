@@ -9,3 +9,4 @@ dist
 **/*.test.ts
 **/*.test.js
 scripts/
+docs/
