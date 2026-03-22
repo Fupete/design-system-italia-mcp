@@ -1,1735 +1,731 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Filo 🧵 — MCP Server per il Design System .italia</title>
-  <!-- Bootstrap Italia CSS (include Titillium Web) -->
+  <title>Filo — MCP server per il Design System .italia</title>
   <link rel="stylesheet" href="assets/vendor/bsi/css/bootstrap-italia.min.css">
-  <!-- Roboto Mono per codice — non inclusa in BSI -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --blue:        #0059B3;
-      --blue-dark:   #004080;
-      --blue-light:  #E3EEF9;
-      --green:       #1A6E3C;
-      --red:         #A8200D;
-      --text:        #1A2E3D;
-      --text-muted:  #3D5A6E;
-      --border:      #B8CEDD;
-      --bg-alt:      #F0F5FA;
-      --bg-hero:     #E3EEF9;
-      --white:       #FFFFFF;
-      --code-bg:     #1A2E3D;
-      --code-text:   #E0EAF4;
-      --warn-bg:     #FFF8E1;
-      --warn-border: #C9820A;
-      --warn-text:   #4A3000;
-      --info-bg:     #E3EEF9;
-      --info-border: #0059B3;
-      --info-text:   #003070;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Titillium Web', sans-serif; font-size: 1rem; color: var(--text); background: var(--white); line-height: 1.6; }
-    a { color: var(--blue); }
-    a:hover { color: var(--blue-dark); }
-    :focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
-
-    .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
-    .skip-link:focus { left: 1rem; top: 1rem; width: auto; height: auto; padding: .5rem 1rem; background: var(--blue); color: #fff; font-weight: 700; border-radius: 4px; outline: 3px solid #fff; z-index: 9999; }
-
-    .container { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
-    section { padding: 4rem 0; }
-    section.alt { background: var(--bg-alt); }
-
-    /* HEADER */
-    .site-header { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 200; }
-    .site-header .inner { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.5rem; max-width: 1080px; margin: 0 auto; gap: 1rem; }
-    .brand { display: flex; align-items: center; gap: .75rem; text-decoration: none; color: var(--text); flex-shrink: 0; }
-    .brand:hover { color: var(--text); }
-    .brand-emoji { font-size: 1.6rem; line-height: 1; }
-    .brand-name  { font-size: 1.05rem; font-weight: 700; color: var(--text); line-height: 1.2; }
-    .brand-sub   { font-size: .7rem; color: var(--text-muted); font-weight: 400; }
-    .site-nav { display: flex; flex-wrap: wrap; }
-    .site-nav a { color: var(--text-muted); text-decoration: none; font-size: .875rem; font-weight: 600; padding: .375rem .75rem; border-radius: 4px; transition: color .15s, background .15s; }
-    .site-nav a:hover { color: var(--blue); background: var(--blue-light); }
-    .nav-toggle { display: none; background: none; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; padding: .3rem .6rem; color: var(--text); font-size: 1.1rem; line-height: 1; font-family: inherit; }
-    @media (max-width: 680px) {
-      .nav-toggle { display: block; }
-      .site-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--white); border-bottom: 1px solid var(--border); flex-direction: column; padding: .5rem 1rem 1rem; gap: .125rem; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
-      .site-nav.open { display: flex; }
-      .site-nav a { padding: .625rem .75rem; }
-    }
-
-    /* HERO */
-    .hero { background: var(--bg-hero); border-bottom: 1px solid var(--border); padding: 4.5rem 0 4rem; }
-    .hero-tag { display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: .25rem .875rem; margin-bottom: 1.25rem; color: var(--text-muted); }
-    .hero h1 { font-size: clamp(1.75rem, 4.5vw, 2.875rem); font-weight: 700; line-height: 1.2; margin-bottom: .75rem; color: var(--text); }
-    .hero-lead { font-size: 1.05rem; line-height: 1.75; color: var(--text-muted); max-width: 560px; margin-bottom: 2rem; font-weight: 400; }
-    .hero-lead em { font-style: italic; color: var(--text-muted); }
-    .version-pill { font-family: 'Roboto Mono', monospace; font-size: .72rem; background: var(--white); border: 1px solid var(--border); border-radius: 3px; padding: .1rem .45rem; vertical-align: middle; margin-left: .5rem; color: var(--text-muted); }
-    .hero-stats { display: flex; flex-wrap: wrap; gap: 2rem; margin-bottom: 2.5rem; }
-    .stat-val   { display: block; font-size: 1.875rem; font-weight: 700; line-height: 1; color: var(--blue); }
-    .stat-label { display: block; font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); margin-top: .2rem; }
-    .hero-cta { display: flex; flex-wrap: wrap; gap: .75rem; }
-    .btn { display: inline-flex; align-items: center; gap: .4rem; padding: .625rem 1.375rem; border-radius: 4px; font-family: 'Titillium Web', sans-serif; font-size: .9375rem; font-weight: 600; text-decoration: none; border: 2px solid transparent; transition: all .15s; line-height: 1.4; }
-    .btn-primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
-    .btn-primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); color: var(--white); }
-    .btn-outline { background: var(--white); color: var(--blue); border-color: var(--blue); }
-    .btn-outline:hover { background: var(--blue-light); color: var(--blue-dark); border-color: var(--blue-dark); }
-
-    /* SECTION HEADINGS */
-    .section-label { font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: .375rem; }
-    h2 { font-size: clamp(1.375rem, 3vw, 1.875rem); font-weight: 700; color: var(--text); margin-bottom: .625rem; line-height: 1.25; }
-    .section-intro { font-size: .9375rem; color: var(--text-muted); max-width: 620px; margin-bottom: 2.5rem; line-height: 1.75; }
-
-    /* CARDS 3 col */
-    .cards-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
-    @media (max-width: 720px) { .cards-3 { grid-template-columns: 1fr; } }
-    .card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem 1.75rem; transition: box-shadow .2s, border-color .2s; }
-    .card:hover { border-color: var(--blue); box-shadow: 0 4px 16px rgba(0,77,153,.1); }
-    .card-icon { font-size: 1.5rem; margin-bottom: .75rem; display: block; }
-    .card h3   { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; color: var(--text); }
-    .card p    { font-size: .875rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.65; }
-    .card-link { font-size: .875rem; font-weight: 600; color: var(--blue); text-decoration: none; }
-    .card-link:hover { text-decoration: underline; }
-
-    /* TOOL CARDS */
-    .tool-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
-    @media (max-width: 900px) { .tool-grid { grid-template-columns: repeat(2,1fr); } }
-    @media (max-width: 480px) { .tool-grid { grid-template-columns: 1fr; } }
-    .tool-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem 1.375rem; }
-    .tool-card-group { font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .25rem; }
-    .tool-card-count { font-size: .75rem; font-weight: 600; color: var(--blue); margin-bottom: .75rem; }
-    .tool-card-desc  { font-size: .8rem; color: var(--text-muted); margin-bottom: .875rem; line-height: 1.55; }
-    .tool-card ul { list-style: none; display: flex; flex-direction: column; gap: .3rem; }
-    .tool-card li { font-family: 'Roboto Mono', monospace; font-size: .775rem; color: var(--blue); }
-
-    /* TABS */
-    .tabs-nav { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; flex-wrap: wrap; }
-
-    /* TAB VERTICALI — dashboard */
-    .dash-tabs-wrap { display: flex; gap: 0; align-items: flex-start; margin-top: 1.5rem; }
-    .dash-tabs-nav { display: flex; flex-direction: column; min-width: 180px; flex-shrink: 0; border-right: 2px solid var(--border); }
-    .dash-tabs-nav .tab-btn { border-bottom: none; border-right: 2px solid transparent; margin-right: -2px; margin-bottom: 0; text-align: left; padding: .75rem 1.125rem; border-radius: 4px 0 0 4px; }
-    .dash-tabs-nav .tab-btn[aria-selected="true"] { color: var(--blue); border-right-color: var(--blue); background: var(--blue-light); }
-    .dash-tabs-panels { flex: 1; min-width: 0; padding-left: 1.75rem; }
-    @media (max-width: 640px) {
-      .dash-tabs-wrap { flex-direction: column; }
-      .dash-tabs-nav { flex-direction: row; flex-wrap: wrap; border-right: none; border-bottom: 2px solid var(--border); min-width: 0; width: 100%; }
-      .dash-tabs-nav .tab-btn { border-right: none; border-bottom: 2px solid transparent; margin-right: 0; margin-bottom: -2px; border-radius: 4px 4px 0 0; }
-      .dash-tabs-nav .tab-btn[aria-selected="true"] { border-right-color: transparent; border-bottom-color: var(--blue); }
-      .dash-tabs-panels { padding-left: 0; padding-top: 1.25rem; }
-    }
-    .tab-btn { background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; padding: .625rem 1.125rem; font-family: 'Titillium Web', sans-serif; font-size: .875rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color .15s, border-color .15s; white-space: nowrap; }
-    .tab-btn:hover { color: var(--blue); }
-    .tab-btn[aria-selected="true"] { color: var(--blue); border-bottom-color: var(--blue); }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* CODE */
-    .pre-wrap { position: relative; margin: .875rem 0; }
-    .pre-wrap pre { margin: 0; }
-    .copy-btn {
-      position: absolute; top: .625rem; right: .625rem;
-      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
-      color: rgba(255,255,255,.8); border-radius: 4px;
-      padding: .25rem .625rem; font-size: .72rem; font-family: 'Titillium Web', sans-serif;
-      font-weight: 600; cursor: pointer; transition: background .15s, color .15s;
-    }
-    .copy-btn:hover { background: rgba(255,255,255,.22); color: #fff; }
-    .copy-btn.copied { background: rgba(26,110,60,.45); border-color: rgba(26,110,60,.5); color: #fff; }
-    pre { background: var(--code-bg); color: var(--code-text); padding: 1.25rem 1.5rem; border-radius: 6px; overflow-x: auto; font-family: 'Roboto Mono', monospace; font-size: .825rem; line-height: 1.65; margin: .875rem 0; }
-    pre.pre-prompt { max-height: 200px; overflow-y: auto; overflow-x: hidden; white-space: pre-wrap; word-break: break-word; }
-    code { font-family: 'Roboto Mono', monospace; font-size: .8em; background: var(--blue-light); color: var(--blue-dark); padding: .1rem .35rem; border-radius: 3px; }
-    pre code { background: none; color: inherit; padding: 0; font-size: 1em; }
-
-    /* CLIENT GRID */
-    .acc { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: .5rem; }
-    .acc:last-child { margin-bottom: 0; }
-    .acc-btn { width: 100%; background: var(--white); border: none; padding: .875rem 1.25rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-family: 'Titillium Web', sans-serif; font-size: .9375rem; font-weight: 700; color: var(--text); text-align: left; transition: background .15s; }
-    .acc-btn:hover { background: var(--bg-alt); }
-    .acc-btn[aria-expanded="true"] { background: var(--blue-light); color: var(--blue-dark); border-bottom: 1px solid var(--border); }
-    .acc-btn .acc-arrow { font-size: .75rem; transition: transform .2s; flex-shrink: 0; margin-left: 1rem; color: var(--text-muted); }
-    .acc-btn[aria-expanded="true"] .acc-arrow { transform: rotate(180deg); }
-    .acc-body { display: none; padding: 1.25rem 1.5rem; background: var(--white); }
-    .acc-body.open { display: block; }
-    .acc-body p { font-size: .8rem; color: var(--text-muted); margin-bottom: .5rem; }
-
-    /* SYSTEM PROMPT BOX */
-    .prompt-box { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 6px; padding: 1.75rem; margin-bottom: 1.5rem; }
-    .prompt-box-label { font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--blue); margin-bottom: 1.25rem; }
-    .clause { padding: .875rem 0; border-bottom: 1px solid var(--border); }
-    .clause:last-child { border-bottom: none; padding-bottom: 0; }
-    .clause-label { font-size: .72rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .3rem; display: flex; align-items: center; gap: .35rem; }
-    .clause p { font-size: .9rem; line-height: 1.65; color: var(--text); }
-
-    /* TABLE */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: .875rem; }
-    th { background: var(--text); color: var(--white); padding: .625rem 1rem; text-align: left; font-size: .8rem; font-weight: 600; }
-    td { padding: .625rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text); }
-    tr:last-child td { border-bottom: none; }
-    tr:nth-child(even) td { background: var(--bg-alt); }
-    .yes { color: var(--green); font-weight: 700; }
-    .no  { color: var(--red);   font-weight: 700; }
-
-    /* ESEMPI */
-    .prompt-ex { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem 1.5rem; flex: 0 0 340px; max-width: 340px; box-sizing: border-box; }
-    .esempi-slider { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: .75rem; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
-    .esempi-slider .prompt-ex { scroll-snap-align: start; }
-    .prompt-ex blockquote { font-style: italic; color: var(--text); border-left: 3px solid var(--blue); padding-left: .875rem; margin-bottom: .75rem; font-size: .9375rem; line-height: 1.6; }
-    .prompt-ex p { font-size: .825rem; color: var(--text-muted); line-height: 1.65; }
-
-
-    /* NOTE */
-    .note-item { display: flex; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
-    .note-item:last-child { border-bottom: none; }
-    .note-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: .15rem; }
-    .note-item h3 { font-size: .9375rem; font-weight: 700; margin-bottom: .25rem; color: var(--text); }
-    .note-item p  { font-size: .875rem; color: var(--text-muted); line-height: 1.7; }
-
-    /* ALERTS */
-    .alert { display: flex; gap: .875rem; align-items: flex-start; padding: .875rem 1.125rem; border-radius: 6px; font-size: .875rem; line-height: 1.65; margin: 1rem 0; }
-    .alert-icon { flex-shrink: 0; font-size: 1rem; margin-top: .1rem; }
-    .alert-warn { background: var(--warn-bg); border: 1px solid var(--warn-border); color: #3D2E00; }
-    .alert-info { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info-text); }
-    .alert-mt { margin-top: 1.5rem; }
-
-    /* FOOTER */
-    .site-footer { background: var(--bg-alt); border-top: 1px solid var(--border); padding: 3rem 0 2rem; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
-    @media (max-width: 720px) { .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; } }
-    .footer-brand { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: .5rem; }
-    .footer-desc  { font-size: .825rem; line-height: 1.7; color: var(--text-muted); }
-    .footer-note  { font-size: .775rem; margin-top: .875rem; font-style: italic; color: var(--text-muted); }
-    .site-footer h4 { font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text); margin-bottom: .75rem; }
-    .site-footer ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
-    .site-footer a  { color: var(--text-muted); text-decoration: none; font-size: .825rem; }
-    .site-footer a:hover { color: var(--blue); }
-    .footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; }
-    .footer-bottom p { font-size: .775rem; color: var(--text-muted); }
-    .footer-licenses { display: flex; flex-wrap: wrap; gap: 1rem; }
-    .footer-licenses a { font-size: .775rem; color: var(--text-muted); }
-
-    /* DASHBOARD */
-    .dash-stat { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem 1.5rem; }
-    .dash-stat-val   { font-size: 1.75rem; font-weight: 700; color: var(--blue); line-height: 1; display: block; }
-    .dash-stat-label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); margin-top: .3rem; display: block; }
-    .dash-stat-sub   { font-size: .75rem; color: var(--text-muted); margin-top: .25rem; display: block; font-family: 'Roboto Mono', monospace; }
-    .dash-filter-btn { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: .25rem .75rem; font-size: .8rem; font-weight: 600; color: var(--text-muted); cursor: pointer; font-family: 'Titillium Web', sans-serif; transition: all .15s; }
-    .dash-filter-btn:hover  { border-color: var(--blue); color: var(--blue); }
-    .dash-filter-btn.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
-    .dash-filter-btn span   { font-weight: 400; opacity: .8; margin-left: .2rem; }
-    #dash-comp-table td, #dash-comp-table th { font-size: .8rem; padding: .5rem .75rem; }
-    #dash-comp-table th:first-child { min-width: 160px; }
-    .badge { display: inline-block; border-radius: 3px; padding: .1rem .45rem; font-size: .72rem; font-weight: 600; }
-    .badge-green  { background: #D4EEE2; color: #1A5C38; }
-    .badge-blue   { background: #D6E8FF; color: #0040A0; }
-    .badge-orange { background: #FFF0D6; color: #7A4000; }
-    .badge-gray   { background: #E8EEF4; color: #445D6E; }
-    .badge-red    { background: #FFE5E3; color: #7A1A10; }
-    .token-bar-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem 1.5rem; }
-    .token-bar-label { font-size: .8rem; font-weight: 700; color: var(--text); margin-bottom: .5rem; display: flex; justify-content: space-between; }
-    .token-bar-track { background: var(--bg-alt); border-radius: 99px; height: 8px; overflow: hidden; margin-bottom: .375rem; }
-    .token-bar-fill  { height: 100%; border-radius: 99px; background: var(--blue); transition: width .6s ease; }
-    .token-bar-fill.good { background: var(--green); }
-    .token-bar-fill.warn { background: #C9820A; }
-    .token-bar-sub   { font-size: .72rem; color: var(--text-muted); }
-    .issue-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem 1.5rem; }
-    .issue-card-repo  { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem; }
-    .issue-card-count { font-size: 2rem; font-weight: 700; color: var(--text); line-height: 1; }
-    .issue-card-label { font-size: .75rem; color: var(--text-muted); margin-top: .2rem; }
-    .issue-card-link  { font-size: .78rem; font-weight: 600; color: var(--blue); text-decoration: none; display: inline-block; margin-top: .75rem; }
-    .issue-card-link:hover { text-decoration: underline; }
-    .issue-card.loading .issue-card-count { color: var(--border); }
-
-    /* BACK TO TOP */
-    #back-to-top { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--blue); color: #fff; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,.15); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 300; }
-    #back-to-top.visible { opacity: 1; pointer-events: auto; }
-    #back-to-top:hover { background: var(--blue-dark); color: #fff; }
-
-    /* HERO DISCLAIMER */
-    .hero-disclaimer { font-size: .8rem; color: var(--text-muted); margin-bottom: 1.5rem; }
-    .hero-disclaimer a { color: var(--blue); }
-
-    /* SEZIONE RIFERIMENTO FORTINI */
-    .ref-note { font-size: .875rem; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 620px; line-height: 1.7; }
-
-    /* DASHBOARD LAYOUT */
-    .dash-sep { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
-    .guidelines-content { margin-top: 1rem; }
-    .guidelines-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem 1.75rem; margin-top: 1rem; }
-    .guidelines-card-title { font-size: 1.125rem; font-weight: 700; color: var(--text); margin-bottom: .75rem; }
-    .guidelines-block { margin-bottom: 1.5rem; }
-    .guidelines-block h3 { font-size: .95rem; font-weight: 700; color: var(--text); margin-bottom: .625rem; }
-    .guidelines-block .guidelines-text { font-size: .875rem; color: var(--text-muted); line-height: 1.75; }
-    .guidelines-text h3 { font-size: .875rem; font-weight: 700; color: var(--text); margin: .875rem 0 .375rem; }
-    .guidelines-text ul { padding-left: 1.25rem; margin: .375rem 0; }
-    .guidelines-text li { margin-bottom: .25rem; }
-    .guidelines-text strong { color: var(--text); font-weight: 600; }
-    .guidelines-text a { color: var(--blue); }
-    .guidelines-desc { font-size: .9rem; color: var(--text-muted); font-style: italic; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-    .guidelines-link { font-size: .825rem; font-weight: 600; color: var(--blue); text-decoration: none; display: inline-block; margin-top: 1rem; }
-    .guidelines-tags { display: flex; flex-wrap: wrap; gap: .375rem; margin-bottom: .875rem; }
-    .guidelines-tag { font-size: .72rem; font-weight: 600; background: var(--blue-light); color: var(--blue-dark); padding: .15rem .5rem; border-radius: 20px; }
-    .guidelines-link:hover { text-decoration: underline; }
-    .dash-tab-panel { display: none; padding-top: 1.5rem; }
-    .dash-tab-panel.active { display: block; }
-    .dash-loading { padding: 2rem 0; color: var(--text-muted); font-size: .9rem; text-align: center; }
-    .dash-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
-    .dash-section-title { font-size: 1rem; font-weight: 700; margin-bottom: .75rem; color: var(--text); }
-    .dash-section-desc  { font-size: .85rem; color: var(--text-muted); margin-bottom: 1rem; }
-    .dash-filter-row { margin-bottom: .75rem; display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
-    .dash-filter-label { font-size: .8rem; color: var(--text-muted); }
-    .dash-table-wrap { overflow-x: auto; }
-    .dash-toggle-wrap { text-align: center; margin: .75rem 0 2.5rem; }
-    .dash-comp-toggle { padding: .375rem 1.25rem; }
-    .dash-token-grid  { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
-    .dash-issues-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-
-    /* TAB PANEL INTRO */
-    .tab-intro { margin-bottom: .75rem; font-size: .875rem; color: var(--text-muted); }
-    .tab-note  { font-size: .825rem; color: var(--text-muted); margin-top: .75rem; }
-
-    /* ASIDE NOTA */
-    .nota-aside { background: var(--bg-alt); border: 1px solid var(--border); border-left: 4px solid var(--border); border-radius: 6px; padding: 1.25rem 1.5rem; margin-top: 2rem; }
-    .nota-aside h3 { font-size: .875rem; font-weight: 700; margin-bottom: .5rem; color: var(--text); }
-    .nota-aside p  { font-size: .875rem; color: var(--text-muted); line-height: 1.7; }
-    .nota-aside p + p { margin-top: .5rem; }
-
-    /* TOKEN PER COMPONENTE */
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-    .token-select-wrap { margin-bottom: 1.25rem; display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-    .token-select-label { font-size: .875rem; font-weight: 600; color: var(--text); white-space: nowrap; }
-    .token-comp-select { padding: .5rem .875rem; border: 1px solid var(--border); border-radius: 6px; font-family: 'Titillium Web', sans-serif; font-size: .875rem; color: var(--text); background: var(--white); cursor: pointer; min-width: 220px; transition: border-color .15s; }
-    .token-comp-select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,89,179,.15); }
-    .token-list { display: flex; flex-direction: column; gap: 0; margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-    .token-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: .75rem 1rem; border-bottom: 1px solid var(--border); background: var(--white); }
-    .props-row { display: grid; grid-template-columns: minmax(120px,1fr) 60px 2fr 100px; gap: .75rem; padding: .75rem 1rem; border-bottom: 1px solid var(--border); background: var(--white); font-size: .8rem; }
-    .props-row:last-child { border-bottom: none; }
-    .props-row:nth-child(even) { background: var(--bg-alt); }
-    .props-row-name { font-family: 'Roboto Mono', monospace; font-size: .775rem; color: var(--blue); font-weight: 500; word-break: break-all; }
-    .props-row-type { font-family: 'Roboto Mono', monospace; font-size: .72rem; color: var(--text-muted); }
-    .props-row-desc { color: var(--text-muted); line-height: 1.5; }
-    .props-row-desc ul { padding-left: 1.25rem; margin-top: .25rem; }
-    .props-row-desc li { font-size: .8rem; line-height: 1.6; }
-    .props-row-desc code { font-size: .75em; }
-    .props-row-default { font-family: 'Roboto Mono', monospace; font-size: .72rem; color: var(--text-muted); }
-    .props-header { display: grid; grid-template-columns: minmax(120px,1fr) 60px 2fr 100px; gap: .75rem; padding: .5rem 1rem; background: var(--text); color: var(--white); font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
-    @media (max-width: 640px) {
-      .props-row { grid-template-columns: 1fr 1fr; }
-      .props-row-type, .props-row-default { display: none; }
-      .props-header { grid-template-columns: 1fr 1fr; }
-      .props-header span:nth-child(2), .props-header span:nth-child(4) { display: none; }
-    }
-    .token-row:last-child { border-bottom: none; }
-    .token-row:nth-child(even) { background: var(--bg-alt); }
-    .token-row-name { font-family: 'Roboto Mono', monospace; font-size: .775rem; color: var(--blue); font-weight: 500; }
-    .token-row-desc { font-size: .8rem; color: var(--text-muted); line-height: 1.5; }
-    .token-empty { font-size: .875rem; color: var(--text-muted); padding: 1rem; }
-    @media (max-width: 600px) { .token-row { grid-template-columns: 1fr; gap: .25rem; } }
-    .token-cta { background: var(--blue-light); border: 1px solid var(--info-border); border-radius: 6px; padding: 1.5rem; margin-bottom: 2rem; }
-    .token-cta-question { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: .5rem; }
-    .token-cta-desc { font-size: .875rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.7; }
-    .token-cta-btn { display: inline-flex; }
-    .token-example { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; }
-    .token-example-label { font-size: .75rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .875rem; }
-    .token-example-chain { display: flex; flex-wrap: wrap; align-items: center; gap: .375rem; margin-bottom: .75rem; }
-    .token-example-note { font-size: .8rem; color: var(--text-muted); font-style: italic; }
-    .token-step-val { font-family: 'Roboto Mono', monospace; font-size: .775rem; background: var(--blue-light); color: var(--blue-dark); padding: .2rem .5rem; border-radius: 4px; line-height: 1.4; white-space: nowrap; }
-    .token-step-val.resolved { background: #D4EEE2; color: #1A5C38; }
-    .token-step-val.intermediate { background: var(--bg-alt); color: var(--text-muted); }
-    .token-arrow { color: var(--text-muted); font-size: .75rem; padding: 0 .125rem; align-self: center; }
-    .token-empty { font-size: .875rem; color: var(--text-muted); padding: 1rem 0; }
-
-
-    /* ALPHA BANNER */
-    .alpha-banner { background: var(--warn-bg); border-bottom: 1px solid var(--warn-border); padding: .625rem 1.5rem; font-size: .8rem; color: var(--warn-text); text-align: center; line-height: 1.6; }
-    .alpha-banner a { color: var(--warn-text); font-weight: 600; }
-    .alpha-banner a:hover { color: var(--warn-text); text-decoration: underline; }
-
-    /* ── TAB VERTICALI ─────────────────────────────────────────── */
-    .vtabs-wrap { display: flex; align-items: stretch; margin-top: 1.5rem; }
-    .vtabs-nav { display: flex; flex-direction: column; min-width: 170px; flex-shrink: 0; border-right: 2px solid var(--border); padding-top: 1.5rem; }
-    .vtab-btn { display: block; width: 100%; box-sizing: border-box; background: none; border: none; border-right: 2px solid transparent; margin-right: -2px; padding: .75rem 1.125rem; font-family: 'Titillium Web', sans-serif; font-size: .875rem; font-weight: 600; color: var(--text-muted); cursor: pointer; text-align: left; white-space: nowrap; transition: color .15s, background .15s, border-color .15s; border-radius: 4px 0 0 4px; }
-    .vtab-btn:hover { color: var(--blue); background: var(--blue-light); }
-    .vtab-btn[aria-selected="true"] { color: var(--blue); border-right-color: var(--blue); background: var(--blue-light); }
-    .vtab-btn small { font-size: .75em; opacity: .75; }
-    .vtabs-panels { flex: 1; min-width: 0; padding-left: 1.75rem; }
-    @media (max-width: 700px) {
-      .vtabs-wrap { flex-direction: column; }
-      .vtabs-nav { flex-direction: row; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; border-right: none; border-bottom: 2px solid var(--border); min-width: 0; width: 100%; padding-top: 0; scrollbar-width: none; }
-      .vtabs-nav::-webkit-scrollbar { display: none; }
-      .vtab-btn { border-right: none; border-bottom: 2px solid transparent; margin-right: 0; margin-bottom: -2px; border-radius: 4px 4px 0 0; width: auto; flex-shrink: 0; }
-      .vtab-btn[aria-selected="true"] { border-right-color: transparent; border-bottom-color: var(--blue); }
-      .vtabs-panels { padding-left: 0; padding-top: 1.25rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="assets/vendor/devkit/fonts.css">
+  <link rel="stylesheet" href="assets/vendor/devkit/styles.css">
+  <link rel="stylesheet" href="assets/css/site.css">
 </head>
+
 <body>
 
-<a href="#main-content" class="skip-link">Vai al contenuto principale</a>
+  <a href="#main-content" class="visually-hidden-focusable">Vai al contenuto principale</a>
 
-<header class="site-header" role="banner">
-  <div class="inner">
-    <a href="#" class="brand" aria-label="Filo — homepage">
-      <span class="brand-emoji" aria-hidden="true">🧵</span>
-      <div>
-        <div class="brand-name">Filo</div>
-        <div class="brand-sub">MCP Server — Design System .italia</div>
-      </div>
-    </a>
-    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Apri menu">☰</button>
-    <nav class="site-nav" id="site-nav" aria-label="Navigazione principale">
-      <a href="#dashboard">Dati</a>
-      <a href="#installazione">Installazione</a>
-      <a href="#strumenti">Strumenti</a>
-      <a href="#esempi">Esempi</a>
-      <a href="#system-prompt">System prompt</a>
-    </nav>
+  <!-- Topbar -->
+  <div class="py-3 bg-primary border-bottom text-center small text-white" role="note">
+    <strong>Filo è un progetto non ufficiale e sperimentale</strong>, usa Bootstrap Italia 3.x (alpha) e Dev
+    Kit Italia (alpha).
+    <a href="https://github.com/fupete/design-system-italia-mcp#readme" class="ms-md-3 text-white">LEGGI IL README</a>
   </div>
-</header>
 
-<div class="alpha-banner" role="note">
-  <span aria-hidden="true">⚠️</span><span class="sr-only">Attenzione: </span> Progetto sperimentale non ufficiale — basato su Bootstrap Italia 3.x e Dev Kit Italia, entrambi in alpha. I dati possono essere incompleti. <a href="https://github.com/fupete/design-system-italia-mcp#readme">Leggi il README</a>
-</div>
-
-<section class="hero" aria-labelledby="hero-title">
-  <div class="container">
-    <div class="hero-tag" aria-hidden="true">Model Context Protocol</div>
-    <h1 id="hero-title"><span aria-hidden="true">🧵</span> Filo — MCP Server per il Design System .italia<span class="version-pill">v0.3.7</span></h1>
-    <p class="hero-lead">
-      Non perdere il filo.<br>
-      Dati verificati di Bootstrap Italia, Dev Kit Italia e Design Tokens Italia per assistenti AI.
-      Costruito litigando con qualche LLM — <em>per evitare che altri ci litighino.</em>
-    </p>
-    <p class="hero-disclaimer">
-      <span aria-hidden="true">⚠️</span><span class="sr-only">Attenzione: </span> Progetto personale sperimentale e non ufficiale di <a href="https://github.com/fupete" >Daniele Tabellini (Fupete)</a>.
-    </p>
-    <div class="hero-stats" role="list" aria-label="Statistiche progetto">
-      <div role="listitem"><span class="stat-val" id="hero-stat-tools">—</span><span class="stat-label">tool MCP</span></div>
-      <div role="listitem"><span class="stat-val" id="hero-stat-comp">55+</span><span class="stat-label">componenti</span></div>
-      <div role="listitem"><span class="stat-val" id="hero-stat-sources">—</span><span class="stat-label">sorgenti dati</span></div>
-      <div role="listitem"><span class="stat-val">BSD&#8209;3</span><span class="stat-label">licenza</span></div>
-    </div>
-    <div class="hero-cta">
-      <a href="#installazione" class="btn btn-primary">Inizia subito →</a>
-      <a href="#dashboard" class="btn btn-secondary">Esplora i dati →</a>
-      <a href="https://github.com/fupete/design-system-italia-mcp" class="btn btn-outline">GitHub</a>
-      <a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp" class="btn btn-outline">npm</a>
-    </div>
-  </div>
-</section>
-
-<section id="main-content" aria-labelledby="cosa-e-title">
-  <div class="container">
-    <p class="section-label">Il problema</p>
-    <h2 id="cosa-e-title">Il tuo AI sa cos'è un accordion.<br>Non sa quello che c'è <em>adesso</em> in Bootstrap Italia.</h2>
-    <p class="section-intro">
-      Filo è un server MCP non ufficiale che espone agli assistenti AI i dati strutturati
-      del Design System .italia: markup HTML dei componenti Bootstrap Italia,
-      web component Dev Kit Italia, token CSS con catena di risoluzione completa,
-      linee guida Designers Italia, stato di accessibilità verificato e issue GitHub aperte.
-      Dati aggiornati ogni notte dal branch <code>data-fetched</code>.
-    </p>
-    <p class="ref-note">
-      Ispirato a <a href="https://github.com/italia/dati-semantic-mcp">dati-semantic-mcp</a> di
-      <a href="https://github.com/mfortini">Matteo Fortini</a> — progetto analogo per schema.gov.it.
-    </p>
-
-    <div class="cards-3">
-      <div class="card">
-        <span class="card-icon" aria-hidden="true">⚡</span>
-        <h3>Installa</h3>
-        <p>Avvia Filo via NPX senza installazione permanente, o con Docker per un deploy stabile su VPS.</p>
-        <a href="#installazione" class="card-link">Setup →</a>
-      </div>
-      <div class="card">
-        <span class="card-icon" aria-hidden="true">🔌</span>
-        <h3>Configura</h3>
-        <p>Configurazioni pronte per Claude Desktop, Cursor, VS Code e Claude Code in modalità stdio o HTTP.</p>
-        <a href="#configurazione" class="card-link">Client MCP →</a>
-      </div>
-      <div class="card">
-        <span class="card-icon" aria-hidden="true">🛡️</span>
-        <h3>Grounded</h3>
-        <p>Un system prompt consigliato per istruire l'assistente AI a usare solo i dati restituiti da Filo, segnalando esplicitamente quando un dato non è disponibile.</p>
-        <a href="#system-prompt" class="card-link">System prompt →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="dashboard" class="alt" aria-labelledby="dashboard-title">
-  <div class="container">
-    <p class="section-label">Data overview</p>
-    <h2 id="dashboard-title">Stato del sistema</h2>
-    <p class="section-intro">Dati live dal branch <code>data-fetched</code>. Snapshot aggiornato ogni notte via CI.</p>
-
-    <div id="dash-loading" class="dash-loading"><span aria-hidden="true">⏳</span> Caricamento dati live…</div>
-    <div id="dash-error" style="display:none;" class="alert alert-warn">
-      <span class="alert-icon" aria-hidden="true">⚠️</span>
-      <div>Impossibile caricare i dati. Possibile rate limit GitHub (60 req/ora senza token) o branch <code>data-fetched</code> non raggiungibile.</div>
-    </div>
-
-    <div id="dash-content" style="display:none;">
-
-      <!-- SNAPSHOT META -->
-      <div id="dash-meta-grid" class="dash-meta-grid"></div>
-
-      <!-- TABS VERTICALI DASHBOARD -->
-      <div class="vtabs-wrap">
-        <nav class="vtabs-nav" role="tablist" aria-label="Viste dashboard">
-          <button class="vtab-btn" role="tab" aria-selected="true"  aria-controls="dtab-comp"       id="dbtn-comp"       onclick="switchDashTab(this,'dtab-comp')">Componenti</button>
-          <button class="vtab-btn" role="tab" aria-selected="false" aria-controls="dtab-tokens"     id="dbtn-tokens"     onclick="switchDashTab(this,'dtab-tokens')">CSS custom properties</button>
-          <button class="vtab-btn" role="tab" aria-selected="false" aria-controls="dtab-props"      id="dbtn-props"      onclick="switchDashTab(this,'dtab-props')">Props Dev Kit</button>
-          <button class="vtab-btn" role="tab" aria-selected="false" aria-controls="dtab-guidelines" id="dbtn-guidelines" onclick="switchDashTab(this,'dtab-guidelines')">Linee guida</button>
-          <button class="vtab-btn" role="tab" aria-selected="false" aria-controls="dtab-issues"     id="dbtn-issues"     onclick="switchDashTab(this,'dtab-issues')">Repository</button>
-        </nav>
-        <div class="vtabs-panels">
-
-      <!-- TAB: COMPONENTI -->
-      <div id="dtab-comp" class="dash-tab-panel active" role="tabpanel" aria-labelledby="dbtn-comp">
-        <h3 class="dash-tab-title">Componenti — stato BSI e Dev Kit</h3>
-        <div class="dash-filter-row">
-          <span class="dash-filter-label">Filtra:</span>
-          <button class="dash-filter-btn active" onclick="filterComp(this,'all')">Tutti <span id="f-all"></span></button>
-          <button class="dash-filter-btn" onclick="filterComp(this,'devkit')">Ha Dev Kit <span id="f-devkit"></span></button>
-        </div>
-        <div class="dash-table-wrap">
-          <table id="dash-comp-table">
-            <thead><tr>
-              <th scope="col">Componente</th>
-              <th scope="col">Stato BSI</th>
-              <th scope="col">Stato UI Kit Italia</th>
-              <th scope="col">Esiste in Dev Kit Italia</th>
-            </tr></thead>
-            <tbody id="dash-comp-body"></tbody>
-          </table>
-        </div>
-        <div class="dash-toggle-wrap">
-          <button id="dash-comp-toggle" class="dash-filter-btn dash-comp-toggle" onclick="toggleAllComponents()">
-            Mostra tutti <span id="dash-comp-toggle-count"></span>
-          </button>
-        </div>
-      </div>
-
-      <!-- TAB: CSS CUSTOM PROPERTIES -->
-      <div id="dtab-tokens" class="dash-tab-panel" role="tabpanel" aria-labelledby="dbtn-tokens">
-        <h3 class="dash-tab-title">CSS custom properties Bootstrap Italia</h3>
-        <p class="dash-section-desc">Seleziona un componente per vedere le sue variabili CSS <code>--bsi-*</code> personalizzabili.</p>
-        <div class="token-select-wrap">
-          <label for="token-comp-select" class="token-select-label">Componente</label>
-          <select id="token-comp-select" class="token-comp-select" onchange="showComponentTokens(this.value)">
-            <option value="">— scegli un componente —</option>
-          </select>
-        </div>
-        <div id="token-list" class="token-list" aria-live="polite"></div>
-        <div class="token-cta" id="token-cta" hidden>
-          <p class="token-cta-question">Vuoi sapere a quale valore concreto porta ognuna di queste variabili?</p>
-          <p class="token-cta-desc">Con Filo attivo, il tuo assistente AI riceve la catena di risoluzione completa —
-          da <code>--bsi-*</code> fino ai Design Tokens Italia e al valore CSS finale.</p>
-          <a href="#installazione" class="btn btn-primary token-cta-btn">Inizia a usare Filo →</a>
-        </div>
-        <div class="token-example" id="token-example">
-          <p class="token-example-label">Esempio di catena reale — <code>--bsi-accordion-padding</code></p>
-          <div class="token-example-chain">
-            <span class="token-step-val">--bsi-accordion-padding</span>
-            <span class="token-arrow" aria-hidden="true">→</span>
-            <span class="token-step-val intermediate">var(--bsi-spacing-m)</span>
-            <span class="token-arrow" aria-hidden="true">→</span>
-            <span class="token-step-val intermediate">var(--it-spacing-m)</span>
-            <span class="token-arrow" aria-hidden="true">→</span>
-            <span class="token-step-val resolved">1.5rem</span>
+  <!-- Header BSI -->
+  <div class="it-header-wrapper">
+    <div class="it-header-center-wrapper it-small-header theme-light shadow-md">
+      <div class="container-xxl">
+        <div class="row">
+          <div class="col-12">
+            <div class="it-header-center-content-wrapper">
+              <div class="it-brand-wrapper">
+                <a href="#">
+                  <div class="it-brand-text">
+                    <div class="it-brand-title">🧵 Filo</div>
+                  </div>
+                </a>
+              </div>
+              <div class="it-right-zone">
+                <div class="it-socials">
+                  <ul>
+                    <li><a class="small" href="https://github.com/fupete/design-system-italia-mcp" aria-label="GitHub"
+                        target="_blank" rel="noopener">
+                        Repository GitHub
+                        <svg class="icon">
+                          <use href="assets/vendor/bsi/svg/sprites.svg#it-github"></use>
+                        </svg>
+                      </a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          <p class="token-example-note">Questa è la risposta che Filo fornisce al modello via <code>get_component_tokens("accordion")</code>.</p>
         </div>
       </div>
-
-      <!-- TAB: PROPS DEV KIT -->
-      <div id="dtab-props" class="dash-tab-panel" role="tabpanel" aria-labelledby="dbtn-props">
-        <h3 class="dash-tab-title">Props Dev Kit Italia</h3>
-        <p class="dash-section-desc">Seleziona un componente per vedere le props del suo web component <code>it-*</code>.</p>
-        <div class="token-select-wrap">
-          <label for="props-comp-select" class="token-select-label">Componente</label>
-          <select id="props-comp-select" class="token-comp-select" onchange="showComponentProps(this.value)">
-            <option value="">— scegli un componente —</option>
-          </select>
-        </div>
-        <div id="props-list" class="token-list" aria-live="polite"></div>
-      </div>
-
-      <!-- TAB: LINEE GUIDA -->
-      <div id="dtab-guidelines" class="dash-tab-panel" role="tabpanel" aria-labelledby="dbtn-guidelines">
-        <h3 class="dash-tab-title">Linee guida — Designers Italia</h3>
-        <p class="dash-section-desc">Seleziona un componente per leggere le linee guida d'uso da Designers Italia.</p>
-        <div class="token-select-wrap">
-          <label for="guidelines-comp-select" class="token-select-label">Componente</label>
-          <select id="guidelines-comp-select" class="token-comp-select" onchange="showComponentGuidelines(this.value)">
-            <option value="">— scegli un componente —</option>
-          </select>
-        </div>
-        <div id="guidelines-content" class="guidelines-content" aria-live="polite"></div>
-      </div>
-
-      <!-- TAB: REPOSITORY -->
-      <div id="dtab-issues" class="dash-tab-panel" role="tabpanel" aria-labelledby="dbtn-issues">
-        <h3 class="dash-tab-title">Repository GitHub</h3>
-        <p class="dash-section-desc">Link ai 4 repository del Design System .italia su GitHub.</p>
-        <div id="dash-issues-grid" class="dash-issues-grid"></div>
-      </div>
-
-        </div><!-- /.vtabs-panels -->
-      </div><!-- /.vtabs-wrap -->
-
     </div>
   </div>
-</section>
 
-<section id="installazione" aria-labelledby="install-title">
-  <div class="container">
-    <p class="section-label">Setup</p>
-    <h2 id="install-title">Installazione</h2>
-    <p class="section-intro">NPX è il canale primario — nessuna installazione permanente. Docker per deploy stabili.</p>
-
-    <div class="vtabs-wrap">
-      <nav class="vtabs-nav" role="tablist" aria-label="Modalità installazione">
-        <button class="vtab-btn" role="tab" aria-selected="true"  aria-controls="ti-npx"    id="bi-npx"    onclick="switchTab(this)">NPX <small>(consigliato)</small></button>
-        <button class="vtab-btn" role="tab" aria-selected="false" aria-controls="ti-docker" id="bi-docker" onclick="switchTab(this)">Docker</button>
-        <button class="vtab-btn" role="tab" aria-selected="false" aria-controls="ti-source" id="bi-source" onclick="switchTab(this)">Da sorgente</button>
-      </nav>
-      <div class="vtabs-panels">
-    <div id="ti-npx" class="tab-panel active" role="tabpanel" aria-labelledby="bi-npx">
-      <p class="tab-intro">Avvio istantaneo via <strong>stdio</strong> — canale principale per Claude Desktop, Cursor, VS Code.</p>
-      <pre><code>npx @fupete/design-system-italia-mcp</code></pre>
-      <div class="alert alert-info">
-        <span class="alert-icon" aria-hidden="true">ℹ️</span>
-        <div>Su macOS con nvm, se npx risolve una versione vecchia di Node (<em>"You must supply a command"</em>), usa il path esplicito: <code>nvm use 22 &amp;&amp; which npx</code>. Vedi la configurazione JSON nella sezione Configurazione.</div>
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     HERO — dark
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <section class="hero" id="main-content" aria-labelledby="hero-title">
+    <div class="container-xxl">
+      <div class="row">
+        <div class="col-12 col-lg-9">
+          <h1>🧵 Filo — MCP server sperimentale per il Design system .italia</h1>
+          <p class="lead mb-2">
+            Che tu sia un designer, uno sviluppatore o una macchina: <em>non perdere il filo</em>.
+            Tutti i componenti, i design token e lo stato del design system a portata di API.
+            Un progetto sperimentale sviluppato anche litigando con qualche
+            LLM.
+          </p>
+          <div class="d-grid d-md-flex flex-wrap gap-3 pt-4">
+            <a href="#installazione" class="btn btn-primary btn-lg">Installa Filo</a>
+            <a href="#dashboard" class="btn btn-outline-primary btn-lg">Esplora i dati</a>
+            <a href="https://github.com/fupete/design-system-italia-mcp" class="btn btn-secondary btn-lg">GitHub</a>
+            <a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp"
+              class="btn btn-secondary btn-lg">npm</a>
+            <a href="https://github.com/Fupete/design-system-italia-mcp/pkgs/container/design-system-italia-mcp"
+              class="btn btn-secondary btn-lg">docker</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-stats" role="list" aria-label="Statistiche">
+        <div class="hero-stat" role="listitem"><span class="hero-stat-val" id="stat-tools">13</span><span
+            class="hero-stat-label">tool MCP</span></div>
+        <div class="hero-stat" role="listitem"><span class="hero-stat-val" id="stat-comp">55</span><span
+            class="hero-stat-label">componenti</span></div>
+        <div class="hero-stat" role="listitem"><span class="hero-stat-val" id="stat-sources">9</span><span
+            class="hero-stat-label">sorgenti dati</span></div>
+        <div class="hero-stat" role="listitem"><span class="hero-stat-val">nightly</span><span
+            class="hero-stat-label">snapshot CI</span></div>
+        <div class="hero-stat" role="listitem"><span class="hero-stat-val">BSD&#8209;3</span><span
+            class="hero-stat-label">licenza*</span></div>
       </div>
     </div>
-    <div id="ti-docker" class="tab-panel" role="tabpanel" aria-labelledby="bi-docker">
-      <p class="tab-intro">Consigliato per deploy stabile. Supporta trasporto HTTP oltre a stdio.</p>
-      <pre><code>docker pull ghcr.io/fupete/design-system-italia-mcp
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     IL PROBLEMA
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <section class="py-5" aria-labelledby="problema-title">
+    <div class="container-xxl">
+      <div class="row">
+        <div class="col-12 col-lg-7">
+          <h2 id="problema-title" class="h2 mb-3">
+            Il tuo assistente LLM conosce i componenti del design system del Paese o se li inventa?
+          </h2>
+          <p class="lead">
+            Filo recupera ogni notte markup Bootstrap Italia e web component Dev Kit Italia, CSS custom property per
+            component e tutti i design token con l'intera catena di risoluzione fino al valore effettivo, linee guida
+            d'uso e issue
+            dalle molte sorgenti ufficiali, li consolida ed espone via MCP come dati strutturati e verificati in formato
+            <code>json</code>.
+          </p>
+        </div>
+      </div>
+      <div class="row g-4 mt-3">
+        <div class="col-12 col-md-4">
+          <article class="it-card it-card-height-full border rounded">
+            <h3 class="it-card-title"><a href="#installazione">Installa Filo</a></h3>
+            <div class="it-card-body">
+              <p class="it-card-text">Usa NPX senza setup permanente. Docker per VPS e self-hosting</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-4">
+          <article class="it-card it-card-height-full border rounded">
+            <h3 class="it-card-title"><a href="#configurazione">Configura gli assistenti</a></h3>
+            <div class="it-card-body">
+              <p class="it-card-text">Usa Claude Desktop, Cursor, VS Code, Claude Code — stdio o HTTP</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-12 col-md-4">
+          <article class="it-card it-card-height-full border rounded">
+            <h3 class="it-card-title"><a href="#system-prompt">Migliorane l'uso</a></h3>
+            <div class="it-card-body">
+              <p class="it-card-text">Usa un system prompt per migliorare l'adesione del modello ai soli dati MCP</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     DASHBOARD
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <section id="dashboard" class="py-5 bg-primary text-white" aria-labelledby="dashboard-title">
+    <div class="container-xxl">
+      <h2 id="dashboard-title" class="mb-1">Esplora i dati</h2>
+      <p class="lead mb-2">Dati live dal ramo <code>data-fetched</code> del repository.</p>
+
+      <p class="mb-5">Ogni notte Filo fa il giro delle sorgenti e consolida tutti i dati utili nel ramo dedicato. Questa
+        dashboard permette di esplorarne una parte.</p>
+
+      <p id="dash-loading" class="data-empty">Caricamento dati…</p>
+      <div id="dash-error" class="alert alert-warning" style="display:none;" role="alert">
+        <svg class="alert-icon icon" aria-hidden="true">
+          <use href="assets/vendor/bsi/svg/sprites.svg#it-warning-circle"></use>
+        </svg>
+        <p class="mb-0">Impossibile caricare i dati, riprova più tardi.</p>
+      </div>
+
+      <div id="dash-content" style="display:none;">
+        <div id="dash-meta" class="dash-meta"></div>
+
+        <!-- Tab orizzontali BSI -->
+        <ul class="nav nav-tabs nav-tabs-cards mb-3" id="dash-tabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="dt-comp-tab" data-bs-toggle="tab" data-bs-target="#dt-comp"
+              type="button" role="tab" aria-controls="dt-comp" aria-selected="true">Componenti</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="dt-tok-tab" data-bs-toggle="tab" data-bs-target="#dt-tok" type="button"
+              role="tab" aria-controls="dt-tok" aria-selected="false">CSS custom props</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="dt-props-tab" data-bs-toggle="tab" data-bs-target="#dt-props" type="button"
+              role="tab" aria-controls="dt-props" aria-selected="false">Props Dev Kit</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="dt-gl-tab" data-bs-toggle="tab" data-bs-target="#dt-gl" type="button"
+              role="tab" aria-controls="dt-gl" aria-selected="false">Linee guida</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="dt-repo-tab" data-bs-toggle="tab" data-bs-target="#dt-repo" type="button"
+              role="tab" aria-controls="dt-repo" aria-selected="false">Repository</button>
+          </li>
+        </ul>
+        <div class="tab-content border-bottom rounded-bottom border-end rounded-start rounded-end border-start shadow-md mb-3" id="dash-tab-content">
+
+          <!-- Componenti -->
+          <div class="tab-pane fade show active" id="dt-comp" role="tabpanel" aria-labelledby="dt-comp-tab">
+            <div class="d-flex gap-2 align-items-center mb-3 comp-filter">
+              <span class="small text-muted">FILTRA:</span>
+              <button class="btn btn-sm btn-primary" onclick="filterComp(this,'all')">TUTTI <span id="f-all"
+                  class="ms-1"></span></button>
+              <button class="btn btn-sm btn-outline-secondary" onclick="filterComp(this,'dk')">CON DEV KIT <span
+                  id="f-dk" class="ms-1"></span></button>
+            </div>
+            <div class="dash-table-wrap">
+              <table id="dash-comp-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Componente</th>
+                    <th scope="col">BSI</th>
+                    <th scope="col">UI Kit</th>
+                    <th scope="col">Dev Kit</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-comp-body"></tbody>
+              </table>
+            </div>
+            <div class="mt-2">
+              <button id="dash-tog" class="btn btn-sm btn-outline-secondary" onclick="toggleComps()"
+                style="display:none">
+                Mostra tutti <span id="dash-tog-n"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Token -->
+          <div class="tab-pane fade" id="dt-tok" role="tabpanel" aria-labelledby="dt-tok-tab">
+            <p class="mb-3">Variabili <code>--bsi-*</code> personalizzabili per componente.</p>
+            <div class="select-wrapper mb-4">
+              <label for="tok-sel">Componente</label>
+              <select id="tok-sel" onchange="showTokens(this.value)">
+                <option value="">— scegli —</option>
+              </select>
+            </div>
+            <div id="tok-list" aria-live="polite"></div>
+            <div id="tok-cta" class="alert alert-info mt-3" hidden>
+              <p class="mb-2">Con Filo attivo il modello riceve la catena di risoluzione completa — <code>--bsi-*</code>
+                → Design Tokens Italia → valore concreto.</p>
+              <a href="#installazione" class="btn btn-primary btn-sm">Inizia →</a>
+            </div>
+            <div id="tok-ex" class="border rounded p-3 bg-white mt-2">
+              <p class="small text-muted fw-bold text-uppercase mb-2"
+                style="font-family:'Roboto Mono',monospace;font-size:.68rem;letter-spacing:.07em;">Esempio —
+                --bsi-accordion-padding</p>
+              <div class="chain">
+                <span class="chain-val">--bsi-accordion-padding</span>
+                <span class="chain-arr">→</span>
+                <span class="chain-val mid">var(--bsi-spacing-m)</span>
+                <span class="chain-arr">→</span>
+                <span class="chain-val mid">var(--it-spacing-m)</span>
+                <span class="chain-arr">→</span>
+                <span class="chain-val resolved">1.5rem</span>
+              </div>
+              <p class="small text-muted mt-2 mb-0" style="font-family:'Roboto Mono',monospace;font-size:.72rem;">
+                get_component_tokens("accordion")</p>
+            </div>
+          </div>
+
+          <!-- Props -->
+          <div class="tab-pane fade" id="dt-props" role="tabpanel" aria-labelledby="dt-props-tab">
+            <p class="mb-3">Attributi del web component <code>it-*</code>.</p>
+            <div class="select-wrapper mb-4">
+              <label for="props-sel">Componente</label>
+              <select id="props-sel" onchange="showProps(this.value)">
+                <option value="">— scegli —</option>
+              </select>
+            </div>
+            <div id="props-list" aria-live="polite"></div>
+          </div>
+
+          <!-- Guidelines -->
+          <div class="tab-pane fade" id="dt-gl" role="tabpanel" aria-labelledby="dt-gl-tab">
+            <p class="mb-3">Quando e come usare ogni componente, da Designers Italia.</p>
+            <div class="select-wrapper mb-4">
+              <label for="gl-sel">Componente</label>
+              <select id="gl-sel" onchange="showGl(this.value)">
+                <option value="">— scegli —</option>
+              </select>
+            </div>
+            <div id="gl-content" aria-live="polite"></div>
+          </div>
+
+          <!-- Repository -->
+          <div class="tab-pane fade" id="dt-repo" role="tabpanel" aria-labelledby="dt-repo-tab">
+            <p class="mb-3">I 4 repository del Design System .italia su GitHub.</p>
+            <div id="dash-issues" class="issue-grid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     INSTALLAZIONE
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <section id="installazione" class="py-5" aria-labelledby="install-title">
+    <div class="container-xxl">
+      <h2 id="install-title" class="mb-1">Installazione</h2>
+      <p class="lead mb-4">NPX è il canale primario — nessuna installazione permanente. Docker per deploy stabili.</p>
+
+      <ul class="nav nav-tabs nav-tabs-cards mb-3" id="inst-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ti-npx" type="button" role="tab"
+            aria-selected="true">NPX <small class="ms-1 text-muted">(consigliato)</small></button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ti-docker" type="button" role="tab"
+            aria-selected="false">Docker</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ti-source" type="button" role="tab"
+            aria-selected="false">Da sorgente</button>
+        </li>
+      </ul>
+      <div class="tab-content border-bottom border-start border-end rounded-start rounded-end border-start shadow-md">
+        <div class="tab-pane fade show active" id="ti-npx" role="tabpanel">
+          <div class="pre-wrap">
+            <pre><code>npx @fupete/design-system-italia-mcp</code></pre><button class="copy-btn"
+              onclick="copyCode(this)">copia</button>
+          </div>
+          <p class="small text-muted mt-2">Su macOS con nvm: <code>nvm use 22 &amp;&amp; which npx</code> per il path
+            esplicito.</p>
+        </div>
+        <div class="tab-pane fade" id="ti-docker" role="tabpanel">
+          <div class="pre-wrap">
+            <pre><code>docker pull ghcr.io/fupete/design-system-italia-mcp
 docker run -p 8080:8080 \
   -e GITHUB_TOKEN=your_token \
-  ghcr.io/fupete/design-system-italia-mcp</code></pre>
-      <div class="alert alert-warn">
-        <span class="alert-icon" aria-hidden="true">⚠️</span>
-        <div>Multiarch — se <code>docker pull</code> scarica un'architettura incompatibile, fai build locale: <code>docker build -t filo-mcp .</code></div>
-      </div>
-    </div>
-    <div id="ti-source" class="tab-panel" role="tabpanel" aria-labelledby="bi-source">
-      <p class="tab-intro">Per sviluppo locale o per contribuire al progetto.</p>
-      <pre><code>git clone https://github.com/fupete/design-system-italia-mcp.git
+  ghcr.io/fupete/design-system-italia-mcp</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="ti-source" role="tabpanel">
+          <div class="pre-wrap">
+            <pre><code>git clone https://github.com/fupete/design-system-italia-mcp.git
 cd design-system-italia-mcp
-npm install
-cp .env.example .env
-# aggiungi GITHUB_TOKEN in .env
-npm run dev</code></pre>
-      <p class="tab-note">Server su <code>http://localhost:8080/mcp</code>. Test: <code>npx @modelcontextprotocol/inspector http://localhost:8080/mcp</code></p>
+npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+          </div>
+        </div>
+      </div>
+      <p class="small text-muted mt-3"><strong>GITHUB_TOKEN</strong> opzionale — per <code>get_component_issues</code>.
+        Senza: 60 req/ora. Con token read-only: 5000/ora.</p>
     </div>
-      </div><!-- /.vtabs-panels -->
-    </div><!-- /.vtabs-wrap -->
-    <div class="alert alert-info alert-mt">
-      <span class="alert-icon" aria-hidden="true">ℹ️</span>
-      <div><strong>GITHUB_TOKEN</strong> (opzionale ma consigliato) — serve per <code>get_component_issues</code>. Senza: 60 req/ora per IP. Con token read-only pubblico: 5000/ora.</div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section id="strumenti" class="alt" aria-labelledby="strumenti-title">
-  <div class="container">
-    <p class="section-label">Tool MCP</p>
-    <h2 id="strumenti-title">13 strumenti disponibili</h2>
-    <p class="section-intro">
-      Pipeline di progressive disclosure: discovery → specifico → aggregazione. Ogni risposta include versioni verificate e URL documentazione ufficiale.
-      <code>dataFetchedAt</code> indica la data dell'ultimo snapshot CI — non il momento della richiesta.
-    </p>
-    <div class="tool-grid">
-      <div class="tool-card">
-        <p class="tool-card-group">Discovery</p>
-        <p class="tool-card-count">4 tool</p>
-        <p class="tool-card-desc">Esplora componenti, filtra per stato, cerca per nome in italiano e inglese. "Fisarmonica", "pulsante", "dialog" funzionano.</p>
-        <ul aria-label="Tool discovery">
-          <li>list_components</li>
-          <li>search_components</li>
-          <li>list_by_status</li>
-          <li>list_accessibility_issues</li>
-        </ul>
-      </div>
-      <div class="tool-card">
-        <p class="tool-card-group">Dettaglio componente</p>
-        <p class="tool-card-count">5 tool</p>
-        <p class="tool-card-desc">Markup HTML BSI, varianti Dev Kit, linee guida Designers Italia, issue GitHub. Una sorgente o tutto insieme.</p>
-        <ul aria-label="Tool dettaglio componente">
-          <li>get_component</li>
-          <li>get_component_variant</li>
-          <li>get_component_full</li>
-          <li>get_component_guidelines</li>
-          <li>get_component_issues</li>
-        </ul>
-      </div>
-      <div class="tool-card">
-        <p class="tool-card-group">Token CSS</p>
-        <p class="tool-card-count">2 tool</p>
-        <p class="tool-card-desc">Variabili <code>--bsi-*</code> per componente con catena di risoluzione fino al valore concreto. <code>var(--bsi-spacing-m)</code> → <code>24px</code>.</p>
-        <ul aria-label="Tool token CSS">
-          <li>get_component_tokens</li>
-          <li>find_token</li>
-        </ul>
-      </div>
-      <div class="tool-card">
-        <p class="tool-card-group">Meta</p>
-        <p class="tool-card-count">2 tool</p>
-        <p class="tool-card-desc">Verifica connessione, versioni correnti di Design System / BSI / Dev Kit Italia, stato board GitHub.</p>
-        <ul aria-label="Tool meta">
-          <li>ping</li>
-          <li>get_project_board_status</li>
-        </ul>
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     STRUMENTI
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <section id="strumenti" class="py-5 lightgrey-bg-b1" aria-labelledby="strumenti-title">
+    <div class="container-xxl">
+      <h2 id="strumenti-title" class="mb-1">13 strumenti MCP</h2>
+      <p class="lead mb-4">Pipeline: discovery → specifico → aggregazione. Ogni risposta include versioni verificate e
+        URL documentazione.</p>
+      <div class="row g-4">
+        <div class="col-6 col-md-3">
+          <h3>Esplora</h3>
+          <ul class="tool-names">
+            <li>list_components</li>
+            <li>search_components</li>
+            <li>list_by_status</li>
+            <li>list_accessibility_issues</li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <h3>Componenti</h3>
+          <ul class="tool-names">
+            <li>get_component</li>
+            <li>get_component_variant</li>
+            <li>get_component_full</li>
+            <li>get_component_guidelines</li>
+            <li>get_component_issues</li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <h3>Tokens</h3>
+          <ul class="tool-names">
+            <li>get_component_tokens</li>
+            <li>find_token</li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <h3>Meta</h3>
+          <ul class="tool-names">
+            <li>ping</li>
+            <li>get_project_board_status</li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div class="alert alert-info alert-mt">
-      <span class="alert-icon" aria-hidden="true">ℹ️</span>
-      <div>Filo aggrega dati da sorgenti diverse in una sola risposta. <em>"Dimmi tutto sull'Alert"</em>, <em>"Quali token cambio per personalizzare header e footer?"</em> — senza dover consultare repo e documentazioni separatamente.</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     ESEMPI
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <section id="esempi" class="py-5" aria-labelledby="esempi-title">
+    <div class="container-xxl">
+      <p class="text-uppercase fw-bold small text-primary mb-2" style="letter-spacing:.08em;">Casi d'uso</p>
+      <h2 id="esempi-title" class="mb-4">Esempi</h2>
+      <div class="row">
+        <div class="col-12 col-lg-8">
+          <div class="esempio">
+            <p class="esempio-q">"Dammi i token CSS per personalizzare header e footer con Bootstrap Italia v3."</p>
+            <p class="esempio-t">get_component_tokens("header") + find_token("navbar")</p>
+          </div>
+          <div class="esempio">
+            <p class="esempio-q">"Trova i componenti form disponibili e il loro markup Dev Kit Italia."</p>
+            <p class="esempio-t">search_components("form") + get_component("input")</p>
+          </div>
+          <div class="esempio">
+            <p class="esempio-q">"Confronta i token di header e navbar — sono separati o condivisi?"</p>
+            <p class="esempio-t">get_component_tokens("header") + find_token("navbar")</p>
+          </div>
+          <div class="esempio">
+            <p class="esempio-q">"Quali componenti hanno problemi di accessibilità aperti?"</p>
+            <p class="esempio-t">list_accessibility_issues</p>
+          </div>
+          <div class="esempio">
+            <p class="esempio-q">"Dammi tutto sul componente Accordion."</p>
+            <p class="esempio-t">get_component_full("accordion")</p>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="esempi" aria-labelledby="esempi-title">
-  <div class="container">
-    <p class="section-label">Casi d'uso reali</p>
-    <h2 id="esempi-title">Esempi d'uso</h2>
-    <p class="section-intro">Esempi di query che usano i dati di Filo come base per la risposta dell'assistente AI.</p>
-    <div class="esempi-slider" role="list">
-      <div class="prompt-ex" role="listitem">
-        <blockquote><p>"Dammi i token CSS per personalizzare il colore di header e footer. Sto usando Bootstrap Italia v3 con Jekyll."</p></blockquote>
-        <p>→ <code>get_component_tokens("header")</code> + <code>get_component_tokens("footer")</code> + <code>find_token("navbar")</code> — token <code>--bsi-*</code> con catena di risoluzione fino al valore concreto</p>
-      </div>
-      <div class="prompt-ex" role="listitem">
-        <blockquote><p>"Trova i componenti form disponibili e il loro markup Dev Kit Italia."</p></blockquote>
-        <p>→ <code>search_components("form")</code> + <code>get_component("input")</code> — markup <code>&lt;it-input&gt;</code> estratto da Storybook</p>
-      </div>
-      <div class="prompt-ex" role="listitem">
-        <blockquote><p>"Confronta i token di header e navbar — sono separati o condivisi?"</p></blockquote>
-        <p>→ usa <code>get_component_tokens("header")</code> + <code>find_token("navbar")</code> — se i token navbar non sono presenti in <code>get_component_tokens</code>, il system prompt consigliato istruisce il modello a segnalarlo</p>
-      </div>
-      <div class="prompt-ex" role="listitem">
-        <blockquote><p>"Quali componenti hanno problemi di accessibilità aperti?"</p></blockquote>
-        <p>→ usa <code>list_accessibility_issues</code> — lista da dati verificati, non da conoscenza pregressa del modello</p>
-      </div>
-    </div>
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     SYSTEM PROMPT
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <section id="system-prompt" class="py-5 lightgrey-bg-b1" aria-labelledby="prompt-title">
+    <div class="container-xxl">
+      <h2 id="prompt-title" class="mb-1">System prompt</h2>
+      <p class="lead mb-4">I modelli mescolano dati MCP e conoscenza pregressa senza segnalarlo. Questo prompt aiuta a
+        fissare il
+        confine e diminuire gli errori, sempre presenti by default.</p>
 
+      <ul class="nav nav-tabs nav-tabs-cards mb-3" id="sp-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sp-it" type="button" role="tab"
+            aria-selected="true">Italiano</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#sp-en" type="button" role="tab"
+            aria-selected="false">English</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#sp-matrix" type="button" role="tab"
+            aria-selected="false">Client supportati</button>
+        </li>
+      </ul>
+      <div class="tab-content border-start border-end border-bottom rounded-start rounded-end border-start shadow-md">
 
-    <aside class="nota-aside">
-      <h3 >Una cosa da tenere a mente</h3>
-      <p >Filo è un server che fornisce dati — markup HTML, token CSS, linee guida, stato accessibilità, issue aperte. È l'assistente AI che li usa per rispondere. I dati vengono da sorgenti aggiornate ogni notte, non dalla memoria del modello — ma il sistema prompt consigliato aiuta a mantenere questo confine.</p>
-      <p >Filo non fornisce calcoli WCAG, compatibilità browser, performance o esempi per React e Vue. Se l'assistente ti dà valori numerici precisi su questi temi, sono inferenze sue — non dati di Filo.</p>
-    </aside>
-  </div>
-</section>
-
-<section id="system-prompt" class="alt" aria-labelledby="prompt-title">
-  <div class="container">
-    <p class="section-label">Anti-hallucination</p>
-    <h2 id="prompt-title">System prompt consigliato</h2>
-    <p class="section-intro">Il problema non è il server — è che i modelli mescolano dati MCP reali e conoscenza pregressa senza segnalarlo. Questo prompt rende visibile il confine e riduce le allucinazioni, anche con modelli piccoli.</p>
-
-    <div class="vtabs-wrap">
-      <nav class="vtabs-nav" role="tablist" aria-label="Versioni system prompt">
-        <button class="vtab-btn" role="tab" aria-selected="true"  aria-controls="tp-it"     id="bp-it"     onclick="switchTab(this)">Italiano</button>
-        <button class="vtab-btn" role="tab" aria-selected="false" aria-controls="tp-en"     id="bp-en"     onclick="switchTab(this)">English</button>
-        <button class="vtab-btn" role="tab" aria-selected="false" aria-controls="tp-matrix" id="bp-matrix" onclick="switchTab(this)">Supporto client</button>
-      </nav>
-      <div class="vtabs-panels">
-    <div id="tp-it" class="tab-panel active" role="tabpanel" aria-labelledby="bp-it">
-      <div class="prompt-box">
-        <p class="prompt-box-label">Versione italiana</p>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">✅</span> Dati verificati</div><p>Usa esclusivamente i dati restituiti dagli strumenti MCP di Filo. Non integrare con conoscenza pregressa su Bootstrap Italia, Dev Kit Italia, Design Tokens Italia o altri framework CSS/web component.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">❌</span> Quando il dato manca</div><p>Se un'informazione non è presente nelle risposte MCP, dillo esplicitamente. Scrivi "Questo dato non è disponibile nelle sorgenti MCP" anziché fornire una stima, un valore plausibile o un'inferenza. Non inventare valori numerici (ratio WCAG, spacing, dimensioni, colori).</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">🔀</span> Quando componi elementi</div><p>Se combini markup MCP reale con struttura HTML/CSS che aggiungi tu, segnala chiaramente cosa viene dai dati MCP e cosa è tua inferenza.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">🏷️</span> Versioni e fonti</div><p>In ogni risposta che usa dati MCP, includi la versione delle sorgenti e il link alla documentazione ufficiale restituiti dal tool.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">⭐</span> Regola d'oro</div><p>Se non sei sicuro che un dato provenga da MCP, trattalo come inferenza e segnalalo.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">🔧</span> Tool disponibili</div><p>All'inizio della sessione, usa il tool <code>ping</code> per verificare la connessione e leggi attentamente la lista e le descrizioni dei tool disponibili prima di rispondere. Non assumere quali tool esistono — usa solo quelli effettivamente elencati dal server.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">📊</span> Completezza dati</div><p>Se un tool restituisce un sottoinsieme dei dati disponibili (es. 3 varianti su 13), segnalalo all'utente e chiedi se vuole il resto. Non presentare un sottoinsieme come se fosse il risultato completo.</p></div>
-      </div>
-      <pre class="pre-prompt"><code>## Regole dati Design System .italia (Filo MCP)
+        <div class="tab-pane fade show active" id="sp-it" role="tabpanel">
+          <div class="pre-wrap">
+            <pre
+              class="pre-prompt"><code>## Regole dati Design System .italia (Filo MCP)
 
 DATI VERIFICATI: usa esclusivamente i dati restituiti dagli strumenti MCP di Filo. Non integrare con conoscenza pregressa su Bootstrap Italia, Dev Kit Italia, Design Tokens Italia o altri framework CSS/web component.
 
-QUANDO IL DATO MANCA: se un'informazione non è presente nelle risposte MCP, dillo esplicitamente. Scrivi "Questo dato non è disponibile nelle sorgenti MCP" anziché fornire una stima, un valore plausibile o un'inferenza. Non inventare valori numerici (ratio WCAG, spacing, dimensioni, colori).
+QUANDO IL DATO MANCA: se un'informazione non è presente nelle risposte MCP, dillo esplicitamente. Scrivi "Questo dato non è disponibile nelle sorgenti MCP" anziché fornire una stima o inferenza. Non inventare valori numerici.
 
-QUANDO COMPONI ELEMENTI: se combini markup MCP reale con struttura HTML/CSS che aggiungi tu, segnala chiaramente cosa viene dai dati MCP e cosa è tua inferenza.
+QUANDO COMPONI ELEMENTI: se combini markup MCP reale con HTML/CSS che aggiungi tu, segnala chiaramente cosa viene dai dati MCP e cosa è tua inferenza.
 
 VERSIONI E FONTI: in ogni risposta che usa dati MCP, includi la versione delle sorgenti e il link alla documentazione ufficiale restituiti dal tool.
 
 REGOLA D'ORO: se non sei sicuro che un dato provenga da MCP, trattalo come inferenza e segnalalo.
 
-TOOL DISPONIBILI: all'inizio della sessione, usa il tool ping per verificare la connessione e leggi attentamente la lista e le descrizioni dei tool disponibili prima di rispondere. Non assumere quali tool esistono — usa solo quelli effettivamente elencati dal server.
+TOOL DISPONIBILI: all'inizio della sessione, usa il tool ping per verificare la connessione e leggi la lista dei tool disponibili. Non assumere quali tool esistono.
 
-COMPLETEZZA DATI: se un tool restituisce un sottoinsieme dei dati disponibili (es. 3 varianti su 13), segnalalo all'utente e chiedi se vuole il resto. Non presentare un sottoinsieme come se fosse il risultato completo.</code></pre>
-    </div>
-    <div id="tp-en" class="tab-panel" role="tabpanel" aria-labelledby="bp-en">
-      <div class="prompt-box">
-        <p class="prompt-box-label">English version</p>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">✅</span> Verified data</div><p>Use exclusively the data returned by Filo's MCP tools. Do not supplement with prior knowledge of Bootstrap Italia, Dev Kit Italia, Design Tokens Italia, or any other CSS/web component framework.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">❌</span> When data is missing</div><p>If information is not present in the MCP responses, say so explicitly. Write "This data is not available in the MCP sources" instead of providing an estimate, plausible value, or inference. Never invent numeric values (WCAG contrast ratios, spacing, dimensions, colors).</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">🔀</span> When composing elements</div><p>If you combine real MCP markup with HTML/CSS structure you add yourself, clearly indicate what comes from MCP data and what is your own inference.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">🏷️</span> Versions and sources</div><p>In every response that uses MCP data, include the source versions and official documentation URL returned by the tool.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">⭐</span> Golden rule</div><p>If you are unsure whether a piece of data comes from MCP, treat it as inference and label it as such.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">🔧</span> Available tools</div><p>At the start of the session, use the <code>ping</code> tool to verify the connection and carefully read the list and descriptions of available tools before responding. Do not assume which tools exist — use only those actually listed by the server.</p></div>
-        <div class="clause"><div class="clause-label"><span aria-hidden="true">📊</span> Data completeness</div><p>If a tool returns a subset of available data (e.g. 3 variants out of 13), flag this to the user and ask if they want the rest. Do not present a subset as if it were the complete result.</p></div>
-      </div>
-      <pre class="pre-prompt"><code>## Data rules — Design System .italia (Filo MCP)
+COMPLETEZZA DATI: se un tool restituisce un sottoinsieme dei dati (es. 3 varianti su 13), segnalalo all'utente.</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">copia</button>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="sp-en" role="tabpanel">
+          <div class="pre-wrap">
+            <pre
+              class="pre-prompt"><code>## Data rules — Design System .italia (Filo MCP)
 
 VERIFIED DATA: use exclusively the data returned by Filo's MCP tools. Do not supplement with prior knowledge of Bootstrap Italia, Dev Kit Italia, Design Tokens Italia, or any other CSS/web component framework.
 
-WHEN DATA IS MISSING: if information is not present in the MCP responses, say so explicitly. Write "This data is not available in the MCP sources" instead of providing an estimate, plausible value, or inference. Never invent numeric values (WCAG contrast ratios, spacing, dimensions, colors).
+WHEN DATA IS MISSING: if information is not present in the MCP responses, say so explicitly. Never invent numeric values.
 
-WHEN COMPOSING ELEMENTS: if you combine real MCP markup with HTML/CSS structure you add yourself, clearly indicate what comes from MCP data and what is your own inference.
+WHEN COMPOSING ELEMENTS: clearly indicate what comes from MCP data and what is your own inference.
 
 VERSIONS AND SOURCES: in every response that uses MCP data, include the source versions and official documentation URL returned by the tool.
 
 GOLDEN RULE: if you are unsure whether a piece of data comes from MCP, treat it as inference and label it as such.
 
-AVAILABLE TOOLS: at the start of the session, use the ping tool to verify the connection and carefully read the list and descriptions of available tools before responding. Do not assume which tools exist — use only those actually listed by the server.
+AVAILABLE TOOLS: at the start of the session, use the ping tool to verify the connection and read the list of available tools. Do not assume which tools exist.
 
-DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants out of 13), flag this to the user and ask if they want the rest. Do not present a subset as if it were the complete result.</code></pre>
-    </div>
-    <div id="tp-matrix" class="tab-panel" role="tabpanel" aria-labelledby="bp-matrix">
-      <p style="margin-bottom:1.25rem;font-size:.875rem;color:var(--text-muted);">Il system prompt per Filo va configurato nel client MCP, non nel server. claude.ai non supporta MCP al momento — i client rilevanti sono i tool da sviluppatore.</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th scope="col">Client</th><th scope="col">Supporto</th><th scope="col">Dove inserire il system prompt</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Claude Desktop</strong></td><td class="yes"><span aria-hidden="true">✅</span><span class="sr-only">Sì</span></td><td>Campo <code>systemPrompt</code> nel config JSON del server MCP (<code>claude_desktop_config.json</code>) — applicato per ogni sessione con Filo</td></tr>
-            <tr><td><strong>Cursor</strong></td><td class="yes"><span aria-hidden="true">✅</span><span class="sr-only">Sì</span></td><td>File <code>.cursor/rules</code> nella root del progetto — applicato a tutte le conversazioni nel workspace</td></tr>
-            <tr><td><strong>Claude Code</strong></td><td class="yes"><span aria-hidden="true">✅</span><span class="sr-only">Sì</span></td><td>File <code>CLAUDE.md</code> nella root del progetto — letto automaticamente come contesto di progetto</td></tr>
-            <tr><td><strong>VS Code</strong></td><td class="no"><span aria-hidden="true">❌</span><span class="sr-only">No</span></td><td>Non supporta system prompt per server MCP al momento</td></tr>
-          </tbody>
-        </table>
+DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants out of 13), flag this to the user.</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">copia</button>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="sp-matrix" role="tabpanel">
+          <p class="mb-3 text-muted">Il system prompt va configurato nel client, non nel server.</p>
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Client</th>
+                <th scope="col">Supporto</th>
+                <th scope="col">Dove</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Claude Desktop</td>
+                <td>✅</td>
+                <td><code>systemPrompt</code> nel config JSON MCP</td>
+              </tr>
+              <tr>
+                <td>claude.ai</td>
+                <td>✅</td>
+                <td>Project instructions</td>
+              </tr>
+              <tr>
+                <td>Cursor</td>
+                <td>✅</td>
+                <td><code>.cursor/rules</code></td>
+              </tr>
+              <tr>
+                <td>Claude Code</td>
+                <td>✅</td>
+                <td><code>CLAUDE.md</code></td>
+              </tr>
+              <tr>
+                <td>VS Code</td>
+                <td>❌</td>
+                <td>Non supportato</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
-      </div><!-- /.vtabs-panels -->
-    </div><!-- /.vtabs-wrap -->
-  </div>
-</section>
+  </section>
 
-<section id="configurazione" aria-labelledby="config-title">
-  <div class="container">
-    <p class="section-label">Client MCP</p>
-    <h2 id="config-title">Configurazione client</h2>
-    <p class="section-intro">Configurazioni pronte per i client principali. Modalità stdio con NPX, HTTP per Docker o VPS.</p>
-    <div>
-      <div class="acc">
-        <button class="acc-btn" aria-expanded="true" aria-controls="acc-claude-desktop" onclick="toggleAcc(this)">
-          Claude Desktop <span class="acc-arrow">▼</span>
-        </button>
-        <div class="acc-body open" id="acc-claude-desktop">
-          <p>In <code>~/Library/Application Support/Claude/claude_desktop_config.json</code></p>
-          <pre><code>{
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     CONFIGURAZIONE
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <section id="configurazione" class="py-5" aria-labelledby="config-title">
+    <div class="container-xxl">
+      <p class="text-uppercase fw-bold small text-primary mb-2" style="letter-spacing:.08em;">Client MCP</p>
+      <h2 id="config-title" class="mb-4">Configurazione</h2>
+      <div class="accordion" id="acc-config">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-cd">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#acc-cd"
+              aria-expanded="true" aria-controls="acc-cd">Claude Desktop</button>
+          </h2>
+          <div id="acc-cd" class="accordion-collapse collapse show" aria-labelledby="h-cd" data-bs-parent="#acc-config">
+            <div class="accordion-body">
+              <p class="small text-muted">In
+                <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>
+              </p>
+              <div class="pre-wrap">
+                <pre><code>{
   "mcpServers": {
     "design-system-italia": {
       "command": "npx",
       "args": ["-y", "@fupete/design-system-italia-mcp"],
-      "env": {
-        "TRANSPORT": "stdio",
-        "GITHUB_TOKEN": "your_token"
-      }
+      "env": { "TRANSPORT": "stdio", "GITHUB_TOKEN": "your_token" }
     }
   }
-}</code></pre>
+}</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="acc">
-        <button class="acc-btn" aria-expanded="false" aria-controls="acc-cursor" onclick="toggleAcc(this)">
-          Cursor / VS Code <span class="acc-arrow">▼</span>
-        </button>
-        <div class="acc-body" id="acc-cursor">
-          <p>In <code>.vscode/mcp.json</code> o impostazioni Cursor MCP</p>
-          <pre><code>{
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-cur">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-cur"
+              aria-expanded="false" aria-controls="acc-cur">Cursor / VS Code</button>
+          </h2>
+          <div id="acc-cur" class="accordion-collapse collapse" aria-labelledby="h-cur" data-bs-parent="#acc-config">
+            <div class="accordion-body">
+              <p class="small text-muted">In <code>.vscode/mcp.json</code></p>
+              <div class="pre-wrap">
+                <pre><code>{
   "servers": {
     "design-system-italia": {
       "command": "npx",
       "args": ["-y", "@fupete/design-system-italia-mcp"],
-      "env": {
-        "TRANSPORT": "stdio",
-        "GITHUB_TOKEN": "your_token"
-      }
+      "env": { "TRANSPORT": "stdio", "GITHUB_TOKEN": "your_token" }
     }
   }
-}</code></pre>
+}</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="acc">
-        <button class="acc-btn" aria-expanded="false" aria-controls="acc-claudecode" onclick="toggleAcc(this)">
-          Claude Code <span class="acc-arrow">▼</span>
-        </button>
-        <div class="acc-body" id="acc-claudecode">
-          <p>Comando CLI diretto</p>
-          <pre><code>claude mcp add design-system-italia \
-  --command \
-  "npx -y @fupete/design-system-italia-mcp" \
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-cc">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-cc"
+              aria-expanded="false" aria-controls="acc-cc">Claude Code</button>
+          </h2>
+          <div id="acc-cc" class="accordion-collapse collapse" aria-labelledby="h-cc" data-bs-parent="#acc-config">
+            <div class="accordion-body">
+              <div class="pre-wrap">
+                <pre><code>claude mcp add design-system-italia \
+  --command "npx -y @fupete/design-system-italia-mcp" \
   --env TRANSPORT=stdio \
-  --env GITHUB_TOKEN=your_token</code></pre>
+  --env GITHUB_TOKEN=your_token</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="acc">
-        <button class="acc-btn" aria-expanded="false" aria-controls="acc-http" onclick="toggleAcc(this)">
-          HTTP remoto (Docker / VPS) <span class="acc-arrow">▼</span>
-        </button>
-        <div class="acc-body" id="acc-http">
-          <p>Per Docker o VPS — trasporto HTTP invece di stdio</p>
-          <pre><code>{
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h-http">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#acc-http" aria-expanded="false" aria-controls="acc-http">HTTP remoto (Docker /
+              VPS)</button>
+          </h2>
+          <div id="acc-http" class="accordion-collapse collapse" aria-labelledby="h-http" data-bs-parent="#acc-config">
+            <div class="accordion-body">
+              <div class="pre-wrap">
+                <pre><code>{
   "mcpServers": {
     "design-system-italia": {
       "type": "http",
       "url": "http://localhost:8080/mcp"
     }
   }
-}</code></pre>
+}</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="note-tecniche" class="alt" aria-labelledby="note-title">
-  <div class="container">
-    <p class="section-label">Architettura</p>
-    <h2 id="note-title">Note tecniche</h2>
-    <p class="section-intro">Comportamenti rilevanti per chi integra Filo in un flusso di lavoro.</p>
-    <div>
-      <div class="note-item">
-        <span class="note-icon" aria-hidden="true">📸</span>
-        <div>
-          <h3>Snapshot nightly, issue live</h3>
-          <p>Bootstrap Italia, Dev Kit Italia, Design Tokens Italia e Designers Italia sono serviti dal branch <code>data-fetched</code>, aggiornato ogni notte via CI. Solo GitHub Issues è fetchato live a runtime (cache 15 min). <code>dataFetchedAt</code> nelle risposte indica la data dell'ultimo snapshot, non il momento della richiesta.</p>
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     NOTE TECNICHE — dark
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <section id="note-tecniche" class="section-dark bg-primary py-5" aria-labelledby="note-title">
+    <div class="container-xxl">
+      <h2 id="note-title" class="mb-4">Note tecniche sul'architettura</h2>
+      <div class="row g-4">
+        <div class="col-12 col-md-6">
+          <h3 class="h5">Snapshot nightly, issue live</h3>
+          <p>Bootstrap Italia, Dev Kit Italia, Design Tokens Italia e documentazione dei componenti dal sito Designers
+            Italia consolidati, strutturati e serviti dal branch
+            <code>data-fetched</code> informato `json`, aggiornato ogni notte, cache 24 ore. GitHub Issues live con
+            cache 15 min.
+          </p>
+        </div>
+        <div class="col-12 col-md-6">
+          <h3 class="h5">Catena di risoluzione CSS custom property e design token</h3>
+          <p><code>--bsi-accordion-padding</code> (CSS custom property del componente Accordion) →
+            <code>var(--bsi-spacing-m)</code> →
+            <code>var(--it-spacing-m) (Design Tokens Italia)</code> → <code>1.5rem</code>. Filo risolve l'intera catena
+            e restituisce via MCP il valore (<code>valueResolved</code>).
+          </p>
+        </div>
+        <div class="col-12 col-md-6">
+          <h3 class="h5">Troncamento varianti</h3>
+          <p><code>get_component</code> restituisce le prime 3 varianti + lista nomi. Usa
+            <code>get_component_variant(name, variantName)</code> per varianti specifiche.
+          </p>
+        </div>
+        <div class="col-12 col-md-6">
+          <h3 class="h5">Trasporto stdio e HTTP</h3>
+          <p>Stdio per NPX locale, HTTP per deploy remoto Docker. Selezionabile via env
+            <code>TRANSPORT</code>.
+          </p>
         </div>
       </div>
-      <div class="note-item">
-        <span class="note-icon" aria-hidden="true">🔗</span>
-        <div>
-          <h3>Catena di risoluzione token</h3>
-          <p>I token CSS seguono la catena completa: <code>--bsi-accordion-padding</code> → <code>var(--bsi-spacing-m)</code> → <code>var(--it-spacing-m)</code> → <code>1.5rem / 24px</code>. Filo risolve l'intera catena e restituisce il valore concreto finale in <code>valueResolved</code>.</p>
+      <div class="alert alert-warning mt-4" role="note">
+        <svg class="alert-icon icon" aria-hidden="true">
+          <use href="assets/vendor/bsi/svg/sprites.svg#it-warning-circle"></use>
+        </svg>
+        <p class="mb-0"><strong>Attenzione:</strong> Bootstrap Italia v3 e Dev Kit Italia v1 sono in alpha. Token
+          <code>--bsi-*</code> <code>--it-*</code> e web component <code>it-*</code> possono cambiare prima della
+          release stabile.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════════════════════════ -->
+  <footer class="site-footer bg-dark" role="contentinfo" aria-labelledby="footer-title">
+    <div class="container-xxl">
+      <div class="row g-4 mb-2">
+        <div class="col-12 col-md-5">
+          <h2 id="footer-title" class="fw-bold mb-2">🧵 Filo</h2>
+          <p>Server MCP sperimentale per il Design System .italia. Progetto personale non ufficiale di <a
+              href="https://github.com/fupete">Daniele Tabellini (@Fupete)</a></p>
+          <p><a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue benvenute</a></p>
+        </div>
+        <div class="col-6 col-md-3 offset-md-1">
+          <h3>Progetto</h3>
+          <ul>
+            <li><a href="https://github.com/fupete/design-system-italia-mcp">GitHub</a></li>
+            <li><a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp">npm</a></li>
+            <li><a href="https://ghcr.io/fupete/design-system-italia-mcp">Docker</a></li>
+            <li><a href="/llms.txt">llms.txt</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <h3>Risorse</h3>
+          <ul>
+            <li><a href="https://designers.italia.it/design-system/">Design System .italia</a></li>
+            <li><a href="https://italia.github.io/bootstrap-italia">Bootstrap Italia</a></li>
+            <li><a href="https://italia.github.io/dev-kit-italia">Dev Kit Italia</a></li>
+            <li><a href="https://github.com/italia/design-tokens-italia">Design Tokens Italia</a></li>
+            <li><a href="https://modelcontextprotocol.io">MCP</a></li>
+            <li><a href="https://github.com/italia/dati-semantic-mcp">dati-semantic-mcp</a></li>
+          </ul>
         </div>
       </div>
-      <div class="note-item">
-        <span class="note-icon" aria-hidden="true">✂️</span>
-        <div>
-          <h3>Troncamento varianti</h3>
-          <p>Per componenti con molte varianti (Card con 30+), <code>get_component</code> e <code>get_component_full</code> restituiscono le prime 3 con markup completo + lista nomi di tutte. Usa <code>get_component_variant(name, variantName)</code> per richiederne una specifica per nome.</p>
-        </div>
-      </div>
-      <div class="note-item">
-        <span class="note-icon" aria-hidden="true">🌐</span>
-        <div>
-          <h3>Trasporto stdio e HTTP</h3>
-          <p>Filo supporta <code>stdio</code> per uso locale con NPX (consigliato per la maggior parte dei client) e <code>http</code> per deploy remoto con Docker. Selezionabile via variabile d'ambiente <code>TRANSPORT</code>.</p>
+      <div class="footer-bottom" aria-labelledby="footer-bottom-title">
+        <h2 id="footer-bottom-title" class="visually-hidden">Crediti e license</h2>
+        <span>© 2026 Daniele Tabellini (@Fupete)</span>
+        <div style="display:flex;gap:1.5rem;">
+          <a href="https://github.com/fupete/design-system-italia-mcp/blob/main/LICENSE">BSD-3-Clause</a>
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 (Designers Italia)</a>
         </div>
       </div>
     </div>
-    <div class="alert alert-warn alert-mt">
-      <span class="alert-icon" aria-hidden="true">⚠️</span>
-      <div><strong>Alpha.</strong> Bootstrap Italia 3.x e Dev Kit Italia sono in alpha. I token CSS <code>--bsi-*</code> e i web component <code>it-*</code> possono avere breaking changes prima della release stabile prevista intorno ad aprile.</div>
-    </div>
-  </div>
-</section>
+  </footer>
 
+  <a href="#" id="back-to-top" aria-label="Torna in cima">↑ top</a>
 
-<footer class="site-footer" role="contentinfo">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand"><span aria-hidden="true">🧵</span> Filo</div>
-        <p class="footer-desc">Server MCP non ufficiale che espone i dati strutturati del Design System .italia ad assistenti AI. Progetto personale sperimentale.</p>
-        <p class="footer-note">Sviluppato da <a href="https://github.com/fupete">Daniele Tabellini (Fupete)</a> anche litigando con qualche LLM. Issue benvenute.</p>
-      </div>
-      <div>
-        <h4>Progetto</h4>
-        <ul>
-          <li><a href="https://github.com/fupete/design-system-italia-mcp">Repository GitHub</a></li>
-          <li><a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp">Pacchetto npm</a></li>
-          <li><a href="https://ghcr.io/fupete/design-system-italia-mcp">Immagine Docker (GHCR)</a></li>
-          <li><a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue e feedback</a></li>
-          <li><a href="/llms.txt">llms.txt</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Risorse</h4>
-        <ul>
-          <li><a href="https://designers.italia.it/design-system/">Design System .italia</a></li>
-          <li><a href="https://italia.github.io/bootstrap-italia">Bootstrap Italia</a></li>
-          <li><a href="https://italia.github.io/dev-kit-italia">Dev Kit Italia</a></li>
-          <li><a href="https://github.com/italia/design-tokens-italia">Design Tokens Italia</a></li>
-          <li><a href="https://modelcontextprotocol.io">Model Context Protocol</a></li>
-          <li><a href="https://github.com/italia/dati-semantic-mcp">dati-semantic-mcp (Fortini)</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>Progetto open source non ufficiale</p>
-      <div class="footer-licenses">
-        <a href="https://github.com/fupete/design-system-italia-mcp/blob/main/LICENSE">BSD-3-Clause (codice)</a>
-        <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 (contenuti Designers Italia)</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script>
-  // Copy buttons
-  document.querySelectorAll('pre').forEach(pre => {
-    const wrap = document.createElement('div');
-    wrap.className = 'pre-wrap';
-    pre.parentNode.insertBefore(wrap, pre);
-    wrap.appendChild(pre);
-    const btn = document.createElement('button');
-    btn.className = 'copy-btn';
-    btn.setAttribute('aria-label', 'Copia codice');
-    btn.textContent = 'Copia';
-    wrap.appendChild(btn);
-    btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
-        btn.textContent = 'Copiato ✓';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'Copia'; btn.classList.remove('copied'); }, 2000);
-      });
-    });
-  });
-
-  function switchDashTab(btn, panelId) {
-    const tablist = btn.closest('[role="tablist"]');
-    tablist.querySelectorAll('[role="tab"]').forEach(b => b.setAttribute('aria-selected','false'));
-    btn.setAttribute('aria-selected','true');
-    document.querySelectorAll('.dash-tab-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById(panelId).classList.add('active');
-    // Su mobile scrolla al pannello
-    if (window.innerWidth <= 640) {
-      document.getElementById(panelId).scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
-  function switchTab(btn) {
-    const tablist = btn.closest('[role="tablist"]');
-    tablist.querySelectorAll('[role="tab"]').forEach(b => b.setAttribute('aria-selected','false'));
-    btn.setAttribute('aria-selected','true');
-    const panelId = btn.getAttribute('aria-controls');
-    const section = btn.closest('section') || document.body;
-    section.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById(panelId).classList.add('active');
-  }
-
-  function switchDashTab(btn, panelId) {
-    const tablist = btn.closest('[role="tablist"]');
-    tablist.querySelectorAll('[role="tab"]').forEach(b => b.setAttribute('aria-selected','false'));
-    btn.setAttribute('aria-selected','true');
-    document.querySelectorAll('.dash-tab-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById(panelId).classList.add('active');
-  }
-  // Drag to scroll esempi slider
-  const slider = document.querySelector('.esempi-slider');
-  if (slider) {
-    let isDown = false, startX, scrollLeft;
-    slider.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-    slider.addEventListener('mouseleave', () => isDown = false);
-    slider.addEventListener('mouseup', () => isDown = false);
-    slider.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; slider.scrollLeft = scrollLeft - (x - startX) * 1.5; });
-  }
-
-  const navToggle = document.querySelector('.nav-toggle');
-  const siteNav   = document.querySelector('.site-nav');
-  navToggle.addEventListener('click', () => {
-    const open = siteNav.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-  siteNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    siteNav.classList.remove('open');
-    navToggle.setAttribute('aria-expanded','false');
-  }));
-
-
-  // ===== ACCORDION =====
-  function toggleAcc(btn) {
-    const body = document.getElementById(btn.getAttribute('aria-controls'));
-    const isOpen = btn.getAttribute('aria-expanded') === 'true';
-    // Chiudi tutti nello stesso gruppo
-    btn.closest('div').parentElement.querySelectorAll('.acc-btn').forEach(b => {
-      b.setAttribute('aria-expanded', 'false');
-      document.getElementById(b.getAttribute('aria-controls')).classList.remove('open');
-    });
-    // Apri quello cliccato se era chiuso
-    if (!isOpen) {
-      btn.setAttribute('aria-expanded', 'true');
-      body.classList.add('open');
-    }
-  }
-
-  // ===== DASHBOARD =====
-  // ── Costanti da aggiornare ad ogni release che cambia tool o sorgenti ──
-  const FILO_TOOL_COUNT   = 13;  // tool MCP esposti
-  const FILO_SOURCE_COUNT = 9;   // sorgenti logiche (vedere README)
-
-  const RAW = 'https://raw.githubusercontent.com/Fupete/design-system-italia-mcp/data-fetched';
-  const GH_API = 'https://api.github.com/repos';
-  const REPOS = [
-    { id: 'bootstrap-italia',  label: 'Bootstrap Italia',  slug: 'italia/bootstrap-italia' },
-    { id: 'design-ui-kit',     label: 'Design UI Kit',     slug: 'italia/design-ui-kit' },
-    { id: 'dev-kit-italia',    label: 'Dev Kit Italia',     slug: 'italia/dev-kit-italia' },
-    { id: 'design-tokens',     label: 'Design Tokens',      slug: 'italia/design-tokens-italia' },
-  ];
-
-  let allComponents = [];
-
-  async function fetchJSON(url) {
-    const r = await fetch(url);
-    if (!r.ok) throw new Error(r.status);
-    return r.json();
-  }
-
-  function metaCard(val, label, sub) {
-    return `<div class="dash-stat">
-      <strong class="dash-stat-val">${val}</strong>
-      <p class="dash-stat-label">${label}</p>
-      ${sub ? `<p class="dash-stat-sub">${sub}</p>` : ''}
-    </div>`;
-  }
-
-  function badge(text, type) {
-    return `<span class="badge badge-${type}">${text}</span>`;
-  }
-
-  function statusBadge(s) {
-    if (!s) return badge('—', 'gray');
-    const sl = s.toLowerCase();
-    // Valori reali dal JSON components-status.json (italiano)
-    if (sl.includes('pronto') || sl.includes('disponibile') || sl.includes('stable') || sl === 'uso') return badge(s, 'green');
-    if (sl.includes('da completare') || sl.includes('in lavorazione') || sl.includes('in progress') || sl.includes('beta')) return badge(s, 'blue');
-    if (sl.includes('da rivedere') || sl.includes('review') || sl.includes('alpha') || sl.includes('wip')) return badge(s, 'orange');
-    if (sl.includes('deprecat') || sl.includes('rimoss')) return badge(s, 'red');
-    if (sl === 'n/d' || sl === '-' || sl === '') return badge('N/D', 'gray');
-    return badge(s, 'gray');
-  }
-
-  function tokenBar(label, resolved, total) {
-    const pct = total > 0 ? Math.round(resolved / total * 100) : 0;
-    const cls = pct >= 80 ? 'good' : pct >= 50 ? '' : 'warn';
-    return `<div class="token-bar-wrap">
-      <div class="token-bar-label"><span>${label}</span><strong>${pct}%</strong></div>
-      <div class="token-bar-track"><div class="token-bar-fill ${cls}" style="width:${pct}%"></div></div>
-      <div class="token-bar-sub">${resolved} / ${total} token risolti</div>
-    </div>`;
-  }
-
-  const ROWS_VISIBLE = 8;
-  let currentList = [];
-  let expanded = false;
-
-
-
-  function renderComponents(list) {
-    currentList = list;
-    expanded = false;
-    _drawRows();
-  }
-
-  function _drawRows() {
-    const body = document.getElementById('dash-comp-body');
-    const visible = expanded ? currentList : currentList.slice(0, ROWS_VISIBLE);
-    body.innerHTML = visible.map(c => `<tr>
-      <td><strong>${c.name}</strong></td>
-      <td>${statusBadge(c.bsiStatus)}</td>
-      <td>${statusBadge(c.uiKitStatus)}</td>
-      <td>${c.hasDevKit ? badge('✓', 'green') : badge('—', 'gray')}</td>
-    </tr>`).join('');
-    const toggle = document.getElementById('dash-comp-toggle');
-    const count  = document.getElementById('dash-comp-toggle-count');
-    if (currentList.length <= ROWS_VISIBLE) {
-      toggle.style.display = 'none';
-    } else {
-      toggle.style.display = '';
-      if (expanded) {
-        toggle.childNodes[0].textContent = 'Mostra meno ';
-        count.textContent = '';
-      } else {
-        toggle.childNodes[0].textContent = 'Mostra tutti ';
-        count.textContent = `(${currentList.length})`;
-      }
-    }
-  }
-
-  function toggleAllComponents() {
-    expanded = !expanded;
-    _drawRows();
-  }
-
-  function filterComp(btn, filter) {
-    document.querySelectorAll('.dash-filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const list = filter === 'all'    ? allComponents
-               : allComponents.filter(c => c.hasDevKit);
-    renderComponents(list);
-  }
-
-  // ===== TOKEN PER COMPONENTE =====
-  let tokensByComponent = {};   // { componentSlug: [{name, value, description}] }
-  let tokenComponentsLoaded = false;
-
-  function populateTokenSelect(rawTokens) {
-    // Raggruppa per componente
-    tokensByComponent = {};
-    const entries = Array.isArray(rawTokens) ? rawTokens : Object.values(rawTokens);
-    entries.forEach(t => {
-      const comp = (t.component || 'altro').toLowerCase();
-      if (!tokensByComponent[comp]) tokensByComponent[comp] = [];
-      tokensByComponent[comp].push({
-        name:        t.name || t.property || '',
-        value:       t.value || t.rawValue || '',
-        description: t.description || t.desc || '',
-      });
-    });
-
-    const select = document.getElementById('token-comp-select');
-    const sorted = Object.keys(tokensByComponent).sort();
-    sorted.forEach(comp => {
-      const opt = document.createElement('option');
-      opt.value = comp;
-      const count = tokensByComponent[comp].length;
-      opt.textContent = `${comp} (${count})`;
-      select.appendChild(opt);
-    });
-    tokenComponentsLoaded = true;
-  }
-
-  // ===== LINEE GUIDA =====
-
-  function populateGuidelinesSelect() {
-    // Usa la lista componenti già caricata da components-status.json
-    const select = document.getElementById('guidelines-comp-select');
-    allComponents.forEach(c => {
-      const opt = document.createElement('option');
-      // Slug: nome → lowercase, spazi → trattini
-      opt.value = c.name.toLowerCase().replace(/\s+/g, '-');
-      opt.textContent = c.name;
-      select.appendChild(opt);
-    });
-  }
-
-  function miniMarkdown(text) {
-    if (!text) return '';
-    // Processa blocco per blocco (separati da doppia newline)
-    return text.split(/\n\n+/).map(block => {
-      block = block.trim();
-      if (!block) return '';
-      // ### heading
-      if (/^### /.test(block)) return block.replace(/^### (.+)$/m, '<h3>$1</h3>');
-      // Lista — righe che iniziano con "- "
-      if (/^- /m.test(block)) {
-        const items = block.split('\n')
-          .filter(l => l.trim())
-          .map(l => l.replace(/^- /, '').trim())
-          .map(l => `<li>${inlineMarkdown(l)}</li>`)
-          .join('');
-        return `<ul>${items}</ul>`;
-      }
-      // Paragrafo normale
-      return `<p>${inlineMarkdown(block)}</p>`;
-    }).join('');
-  }
-
-  function inlineMarkdown(text) {
-    return text
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, url) => {
-        const absUrl = url.startsWith('/') ? 'https://designers.italia.it' + url : url;
-        return `<a href="${absUrl}" target="_blank" rel="noopener">${label}</a>`;
-      })
-      .replace(/`([^`]+)`/g, '<code>$1</code>');
-  }
-
-  async function showComponentGuidelines(slug) {
-    const content = document.getElementById('guidelines-content');
-    if (!slug) { content.innerHTML = ''; return; }
-    content.innerHTML = '<p class="token-empty">Caricamento linee guida…</p>';
-    try {
-      const url = `${RAW}/designers/components/${slug}.json`;
-      const data = await fetchJSON(url);
-
-      const hero     = data?.components?.hero;
-      const title    = hero?.title || slug;
-      const subtitle = hero?.subtitle || null;
-      const designersUrl = `https://designers.italia.it${data?.seo?.pathname || '/design-system/componenti/' + slug + '/'}`;
-
-      // Estrai testi dalla tab "Uso e accessibilità"
-      const usageTab = data?.tabs?.find(t =>
-        t.title?.toLowerCase().includes('uso') ||
-        t.title?.toLowerCase().includes('accessibilit')
-      );
-
-      const allComps = usageTab?.sectionsEditorial?.flatMap(s => s.components || []) || [];
-
-      function findText(titleMatch) {
-        return allComps.find(c =>
-          c.name === 'TextImageCta' &&
-          c.title?.toLowerCase().includes(titleMatch.toLowerCase())
-        )?.text || null;
-      }
-
-      const whenToUse = findText('quando usarlo') || findText('quando usare');
-      const howToUse  = findText('come usarlo')   || findText('come usare');
-
-      const tags = hero?.kangaroo?.tagsDesignSystem || [];
-      const tagsHtml = tags.length
-        ? `<div class="guidelines-tags">${tags.map(t => `<span class="guidelines-tag">${escHtml(t)}</span>`).join('')}</div>`
-        : '';
-      console.log('allComps titles', allComps.map(c => c.name + ':' + (c.title||'')));
-      console.log('howToUse', howToUse);
-      let out = `<h3 class="guidelines-card-title">${escHtml(title)}</h3>` + tagsHtml + `<p class="guidelines-desc">${escHtml(subtitle || '')}</p>`;
-
-      if (whenToUse) out += `
-        <div class="guidelines-block">
-          <h3>Quando usarlo</h3>
-          <div class="guidelines-text">${miniMarkdown(whenToUse)}</div>
-        </div>`;
-
-      if (howToUse) out += `
-        <div class="guidelines-block">
-          <h3>Come usarlo</h3>
-          <div class="guidelines-text">${miniMarkdown(howToUse)}</div>
-        </div>`;
-
-      if (!whenToUse && !howToUse)
-        out += '<p class="token-empty">Linee guida non disponibili per questo componente.</p>';
-
-      out += `<a class="guidelines-link" href="${designersUrl}" target="_blank" rel="noopener">Leggi la scheda completa su Designers Italia →</a>`;
-
-      content.innerHTML = `<div class="guidelines-card">${out}</div>`;
-    } catch(e) {
-      content.innerHTML = '<p class="token-empty">Linee guida non disponibili per questo componente.</p>';
-    }
-  }
-
-  // ===== PROPS DEV KIT ITALIA =====
-  let propsByComponent = {};   // { slug: DevKitPropsSnapshot | null }
-  let propsSelectPopulated = false;
-
-  // Slug con props disponibili in data-fetched/devkit/props/
-  const PROPS_SLUGS = [
-    'accordion',
-    'avatar',
-    'back-to-top',
-    'breadcrumbs',
-    'button',
-    'callout',
-    'card',
-    'carousel',
-    'chip',
-    'collapse',
-    'dropdown',
-    'form-autocomplete',
-    'form-checkbox',
-    'form-datepicker',
-    'form-input',
-    'form-number-input',
-    'form-radio-button',
-    'form-select',
-    'form-timepicker',
-    'hero',
-    'icon',
-    'megamenu',
-    'modal',
-    'navscroll',
-    'pagination',
-    'popover',
-    'rating',
-    'section',
-    'skiplinks',
-    'sticky',
-    'video-player',
-  ];
-
-  function populatePropsSelect() {
-    const select = document.getElementById('props-comp-select');
-    PROPS_SLUGS.forEach(slug => {
-      const opt = document.createElement('option');
-      opt.value = slug;
-      // Nome leggibile: "form-input" → "Form Input"
-      opt.textContent = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-      select.appendChild(opt);
-    });
-    propsSelectPopulated = true;
-  }
-
-  async function showComponentProps(slug) {
-    const list = document.getElementById('props-list');
-    if (!slug) { list.innerHTML = ''; return; }
-    list.innerHTML = '<p class="token-empty">Caricamento props…</p>';
-    try {
-      const url = `${RAW}/devkit/props/${slug}.json`;
-      const snapshot = await fetchJSON(url);
-      // DevKitPropsSnapshot: { tagName, props: [{name, type, description, default, options}], subcomponents }
-      if (!snapshot || !snapshot.props || snapshot.props.length === 0) {
-        const displayName = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-        list.innerHTML = '<p class="token-empty">Il componente non espone props configurabili.</p>';
-        return;
-      }
-      list.innerHTML =
-        `<div class="token-list">
-          <div class="props-header">
-            <span>Prop (<code>${escHtml(snapshot.tagName)}</code>)</span>
-            <span>Tipo</span>
-            <span>Descrizione</span>
-            <span>Default</span>
-          </div>` +
-        snapshot.props.map(p => `
-          <div class="props-row">
-            <span class="props-row-name">${escHtml(p.name)}</span>
-            <span class="props-row-type">${escHtml(p.type || '—')}</span>
-            <span class="props-row-desc">${formatPropDesc(p.description)}</span>
-            <span class="props-row-default">${p.default != null ? escHtml(String(p.default)) : '—'}</span>
-          </div>`).join('') +
-        `</div>`;
-    } catch(e) {
-      list.innerHTML = `<p class="token-empty">Props non disponibili per <code>${escHtml(slug)}</code>.</p>`;
-    }
-  }
-
-  function showComponentTokens(comp) {
-    const list   = document.getElementById('token-list');
-    const cta    = document.getElementById('token-cta');
-    const example = document.getElementById('token-example');
-
-    if (!comp) {
-      list.innerHTML = '';
-      cta.hidden = true;
-      example.hidden = false;
-      return;
-    }
-
-    const tokens = tokensByComponent[comp] || [];
-    if (tokens.length === 0) {
-      list.innerHTML = '<p class="token-empty">Nessuna custom property trovata per questo componente.</p>';
-      cta.hidden = true;
-      return;
-    }
-
-    list.innerHTML = tokens.map(t => `
-      <div class="token-row">
-        <span class="token-row-name">${escHtml(t.name)}</span>
-        <span class="token-row-desc">${t.description ? escHtml(t.description) : escHtml(t.value)}</span>
-      </div>`).join('');
-
-    cta.hidden = false;
-    example.hidden = true;
-  }
-
-
-  async function loadDashboard() {
-    try {
-      const [metaData, status, devkitIdx, tokens] = await Promise.all([
-        fetchJSON(`${RAW}/snapshot-meta.json`),
-        fetchJSON(`${RAW}/bsi/components-status.json`),
-        fetchJSON(`${RAW}/devkit/index.json`).catch(() => null),
-        fetchJSON(`${RAW}/bsi/custom-properties.json`).catch(() => null),
-      ]);
-
-      // META GRID
-      // snapshot-meta.json: { fetchedAt, versions: { bootstrapItalia, devKitItalia, designTokensItalia, designSystem }, ... }
-      const v = metaData.versions || {};
-      const fetchedAt = metaData.fetchedAt ? new Date(metaData.fetchedAt).toLocaleDateString('it-IT') : '—';
-      const hoursAgo  = metaData.fetchedAt ? Math.round((Date.now() - new Date(metaData.fetchedAt)) / 3600000) : null;
-      const freshness = hoursAgo !== null ? (hoursAgo < 30 ? '<span aria-hidden="true">🟢</span> fresco' : hoursAgo < 50 ? '<span aria-hidden="true">🟡</span> in attesa' : '<span aria-hidden="true">🔴</span> vecchio') : '';
-      document.getElementById('dash-meta-grid').innerHTML =
-        metaCard(v.designSystem       || '—', 'Design System .italia', null) +
-        metaCard(v.bootstrapItalia    || '—', 'Bootstrap Italia',     null) +
-        metaCard(v.devKitItalia       || '—', 'Dev Kit Italia',       null) +
-        metaCard(v.designTokensItalia || '—', 'Design Tokens Italia', null) +
-        metaCard(fetchedAt, 'Ultimo snapshot CI', freshness);
-
-      // Aggiorna stat hero da snapshot-meta.json
-      if (metaData.sources) {
-        const bsiComps   = Object.keys(metaData.sources).filter(k => k.startsWith('bsi/components/') && k.endsWith('.json')).length;
-        const devkitProps = Object.keys(metaData.sources).filter(k => k.startsWith('devkit/props/') && k.endsWith('.json')).length;
-        const el = document.getElementById('hero-stat-comp');
-        if (el && bsiComps > 0) el.textContent = bsiComps + '+';
-        // sources: conta le sorgenti distinte (bsi, designers, devkit, design-tokens, dsnav)
-        const sourceGroups = new Set(Object.keys(metaData.sources).map(k => k.split('/')[0]));
-        // Aggiorna anche titolo sezione strumenti
-        const elTitle = document.getElementById('strumenti-title');
-        // Tool count rimane hardcoded — non disponibile in snapshot-meta
-      }
-
-      // COMPONENTI
-      // components-status.json: { items: RawStatusEntry[] }
-      // RawStatusEntry: { title, 'bootstrap Italia', 'uI Kit Italia', 'visivamente accessibile', ... }
-      const devkitSlugs = new Set();
-      if (devkitIdx && devkitIdx.entries) {
-        // devkit/index.json: { v, entries: Record<string, IndexEntry> }
-        Object.values(devkitIdx.entries)
-          .filter(e => e.type === 'docs' && e.id.startsWith('componenti-'))
-          .forEach(e => {
-            // slug da title: "Componenti/Accordion" → "accordion"
-            const parts = (e.title || '').split('/');
-            const slug = (parts[parts.length - 1] || '').toLowerCase().trim().replace(/\s+/g, '-');
-            if (slug) devkitSlugs.add(slug);
-          });
-      }
-      allComponents = (status.items || []).map(c => {
-        const name = (c.title || '').replace(/`/g, '').replace(/\s*-\s*check\s+a11y.*$/i, '').trim();
-        const slug = name.toLowerCase().replace(/\s+/g, '-');
-        const bsiStatus   = c['bootstrap Italia'] || '';
-        const uiKitStatus = c['uI Kit Italia']    || '';
-        const hasDevKit   = devkitSlugs.has(slug);
-        return { name, bsiStatus, uiKitStatus, hasDevKit };
-      }).filter(c => c.name).sort((a, b) => a.name.localeCompare(b.name));
-
-      document.getElementById('f-all').textContent    = allComponents.length;
-      document.getElementById('f-devkit').textContent = allComponents.filter(c => c.hasDevKit).length;
-
-      renderComponents(allComponents);
-      populatePropsSelect();
-      populateGuidelinesSelect();
-
-      // TOKEN
-      // custom-properties.json: Record<slug, Array<{ 'variable-name', value, description }>>
-      if (tokens && typeof tokens === 'object') {
-        // Converti in array flat con component slug
-        const flatTokens = Object.entries(tokens).flatMap(([slug, entries]) =>
-          (entries || []).map(e => ({
-            component: slug,
-            name: e['variable-name'] || '',
-            value: e.value || '',
-            description: e.description || '',
-          }))
-        ).filter(t => t.name);
-        populateTokenSelect(flatTokens);
-      } else {
-        const select = document.getElementById('token-comp-select');
-        const opt = document.createElement('option');
-        opt.textContent = 'Dati token non disponibili';
-        opt.disabled = true;
-        select.appendChild(opt);
-      }
-
-      // ISSUE — link statici, no API call (rate limit)
-      const issueGrid = document.getElementById('dash-issues-grid');
-      issueGrid.innerHTML = REPOS.map(r =>
-        `<div class="issue-card">
-          <p class="issue-card-repo">${r.label}</p>
-          <a class="issue-card-link" href="https://github.com/${r.slug}/issues" target="_blank" rel="noopener">Issue aperte su GitHub →</a>
-        </div>`
-      ).join('');
-
-      document.getElementById('dash-loading').style.display = 'none';
-      document.getElementById('dash-content').style.display = 'block';
-
-    } catch(err) {
-      console.error(err);
-
-      /* =====================================================================
-         MOCK FALLBACK — SOLO PER PREVIEW/SVILUPPO
-         Rimuovere prima della messa in produzione.
-         Attivo quando il fetch da raw.githubusercontent.com fallisce
-         (es. sandbox claude.ai, CORS, rete non disponibile).
-         ===================================================================== */
-      try {
-        const MOCK_META = {
-          designSystem: 'v1.10.1 ⚠️ MOCK',
-          bootstrapItalia: '3.0.0-alpha.5 ⚠️ MOCK',
-          devKitItalia: '1.0.0-alpha.6 ⚠️ MOCK',
-          designTokensItalia: '1.3.2 ⚠️ MOCK',
-          fetchedAt: new Date(Date.now() - 14 * 3600000).toISOString(),
-        };
-        const MOCK_COMPONENTS = [
-          { name: 'Accordion',  bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: true  },
-          { name: 'Alert',      bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: true  },
-          { name: 'Button',     bsiStatus: 'Disponibile',        uiKitStatus: 'Disponibile',  hasDevKit: true  },
-          { name: 'Card',       bsiStatus: 'Disponibile',        uiKitStatus: 'Disponibile',  hasDevKit: true  },
-          { name: 'Carousel',   bsiStatus: 'Da rivedere a11y',   uiKitStatus: 'N/D',          hasDevKit: false },
-          { name: 'Checkbox',   bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: true  },
-          { name: 'Dialog',     bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: true  },
-          { name: 'Footer',     bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: true  },
-          { name: 'Header',     bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: true  },
-          { name: 'Input',      bsiStatus: 'Disponibile',        uiKitStatus: 'Disponibile',  hasDevKit: true  },
-          { name: 'Modal',      bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: false },
-          { name: 'Pagination', bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: false },
-          { name: 'Select',     bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: true  },
-          { name: 'Tabs',       bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: true  },
-          { name: 'Toggle',     bsiStatus: 'Disponibile',        uiKitStatus: 'N/D',          hasDevKit: true  },
-        ]
-        /* Token mock con catene realistiche e variabili (anche multi-step --it-) */
-        const MOCK_TOKENS = [
-          {
-            name: '--bsi-accordion-padding',
-            value: 'var(--bsi-spacing-m)',
-            resolvedVia: ['--bsi-spacing-m', 'var(--it-spacing-m)', '--it-spacing-m', 'var(--it-size-4)'],
-            valueResolved: '1.5rem',
-            component: 'accordion',
-            description: 'Padding interno accordion ⚠️ MOCK',
-          },
-          {
-            name: '--bsi-button-color-bg',
-            value: 'var(--bsi-color-primary)',
-            resolvedVia: ['--bsi-color-primary', 'var(--it-color-primary-600)', '--it-color-primary-600', 'var(--it-palette-blue-600)', '--it-palette-blue-600'],
-            valueResolved: '#0059B3',
-            component: 'button',
-            description: 'Colore sfondo pulsante primario ⚠️ MOCK',
-          },
-          {
-            name: '--bsi-navbar-height',
-            value: 'var(--bsi-size-header-sticky)',
-            resolvedVia: ['--bsi-size-header-sticky', 'var(--it-size-header-sticky)', '--it-size-header-sticky'],
-            valueResolved: '64px',
-            component: 'header',
-            description: 'Altezza navbar sticky ⚠️ MOCK',
-          },
-          {
-            name: '--bsi-input-border-color',
-            value: 'var(--bsi-color-neutral-400)',
-            resolvedVia: ['--bsi-color-neutral-400', 'var(--it-color-neutral-400)', '--it-color-neutral-400', 'var(--it-palette-gray-400)', '--it-palette-gray-400'],
-            valueResolved: '#B8CEDD',
-            component: 'input',
-            description: 'Colore bordo input ⚠️ MOCK',
-          },
-          {
-            name: '--bsi-card-radius',
-            value: 'var(--bsi-border-radius-m)',
-            resolvedVia: ['--bsi-border-radius-m', 'var(--it-border-radius-m)', '--it-border-radius-m'],
-            valueResolved: '6px',
-            component: 'card',
-            description: 'Border radius card ⚠️ MOCK',
-          },
-          {
-            name: '--bsi-spacing-xs',
-            value: 'var(--bsi-size-1)',
-            resolvedVia: ['--bsi-size-1', 'var(--it-size-1)', '--it-size-1'],
-            valueResolved: '0.25rem',
-            component: null,
-            description: 'Spacing extra small globale ⚠️ MOCK',
-          },
-          {
-            name: '--bsi-color-text-primary-active',
-            value: 'var(--bsi-color-primary-dark)',
-            resolvedVia: ['--bsi-color-primary-dark'],
-            valueResolved: null,
-            component: 'button',
-            description: 'Colore testo attivo — non risolto in questo snapshot ⚠️ MOCK',
-          },
-        ];
-
-        // Popola meta
-        const fetchedAt = new Date(MOCK_META.fetchedAt).toLocaleDateString('it-IT');
-        const hoursAgo  = Math.round((Date.now() - new Date(MOCK_META.fetchedAt)) / 3600000);
-        const freshness = hoursAgo < 30 ? '<span aria-hidden="true">🟢</span> fresco' : hoursAgo < 50 ? '<span aria-hidden="true">🟡</span> in attesa' : '<span aria-hidden="true">🔴</span> vecchio';
-        document.getElementById('dash-meta-grid').innerHTML =
-          metaCard(MOCK_META.bootstrapItalia,    'Bootstrap Italia',     null) +
-          metaCard(MOCK_META.devKitItalia,       'Dev Kit Italia',       null) +
-          metaCard(MOCK_META.designTokensItalia, 'Design Tokens Italia', null) +
-          metaCard(fetchedAt, 'Ultimo snapshot CI', freshness);
-
-        // Popola componenti
-        allComponents = MOCK_COMPONENTS;
-        document.getElementById('f-all').textContent    = allComponents.length;
-        document.getElementById('f-devkit').textContent = allComponents.filter(c => c.hasDevKit).length;
-  
-        renderComponents(allComponents);
-        populatePropsSelect();
-        populateGuidelinesSelect();
-      populateGuidelinesSelect();  
-
-        populateTokenSelect(MOCK_TOKENS);
-
-        // Issue — link statici anche nel mock
-        const issueGrid = document.getElementById('dash-issues-grid');
-        issueGrid.innerHTML = REPOS.map(r =>
-          `<div class="issue-card">
-            <p class="issue-card-repo">${r.label}</p>
-            <a class="issue-card-link" href="https://github.com/${r.slug}/issues" target="_blank" rel="noopener">Issue aperte su GitHub →</a>
-          </div>`
-        ).join('');
-
-        // Mock guidelines — sovrascrive showComponentGuidelines con dati hardcoded
-        /* MOCK — rimuovere per produzione */
-        window._mockGuidelines = {
-          accordion: {
-            title: 'Accordion',
-            subtitle: "Sezione di contenuti espandibile e richiudibile.",
-            tags: ['Contenuti'],
-            whenToUse: `Usa l'accordion per contenuti lunghi e non principali.\n\n### Alternative\n- **Tabs**: utili quando l'utente deve passare velocemente tra sezioni.\n- **Collapse**: per una o due sezioni brevi.`,
-            howToUse: `- Riduci lo scorrimento di contenuti testuali lunghi.\n- Dai un'anteprima di contenuti correlati.\n\n### Attenzione a\n- Non nascondere informazioni importanti in un accordion.\n- Non usare per contenuti con molte immagini.`,
-            url: 'https://designers.italia.it/design-system/componenti/accordion/'
-          },
-          alert: {
-            title: 'Alert',
-            subtitle: "Messaggio di feedback per l'utente in risposta a un'azione.",
-            tags: ['Feedback'],
-            whenToUse: `Usa gli alert per comunicare messaggi importanti all'utente: conferme, avvisi, errori.`,
-            howToUse: `- Scegli il tipo di alert in base alla severità del messaggio.\n\n### Attenzione a\n- Non usare alert per contenuti non urgenti.`,
-            url: 'https://designers.italia.it/design-system/componenti/alert/'
-          },
-        };
-        const _origShowGuidelines = window.showComponentGuidelines;
-        window.showComponentGuidelines = async function(slug) {
-          const mock = (window._mockGuidelines || {})[slug];
-          if (!mock) { return _origShowGuidelines(slug); }
-          const content = document.getElementById('guidelines-content');
-          if (!slug) { content.innerHTML = ''; return; }
-          const tagsHtml = mock.tags?.length
-            ? `<div class="guidelines-tags">${mock.tags.map(t => `<span class="guidelines-tag">${escHtml(t)}</span>`).join('')}</div>` : '';
-          let out = tagsHtml + `<p class="guidelines-desc">${escHtml(mock.subtitle)}</p>`;
-          if (mock.whenToUse) out += `<div class="guidelines-block"><h3>Quando usarlo</h3><div class="guidelines-text">${miniMarkdown(mock.whenToUse)}</div></div>`;
-          if (mock.howToUse)  out += `<div class="guidelines-block"><h3>Come usarlo</h3><div class="guidelines-text">${miniMarkdown(mock.howToUse)}</div></div>`;
-          out += `<a class="guidelines-link" href="${mock.url}" target="_blank" rel="noopener">Leggi la scheda completa su Designers Italia →</a>`;
-          content.innerHTML = `<div class="guidelines-card">${out}</div>`;
-        };
-        /* === FINE MOCK GUIDELINES === */
-
-        document.getElementById('dash-loading').style.display = 'none';
-        document.getElementById('dash-content').style.display = 'block';
-
-      } catch(mockErr) {
-        console.error('Anche il mock è fallito:', mockErr);
-        document.getElementById('dash-loading').style.display = 'none';
-        document.getElementById('dash-error').style.display   = 'flex';
-      }
-      /* === FINE MOCK FALLBACK === */
-    }
-  }
-
-  function formatPropDesc(s) {
-    if (!s) return '—';
-    // Converti backtick in <code>, lascia passare HTML esistente
-    return s.replace(/`([^`]+)`/g, '<code>$1</code>');
-  }
-
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  // Aggiorna stat hero con costanti
-  const elTools   = document.getElementById('hero-stat-tools');
-  const elSources = document.getElementById('hero-stat-sources');
-  if (elTools)   elTools.textContent   = FILO_TOOL_COUNT;
-  if (elSources) elSources.textContent = FILO_SOURCE_COUNT;
-
-  loadDashboard();
-
-  // Back to top
-  const btt = document.getElementById('back-to-top');
-  if (btt) {
-    window.addEventListener('scroll', () => {
-      btt.classList.toggle('visible', window.scrollY > 400);
-    }, { passive: true });
-  }
-
-</script>
-
-<a href="#" id="back-to-top" aria-label="Torna in cima">↑</a>
-  <!-- Bootstrap Italia JS -->
+  <script src="assets/js/site.js"></script>
   <script src="assets/vendor/bsi/js/bootstrap-italia.bundle.min.js"></script>
-  <!-- Dev Kit Italia web components -->
   <script type="module" src="assets/vendor/devkit/elements.js"></script>
 </body>
+
 </html>
