@@ -43,10 +43,12 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.0.0",
+    "js-yaml": "^4.1.0",
     "playwright": "^1.58.2",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
-    "js-yaml": "^4.1.0"
+    "@italia/dev-kit-italia": "^1.0.0-alpha.6",
+    "bootstrap-italia": "^3.0.0-alpha.5"
   },
   "engines": {
     "node": ">=22.0.0"
