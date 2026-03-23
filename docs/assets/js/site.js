@@ -283,7 +283,6 @@ if (siteNav) {
   }
 
   initObserver();
-  mq.addEventListener('change', initObserver);
 }
 
 /* Init */
