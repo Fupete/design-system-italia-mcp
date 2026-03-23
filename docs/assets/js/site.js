@@ -265,18 +265,17 @@ async function loadDashboard() {
 /* Sticky nav brand — desktop only (matches CSS breakpoint) */
 const siteNav = document.querySelector('.site-nav');
 if (siteNav) {
-  const mq = window.matchMedia('(min-width: 768px)');
-  const hero = document.querySelector('.hero');
+  const hero = document.querySelector('.it-header-wrapper');
   let observer = null;
 
   function initObserver() {
-    if (mq.matches && !observer) {
+    if (!observer) {
       observer = new IntersectionObserver(
         ([e]) => siteNav.classList.toggle('is-sticky', !e.isIntersecting),
         { threshold: 1, rootMargin: '-1px 0px 0px 0px' }
       );
       observer.observe(hero);
-    } else if (!mq.matches && observer) {
+    } else if (observer) {
       observer.disconnect();
       observer = null;
       siteNav.classList.remove('is-sticky');
