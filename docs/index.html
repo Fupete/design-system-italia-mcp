@@ -15,7 +15,7 @@
 
   <a href="#main-content" class="visually-hidden-focusable">Vai al contenuto principale</a>
 
-  <div class="it-header-slim-wrapper" role="note">
+  <div class="it-header-slim-wrapper bg-secondary" role="note">
     <div class="container-xxl">
       <div class="row">
         <div class="col-12">
@@ -64,19 +64,23 @@
               <div class="it-brand-wrapper">
                 <a href="#">
                   <div class="it-brand-text">
-                    <div class="it-brand-title">🧵 Filo </div>
+                    <div class="it-brand-title text-secondary">🧵 Filo </div>
                   </div>
                 </a>
               </div>
               <div class="it-right-zone">
-                <div class="badge badge-secondary me-4 "> <span class="visually-hidden">Versione corrente:
-                  </span>v0.3.8</div>
+                <div class="badge badge-secondary me-5">
+                  <a class="text-white" href="https://github.com/fupete/design-system-italia-mcp/releases">
+                    <span class="visually-hidden">Versione corrente: </span>
+                    v0.3.8
+                  </a>
+                </div>
                 <div class="it-socials">
                   <ul>
                     <li><a class="small" href="https://github.com/fupete/design-system-italia-mcp" aria-label="GitHub"
                         target="_blank" rel="noopener">
                         Repository GitHub
-                        <svg class="icon">
+                        <svg class="icon" aria-hidden="true" style="fill: var(--bsi-icon-secondary);">
                           <use href="assets/vendor/bsi/svg/sprites.svg#it-github"></use>
                         </svg>
                       </a></li>
@@ -109,15 +113,15 @@
         <div class="col-12 col-lg-9">
           <h1 id="hero-title">🧵 Filo ⁄ MCP server sperimentale per il Design system .italia </h1>
           <p class="lead mb-2">
-            Allo stato dell'arte un progetto personale che si sta evolvendo mentre viene sviluppato,
-            anche litigando con qualche LLM. <strong>Per la documentazione ufficiale del Design system .italia fai
-              riferimento solo alle <a href="https://designers.italia.it/design-system/come-iniziare/">guide
+            Allo stato dell'arte questo è un esperimento che si sta evolvendo mentre viene sviluppato,
+            anche litigando con qualche LLM. <strong>Se cerchi la documentazione ufficiale del Design system .italia fai
+              riferimento direttamente alle <a href="https://designers.italia.it/design-system/come-iniziare/">guide
                 sul sito Designers Italia</strong></a>
           </p>
           </p>
           <div class="d-grid d-md-flex flex-wrap gap-3 pt-4" style="align-items: end">
-            <a href="#dashboard" class="btn btn-outline-primary btn-lg">Esplora i dati</a>
-            <a href="#installazione" class="btn btn-primary btn-lg mb-4 mb-md-0 me-md-4 ">Installa Filo</a>
+            <a href="#dashboard" class="btn btn-outline-secondary btn-lg">Esplora i dati</a>
+            <a href="#installazione" class="btn btn-secondary btn-lg mb-4 mb-md-0 me-md-4 ">Installa Filo</a>
             <a href="https://github.com/fupete/design-system-italia-mcp" class="btn btn-secondary"
               style="height: fit-content">GitHub</a>
             <a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp" class="btn btn-secondary"
@@ -162,7 +166,8 @@
             Filo raccoglie ogni notte informazioni ufficiali su componenti, stili e linee guida d'uso, le organizza e le
             rende disponibili come dati strutturati.</p>
 
-          <p class="mb-5">Markup di componenti Bootstrap Italia v3 (alpha) e web component Dev Kit Italia v1 (alpha) con le loro
+          <p class="mb-5">Markup di componenti Bootstrap Italia v3 (alpha) e web component Dev Kit Italia v1 (alpha) con
+            le loro
             props, CSS custom property e design token, lo
             stato dei controlli sui componenti e le issue GitHub aperte a portata di assistente AI, designer e
             sviluppatori.</p>
@@ -198,7 +203,7 @@
     </div>
   </section>
 
-  <section id="dashboard" class="py-5 bg-primary text-white" aria-labelledby="dashboard-title">
+  <section id="dashboard" class="py-5 bg-secondary text-white" aria-labelledby="dashboard-title">
     <div class="container-xxl">
       <h2 id="dashboard-title" class="mb-1">Esplora i dati</h2>
       <p class="lead mb-2">Dati aggiornati automaticamente, pronti da consultare</p>
@@ -239,7 +244,7 @@
             <p>Componenti Bootstrap Italia v3 e rispettivi web component Dev Kit Italia v1</p>
             <div class="d-flex gap-2 align-items-center mb-3 comp-filter">
               <span class="small text-muted">FILTRA:</span>
-              <button class="btn btn-xs btn-primary" onclick="filterComp(this,'all')">TUTTI <span id="f-all"
+              <button class="btn btn-xs btn-secondary" onclick="filterComp(this,'all')">TUTTI <span id="f-all"
                   class="ms-1"></span></button>
               <button class="btn btn-xs btn-outline-secondary" onclick="filterComp(this,'dk')">CON DEV KIT <span
                   id="f-dk" class="ms-1"></span></button>
@@ -277,7 +282,7 @@
             <div id="tok-cta" class="alert alert-info mt-3" hidden>
               <p class="mb-2">Con Filo attivo il modello riceve la catena di risoluzione completa — <code>--bsi-*</code>
                 → Design Tokens Italia → valore concreto.</p>
-              <a href="#installazione" class="btn btn-primary btn-sm">Inizia →</a>
+              <a href="#installazione" class="btn btn-secondary btn-sm">Inizia →</a>
             </div>
             <div id="tok-ex" class="border rounded p-3 bg-white mt-2">
               <p class="chain-label">Esempio — --bsi-accordion-padding</p>
@@ -303,6 +308,11 @@
               </select>
             </div>
             <div id="props-list" aria-live="polite"></div>
+            <div id="props-cta" class="alert alert-info mt-3" hidden>
+              <p class="mb-2">Con Filo attivo il modello identificherebbe anche gli eventuali sotto-componenti con le
+                loro props.</p>
+              <a href="#installazione" class="btn btn-secondary btn-sm">Inizia →</a>
+            </div>
           </div>
 
           <div class="tab-pane fade" id="dt-gl" role="tabpanel">
@@ -344,7 +354,7 @@
         <div class="tab-pane fade show active" id="ti-npx" role="tabpanel">
           <div class="pre-wrap">
             <pre><code>npx @fupete/design-system-italia-mcp</code></pre><button class="copy-btn"
-              onclick="copyCode(this)">copia</button>
+              onclick="copyCode(this)">Copia</button>
           </div>
           <p class="text-muted mt-3">Su macOS con nvm: <code>nvm use 22 &amp;&amp; which npx</code> per il path
             esplicito</p>
@@ -354,14 +364,14 @@
             <pre><code>docker pull ghcr.io/fupete/design-system-italia-mcp
 docker run -p 8080:8080 \
   -e GITHUB_TOKEN=your_token \
-  ghcr.io/fupete/design-system-italia-mcp</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+  ghcr.io/fupete/design-system-italia-mcp</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
           </div>
         </div>
         <div class="tab-pane fade" id="ti-source" role="tabpanel">
           <div class="pre-wrap">
             <pre><code>git clone https://github.com/fupete/design-system-italia-mcp.git
 cd design-system-italia-mcp
-npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
           </div>
         </div>
       </div>
@@ -431,7 +441,7 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
 di header e footer con Bootstrap 
 Italia v3. Usa le CSS custom property 
 per componente e studiati le classi 
-del markup di quei componenti</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+del markup di quei componenti</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
               <p class="it-card-text">Filo restituisce la personalizzazione delle variabili <code>--bsi-*</code> del
                 componente avendo anche a disposizione la catena di risoluzione completa fino al valore concreto e il
@@ -464,7 +474,7 @@ del markup di quei componenti</code></pre><button class="copy-btn" onclick="copy
                 <pre><code class="small">Quali componenti form esistono? 
 Dammi il markup dei web component Dev
 Kit Italia e i loro attributi/props 
-configurabili</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+configurabili</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
               <p class="it-card-text">Filo restituisce la lista dei componenti e il markup HTML web component
                 <code>it-*</code>
@@ -493,7 +503,7 @@ configurabili</code></pre><button class="copy-btn" onclick="copyCode(this)">copi
             <div class="it-card-body">
               <div class="pre-wrap mb-4">
                 <pre><code class="small">Quali componenti hanno note
-di accessibilità aperte o problemi noti?</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+di accessibilità aperte o problemi noti?</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
               <p class="it-card-text">Filo aggrega lo stato dei controlli accessibilità e le issue GitHub aperte per
                 ogni componente.</p>
@@ -521,7 +531,7 @@ di accessibilità aperte o problemi noti?</code></pre><button class="copy-btn" o
             <div class="it-card-body">
               <div class="pre-wrap mb-4">
                 <pre><code class="small">Come si usa il componente
-Modal? Quando è appropriato usarlo?</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+Modal? Quando è appropriato usarlo?</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
               <p class="it-card-text">Filo restituisce le linee guida d'uso dalla documentazione del Design system
                 .italia su Designers Italia: quando usarlo, come
@@ -548,7 +558,7 @@ Modal? Quando è appropriato usarlo?</code></pre><button class="copy-btn" onclic
               <div class="pre-wrap mb-4">
                 <pre><code class="small">Dammi tutto sull'Accordion:
 markup, token, linee guida e
-issue aperte</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+issue aperte</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
               <p class="it-card-text">Filo aggrega markup, token CSS, props Dev Kit, linee guida e issue GitHub in
                 un'unica risposta strutturata.</p>
@@ -573,7 +583,7 @@ issue aperte</code></pre><button class="copy-btn" onclick="copyCode(this)">copia
               <div class="pre-wrap mb-4">
                 <pre><code class="small">Quali versioni di Bootstrap Italia
 e dev Kit Italia sono attive?
-Quali componenti sono pronti?</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+Quali componenti sono pronti?</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
               <p class="it-card-text">Ogni risposta di Filo include versioni verificate di Design system, BSI, Dev Kit e
                 Design Tokens Italia.</p>
@@ -631,7 +641,7 @@ REGOLA D'ORO: se non sei sicuro che un dato provenga da MCP, trattalo come infer
 TOOL DISPONIBILI: all'inizio della sessione, usa il tool ping per verificare la connessione e leggi la lista dei tool disponibili. Non assumere quali tool esistono.
 
 COMPLETEZZA DATI: se un tool restituisce un sottoinsieme dei dati (es. 3 varianti su 13), segnalalo all'utente.</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">copia</button>
+            <button class="copy-btn" onclick="copyCode(this)">Copia</button>
           </div>
         </div>
         <div class="tab-pane fade" id="sp-en" role="tabpanel">
@@ -652,7 +662,7 @@ GOLDEN RULE: if you are unsure whether a piece of data comes from MCP, treat it 
 AVAILABLE TOOLS: at the start of the session, use the ping tool to verify the connection and read the list of available tools. Do not assume which tools exist.
 
 DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants out of 13), flag this to the user.</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">copia</button>
+            <button class="copy-btn" onclick="copyCode(this)">Copia</button>
           </div>
         </div>
       </div>
@@ -682,7 +692,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
       "env": { "TRANSPORT": "stdio", "GITHUB_TOKEN": "your_token" }
     }
   }
-}</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+}</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
             </div>
           </div>
@@ -704,7 +714,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
       "env": { "TRANSPORT": "stdio", "GITHUB_TOKEN": "your_token" }
     }
   }
-}</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+}</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
             </div>
           </div>
@@ -720,7 +730,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
                 <pre><code>claude mcp add design-system-italia \
   --command "npx -y @fupete/design-system-italia-mcp" \
   --env TRANSPORT=stdio \
-  --env GITHUB_TOKEN=your_token</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+  --env GITHUB_TOKEN=your_token</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
             </div>
           </div>
@@ -741,7 +751,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
       "url": "http://localhost:8080/mcp"
     }
   }
-}</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+}</code></pre><button class="copy-btn" onclick="copyCode(this)">Copia</button>
               </div>
             </div>
           </div>
@@ -750,7 +760,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
     </div>
   </section>
 
-  <section id="note-tecniche" class="section-dark bg-primary py-5" aria-labelledby="note-title">
+  <section id="note-tecniche" class="section-dark bg-secondary py-5" aria-labelledby="note-title">
     <div class="container-xxl">
       <h2 id="note-title" class="mb-4">Note tecniche sull'architettura</h2>
       <div class="row g-4">
@@ -788,14 +798,15 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
     </div>
   </section>
 
-  <footer class="site-footer bg-dark" role="contentinfo" aria-labelledby="footer-title">
+  <footer class="site-footer pb-5" style="background-color: #212121;" role="contentinfo" aria-labelledby="footer-title">
     <div class="container-xxl">
       <div class="row g-4 mb-2">
         <div class="col-12 col-md-5">
           <h2 id="footer-title" class="fw-bold mb-2">🧵 Filo</h2>
           <p>Server MCP sperimentale per il Design System .italia. Progetto personale non ufficiale di <a
               href="https://github.com/fupete">Daniele Tabellini (@Fupete)</a></p>
-          <p><a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue benvenute</a>, tutto è alpha e in divenire</p>
+          <p><a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue benvenute</a>, tutto è alpha e in
+            divenire</p>
         </div>
         <div class="col-6 col-md-3 offset-md-1">
           <h3>Progetto</h3>
@@ -818,7 +829,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
           </ul>
         </div>
       </div>
-      <div class="footer-bottom" aria-labelledby="footer-bottom-title">
+      <div class="footer-bottom pb-5" aria-labelledby="footer-bottom-title">
         <h2 id="footer-bottom-title" class="visually-hidden">Crediti e licenze</h2>
         <span>© 2026 Daniele Tabellini (@Fupete)</span>
         <div class="footer-licenses">

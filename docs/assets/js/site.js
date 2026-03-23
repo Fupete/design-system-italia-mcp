@@ -4,7 +4,7 @@ function copyCode(btn) {
   const pre = btn.closest('.pre-wrap').querySelector('pre');
   navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
     const orig = btn.textContent;
-    btn.textContent = 'copiato ✓';
+    btn.textContent = 'Copiato ✓';
     btn.classList.add('copied');
     setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
   });
@@ -120,12 +120,15 @@ function populatePropsSel() {
 
 async function showProps(slug) {
   const el = document.getElementById('props-list');
+  const cta = document.getElementById('props-cta');
+  if (!slug) { el.innerHTML = ''; cta.hidden = true; }
   if (!slug) { el.innerHTML = ''; return; }
   el.innerHTML = '<p class="data-empty">caricamento…</p>';
   try {
     const s = await j(`${RAW}/devkit/props/${slug}.json`);
     if (!s?.props?.length) { el.innerHTML = '<p class="data-empty">Nessuna prop configurabile.</p>'; return; }
     el.innerHTML = `<table class="tok-table"><thead><tr><th>Prop <code>${esc(s.tagName)}</code></th><th>Tipo</th><th>Descrizione</th><th>Default</th></tr></thead><tbody>${s.props.map((p, i) => `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(p.name)}</td><td class="token-desc">${esc(p.type || '')}</td><td class="token-desc">${p.description ? p.description.replace(/`([^`]+)`/g, (_, code) => `<code>${esc(code)}</code>`) : ''}</td><td class="token-desc">${p.default != null ? esc(String(p.default)) : ''}</td></tr>`).join('')}</tbody></table>`;
+    cta.hidden = false;
   } catch { el.innerHTML = '<p class="data-empty">Props non disponibili.</p>'; }
 }
 

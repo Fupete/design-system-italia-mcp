@@ -4,6 +4,18 @@
   --filo-dark: #0B2540;
 }
 
+a {
+  color: var(--bsi-secondary);
+}
+
+a:hover {
+  color: black;
+}
+
+.accordion-button {
+  color: var(--bsi-secondary)!important;
+}
+
 /* Hero */
 .hero {
   padding: 5rem 0 4rem;
@@ -119,12 +131,12 @@ pre code {
   position: absolute;
   top: .6rem;
   right: .6rem;
-  background: rgba(255, 255, 255, .08);
-  border: 1px solid rgba(255, 255, 255, .15);
-  color: rgba(255, 255, 255, .55);
+  background: rgba(255, 255, 255, .15);
+  border: 1px solid rgba(255, 255, 255, .32);
+  color: rgba(255, 255, 255, .75);
   border-radius: 4px;
   padding: .2rem .7rem;
-  font-size: .7rem;
+  font-size: .8rem;
   font-family: 'Roboto Mono', monospace;
   cursor: pointer;
   transition: background .15s;
@@ -136,7 +148,7 @@ pre code {
 }
 
 .copy-btn.copied {
-  background: rgba(0, 200, 80, .2);
+  background: rgba(0, 200, 80, .5);
   color: #6ee7a0;
 }
 
@@ -240,21 +252,22 @@ ul.nav-tabs button.nav-link {
 
 ul.nav-tabs button.nav-link.active {
   background-color: white;
+  color: var(--bsi-secondary);
 }
 
 /* Tabs on primary background */
-.bg-primary ul.nav-tabs button.nav-link:not(.active) {
+.bg-secondary ul.nav-tabs button.nav-link:not(.active) {
   background-color: transparent;
   color: white;
 }
 
-.bg-primary ul.nav-tabs button.nav-link.active {
+.bg-secondary ul.nav-tabs button.nav-link.active {
   background-color: white;
-  color: var(--bsi-primary) !important;
+  color: var(--bsi-secondary) !important;
   border-color: white white white transparent;
 }
 
-.bg-primary div.tab-content {
+.bg-secondary div.tab-content {
   background-color: white;
   color: black;
 }
@@ -337,7 +350,7 @@ ul.nav-tabs button.nav-link.active {
 .token-name {
   font-family: 'Roboto Mono', monospace;
   font-size: .85rem;
-  color: var(--bsi-primary);
+  color: var(--bsi-secondary);
   white-space: nowrap;
 }
 
@@ -390,9 +403,9 @@ ul.nav-tabs button.nav-link.active {
 
 .chain-label {
   font-family: 'Roboto Mono', monospace;
-  font-size: .72rem;
+  font-size: .85rem;
   text-transform: uppercase;
-  letter-spacing: .07em;
+  letter-spacing: .08em;
   color: var(--bsi-secondary-color);
   margin-bottom: .5rem;
 }
@@ -505,7 +518,6 @@ ul.nav-tabs button.nav-link.active {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: .5rem;
-  font-size: .75rem;
   color: white;
 }
 
@@ -517,6 +529,7 @@ ul.nav-tabs button.nav-link.active {
   display: flex;
   gap: 1.5rem;
 }
+
 
 /* Readability */
 p {
@@ -534,13 +547,13 @@ ul.it-card-list li .it-card-text {
 }
 
 /* workaround BSI 3.x #1726 */
-.bg-primary .alert-warning {
+.bg-secondary .alert-warning {
   background-color: #fff3cd;
   color: #664d03;
   border-color: #ffecb5;
 }
 
-.bg-primary .alert-warning .alert-icon {
+.bg-secondary .alert-warning .alert-icon {
   fill: #664d03;
 }
 
@@ -584,6 +597,7 @@ ul.it-card-list li .it-card-text {
 
 .site-nav a {
   display: inline-block;
+  color: var(--bsi-secondary);
   padding: .65rem 1rem;
   text-decoration: none;
   border-bottom: 2px solid transparent;
@@ -593,10 +607,14 @@ ul.it-card-list li .it-card-text {
 }
 
 .site-nav a:hover {
-  color: var(--bsi-primary);
-  border-bottom-color: var(--bsi-primary);
+  border-bottom-color: var(--bsi-secondary);
 }
 
 it-callout::part(inner) {
   background-color: white;
+}
+
+it-back-to-top::part(button) {
+  background-color: var(--bsi-secondary);
+  border: 2px solid white;
 }
