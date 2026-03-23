@@ -118,27 +118,6 @@ function populatePropsSel() {
   });
 }
 
-// invece di PROPS_SLUGS hardcoded, dopo che dki è caricato in loadDashboard:
-function populatePropsSel(dki) {
-  const sel = document.getElementById('props-sel');
-  const slugs = dki?.entries
-    ? Object.values(dki.entries)
-      .filter(e => e.type === 'docs' && e.id.startsWith('componenti-'))
-      .map(e => {
-        const parts = (e.title || '').split('/');
-        return (parts[parts.length - 1] || '').toLowerCase().trim().replace(/\s+/g, '-');
-      })
-      .filter(Boolean)
-      .sort()
-    : [];
-  slugs.forEach(s => {
-    const o = document.createElement('option');
-    o.value = s;
-    o.textContent = s.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
-    sel.appendChild(o);
-  });
-}
-
 async function showProps(slug) {
   const el = document.getElementById('props-list');
   const cta = document.getElementById('props-cta');
@@ -259,7 +238,7 @@ async function loadDashboard() {
     document.getElementById('f-all').textContent = allComps.length;
     document.getElementById('f-dk').textContent = allComps.filter(c => c.dk).length;
     renderComps(allComps);
-    populatePropsSel(dki);
+    populatePropsSel();
     populateGlSel();
 
     if (tokens && typeof tokens === 'object') {
