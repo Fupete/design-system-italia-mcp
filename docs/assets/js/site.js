@@ -16,9 +16,9 @@ const FILO_SOURCES = 9;
 const RAW = 'https://raw.githubusercontent.com/Fupete/design-system-italia-mcp/data-fetched';
 const REPOS = [
   { label: 'Bootstrap Italia', slug: 'italia/bootstrap-italia' },
-  { label: 'Design UI Kit', slug: 'italia/design-ui-kit' },
+  { label: 'UI Kit Italia', slug: 'italia/design-ui-kit' },
   { label: 'Dev Kit Italia', slug: 'italia/dev-kit-italia' },
-  { label: 'Design Tokens', slug: 'italia/design-tokens-italia' },
+  { label: 'Design Tokens Italia', slug: 'italia/design-tokens-italia' },
 ];
 
 let allComps = [];
@@ -100,7 +100,7 @@ function showTokens(comp) {
   if (!comp) { el.innerHTML = ''; cta.hidden = true; ex.hidden = false; return; }
   const toks = tokByComp[comp] || [];
   if (!toks.length) { el.innerHTML = '<p class="data-empty">Nessuna custom property.</p>'; cta.hidden = true; return; }
-  el.innerHTML = `<div class="token-table">${toks.map(t => `<div class="token-row"><span class="token-name">${esc(t.name)}</span><span class="token-desc">${t.description ? esc(t.description) : esc(t.value)}</span></div>`).join('')}</div>`;
+  el.innerHTML = `<table class="tok-table"><thead><tr><th>Variabile</th><th>Valore</th><th>Descrizione</th></tr></thead><tbody>${toks.map((t, i) => `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(t.name)}</td><td class="token-desc">${esc(t.value)}</td><td class="token-desc">${esc(t.description)}</td></tr>`).join('')}</tbody></table>`;
   cta.hidden = false;
   ex.hidden = true;
 }
@@ -125,7 +125,7 @@ async function showProps(slug) {
   try {
     const s = await j(`${RAW}/devkit/props/${slug}.json`);
     if (!s?.props?.length) { el.innerHTML = '<p class="data-empty">Nessuna prop configurabile.</p>'; return; }
-    el.innerHTML = `<div class="token-table"><div class="props-head"><span>Prop (<code>${esc(s.tagName)}</code>)</span><span>Tipo</span><span>Descrizione</span><span>Default</span></div>${s.props.map(p => `<div class="props-row"><span class="props-name">${esc(p.name)}</span><span class="props-type">${esc(p.type || '—')}</span><span class="props-desc">${p.description ? p.description.replace(/`([^`]+)`/g, '<code>$1</code>') : '—'}</span><span class="props-default">${p.default != null ? esc(String(p.default)) : '—'}</span></div>`).join('')}</div>`;
+    el.innerHTML = `<table class="tok-table"><thead><tr><th>Prop <code>${esc(s.tagName)}</code></th><th>Tipo</th><th>Descrizione</th><th>Default</th></tr></thead><tbody>${s.props.map((p, i) => `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(p.name)}</td><td class="token-desc">${esc(p.type || '')}</td><td class="token-desc">${p.description ? p.description.replace(/`([^`]+)`/g, (_, code) => `<code>${esc(code)}</code>`) : ''}</td><td class="token-desc">${p.default != null ? esc(String(p.default)) : ''}</td></tr>`).join('')}</tbody></table>`;
   } catch { el.innerHTML = '<p class="data-empty">Props non disponibili.</p>'; }
 }
 
@@ -200,7 +200,7 @@ async function loadDashboard() {
     const v = meta.versions || {};
     const fa = meta.fetchedAt ? new Date(meta.fetchedAt).toLocaleDateString('it-IT') : '—';
     const ha = meta.fetchedAt ? Math.round((Date.now() - new Date(meta.fetchedAt)) / 3600000) : null;
-    const fr = ha !== null ? (ha < 30 ? '🟢 Fresco' : ha < 50 ? '🟡 Aging' : '🔴 Stale') : '';
+    const fr = ha !== null ? (ha < 48 ? '🟢 Nelle ultime 48 ore' : ha < 96 ? '🟡 Negli ultimi 4 giorni' : '🔴 Più di 4 giorni fa') : '';
 
     document.getElementById('dash-meta').innerHTML = [
       [v.designSystem || '—', 'Design system .italia'],

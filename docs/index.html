@@ -64,11 +64,13 @@
               <div class="it-brand-wrapper">
                 <a href="#">
                   <div class="it-brand-text">
-                    <div class="it-brand-title">🧵 Filo</div>
+                    <div class="it-brand-title">🧵 Filo </div>
                   </div>
                 </a>
               </div>
               <div class="it-right-zone">
+                <div class="badge badge-secondary me-4 "> <span class="visually-hidden">Versione corrente:
+                  </span>v0.3.8</div>
                 <div class="it-socials">
                   <ul>
                     <li><a class="small" href="https://github.com/fupete/design-system-italia-mcp" aria-label="GitHub"
@@ -88,7 +90,7 @@
     </div>
   </div>
 
-  <nav class="site-nav border-bottom shadow-md" aria-label="Navigazione sezioni">
+  <nav class="site-nav border-bottom shadow-sm" aria-label="Navigazione sezioni">
     <div class="site-nav-inner container-xxl">
       <span class="site-nav-brand" aria-hidden="true">🧵 Filo</span>
       <a href="#dashboard">Esplora i dati</a>
@@ -96,6 +98,8 @@
       <a href="#strumenti">Strumenti MCP</a>
       <a href="#esempi">Esempi d'uso</a>
       <a href="#system-prompt">System prompt</a>
+      <a href="#configurazione">Configurazione</a>
+      <a href="#note-tecniche">Note tecniche</a>
     </div>
   </nav>
 
@@ -103,33 +107,48 @@
     <div class="container-xxl">
       <div class="row">
         <div class="col-12 col-lg-9">
-          <h1 id="hero-title">🧵 Filo — MCP server per il Design system .italia</h1>
+          <h1 id="hero-title">🧵 Filo ⁄ MCP server sperimentale per il Design system .italia </h1>
           <p class="lead mb-2">
-            Un progetto sperimentale sviluppato anche litigando con qualche LLM
+            Allo stato dell'arte un progetto personale che si sta evolvendo mentre viene sviluppato,
+            anche litigando con qualche LLM. <strong>Per la documentazione ufficiale del Design system .italia fai
+              riferimento solo alle <a href="https://designers.italia.it/design-system/come-iniziare/">guide
+                sul sito Designers Italia</strong></a>
           </p>
           </p>
-          <div class="d-grid d-md-flex flex-wrap gap-3 pt-4">
+          <div class="d-grid d-md-flex flex-wrap gap-3 pt-4" style="align-items: end">
             <a href="#dashboard" class="btn btn-outline-primary btn-lg">Esplora i dati</a>
-            <a href="#installazione" class="btn btn-primary btn-lg">Installa Filo</a>
-            <a href="https://github.com/fupete/design-system-italia-mcp" class="btn btn-secondary btn-lg">GitHub</a>
-            <a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp"
-              class="btn btn-secondary btn-lg">npm</a>
+            <a href="#installazione" class="btn btn-primary btn-lg mb-4 mb-md-0 me-md-4 ">Installa Filo</a>
+            <a href="https://github.com/fupete/design-system-italia-mcp" class="btn btn-secondary"
+              style="height: fit-content">GitHub</a>
+            <a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp" class="btn btn-secondary"
+              style="height: fit-content">npm</a>
             <a href="https://github.com/Fupete/design-system-italia-mcp/pkgs/container/design-system-italia-mcp"
-              class="btn btn-secondary btn-lg">docker</a>
+              class="btn btn-secondary" style="height: fit-content">docker</a>
           </div>
         </div>
       </div>
       <div class="hero-stats" role="list" aria-label="Statistiche">
-        <div class="hero-stat" role="listitem"><span class="hero-stat-val" id="stat-tools">13</span><span
-            class="hero-stat-label">tool MCP</span></div>
-        <div class="hero-stat" role="listitem"><span class="hero-stat-val" id="stat-comp">55</span><span
-            class="hero-stat-label">componenti</span></div>
-        <div class="hero-stat" role="listitem"><span class="hero-stat-val" id="stat-sources">9</span><span
-            class="hero-stat-label">sorgenti dati</span></div>
-        <div class="hero-stat" role="listitem"><span class="hero-stat-val">nightly</span><span
-            class="hero-stat-label">snapshot CI</span></div>
-        <div class="hero-stat" role="listitem"><span class="hero-stat-val">BSD&#8209;3</span><span
-            class="hero-stat-label">licenza*</span></div>
+        <div class="hero-stat" role="listitem">
+          <span class="hero-stat-label">Strumenti MCP</span>
+          <span class="hero-stat-val" id="stat-tools">13</span>
+        </div>
+        <div class="hero-stat" role="listitem">
+          <span class="hero-stat-label">Componenti</span>
+          <span class="hero-stat-val" id="stat-comp">55+</span>
+        </div>
+        <div class="hero-stat" role="listitem">
+          <span class="hero-stat-label">Sorgenti dati</span>
+          <span class="hero-stat-val" id="stat-sources">9</span>
+        </div>
+        <div class="hero-stat" role="listitem">
+          <span class="hero-stat-label">Snapshot CI</span>
+          <span class="hero-stat-val">Nightly</span>
+        </div>
+        <div class="hero-stat" role="listitem">
+          <span class="hero-stat-label">Licenza*</span>
+          <span class="hero-stat-val">BSD&#8209;3</span>
+
+        </div>
       </div>
     </div>
   </section>
@@ -143,19 +162,19 @@
             Filo raccoglie ogni notte informazioni ufficiali su componenti, stili e linee guida d'uso, le organizza e le
             rende disponibili come dati strutturati.</p>
 
-          <p>Markup di componenti Bootstrap Italia v3 (alpha) e web component Dev Kit Italia v1 (alpha) con le loro
+          <p class="mb-5">Markup di componenti Bootstrap Italia v3 (alpha) e web component Dev Kit Italia v1 (alpha) con le loro
             props, CSS custom property e design token, lo
             stato dei controlli sui componenti e le issue GitHub aperte a portata di assistente AI, designer e
             sviluppatori.</p>
           </p>
         </div>
       </div>
-      <div class="row g-4 mt-3 mb-5">
+      <!-- <div class="row g-4 mt-3 mb-5">
         <div class="col-12 col-md-4">
           <article class="it-card it-card-height-full border rounded">
             <h3 class="it-card-title"><a href="#installazione">Installa Filo</a></h3>
             <div class="it-card-body">
-              <p class="it-card-text">NPX senza setup. Docker per VPS e self-hosting</p>
+              <p class="it-card-text">npx senza setup. Docker per VPS e self-hosting</p>
             </div>
           </article>
         </div>
@@ -175,7 +194,7 @@
             </div>
           </article>
         </div>
-      </div>
+      </div> -->
     </div>
   </section>
 
@@ -315,7 +334,7 @@
       </p>
       <ul class="nav nav-tabs nav-tabs-cards mb-3" role="tablist">
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ti-npx" type="button"
-            role="tab" aria-selected="true">NPX <small class="ms-1 text-muted">(consigliato)</small></button></li>
+            role="tab" aria-selected="true">npx</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#ti-docker" type="button"
             role="tab" aria-selected="false">Docker</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#ti-source" type="button"
@@ -399,49 +418,201 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
 
   <section id="esempi" class="py-5" aria-labelledby="esempi-title">
     <div class="container-xxl">
-      <p class="eyebrow">Casi d'uso</p>
-      <h2 id="esempi-title" class="mb-4">Esempi</h2>
-      <div class="row">
-        <div class="col-12 col-lg-8">
-          <div class="esempio">
-            <p class="esempio-q">"Dammi i token CSS per personalizzare header e footer con Bootstrap Italia v3."</p>
-            <p class="esempio-t">get_component_tokens("header") + find_token("navbar")</p>
-          </div>
-          <div class="esempio">
-            <p class="esempio-q">"Trova i componenti form disponibili e il loro markup Dev Kit Italia."</p>
-            <p class="esempio-t">search_components("form") + get_component("input")</p>
-          </div>
-          <div class="esempio">
-            <p class="esempio-q">"Confronta i token di header e navbar — sono separati o condivisi?"</p>
-            <p class="esempio-t">get_component_tokens("header") + find_token("navbar")</p>
-          </div>
-          <div class="esempio">
-            <p class="esempio-q">"Quali componenti hanno problemi di accessibilità aperti?"</p>
-            <p class="esempio-t">list_accessibility_issues</p>
-          </div>
-          <div class="esempio">
-            <p class="esempio-q">"Dammi tutto sul componente Accordion."</p>
-            <p class="esempio-t">get_component_full("accordion")</p>
-          </div>
-        </div>
-      </div>
+      <h2 id="esempi-title" class="mb-4">Esempi d'uso</h2>
+      <ul class="it-card-list row">
+
+        <li class="col-12 col-md-6 col-lg-4 mb-3 mb-md-4">
+          <article
+            class="it-card it-card-height-full it-card-border-top it-card-border-top-secondary rounded border shadow-sm">
+            <h3 class="it-card-title">Personalizza i colori del tuo sito</h3>
+            <div class="it-card-body">
+              <div class="pre-wrap mb-4">
+                <pre><code class="small">Dammi il CSS per cambiare i colori 
+di header e footer con Bootstrap 
+Italia v3. Usa le CSS custom property 
+per componente e studiati le classi 
+del markup di quei componenti</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+              <p class="it-card-text">Filo restituisce la personalizzazione delle variabili <code>--bsi-*</code> del
+                componente avendo anche a disposizione la catena di risoluzione completa fino al valore concreto e il
+                markup per controllare l'uso delle classi.</p>
+            </div>
+            <footer class="it-card-footer">
+              <div class="it-card-taxonomy">
+                <ul class="it-card-chips" aria-label="Tool usati: ">
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span class="chip-label">get_component_tokens</span></span>
+                  </li>
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span class="chip-label">find_token</span></span>
+                  </li>
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span class="chip-label">get_component</span></span>
+                  </li>
+                </ul>
+              </div>
+            </footer>
+          </article>
+        </li>
+
+        <li class="col-12 col-md-6 col-lg-4 mb-3 mb-md-4">
+          <article
+            class="it-card it-card-height-full it-card-border-top it-card-border-top-secondary rounded border shadow-sm">
+            <h3 class="it-card-title">Trova markup e props di un componente</h3>
+            <div class="it-card-body">
+              <div class="pre-wrap mb-4">
+                <pre><code class="small">Quali componenti form esistono? 
+Dammi il markup dei web component Dev
+Kit Italia e i loro attributi/props 
+configurabili</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+              <p class="it-card-text">Filo restituisce la lista dei componenti e il markup HTML web component
+                <code>it-*</code>
+                con tutte le props configurabili.
+              </p>
+            </div>
+            <footer class="it-card-footer">
+              <div class="it-card-taxonomy">
+                <ul class="it-card-chips" aria-label="Tool usati: ">
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span class="chip-label">search_components</span></span>
+                  </li>
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span class="chip-label">get_component</span></span>
+                  </li>
+                </ul>
+              </div>
+            </footer>
+          </article>
+        </li>
+
+        <li class="col-12 col-md-6 col-lg-4 mb-3 mb-md-4">
+          <article
+            class="it-card it-card-height-full it-card-border-top it-card-border-top-secondary rounded border shadow-sm">
+            <h3 class="it-card-title">Controlla lo stato dei componenti</h3>
+            <div class="it-card-body">
+              <div class="pre-wrap mb-4">
+                <pre><code class="small">Quali componenti hanno note
+di accessibilità aperte o problemi noti?</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+              <p class="it-card-text">Filo aggrega lo stato dei controlli accessibilità e le issue GitHub aperte per
+                ogni componente.</p>
+            </div>
+            <footer class="it-card-footer">
+              <div class="it-card-taxonomy">
+                <ul class="it-card-chips" aria-label="Tool usati: ">
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span
+                        class="chip-label">list_accessibility_issues</span></span>
+                  </li>
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span class="chip-label">get_component_issues</span></span>
+                  </li>
+                </ul>
+              </div>
+            </footer>
+          </article>
+        </li>
+
+        <li class="col-12 col-md-6 col-lg-4 mb-3 mb-md-4">
+          <article
+            class="it-card it-card-height-full it-card-border-top it-card-border-top-secondary rounded border shadow-sm">
+            <h3 class="it-card-title">Scopri come e quando usare un componente</h3>
+            <div class="it-card-body">
+              <div class="pre-wrap mb-4">
+                <pre><code class="small">Come si usa il componente
+Modal? Quando è appropriato usarlo?</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+              <p class="it-card-text">Filo restituisce le linee guida d'uso dalla documentazione del Design system
+                .italia su Designers Italia: quando usarlo, come
+                usarlo, alternative consigliate.</p>
+            </div>
+            <footer class="it-card-footer">
+              <div class="it-card-taxonomy">
+                <ul class="it-card-chips" aria-label="Tool usati: ">
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span
+                        class="chip-label">get_component_guidelines</span></span>
+                  </li>
+                </ul>
+              </div>
+            </footer>
+          </article>
+        </li>
+
+        <li class="col-12 col-md-6 col-lg-4 mb-3 mb-md-4">
+          <article
+            class="it-card it-card-height-full it-card-border-top it-card-border-top-secondary rounded border shadow-sm">
+            <h3 class="it-card-title">Tutto su un componente in una sola query</h3>
+            <div class="it-card-body">
+              <div class="pre-wrap mb-4">
+                <pre><code class="small">Dammi tutto sull'Accordion:
+markup, token, linee guida e
+issue aperte</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+              <p class="it-card-text">Filo aggrega markup, token CSS, props Dev Kit, linee guida e issue GitHub in
+                un'unica risposta strutturata.</p>
+            </div>
+            <footer class="it-card-footer">
+              <div class="it-card-taxonomy">
+                <ul class="it-card-chips" aria-label="Tool usati: ">
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span class="chip-label">get_component_full</span></span>
+                  </li>
+                </ul>
+              </div>
+            </footer>
+          </article>
+        </li>
+
+        <li class="col-12 col-md-6 col-lg-4 mb-3 mb-md-4">
+          <article
+            class="it-card it-card-height-full it-card-border-top it-card-border-top-secondary rounded border shadow-sm">
+            <h3 class="it-card-title">Verifica versioni e stato del design system</h3>
+            <div class="it-card-body">
+              <div class="pre-wrap mb-4">
+                <pre><code class="small">Quali versioni di Bootstrap Italia
+e dev Kit Italia sono attive?
+Quali componenti sono pronti?</code></pre><button class="copy-btn" onclick="copyCode(this)">copia</button>
+              </div>
+              <p class="it-card-text">Ogni risposta di Filo include versioni verificate di Design system, BSI, Dev Kit e
+                Design Tokens Italia.</p>
+            </div>
+            <footer class="it-card-footer">
+              <div class="it-card-taxonomy">
+                <ul class="it-card-chips" aria-label="Tool usati: ">
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span class="chip-label">ping</span></span>
+                  </li>
+                  <li class="list-item">
+                    <span class="chip chip-simple chip-sm"><span class="chip-label">list_components</span></span>
+                  </li>
+                </ul>
+              </div>
+            </footer>
+          </article>
+        </li>
+
+      </ul>
     </div>
   </section>
 
   <section id="system-prompt" class="py-5 lightgrey-bg-b1" aria-labelledby="prompt-title">
     <div class="container-xxl">
       <h2 id="prompt-title" class="mb-1">System prompt</h2>
-      <p class="lead mb-4">I modelli mescolano dati MCP e conoscenza pregressa senza segnalarlo. Questo prompt aiuta a
-        fissare il confine e diminuire gli errori, sempre presenti by default.</p>
+      <p class="lead mb-4">Gli assistenti "intelligenti" possono mescolare dati MCP e conoscenza pregressa senza
+        segnalarlo
+      </p>
+      <p>Questo system prompt opzionale per il tuo client prova ad aiutarti a
+        fissare il confine e diminuire gli errori. Controlla in ogni caso sempre tutto il lavoro svolto dagli assistenti
+      </p>
       <ul class="nav nav-tabs nav-tabs-cards mb-3" role="tablist">
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sp-it" type="button"
             role="tab" aria-selected="true">Italiano</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sp-en" type="button"
             role="tab" aria-selected="false">English</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sp-matrix" type="button"
-            role="tab" aria-selected="false">Client supportati</button></li>
       </ul>
-      <div class="tab-content border-start border-end border-bottom rounded-bottom shadow-md">
+      <div class="tab-content bg-white border-start border-end border-bottom rounded-bottom shadow-md">
         <div class="tab-pane fade show active" id="sp-it" role="tabpanel">
           <div class="pre-wrap">
             <pre
@@ -484,53 +655,13 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             <button class="copy-btn" onclick="copyCode(this)">copia</button>
           </div>
         </div>
-        <div class="tab-pane fade" id="sp-matrix" role="tabpanel">
-          <p class="mb-3 text-muted">Il system prompt va configurato nel client, non nel server.</p>
-          <table class="table table-bordered">
-            <thead class="table-light">
-              <tr>
-                <th scope="col">Client</th>
-                <th scope="col">Supporto</th>
-                <th scope="col">Dove</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Claude Desktop</td>
-                <td>✅</td>
-                <td><code>systemPrompt</code> nel config JSON MCP</td>
-              </tr>
-              <tr>
-                <td>claude.ai</td>
-                <td>✅</td>
-                <td>Project instructions</td>
-              </tr>
-              <tr>
-                <td>Cursor</td>
-                <td>✅</td>
-                <td><code>.cursor/rules</code></td>
-              </tr>
-              <tr>
-                <td>Claude Code</td>
-                <td>✅</td>
-                <td><code>CLAUDE.md</code></td>
-              </tr>
-              <tr>
-                <td>VS Code</td>
-                <td>❌</td>
-                <td>Non supportato</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   </section>
 
   <section id="configurazione" class="py-5" aria-labelledby="config-title">
     <div class="container-xxl">
-      <p class="eyebrow">Client MCP</p>
-      <h2 id="config-title" class="mb-4">Configurazione</h2>
+      <h2 id="config-title" class="mb-4">Configurazione client</h2>
       <div class="accordion" id="acc-config">
         <div class="accordion-item">
           <h2 class="accordion-header" id="h-cd">
@@ -643,7 +774,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
         </div>
         <div class="col-12 col-md-6">
           <h3 class="h5">Trasporto stdio e HTTP</h3>
-          <p>Stdio per NPX locale, HTTP per deploy remoto Docker. Selezionabile via env <code>TRANSPORT</code>.</p>
+          <p>Stdio per npx locale, HTTP per deploy remoto Docker. Selezionabile via env <code>TRANSPORT</code>.</p>
         </div>
       </div>
       <div class="mt-4">
@@ -663,8 +794,8 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
         <div class="col-12 col-md-5">
           <h2 id="footer-title" class="fw-bold mb-2">🧵 Filo</h2>
           <p>Server MCP sperimentale per il Design System .italia. Progetto personale non ufficiale di <a
-              href="https://github.com/fupete">Daniele Tabellini (@Fupete)</a>.</p>
-          <p><a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue benvenute</a></p>
+              href="https://github.com/fupete">Daniele Tabellini (@Fupete)</a></p>
+          <p><a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue benvenute</a>, tutto è alpha e in divenire</p>
         </div>
         <div class="col-6 col-md-3 offset-md-1">
           <h3>Progetto</h3>
@@ -672,7 +803,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             <li><a href="https://github.com/fupete/design-system-italia-mcp">GitHub</a></li>
             <li><a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp">npm</a></li>
             <li><a href="https://ghcr.io/fupete/design-system-italia-mcp">Docker</a></li>
-            <li><a href="/llms.txt">llms.txt</a></li>
+            <!--<li><a href="/llms.txt">llms.txt</a></li>-->
           </ul>
         </div>
         <div class="col-6 col-md-3">

@@ -39,17 +39,17 @@
 .hero-stat-val {
   display: block;
   font-family: 'Roboto Mono', monospace;
-  font-size: 1.7rem;
+  font-size: 2rem;
   font-weight: 700;
   line-height: 1;
 }
 
 .hero-stat-label {
   display: block;
-  font-size: .72rem;
+  font-size: .85rem;
   text-transform: uppercase;
   letter-spacing: .08em;
-  margin-top: .3rem;
+  margin-bottom: .3rem;
 }
 
 @media (max-width: 576px) {
@@ -78,17 +78,6 @@
 
 .section-dark .text-muted {
   color: rgba(255, 255, 255, .6) !important;
-}
-
-/* Eyebrow label */
-.eyebrow {
-  font-family: 'Roboto Mono', monospace;
-  font-size: .72rem;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: var(--bsi-primary);
-  display: block;
-  margin-bottom: .4rem;
 }
 
 /* Code block */
@@ -160,39 +149,22 @@ pre code {
 
 .tool-names li {
   font-family: 'Roboto Mono', monospace;
-  font-size: .85rem;
+  font-size: 1rem;
   padding: .2rem 0;
 }
 
 .tool-names li::before {
-  content: '→ ';
+  content: '— ';
   opacity: .4;
 }
 
-/* Examples */
-.esempio {
-  border-bottom: 1px solid var(--bsi-border-color);
-  padding: 1.25rem 0;
-}
-
-.esempio:first-child {
-  border-top: 1px solid var(--bsi-border-color);
-}
-
-.esempio-q {
-  font-size: 1rem;
-  margin-bottom: .35rem;
-}
-
-.esempio-t {
+/* Examples — chip tool labels in card footer */
+.it-card-footer .chip {
   font-family: 'Roboto Mono', monospace;
-  font-size: .85rem;
-  color: var(--bsi-secondary-color);
 }
 
-.esempio-t::before {
-  content: '→ ';
-  opacity: .5;
+.it-card-footer .chip-label {
+  font-size: .85rem;
 }
 
 /* Dashboard version strip */
@@ -237,9 +209,9 @@ pre code {
 
 .dash-meta-label {
   display: block;
-  font-size: .72rem;
+  font-size: .85rem;
   text-transform: uppercase;
-  letter-spacing: .07em;
+  letter-spacing: .08em;
   color: var(--bsi-secondary-color);
   margin-bottom: .2rem;
 }
@@ -264,6 +236,10 @@ div.tab-content {
 
 ul.nav-tabs button.nav-link {
   background-color: transparent;
+}
+
+ul.nav-tabs button.nav-link.active {
+  background-color: white;
 }
 
 /* Tabs on primary background */
@@ -320,108 +296,63 @@ ul.nav-tabs button.nav-link {
   border-bottom: none;
 }
 
-/* Token rows */
-.token-table {
-  border: 1px solid var(--bsi-border-color);
-  border-radius: 6px;
-  overflow: hidden;
+/* Token + Props tables */
+.tok-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
 }
 
-.token-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  padding: .6rem .9rem;
-  border-bottom: 1px solid var(--bsi-border-color);
+.tok-table thead tr {
+  background: #1a3a6b;
+  color: #fff;
 }
 
-.token-row:last-child {
+.tok-table thead th {
+  padding: .55rem .9rem;
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  text-align: left;
+}
+
+.tok-table tbody tr {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.tok-table tbody tr:last-child {
   border-bottom: none;
 }
 
-.token-row:nth-child(even) {
-  background: var(--bsi-light, #f8f9fa);
+.tok-table tbody tr.tok-alt {
+  background: #e8f1ff;
+}
+
+.tok-table td {
+  padding: .55rem .9rem;
+  vertical-align: top;
 }
 
 .token-name {
   font-family: 'Roboto Mono', monospace;
   font-size: .85rem;
   color: var(--bsi-primary);
+  white-space: nowrap;
 }
 
 .token-desc {
   font-size: .85rem;
   color: var(--bsi-secondary-color);
-}
-
-/* Props table */
-.props-head {
-  display: grid;
-  grid-template-columns: minmax(100px, 1fr) 60px 2fr 90px;
-  gap: .75rem;
-  padding: .45rem .9rem;
-  background: var(--bsi-light, #f8f9fa);
-  border-bottom: 1px solid var(--bsi-border-color);
-  font-size: .72rem;
-  font-weight: 600;
-  color: var(--bsi-secondary-color);
-  text-transform: uppercase;
-  letter-spacing: .04em;
-}
-
-.props-row {
-  display: grid;
-  grid-template-columns: minmax(100px, 1fr) 60px 2fr 90px;
-  gap: .75rem;
-  padding: .55rem .9rem;
-  border-bottom: 1px solid var(--bsi-border-color);
-  font-size: .85rem;
-}
-
-.props-row:last-child {
-  border-bottom: none;
-}
-
-.props-row:nth-child(even) {
-  background: var(--bsi-light, #f8f9fa);
-}
-
-.props-name {
-  font-family: 'Roboto Mono', monospace;
-  font-size: .85rem;
-  color: var(--bsi-primary);
-  word-break: break-all;
-}
-
-.props-type {
-  font-family: 'Roboto Mono', monospace;
-  font-size: .82rem;
-  color: var(--bsi-secondary-color);
-}
-
-.props-desc {
-  color: var(--bsi-secondary-color);
-  font-size: .85rem;
   line-height: 1.5;
-}
-
-.props-default {
-  font-family: 'Roboto Mono', monospace;
-  font-size: .82rem;
-  color: var(--bsi-secondary-color);
 }
 
 @media (max-width: 640px) {
 
-  .props-head,
-  .props-row {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .props-type,
-  .props-default,
-  .props-head span:nth-child(2),
-  .props-head span:nth-child(4) {
+  .tok-table thead th:nth-child(2),
+  .tok-table thead th:nth-child(4),
+  .tok-table td:nth-child(2),
+  .tok-table td:nth-child(4) {
     display: none;
   }
 }
@@ -482,6 +413,16 @@ ul.nav-tabs button.nav-link {
   margin-bottom: .6rem;
 }
 
+.gl-tag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .65rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  border: 1px solid var(--bsi-border-color);
+  padding: .1rem .45rem;
+  border-radius: 3px;
+  color: var(--bsi-secondary-color);
+}
 
 .gl-text {
   font-size: 1rem;
@@ -504,14 +445,14 @@ ul.nav-tabs button.nav-link {
 }
 
 .issue-card {
-  border: 1px solid var(--bsi-border-color);
+  border: 1px solid black;
   border-radius: 6px;
   padding: 1rem 1.25rem;
 }
 
 .issue-repo {
   font-family: 'Roboto Mono', monospace;
-  font-size: .68rem;
+  font-size: .85rem;
   text-transform: uppercase;
   letter-spacing: .08em;
   color: var(--bsi-secondary-color);
@@ -583,16 +524,13 @@ p {
 }
 
 /* BSI overrides */
+
+ul.it-card-list li .it-card-text {
+  font-size: 1rem !important;
+}
+
 .it-brand-wrapper {
   padding-left: 0;
-}
-
-.it-card {
-  box-shadow: none !important;
-}
-
-ul.it-card-list .it-card-text {
-  font-size: 1rem;
 }
 
 /* workaround BSI 3.x #1726 */
@@ -606,7 +544,7 @@ ul.it-card-list .it-card-text {
   fill: #664d03;
 }
 
-/* Sticky anchor nav — desktop only */
+/* Sticky anchor nav */
 .site-nav {
   position: sticky;
   top: 0;
@@ -657,18 +595,6 @@ ul.it-card-list .it-card-text {
 .site-nav a:hover {
   color: var(--bsi-primary);
   border-bottom-color: var(--bsi-primary);
-}
-
-/* On mobile: not sticky, just a plain scrollable row */
-@media (max-width: 767px) {
-  .site-nav {
-    position: static;
-    box-shadow: none;
-  }
-
-  .site-nav-brand {
-    display: none;
-  }
 }
 
 it-callout::part(inner) {
