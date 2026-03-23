@@ -105,12 +105,33 @@ function showTokens(comp) {
   ex.hidden = true;
 }
 
-/* Dev Kit props hack XXX */
+/* Dev Kit props - UPDATE ON NEW COMPONENTS in https://github.com/Fupete/design-system-italia-mcp/tree/data-fetched/devkit/props (now 31) */
 const PROPS_SLUGS = ['accordion', 'avatar', 'back-to-top', 'breadcrumbs', 'button', 'callout', 'card', 'carousel', 'chip', 'collapse', 'dropdown', 'form-autocomplete', 'form-checkbox', 'form-datepicker', 'form-input', 'form-number-input', 'form-radio-button', 'form-select', 'form-timepicker', 'hero', 'icon', 'megamenu', 'modal', 'navscroll', 'pagination', 'popover', 'rating', 'section', 'skiplinks', 'sticky', 'video-player'];
 
 function populatePropsSel() {
   const sel = document.getElementById('props-sel');
   PROPS_SLUGS.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s;
+    o.textContent = s.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
+    sel.appendChild(o);
+  });
+}
+
+// invece di PROPS_SLUGS hardcoded, dopo che dki è caricato in loadDashboard:
+function populatePropsSel(dki) {
+  const sel = document.getElementById('props-sel');
+  const slugs = dki?.entries
+    ? Object.values(dki.entries)
+      .filter(e => e.type === 'docs' && e.id.startsWith('componenti-'))
+      .map(e => {
+        const parts = (e.title || '').split('/');
+        return (parts[parts.length - 1] || '').toLowerCase().trim().replace(/\s+/g, '-');
+      })
+      .filter(Boolean)
+      .sort()
+    : [];
+  slugs.forEach(s => {
     const o = document.createElement('option');
     o.value = s;
     o.textContent = s.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
@@ -238,7 +259,7 @@ async function loadDashboard() {
     document.getElementById('f-all').textContent = allComps.length;
     document.getElementById('f-dk').textContent = allComps.filter(c => c.dk).length;
     renderComps(allComps);
-    populatePropsSel();
+    populatePropsSel(dki);
     populateGlSel();
 
     if (tokens && typeof tokens === 'object') {
