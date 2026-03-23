@@ -30,7 +30,9 @@
     "dev": "tsx watch --env-file=.env src/index.ts",
     "start": "node --env-file=.env dist/index.js",
     "typecheck": "tsc --noEmit",
-    "canary": "npx tsx scripts/canary.ts"
+    "canary": "npx tsx scripts/canary.ts",
+    "docs-vendor": "node docs/scripts/vendor.mjs",
+    "docs-setup": "npm install && npm run docs-vendor"
   },
   "repository": {
     "type": "git",
