@@ -143,8 +143,14 @@ function populateGlSel() {
 const mm = text => {
   if (!text) return '';
   return text.split(/\n\n+/).map(b => {
-    b = b.trim(); if (!b) return '';
-    if (/^### /.test(b)) return b.replace(/^### (.+)$/m, '<h3>$1</h3>');
+    b = b.trim();
+    if (!b) return '';
+    if (/^### /.test(b)) {
+      const lines = b.split('\n');
+      const heading = `<h3>${esc(lines[0].replace(/^### /, ''))}</h3>`;
+      const rest = lines.slice(1).join('\n').trim();
+      return heading + (rest ? mm(rest) : '');
+    }
     if (/^- /m.test(b)) return `<ul>${b.split('\n').filter(l => l.trim()).map(l => `<li>${mi(l.replace(/^- /, ''))}</li>`).join('')}</ul>`;
     return `<p>${mi(b)}</p>`;
   }).join('');
@@ -152,8 +158,9 @@ const mm = text => {
 
 const mi = t => t
   .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, la, ur) => `<a href="${ur.startsWith('/') ? 'https://designers.italia.it' + ur : ur}" target="_blank" rel="noopener">${la}</a>`)
-  .replace(/`([^`]+)`/g, '<code>$1</code>');
+  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, la, ur) =>
+    `<a href="${ur.startsWith('/') ? 'https://designers.italia.it' + ur : ur}" target="_blank" rel="noopener">${la}</a>`)
+  .replace(/`([^`]+)`/g, (_, code) => `<code>${esc(code)}</code>`);
 
 async function showGl(slug) {
   const el = document.getElementById('gl-content');
@@ -171,9 +178,9 @@ async function showGl(slug) {
     const when = ft('quando usarlo') || ft('quando usare');
     const how = ft('come usarlo') || ft('come usare');
     const tags = (hero?.kangaroo?.tagsDesignSystem || []).map(t => `<span class="gl-tag">${esc(t)}</span>`).join('');
-    let out = `<h3 class="h5 mb-2">${esc(title)}</h3>${tags ? `<div class="gl-tags">${tags}</div>` : ''}${sub ? `<p class="text-muted">${esc(sub)}</p>` : ''}`;
-    if (when) out += `<div class="mb-3"><h4 class="h6">Quando usarlo</h4><div class="gl-text">${mm(when)}</div></div>`;
-    if (how) out += `<div class="mb-3"><h4 class="h6">Come usarlo</h4><div class="gl-text">${mm(how)}</div></div>`;
+    let out = `<h3 class="mb-2">${esc(title)}</h3>${tags ? `<div class="chip"><span class="chip-label">${tags}</chip></div>` : ''}${sub ? `<p class="lead mt-2">${esc(sub)}</p>` : ''}`;
+    if (when) out += `<div class="mb-3"><h4>Quando usarlo</h4><div class="gl-text">${mm(when)}</div></div>`;
+    if (how) out += `<div class="mb-3"><h4>Come usarlo</h4><div class="gl-text">${mm(how)}</div></div>`;
     if (!when && !how) out += '<p class="data-empty">Linee guida non disponibili.</p>';
     out += `<a href="${url}" target="_blank" rel="noopener" class="fw-semibold">Scheda completa su Designers Italia →</a>`;
     el.innerHTML = out;

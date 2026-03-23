@@ -186,12 +186,13 @@ pre code {
 
 .esempio-t {
   font-family: 'Roboto Mono', monospace;
-  font-size: .78rem;
+  font-size: .85rem;
   color: var(--bsi-secondary-color);
 }
 
 .esempio-t::before {
   content: '→ ';
+  opacity: .5;
 }
 
 /* Dashboard version strip */
@@ -236,7 +237,7 @@ pre code {
 
 .dash-meta-label {
   display: block;
-  font-size: .68rem;
+  font-size: .72rem;
   text-transform: uppercase;
   letter-spacing: .07em;
   color: var(--bsi-secondary-color);
@@ -246,7 +247,7 @@ pre code {
 .dash-meta-sub {
   display: block;
   font-family: 'Roboto Mono', monospace;
-  font-size: .65rem;
+  font-size: .75rem;
   color: var(--bsi-secondary-color);
 }
 
@@ -261,12 +262,11 @@ div.tab-content {
   padding: 2rem;
 }
 
-/* Tabs on primary background — inactive white text, active white bg with primary text */
 ul.nav-tabs button.nav-link {
   background-color: transparent;
 }
 
-/* Tabs on primary background — inactive white text, active white bg with primary text */
+/* Tabs on primary background */
 .bg-primary ul.nav-tabs button.nav-link:not(.active) {
   background-color: transparent;
   color: white;
@@ -305,7 +305,7 @@ ul.nav-tabs button.nav-link {
 }
 
 #dash-comp-table td {
-  font-size: 1rem;
+  font-size: .95rem;
   padding: .45rem .75rem;
   border-bottom: 1px dotted var(--bsi-border-color, #666);
   width: 25%;
@@ -345,12 +345,12 @@ ul.nav-tabs button.nav-link {
 
 .token-name {
   font-family: 'Roboto Mono', monospace;
-  font-size: .76rem;
+  font-size: .85rem;
   color: var(--bsi-primary);
 }
 
 .token-desc {
-  font-size: .82rem;
+  font-size: .85rem;
   color: var(--bsi-secondary-color);
 }
 
@@ -375,7 +375,7 @@ ul.nav-tabs button.nav-link {
   gap: .75rem;
   padding: .55rem .9rem;
   border-bottom: 1px solid var(--bsi-border-color);
-  font-size: .82rem;
+  font-size: .85rem;
 }
 
 .props-row:last-child {
@@ -388,26 +388,26 @@ ul.nav-tabs button.nav-link {
 
 .props-name {
   font-family: 'Roboto Mono', monospace;
-  font-size: .76rem;
+  font-size: .85rem;
   color: var(--bsi-primary);
   word-break: break-all;
 }
 
 .props-type {
   font-family: 'Roboto Mono', monospace;
-  font-size: .72rem;
+  font-size: .82rem;
   color: var(--bsi-secondary-color);
 }
 
 .props-desc {
   color: var(--bsi-secondary-color);
-  font-size: .8rem;
+  font-size: .85rem;
   line-height: 1.5;
 }
 
 .props-default {
   font-family: 'Roboto Mono', monospace;
-  font-size: .72rem;
+  font-size: .82rem;
   color: var(--bsi-secondary-color);
 }
 
@@ -436,7 +436,7 @@ ul.nav-tabs button.nav-link {
 
 .chain-val {
   font-family: 'Roboto Mono', monospace;
-  font-size: .76rem;
+  font-size: .85rem;
   background: #f0f0f0;
   padding: .15rem .45rem;
   border-radius: 3px;
@@ -459,7 +459,7 @@ ul.nav-tabs button.nav-link {
 
 .chain-label {
   font-family: 'Roboto Mono', monospace;
-  font-size: .68rem;
+  font-size: .72rem;
   text-transform: uppercase;
   letter-spacing: .07em;
   color: var(--bsi-secondary-color);
@@ -468,7 +468,7 @@ ul.nav-tabs button.nav-link {
 
 .chain-tool {
   font-family: 'Roboto Mono', monospace;
-  font-size: .72rem;
+  font-size: .85rem;
   color: var(--bsi-secondary-color);
   margin-top: .5rem;
   margin-bottom: 0;
@@ -482,25 +482,15 @@ ul.nav-tabs button.nav-link {
   margin-bottom: .6rem;
 }
 
-.gl-tag {
-  font-family: 'Roboto Mono', monospace;
-  font-size: .65rem;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  border: 1px solid var(--bsi-border-color);
-  padding: .1rem .45rem;
-  border-radius: 3px;
-  color: var(--bsi-secondary-color);
-}
 
 .gl-text {
-  font-size: .9rem;
+  font-size: 1rem;
   color: var(--bsi-secondary-color);
   line-height: 1.75;
 }
 
 .gl-text h3 {
-  font-size: .9rem;
+  font-size: 1rem;
   font-weight: 700;
   margin: .65rem 0 .2rem;
   color: var(--bsi-body-color);
@@ -531,7 +521,7 @@ ul.nav-tabs button.nav-link {
 /* Empty / loading state */
 .data-empty {
   font-family: 'Roboto Mono', monospace;
-  font-size: .8rem;
+  font-size: .85rem;
   color: var(--bsi-secondary-color);
   padding: .5rem 0;
 }
@@ -582,7 +572,6 @@ ul.nav-tabs button.nav-link {
   text-decoration: underline;
 }
 
-
 .footer-licenses {
   display: flex;
   gap: 1.5rem;
@@ -616,7 +605,6 @@ ul.it-card-list .it-card-text {
 .bg-primary .alert-warning .alert-icon {
   fill: #664d03;
 }
-
 
 /* Sticky anchor nav — desktop only */
 .site-nav {
