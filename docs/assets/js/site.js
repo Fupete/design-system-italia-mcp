@@ -67,9 +67,9 @@ function drawRows() {
 function toggleComps() { exp = !exp; drawRows(); }
 
 function filterComp(btn, f) {
-  document.querySelectorAll('.comp-filter .btn').forEach(b => { b.classList.remove('btn-primary'); b.classList.add('btn-outline-secondary'); });
+  document.querySelectorAll('.comp-filter .btn').forEach(b => { b.classList.remove('btn-secondary'); b.classList.add('btn-outline-secondary'); });
   btn.classList.remove('btn-outline-secondary');
-  btn.classList.add('btn-primary');
+  btn.classList.add('btn-secondary');
   renderComps(f === 'all' ? allComps : allComps.filter(c => c.dk));
 }
 
@@ -105,7 +105,7 @@ function showTokens(comp) {
   ex.hidden = true;
 }
 
-/* Dev Kit props */
+/* Dev Kit props hack XXX */
 const PROPS_SLUGS = ['accordion', 'avatar', 'back-to-top', 'breadcrumbs', 'button', 'callout', 'card', 'carousel', 'chip', 'collapse', 'dropdown', 'form-autocomplete', 'form-checkbox', 'form-datepicker', 'form-input', 'form-number-input', 'form-radio-button', 'form-select', 'form-timepicker', 'hero', 'icon', 'megamenu', 'modal', 'navscroll', 'pagination', 'popover', 'rating', 'section', 'skiplinks', 'sticky', 'video-player'];
 
 function populatePropsSel() {
@@ -181,7 +181,7 @@ async function showGl(slug) {
     const when = ft('quando usarlo') || ft('quando usare');
     const how = ft('come usarlo') || ft('come usare');
     const tags = (hero?.kangaroo?.tagsDesignSystem || []).map(t => `<span class="gl-tag">${esc(t)}</span>`).join('');
-    let out = `<h3 class="mb-2">${esc(title)}</h3>${tags ? `<div class="chip"><span class="chip-label">${tags}</chip></div>` : ''}${sub ? `<p class="lead mt-2">${esc(sub)}</p>` : ''}`;
+    let out = `<h3 class="mb-2">${esc(title)}</h3>${tags ? `<div class="chip"><span class="chip-label">${tags}</span></div>` : ''}${sub ? `<p class="lead mt-2">${esc(sub)}</p>` : ''}`;
     if (when) out += `<div class="mb-3"><h4>Quando usarlo</h4><div class="gl-text">${mm(when)}</div></div>`;
     if (how) out += `<div class="mb-3"><h4>Come usarlo</h4><div class="gl-text">${mm(how)}</div></div>`;
     if (!when && !how) out += '<p class="data-empty">Linee guida non disponibili.</p>';
