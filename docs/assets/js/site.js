@@ -4,12 +4,13 @@ function copyCode(btn) {
   const pre = btn.closest('.pre-wrap').querySelector('pre');
   navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
     const orig = btn.textContent;
-    btn.textContent = 'copiato ✓'; btn.classList.add('copied');
+    btn.textContent = 'copiato ✓';
+    btn.classList.add('copied');
     setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
   });
 }
 
-/* ── Dashboard ───────────────────────────────────────────────────────────── */
+/* Dashboard */
 const FILO_TOOLS = 13;
 const FILO_SOURCES = 9;
 const RAW = 'https://raw.githubusercontent.com/Fupete/design-system-italia-mcp/data-fetched';
@@ -29,6 +30,7 @@ function badge(text, type) {
   const cls = { green: 'badge-success', blue: 'badge-primary', orange: 'badge-warning', red: 'badge-danger', gray: 'badge-secondary' }[type] || 'badge-secondary';
   return `<span class="badge rounded-pill ${cls}">${esc(text)}</span>`;
 }
+
 function statusBadge(s) {
   if (!s) return badge('—', 'gray');
   const sl = s.toLowerCase();
@@ -39,32 +41,41 @@ function statusBadge(s) {
   return badge(s || 'N/D', 'gray');
 }
 
-/* Componenti table */
-const N = 8; let curList = [], exp = false;
+/* Components table */
+const N = 8;
+let curList = [], exp = false;
+
 function renderComps(l) { curList = l; exp = false; drawRows(); }
+
 function drawRows() {
   const body = document.getElementById('dash-comp-body');
   const vis = exp ? curList : curList.slice(0, N);
   body.innerHTML = vis.map(c => `<tr>
     <td><strong>${esc(c.name)}</strong></td>
-    <td>${statusBadge(c.bsi)}</td><td>${statusBadge(c.uik)}</td>
-    <td>${c.dk ? badge('✓', 'green') : badge('—', 'gray')}</td>
+    <td>${statusBadge(c.bsi)}</td>
+    <td>${statusBadge(c.uik)}</td>
+    <td>${c.dk ? badge('PRESENTE', 'green') : badge('NON PRESENTE', 'gray')}</td>
   </tr>`).join('');
-  const tog = document.getElementById('dash-tog'); const cnt = document.getElementById('dash-tog-n');
+  const tog = document.getElementById('dash-tog');
+  const cnt = document.getElementById('dash-tog-n');
   if (curList.length <= N) { tog.style.display = 'none'; return; }
   tog.style.display = '';
   tog.firstChild.textContent = exp ? 'Mostra meno ' : 'Mostra tutti ';
   cnt.textContent = exp ? '' : `(${curList.length})`;
 }
+
 function toggleComps() { exp = !exp; drawRows(); }
+
 function filterComp(btn, f) {
   document.querySelectorAll('.comp-filter .btn').forEach(b => { b.classList.remove('btn-primary'); b.classList.add('btn-outline-secondary'); });
-  btn.classList.remove('btn-outline-secondary'); btn.classList.add('btn-primary');
+  btn.classList.remove('btn-outline-secondary');
+  btn.classList.add('btn-primary');
   renderComps(f === 'all' ? allComps : allComps.filter(c => c.dk));
 }
 
-/* Token */
+/* CSS tokens */
 let tokByComp = {};
+
 function populateTokenSel(raw) {
   tokByComp = {};
   const arr = Array.isArray(raw) ? raw : Object.values(raw);
@@ -75,24 +86,38 @@ function populateTokenSel(raw) {
   });
   const sel = document.getElementById('tok-sel');
   Object.keys(tokByComp).sort().forEach(c => {
-    const o = document.createElement('option'); o.value = c; o.textContent = `${c} (${tokByComp[c].length})`; sel.appendChild(o);
+    const o = document.createElement('option');
+    o.value = c;
+    o.textContent = `${c} (${tokByComp[c].length})`;
+    sel.appendChild(o);
   });
 }
+
 function showTokens(comp) {
-  const el = document.getElementById('tok-list'), cta = document.getElementById('tok-cta'), ex = document.getElementById('tok-ex');
+  const el = document.getElementById('tok-list');
+  const cta = document.getElementById('tok-cta');
+  const ex = document.getElementById('tok-ex');
   if (!comp) { el.innerHTML = ''; cta.hidden = true; ex.hidden = false; return; }
   const toks = tokByComp[comp] || [];
   if (!toks.length) { el.innerHTML = '<p class="data-empty">Nessuna custom property.</p>'; cta.hidden = true; return; }
   el.innerHTML = `<div class="token-table">${toks.map(t => `<div class="token-row"><span class="token-name">${esc(t.name)}</span><span class="token-desc">${t.description ? esc(t.description) : esc(t.value)}</span></div>`).join('')}</div>`;
-  cta.hidden = false; ex.hidden = true;
+  cta.hidden = false;
+  ex.hidden = true;
 }
 
-/* Props */
+/* Dev Kit props */
 const PROPS_SLUGS = ['accordion', 'avatar', 'back-to-top', 'breadcrumbs', 'button', 'callout', 'card', 'carousel', 'chip', 'collapse', 'dropdown', 'form-autocomplete', 'form-checkbox', 'form-datepicker', 'form-input', 'form-number-input', 'form-radio-button', 'form-select', 'form-timepicker', 'hero', 'icon', 'megamenu', 'modal', 'navscroll', 'pagination', 'popover', 'rating', 'section', 'skiplinks', 'sticky', 'video-player'];
+
 function populatePropsSel() {
   const sel = document.getElementById('props-sel');
-  PROPS_SLUGS.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' '); sel.appendChild(o); });
+  PROPS_SLUGS.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s;
+    o.textContent = s.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
+    sel.appendChild(o);
+  });
 }
+
 async function showProps(slug) {
   const el = document.getElementById('props-list');
   if (!slug) { el.innerHTML = ''; return; }
@@ -104,11 +129,17 @@ async function showProps(slug) {
   } catch { el.innerHTML = '<p class="data-empty">Props non disponibili.</p>'; }
 }
 
-/* Guidelines */
+/* Component guidelines */
 function populateGlSel() {
   const sel = document.getElementById('gl-sel');
-  allComps.forEach(c => { const o = document.createElement('option'); o.value = c.name.toLowerCase().replace(/\s+/g, '-'); o.textContent = c.name; sel.appendChild(o); });
+  allComps.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c.name.toLowerCase().replace(/\s+/g, '-');
+    o.textContent = c.name;
+    sel.appendChild(o);
+  });
 }
+
 const mm = text => {
   if (!text) return '';
   return text.split(/\n\n+/).map(b => {
@@ -118,7 +149,11 @@ const mm = text => {
     return `<p>${mi(b)}</p>`;
   }).join('');
 };
-const mi = t => t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, la, ur) => `<a href="${ur.startsWith('/') ? 'https://designers.italia.it' + ur : ur}" target="_blank" rel="noopener">${la}</a>`).replace(/`([^`]+)`/g, '<code>$1</code>');
+
+const mi = t => t
+  .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, la, ur) => `<a href="${ur.startsWith('/') ? 'https://designers.italia.it' + ur : ur}" target="_blank" rel="noopener">${la}</a>`)
+  .replace(/`([^`]+)`/g, '<code>$1</code>');
 
 async function showGl(slug) {
   const el = document.getElementById('gl-content');
@@ -127,12 +162,14 @@ async function showGl(slug) {
   try {
     const d = await j(`${RAW}/designers/components/${slug}.json`);
     const hero = d?.components?.hero;
-    const title = hero?.title || slug, sub = hero?.subtitle || null;
+    const title = hero?.title || slug;
+    const sub = hero?.subtitle || null;
     const url = `https://designers.italia.it${d?.seo?.pathname || '/design-system/componenti/' + slug + '/'}`;
     const tab = d?.tabs?.find(t => t.title?.toLowerCase().includes('uso') || t.title?.toLowerCase().includes('accessibilit'));
     const comps = tab?.sectionsEditorial?.flatMap(s => s.components || []) || [];
     const ft = k => comps.find(c => c.name === 'TextImageCta' && c.title?.toLowerCase().includes(k))?.text || null;
-    const when = ft('quando usarlo') || ft('quando usare'), how = ft('come usarlo') || ft('come usare');
+    const when = ft('quando usarlo') || ft('quando usare');
+    const how = ft('come usarlo') || ft('come usare');
     const tags = (hero?.kangaroo?.tagsDesignSystem || []).map(t => `<span class="gl-tag">${esc(t)}</span>`).join('');
     let out = `<h3 class="h5 mb-2">${esc(title)}</h3>${tags ? `<div class="gl-tags">${tags}</div>` : ''}${sub ? `<p class="text-muted">${esc(sub)}</p>` : ''}`;
     if (when) out += `<div class="mb-3"><h4 class="h6">Quando usarlo</h4><div class="gl-text">${mm(when)}</div></div>`;
@@ -143,7 +180,7 @@ async function showGl(slug) {
   } catch { el.innerHTML = '<p class="data-empty">Linee guida non disponibili.</p>'; }
 }
 
-/* loadDashboard */
+/* Load dashboard data */
 async function loadDashboard() {
   try {
     const [meta, status, dki, tokens] = await Promise.all([
@@ -152,26 +189,36 @@ async function loadDashboard() {
       j(`${RAW}/devkit/index.json`).catch(() => null),
       j(`${RAW}/bsi/custom-properties.json`).catch(() => null),
     ]);
+
     const v = meta.versions || {};
     const fa = meta.fetchedAt ? new Date(meta.fetchedAt).toLocaleDateString('it-IT') : '—';
     const ha = meta.fetchedAt ? Math.round((Date.now() - new Date(meta.fetchedAt)) / 3600000) : null;
-    const fr = ha !== null ? (ha < 30 ? '🟢 fresco' : ha < 50 ? '🟡 aging' : '🔴 stale') : '';
-    const mg = document.getElementById('dash-meta');
-    mg.innerHTML = [
-      [v.designSystem || '—', 'Design System'],
+    const fr = ha !== null ? (ha < 30 ? '🟢 Fresco' : ha < 50 ? '🟡 Aging' : '🔴 Stale') : '';
+
+    document.getElementById('dash-meta').innerHTML = [
+      [v.designSystem || '—', 'Design system .italia'],
       [v.bootstrapItalia || '—', 'Bootstrap Italia'],
       [v.devKitItalia || '—', 'Dev Kit Italia'],
-      [v.designTokensItalia || '—', 'Design Tokens'],
+      [v.designTokensItalia || '—', 'Design Tokens Italia'],
       [fa, 'Snapshot CI', fr],
-    ].map(([val, lab, sub]) => `<div class="dash-meta-item"><span class="dash-meta-val">${val}</span><span class="dash-meta-label">${lab}</span>${sub ? `<span class="dash-meta-sub">${sub}</span>` : ''}</div>`).join('');
+    ].map(([val, lab, sub]) => `<div class="dash-meta-item"><span class="dash-meta-label">${lab}</span><span class="dash-meta-val">${val}</span>${sub ? `<span class="dash-meta-sub">${sub}</span>` : ''}</div>`).join('');
 
     if (meta.sources) {
       const n = Object.keys(meta.sources).filter(k => k.startsWith('bsi/components/') && k.endsWith('.json')).length;
-      const el = document.getElementById('stat-comp'); if (el && n > 0) el.textContent = n + '+';
+      const el = document.getElementById('stat-comp');
+      if (el && n > 0) el.textContent = n + '+';
     }
 
     const dkSlugs = new Set();
-    if (dki?.entries) Object.values(dki.entries).filter(e => e.type === 'docs' && e.id.startsWith('componenti-')).forEach(e => { const p = (e.title || '').split('/'); const s = (p[p.length - 1] || '').toLowerCase().trim().replace(/\s+/g, '-'); if (s) dkSlugs.add(s); });
+    if (dki?.entries) {
+      Object.values(dki.entries)
+        .filter(e => e.type === 'docs' && e.id.startsWith('componenti-'))
+        .forEach(e => {
+          const p = (e.title || '').split('/');
+          const s = (p[p.length - 1] || '').toLowerCase().trim().replace(/\s+/g, '-');
+          if (s) dkSlugs.add(s);
+        });
+    }
 
     allComps = (status.items || []).map(c => {
       const name = (c.title || '').replace(/`/g, '').replace(/\s*-\s*check\s+a11y.*$/i, '').trim();
@@ -185,21 +232,54 @@ async function loadDashboard() {
     populateGlSel();
 
     if (tokens && typeof tokens === 'object') {
-      populateTokenSel(Object.entries(tokens).flatMap(([slug, entries]) => (entries || []).map(e => ({ component: slug, name: e['variable-name'] || '', value: e.value || '', description: e.description || '' }))).filter(t => t.name));
+      populateTokenSel(
+        Object.entries(tokens)
+          .flatMap(([slug, entries]) => (entries || []).map(e => ({ component: slug, name: e['variable-name'] || '', value: e.value || '', description: e.description || '' })))
+          .filter(t => t.name)
+      );
     }
 
-    document.getElementById('dash-issues').innerHTML = REPOS.map(r => `<div class="issue-card"><p class="issue-repo">${r.label}</p><a href="https://github.com/${r.slug}/issues" target="_blank" rel="noopener" class="fw-semibold small">Issue aperte →</a></div>`).join('');
+    document.getElementById('dash-issues').innerHTML = REPOS.map(r =>
+      `<div class="issue-card"><p class="issue-repo">${r.label}</p><a href="https://github.com/${r.slug}/issues" target="_blank" rel="noopener" class="fw-semibold small">Issue aperte →</a></div>`
+    ).join('');
 
     document.getElementById('dash-loading').style.display = 'none';
     document.getElementById('dash-content').style.display = 'block';
 
-  } catch (err) {
-    console.log(err);
+  } catch {
+    document.getElementById('dash-loading').style.display = 'none';
+    document.getElementById('dash-error').style.display = 'block';
   }
 }
 
-/* stat hero */
-const st = document.getElementById('stat-tools'), ss = document.getElementById('stat-sources');
+/* Sticky nav brand — desktop only (matches CSS breakpoint) */
+const siteNav = document.querySelector('.site-nav');
+if (siteNav) {
+  const mq = window.matchMedia('(min-width: 768px)');
+  const hero = document.querySelector('.hero');
+  let observer = null;
+
+  function initObserver() {
+    if (mq.matches && !observer) {
+      observer = new IntersectionObserver(
+        ([e]) => siteNav.classList.toggle('is-sticky', !e.isIntersecting),
+        { threshold: 1, rootMargin: '-1px 0px 0px 0px' }
+      );
+      observer.observe(hero);
+    } else if (!mq.matches && observer) {
+      observer.disconnect();
+      observer = null;
+      siteNav.classList.remove('is-sticky');
+    }
+  }
+
+  initObserver();
+  mq.addEventListener('change', initObserver);
+}
+
+/* Init */
+const st = document.getElementById('stat-tools');
+const ss = document.getElementById('stat-sources');
 if (st) st.textContent = FILO_TOOLS;
 if (ss) ss.textContent = FILO_SOURCES;
 

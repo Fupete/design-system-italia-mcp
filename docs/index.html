@@ -15,16 +15,48 @@
 
   <a href="#main-content" class="visually-hidden-focusable">Vai al contenuto principale</a>
 
-  <!-- Topbar -->
-  <div class="py-3 bg-primary border-bottom text-center small text-white" role="note">
-    <strong>Filo è un progetto non ufficiale e sperimentale</strong>, usa Bootstrap Italia 3.x (alpha) e Dev
-    Kit Italia (alpha).
-    <a href="https://github.com/fupete/design-system-italia-mcp#readme" class="ms-md-3 text-white">LEGGI IL README</a>
+  <div class="it-header-slim-wrapper" role="note">
+    <div class="container-xxl">
+      <div class="row">
+        <div class="col-12">
+          <div class="it-header-slim-wrapper-content">
+            <span class="small text-white p-2" style="margin: 0 auto">
+              <strong>Progetto sperimentale</strong>: Bootstrap Italia v3 e Dev Kit Italia v1 sono
+              alpha — <a href="https://github.com/fupete/design-system-italia-mcp#readme" class="text-white">README</a>
+            </span>
+            <!--<div class="it-header-slim-right-zone">
+              <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <span class="visually-hidden">Selezione lingua: lingua selezionata</span>
+                  <span>ITA</span>
+                  <svg class="icon d-none d-lg-block">
+                    <use href="assets/vendor/bsi/svg/sprites.svg#it-expand"></use>
+                  </svg>
+                </a>
+                <div class="dropdown-menu">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="link-list-wrapper">
+                        <ul class="link-list">
+                          <li><a class="dropdown-item list-item" href="#"><span>ITA <span
+                                  class="visually-hidden">selezionata</span></span></a></li>
+                          <li><a class="dropdown-item list-item" href="#"><span>ENG</span></a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Header BSI -->
   <div class="it-header-wrapper">
-    <div class="it-header-center-wrapper it-small-header theme-light shadow-md">
+    <div class="it-header-center-wrapper it-small-header theme-light shadow-sm">
       <div class="container-xxl">
         <div class="row">
           <div class="col-12">
@@ -56,23 +88,29 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     HERO — dark
-     ═══════════════════════════════════════════════════════════════════════════ -->
+  <nav class="site-nav border-bottom shadow-md" aria-label="Navigazione sezioni">
+    <div class="site-nav-inner container-xxl">
+      <span class="site-nav-brand" aria-hidden="true">🧵 Filo</span>
+      <a href="#dashboard">Esplora i dati</a>
+      <a href="#installazione">Installa Filo</a>
+      <a href="#strumenti">Strumenti MCP</a>
+      <a href="#esempi">Esempi d'uso</a>
+      <a href="#system-prompt">System prompt</a>
+    </div>
+  </nav>
+
   <section class="hero" id="main-content" aria-labelledby="hero-title">
     <div class="container-xxl">
       <div class="row">
         <div class="col-12 col-lg-9">
-          <h1>🧵 Filo — MCP server sperimentale per il Design system .italia</h1>
+          <h1 id="hero-title">🧵 Filo — MCP server per il Design system .italia</h1>
           <p class="lead mb-2">
-            Che tu sia un designer, uno sviluppatore o una macchina: <em>non perdere il filo</em>.
-            Tutti i componenti, i design token e lo stato del design system a portata di API.
-            Un progetto sperimentale sviluppato anche litigando con qualche
-            LLM.
+            Un progetto sperimentale sviluppato anche litigando con qualche LLM
+          </p>
           </p>
           <div class="d-grid d-md-flex flex-wrap gap-3 pt-4">
-            <a href="#installazione" class="btn btn-primary btn-lg">Installa Filo</a>
             <a href="#dashboard" class="btn btn-outline-primary btn-lg">Esplora i dati</a>
+            <a href="#installazione" class="btn btn-primary btn-lg">Installa Filo</a>
             <a href="https://github.com/fupete/design-system-italia-mcp" class="btn btn-secondary btn-lg">GitHub</a>
             <a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp"
               class="btn btn-secondary btn-lg">npm</a>
@@ -96,47 +134,44 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     IL PROBLEMA
-     ═══════════════════════════════════════════════════════════════════════════ -->
   <section class="py-5" aria-labelledby="problema-title">
     <div class="container-xxl">
       <div class="row">
         <div class="col-12 col-lg-7">
-          <h2 id="problema-title" class="h2 mb-3">
-            Il tuo assistente LLM conosce i componenti del design system del Paese o se li inventa?
-          </h2>
+          <h2 id="problema-title" class="mb-3">Non perdere il Filo</h2>
           <p class="lead">
-            Filo recupera ogni notte markup Bootstrap Italia e web component Dev Kit Italia, CSS custom property per
-            component e tutti i design token con l'intera catena di risoluzione fino al valore effettivo, linee guida
-            d'uso e issue
-            dalle molte sorgenti ufficiali, li consolida ed espone via MCP come dati strutturati e verificati in formato
-            <code>json</code>.
+            Filo raccoglie ogni notte informazioni ufficiali su componenti, stili e linee guida d'uso, le organizza e le
+            rende disponibili come dati strutturati.</p>
+
+          <p>Markup di componenti Bootstrap Italia v3 (alpha) e web component Dev Kit Italia v1 (alpha) con le loro
+            props, CSS custom property e design token, lo
+            stato dei controlli sui componenti e le issue GitHub aperte a portata di assistente AI, designer e
+            sviluppatori.</p>
           </p>
         </div>
       </div>
-      <div class="row g-4 mt-3">
+      <div class="row g-4 mt-3 mb-5">
         <div class="col-12 col-md-4">
           <article class="it-card it-card-height-full border rounded">
             <h3 class="it-card-title"><a href="#installazione">Installa Filo</a></h3>
             <div class="it-card-body">
-              <p class="it-card-text">Usa NPX senza setup permanente. Docker per VPS e self-hosting</p>
+              <p class="it-card-text">NPX senza setup. Docker per VPS e self-hosting</p>
             </div>
           </article>
         </div>
         <div class="col-12 col-md-4">
           <article class="it-card it-card-height-full border rounded">
-            <h3 class="it-card-title"><a href="#configurazione">Configura gli assistenti</a></h3>
+            <h3 class="it-card-title"><a href="#configurazione">Configura Filo</a></h3>
             <div class="it-card-body">
-              <p class="it-card-text">Usa Claude Desktop, Cursor, VS Code, Claude Code — stdio o HTTP</p>
+              <p class="it-card-text">Claude Desktop, Cursor, VS Code, Claude Code, ...</p>
             </div>
           </article>
         </div>
         <div class="col-12 col-md-4">
           <article class="it-card it-card-height-full border rounded">
-            <h3 class="it-card-title"><a href="#system-prompt">Migliorane l'uso</a></h3>
+            <h3 class="it-card-title"><a href="#system-prompt">Migliora Filo</a></h3>
             <div class="it-card-body">
-              <p class="it-card-text">Usa un system prompt per migliorare l'adesione del modello ai soli dati MCP</p>
+              <p class="it-card-text">Usa un system prompt per cercare di migliorane l'uso</p>
             </div>
           </article>
         </div>
@@ -144,60 +179,50 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     DASHBOARD
-     ═══════════════════════════════════════════════════════════════════════════ -->
   <section id="dashboard" class="py-5 bg-primary text-white" aria-labelledby="dashboard-title">
     <div class="container-xxl">
       <h2 id="dashboard-title" class="mb-1">Esplora i dati</h2>
-      <p class="lead mb-2">Dati live dal ramo <code>data-fetched</code> del repository.</p>
-
-      <p class="mb-5">Ogni notte Filo fa il giro delle sorgenti e consolida tutti i dati utili nel ramo dedicato. Questa
-        dashboard permette di esplorarne una parte.</p>
+      <p class="lead mb-2">Dati aggiornati automaticamente, pronti da consultare</p>
+      <p class="mb-5">
+        Questa dashboard ti permette di esplorare una parte delle informazioni raccolte ogni notte da repository e
+        documentazione ufficiale, organizzate e salvate in formato <code>json</code> nel ramo <code>data-fetched</code>
+        come snapshot CI.
+      </p>
 
       <p id="dash-loading" class="data-empty">Caricamento dati…</p>
-      <div id="dash-error" class="alert alert-warning" style="display:none;" role="alert">
+      <div id="dash-error" class="alert alert-warning" style="display:none" role="alert">
         <svg class="alert-icon icon" aria-hidden="true">
           <use href="assets/vendor/bsi/svg/sprites.svg#it-warning-circle"></use>
         </svg>
         <p class="mb-0">Impossibile caricare i dati, riprova più tardi.</p>
       </div>
 
-      <div id="dash-content" style="display:none;">
+      <div id="dash-content" style="display:none">
+        <h3>Versioni</h3>
         <div id="dash-meta" class="dash-meta"></div>
 
-        <!-- Tab orizzontali BSI -->
-        <ul class="nav nav-tabs nav-tabs-cards mb-3" id="dash-tabs" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="dt-comp-tab" data-bs-toggle="tab" data-bs-target="#dt-comp"
-              type="button" role="tab" aria-controls="dt-comp" aria-selected="true">Componenti</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="dt-tok-tab" data-bs-toggle="tab" data-bs-target="#dt-tok" type="button"
-              role="tab" aria-controls="dt-tok" aria-selected="false">CSS custom props</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="dt-props-tab" data-bs-toggle="tab" data-bs-target="#dt-props" type="button"
-              role="tab" aria-controls="dt-props" aria-selected="false">Props Dev Kit</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="dt-gl-tab" data-bs-toggle="tab" data-bs-target="#dt-gl" type="button"
-              role="tab" aria-controls="dt-gl" aria-selected="false">Linee guida</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="dt-repo-tab" data-bs-toggle="tab" data-bs-target="#dt-repo" type="button"
-              role="tab" aria-controls="dt-repo" aria-selected="false">Repository</button>
-          </li>
+        <h3>Componenti</h3>
+        <ul class="nav nav-tabs nav-tabs-cards mb-3" role="tablist">
+          <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#dt-comp"
+              type="button" role="tab" aria-selected="true">Componenti</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dt-tok" type="button"
+              role="tab" aria-selected="false">CSS custom property</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dt-props" type="button"
+              role="tab" aria-selected="false">Props Dev Kit</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dt-gl" type="button"
+              role="tab" aria-selected="false">Linee guida d'uso</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dt-repo" type="button"
+              role="tab" aria-selected="false">Repository</button></li>
         </ul>
-        <div class="tab-content border-bottom rounded-bottom border-end rounded-start rounded-end border-start shadow-md mb-3" id="dash-tab-content">
+        <div class="tab-content border-bottom border-start border-end rounded-bottom shadow-md mb-3">
 
-          <!-- Componenti -->
-          <div class="tab-pane fade show active" id="dt-comp" role="tabpanel" aria-labelledby="dt-comp-tab">
+          <div class="tab-pane fade show active" id="dt-comp" role="tabpanel">
+            <p>Componenti Bootstrap Italia v3 e rispettivi web component Dev Kit Italia v1</p>
             <div class="d-flex gap-2 align-items-center mb-3 comp-filter">
               <span class="small text-muted">FILTRA:</span>
-              <button class="btn btn-sm btn-primary" onclick="filterComp(this,'all')">TUTTI <span id="f-all"
+              <button class="btn btn-xs btn-primary" onclick="filterComp(this,'all')">TUTTI <span id="f-all"
                   class="ms-1"></span></button>
-              <button class="btn btn-sm btn-outline-secondary" onclick="filterComp(this,'dk')">CON DEV KIT <span
+              <button class="btn btn-xs btn-outline-secondary" onclick="filterComp(this,'dk')">CON DEV KIT <span
                   id="f-dk" class="ms-1"></span></button>
             </div>
             <div class="dash-table-wrap">
@@ -205,25 +230,24 @@
                 <thead>
                   <tr>
                     <th scope="col">Componente</th>
-                    <th scope="col">BSI</th>
-                    <th scope="col">UI Kit</th>
-                    <th scope="col">Dev Kit</th>
+                    <th scope="col">Bootstrap Italia</th>
+                    <th scope="col">UI Kit Italia</th>
+                    <th scope="col">Dev Kit Italia</th>
                   </tr>
                 </thead>
                 <tbody id="dash-comp-body"></tbody>
               </table>
             </div>
-            <div class="mt-2">
-              <button id="dash-tog" class="btn btn-sm btn-outline-secondary" onclick="toggleComps()"
+            <div class="mt-2 text-center">
+              <button id="dash-tog" class="btn btn-xs btn-outline-secondary" onclick="toggleComps()"
                 style="display:none">
                 Mostra tutti <span id="dash-tog-n"></span>
               </button>
             </div>
           </div>
 
-          <!-- Token -->
-          <div class="tab-pane fade" id="dt-tok" role="tabpanel" aria-labelledby="dt-tok-tab">
-            <p class="mb-3">Variabili <code>--bsi-*</code> personalizzabili per componente.</p>
+          <div class="tab-pane fade" id="dt-tok" role="tabpanel">
+            <p class="mb-3">Variabili <code>--bsi-*</code> personalizzabili per componente</p>
             <div class="select-wrapper mb-4">
               <label for="tok-sel">Componente</label>
               <select id="tok-sel" onchange="showTokens(this.value)">
@@ -237,9 +261,7 @@
               <a href="#installazione" class="btn btn-primary btn-sm">Inizia →</a>
             </div>
             <div id="tok-ex" class="border rounded p-3 bg-white mt-2">
-              <p class="small text-muted fw-bold text-uppercase mb-2"
-                style="font-family:'Roboto Mono',monospace;font-size:.68rem;letter-spacing:.07em;">Esempio —
-                --bsi-accordion-padding</p>
+              <p class="chain-label">Esempio — --bsi-accordion-padding</p>
               <div class="chain">
                 <span class="chain-val">--bsi-accordion-padding</span>
                 <span class="chain-arr">→</span>
@@ -249,14 +271,12 @@
                 <span class="chain-arr">→</span>
                 <span class="chain-val resolved">1.5rem</span>
               </div>
-              <p class="small text-muted mt-2 mb-0" style="font-family:'Roboto Mono',monospace;font-size:.72rem;">
-                get_component_tokens("accordion")</p>
+              <p class="chain-tool">get_component_tokens("accordion")</p>
             </div>
           </div>
 
-          <!-- Props -->
-          <div class="tab-pane fade" id="dt-props" role="tabpanel" aria-labelledby="dt-props-tab">
-            <p class="mb-3">Attributi del web component <code>it-*</code>.</p>
+          <div class="tab-pane fade" id="dt-props" role="tabpanel">
+            <p class="mb-3">Attributi per web component <code>it-*</code></p>
             <div class="select-wrapper mb-4">
               <label for="props-sel">Componente</label>
               <select id="props-sel" onchange="showProps(this.value)">
@@ -266,9 +286,8 @@
             <div id="props-list" aria-live="polite"></div>
           </div>
 
-          <!-- Guidelines -->
-          <div class="tab-pane fade" id="dt-gl" role="tabpanel" aria-labelledby="dt-gl-tab">
-            <p class="mb-3">Quando e come usare ogni componente, da Designers Italia.</p>
+          <div class="tab-pane fade" id="dt-gl" role="tabpanel">
+            <p class="mb-3">Quando e come usare ogni componente, dalle schede di documentazione su Designers Italia</p>
             <div class="select-wrapper mb-4">
               <label for="gl-sel">Componente</label>
               <select id="gl-sel" onchange="showGl(this.value)">
@@ -278,46 +297,38 @@
             <div id="gl-content" aria-live="polite"></div>
           </div>
 
-          <!-- Repository -->
-          <div class="tab-pane fade" id="dt-repo" role="tabpanel" aria-labelledby="dt-repo-tab">
-            <p class="mb-3">I 4 repository del Design System .italia su GitHub.</p>
+          <div class="tab-pane fade" id="dt-repo" role="tabpanel">
+            <p class="mb-3">I repository su GitHub</p>
             <div id="dash-issues" class="issue-grid"></div>
           </div>
+
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     INSTALLAZIONE
-     ═══════════════════════════════════════════════════════════════════════════ -->
   <section id="installazione" class="py-5" aria-labelledby="install-title">
     <div class="container-xxl">
-      <h2 id="install-title" class="mb-1">Installazione</h2>
-      <p class="lead mb-4">NPX è il canale primario — nessuna installazione permanente. Docker per deploy stabili.</p>
-
-      <ul class="nav nav-tabs nav-tabs-cards mb-3" id="inst-tabs" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ti-npx" type="button" role="tab"
-            aria-selected="true">NPX <small class="ms-1 text-muted">(consigliato)</small></button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ti-docker" type="button" role="tab"
-            aria-selected="false">Docker</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ti-source" type="button" role="tab"
-            aria-selected="false">Da sorgente</button>
-        </li>
+      <h2 id="install-title" class="mb-1">Installa Filo</h2>
+      <p class="lead mb-4"><strong>npx</strong> è lo strumento suggerito, nessuna installazione permanente.
+        <strong>Docker</strong> per deploy stabili
+      </p>
+      <ul class="nav nav-tabs nav-tabs-cards mb-3" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ti-npx" type="button"
+            role="tab" aria-selected="true">NPX <small class="ms-1 text-muted">(consigliato)</small></button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#ti-docker" type="button"
+            role="tab" aria-selected="false">Docker</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#ti-source" type="button"
+            role="tab" aria-selected="false">Da sorgente</button></li>
       </ul>
-      <div class="tab-content border-bottom border-start border-end rounded-start rounded-end border-start shadow-md">
+      <div class="tab-content border-bottom border-start border-end rounded-bottom shadow-md">
         <div class="tab-pane fade show active" id="ti-npx" role="tabpanel">
           <div class="pre-wrap">
             <pre><code>npx @fupete/design-system-italia-mcp</code></pre><button class="copy-btn"
               onclick="copyCode(this)">copia</button>
           </div>
-          <p class="small text-muted mt-2">Su macOS con nvm: <code>nvm use 22 &amp;&amp; which npx</code> per il path
-            esplicito.</p>
+          <p class="text-muted mt-3">Su macOS con nvm: <code>nvm use 22 &amp;&amp; which npx</code> per il path
+            esplicito</p>
         </div>
         <div class="tab-pane fade" id="ti-docker" role="tabpanel">
           <div class="pre-wrap">
@@ -335,19 +346,19 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
           </div>
         </div>
       </div>
-      <p class="small text-muted mt-3"><strong>GITHUB_TOKEN</strong> opzionale — per <code>get_component_issues</code>.
-        Senza: 60 req/ora. Con token read-only: 5000/ora.</p>
+      <p class="text-muted mt-4"><strong>GITHUB_TOKEN</strong> opzionale per <code>get_component_issues</code>.
+        Senza: 60 richieste/ora. Con token read-only: 5000/ora.</p>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     STRUMENTI
-     ═══════════════════════════════════════════════════════════════════════════ -->
   <section id="strumenti" class="py-5 lightgrey-bg-b1" aria-labelledby="strumenti-title">
     <div class="container-xxl">
-      <h2 id="strumenti-title" class="mb-1">13 strumenti MCP</h2>
-      <p class="lead mb-4">Pipeline: discovery → specifico → aggregazione. Ogni risposta include versioni verificate e
-        URL documentazione.</p>
+      <h2 id="strumenti-title" class="mb-1">Strumenti MCP</h2>
+      <p class="lead mb-4">
+        Dalla scoperta all’analisi: strumenti che guidano passo dopo passo e restituiscono risposte verificate con link
+        alla documentazione
+      </p>
+      <p>13 strumenti già disponibili, con altri in arrivo</p>
       <div class="row g-4">
         <div class="col-6 col-md-3">
           <h3>Esplora</h3>
@@ -386,12 +397,9 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     ESEMPI
-     ═══════════════════════════════════════════════════════════════════════════ -->
   <section id="esempi" class="py-5" aria-labelledby="esempi-title">
     <div class="container-xxl">
-      <p class="text-uppercase fw-bold small text-primary mb-2" style="letter-spacing:.08em;">Casi d'uso</p>
+      <p class="eyebrow">Casi d'uso</p>
       <h2 id="esempi-title" class="mb-4">Esempi</h2>
       <div class="row">
         <div class="col-12 col-lg-8">
@@ -420,32 +428,20 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     SYSTEM PROMPT
-     ═══════════════════════════════════════════════════════════════════════════ -->
   <section id="system-prompt" class="py-5 lightgrey-bg-b1" aria-labelledby="prompt-title">
     <div class="container-xxl">
       <h2 id="prompt-title" class="mb-1">System prompt</h2>
       <p class="lead mb-4">I modelli mescolano dati MCP e conoscenza pregressa senza segnalarlo. Questo prompt aiuta a
-        fissare il
-        confine e diminuire gli errori, sempre presenti by default.</p>
-
-      <ul class="nav nav-tabs nav-tabs-cards mb-3" id="sp-tabs" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sp-it" type="button" role="tab"
-            aria-selected="true">Italiano</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#sp-en" type="button" role="tab"
-            aria-selected="false">English</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#sp-matrix" type="button" role="tab"
-            aria-selected="false">Client supportati</button>
-        </li>
+        fissare il confine e diminuire gli errori, sempre presenti by default.</p>
+      <ul class="nav nav-tabs nav-tabs-cards mb-3" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sp-it" type="button"
+            role="tab" aria-selected="true">Italiano</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sp-en" type="button"
+            role="tab" aria-selected="false">English</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sp-matrix" type="button"
+            role="tab" aria-selected="false">Client supportati</button></li>
       </ul>
-      <div class="tab-content border-start border-end border-bottom rounded-start rounded-end border-start shadow-md">
-
+      <div class="tab-content border-start border-end border-bottom rounded-bottom shadow-md">
         <div class="tab-pane fade show active" id="sp-it" role="tabpanel">
           <div class="pre-wrap">
             <pre
@@ -467,7 +463,6 @@ COMPLETEZZA DATI: se un tool restituisce un sottoinsieme dei dati (es. 3 variant
             <button class="copy-btn" onclick="copyCode(this)">copia</button>
           </div>
         </div>
-
         <div class="tab-pane fade" id="sp-en" role="tabpanel">
           <div class="pre-wrap">
             <pre
@@ -489,7 +484,6 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             <button class="copy-btn" onclick="copyCode(this)">copia</button>
           </div>
         </div>
-
         <div class="tab-pane fade" id="sp-matrix" role="tabpanel">
           <p class="mb-3 text-muted">Il system prompt va configurato nel client, non nel server.</p>
           <table class="table table-bordered">
@@ -529,17 +523,13 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     CONFIGURAZIONE
-     ═══════════════════════════════════════════════════════════════════════════ -->
   <section id="configurazione" class="py-5" aria-labelledby="config-title">
     <div class="container-xxl">
-      <p class="text-uppercase fw-bold small text-primary mb-2" style="letter-spacing:.08em;">Client MCP</p>
+      <p class="eyebrow">Client MCP</p>
       <h2 id="config-title" class="mb-4">Configurazione</h2>
       <div class="accordion" id="acc-config">
         <div class="accordion-item">
@@ -629,28 +619,21 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     NOTE TECNICHE — dark
-     ═══════════════════════════════════════════════════════════════════════════ -->
   <section id="note-tecniche" class="section-dark bg-primary py-5" aria-labelledby="note-title">
     <div class="container-xxl">
-      <h2 id="note-title" class="mb-4">Note tecniche sul'architettura</h2>
+      <h2 id="note-title" class="mb-4">Note tecniche sull'architettura</h2>
       <div class="row g-4">
         <div class="col-12 col-md-6">
           <h3 class="h5">Snapshot nightly, issue live</h3>
-          <p>Bootstrap Italia, Dev Kit Italia, Design Tokens Italia e documentazione dei componenti dal sito Designers
-            Italia consolidati, strutturati e serviti dal branch
-            <code>data-fetched</code> informato `json`, aggiornato ogni notte, cache 24 ore. GitHub Issues live con
-            cache 15 min.
-          </p>
+          <p>Bootstrap Italia, Dev Kit Italia, Design Tokens Italia e documentazione Designers Italia consolidati e
+            serviti dal branch <code>data-fetched</code> in formato <code>json</code>, aggiornato ogni notte, cache 24
+            ore. GitHub Issues live con cache 15 min.</p>
         </div>
         <div class="col-12 col-md-6">
           <h3 class="h5">Catena di risoluzione CSS custom property e design token</h3>
-          <p><code>--bsi-accordion-padding</code> (CSS custom property del componente Accordion) →
-            <code>var(--bsi-spacing-m)</code> →
-            <code>var(--it-spacing-m) (Design Tokens Italia)</code> → <code>1.5rem</code>. Filo risolve l'intera catena
-            e restituisce via MCP il valore (<code>valueResolved</code>).
-          </p>
+          <p><code>--bsi-accordion-padding</code> → <code>var(--bsi-spacing-m)</code> → <code>var(--it-spacing-m)</code>
+            (Design Tokens Italia) → <code>1.5rem</code>. Filo risolve l'intera catena e restituisce via MCP il valore
+            (<code>valueResolved</code>).</p>
         </div>
         <div class="col-12 col-md-6">
           <h3 class="h5">Troncamento varianti</h3>
@@ -660,33 +643,27 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
         </div>
         <div class="col-12 col-md-6">
           <h3 class="h5">Trasporto stdio e HTTP</h3>
-          <p>Stdio per NPX locale, HTTP per deploy remoto Docker. Selezionabile via env
-            <code>TRANSPORT</code>.
-          </p>
+          <p>Stdio per NPX locale, HTTP per deploy remoto Docker. Selezionabile via env <code>TRANSPORT</code>.</p>
         </div>
       </div>
-      <div class="alert alert-warning mt-4" role="note">
-        <svg class="alert-icon icon" aria-hidden="true">
-          <use href="assets/vendor/bsi/svg/sprites.svg#it-warning-circle"></use>
-        </svg>
-        <p class="mb-0"><strong>Attenzione:</strong> Bootstrap Italia v3 e Dev Kit Italia v1 sono in alpha. Token
-          <code>--bsi-*</code> <code>--it-*</code> e web component <code>it-*</code> possono cambiare prima della
-          release stabile.
-        </p>
+      <div class="mt-4">
+        <it-callout variant="warning" heading-level="h3">
+          <it-icon slot="icon" size="md" name="it-warning-circle"></it-icon>
+          <span slot="title">Attenzione</span>
+          Bootstrap Italia v3 e Dev Kit Italia v1 sono in alpha. Token <code>--bsi-*</code> <code>--it-*</code> e web
+          component <code>it-*</code> possono cambiare prima della release stabile.
+        </it-callout>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════════
-     FOOTER
-     ═══════════════════════════════════════════════════════════════════════════ -->
   <footer class="site-footer bg-dark" role="contentinfo" aria-labelledby="footer-title">
     <div class="container-xxl">
       <div class="row g-4 mb-2">
         <div class="col-12 col-md-5">
           <h2 id="footer-title" class="fw-bold mb-2">🧵 Filo</h2>
           <p>Server MCP sperimentale per il Design System .italia. Progetto personale non ufficiale di <a
-              href="https://github.com/fupete">Daniele Tabellini (@Fupete)</a></p>
+              href="https://github.com/fupete">Daniele Tabellini (@Fupete)</a>.</p>
           <p><a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue benvenute</a></p>
         </div>
         <div class="col-6 col-md-3 offset-md-1">
@@ -711,9 +688,9 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
         </div>
       </div>
       <div class="footer-bottom" aria-labelledby="footer-bottom-title">
-        <h2 id="footer-bottom-title" class="visually-hidden">Crediti e license</h2>
+        <h2 id="footer-bottom-title" class="visually-hidden">Crediti e licenze</h2>
         <span>© 2026 Daniele Tabellini (@Fupete)</span>
-        <div style="display:flex;gap:1.5rem;">
+        <div class="footer-licenses">
           <a href="https://github.com/fupete/design-system-italia-mcp/blob/main/LICENSE">BSD-3-Clause</a>
           <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 (Designers Italia)</a>
         </div>
@@ -721,7 +698,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
     </div>
   </footer>
 
-  <a href="#" id="back-to-top" aria-label="Torna in cima">↑ top</a>
+  <it-back-to-top it-aria-label="Torna su"></it-back-to-top>
 
   <script src="assets/js/site.js"></script>
   <script src="assets/vendor/bsi/js/bootstrap-italia.bundle.min.js"></script>
