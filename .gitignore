@@ -4,3 +4,4 @@ data-fetched/
 .env
 *.js.map
 .DS_Store
+docs/assets/vendor/
