@@ -99,6 +99,7 @@ async function fetchText(url: string): Promise<string> {
         signal: AbortSignal.timeout(15_000),
         headers: {
             'User-Agent': 'design-system-italia-mcp/snapshot',
+            'Cache-Control': 'no-cache',
             ...(process.env.GITHUB_TOKEN
                 ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
                 : {}),
