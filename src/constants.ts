@@ -24,7 +24,7 @@ export const ALPHA_WARNING =
 export const BSI_BRANCH = '3.x'
 
 /**
- * Branch containing updated API markup for BSI 3.x.
+ * Branch containing updated API markup and custom properties for BSI 3.x.
  * Using feature/update-examples-api-v3 until it merges into 3.x.
  * TODO: switch back to BSI_BRANCH when feature/update-examples-api-v3 is merged into 3.x
  */
@@ -42,7 +42,7 @@ export const BSI_STATUS_URL =
 
 /** Per-component CSS tokens --bsi-* with semantic descriptions ⚠️ alpha */
 export const BSI_CUSTOM_PROPERTIES_URL =
-  `${BSI_RAW_BASE}/api/custom_properties.json`
+  `${BSI_API_MARKUP_BASE}/api/custom_properties.json`
 
 
 /** HTML markup variants per component — subfolder varies by category */
