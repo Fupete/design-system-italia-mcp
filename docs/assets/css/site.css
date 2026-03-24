@@ -13,7 +13,7 @@ a:hover {
 }
 
 .accordion-button {
-  color: var(--bsi-secondary)!important;
+  color: var(--bsi-secondary) !important;
 }
 
 /* Hero */
@@ -100,13 +100,13 @@ pre {
   border-radius: 6px;
   overflow-x: auto;
   font-family: 'Roboto Mono', monospace;
-  font-size: 1rem;
+  font-size: .85rem;
   line-height: 1.7;
   margin: .75rem 0;
 }
 
 pre.pre-prompt {
-  max-height: 240px;
+  max-height: 120px;
   overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-word;
@@ -483,7 +483,6 @@ ul.nav-tabs button.nav-link.active {
 /* Footer */
 .site-footer {
   padding: 3.5rem 0 2rem;
-  font-size: .85rem;
   color: rgba(255, 255, 255, .75);
 }
 
@@ -532,8 +531,10 @@ ul.nav-tabs button.nav-link.active {
 
 
 /* Readability */
-p {
-  max-width: 70ch;
+p,
+li {
+  max-width: 75ch;
+  word-break: break-all;
 }
 
 /* BSI overrides */
