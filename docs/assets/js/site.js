@@ -11,7 +11,6 @@ function copyCode(btn) {
 }
 
 /* Dashboard */
-const FILO_TOOLS = 13;
 const FILO_SOURCES = 9;
 const RAW = 'https://raw.githubusercontent.com/Fupete/design-system-italia-mcp/data-fetched';
 const REPOS = [
@@ -105,7 +104,7 @@ function showTokens(comp) {
   ex.hidden = true;
 }
 
-/* Dev Kit props - UPDATE ON NEW COMPONENTS in https://github.com/Fupete/design-system-italia-mcp/tree/data-fetched/devkit/props (now 31) */
+/* Dev Kit props — update slug list when new components added to data-fetched/devkit/props/ */
 const PROPS_SLUGS = ['accordion', 'avatar', 'back-to-top', 'breadcrumbs', 'button', 'callout', 'card', 'carousel', 'chip', 'collapse', 'dropdown', 'form-autocomplete', 'form-checkbox', 'form-datepicker', 'form-input', 'form-number-input', 'form-radio-button', 'form-select', 'form-timepicker', 'hero', 'icon', 'megamenu', 'modal', 'navscroll', 'pagination', 'popover', 'rating', 'section', 'skiplinks', 'sticky', 'video-player'];
 
 function populatePropsSel() {
@@ -121,8 +120,7 @@ function populatePropsSel() {
 async function showProps(slug) {
   const el = document.getElementById('props-list');
   const cta = document.getElementById('props-cta');
-  if (!slug) { el.innerHTML = ''; cta.hidden = true; }
-  if (!slug) { el.innerHTML = ''; return; }
+  if (!slug) { el.innerHTML = ''; cta.hidden = true; return; }
   el.innerHTML = '<p class="data-empty">caricamento…</p>';
   try {
     const s = await j(`${RAW}/devkit/props/${slug}.json`);
@@ -213,12 +211,6 @@ async function loadDashboard() {
       [fa, 'Snapshot CI', fr],
     ].map(([val, lab, sub]) => `<div class="dash-meta-item"><span class="dash-meta-label">${lab}</span><span class="dash-meta-val">${val}</span>${sub ? `<span class="dash-meta-sub">${sub}</span>` : ''}</div>`).join('');
 
-    if (meta.sources) {
-      const n = Object.keys(meta.sources).filter(k => k.startsWith('bsi/components/') && k.endsWith('.json')).length;
-      const el = document.getElementById('stat-comp');
-      if (el && n > 0) el.textContent = n + '+';
-    }
-
     const dkSlugs = new Set();
     if (dki?.entries) {
       Object.values(dki.entries)
@@ -262,33 +254,15 @@ async function loadDashboard() {
   }
 }
 
-/* Sticky nav brand — desktop only (matches CSS breakpoint) */
+/* Sticky nav — show brand label when header scrolls out of view */
 const siteNav = document.querySelector('.site-nav');
 if (siteNav) {
   const hero = document.querySelector('.it-header-wrapper');
-  let observer = null;
-
-  function initObserver() {
-    if (!observer) {
-      observer = new IntersectionObserver(
-        ([e]) => siteNav.classList.toggle('is-sticky', !e.isIntersecting),
-        { threshold: 1, rootMargin: '-1px 0px 0px 0px' }
-      );
-      observer.observe(hero);
-    } else if (observer) {
-      observer.disconnect();
-      observer = null;
-      siteNav.classList.remove('is-sticky');
-    }
-  }
-
-  initObserver();
+  const observer = new IntersectionObserver(
+    ([e]) => siteNav.classList.toggle('is-sticky', !e.isIntersecting),
+    { threshold: 1, rootMargin: '-1px 0px 0px 0px' }
+  );
+  observer.observe(hero);
 }
-
-/* Init */
-const st = document.getElementById('stat-tools');
-const ss = document.getElementById('stat-sources');
-if (st) st.textContent = FILO_TOOLS;
-if (ss) ss.textContent = FILO_SOURCES;
 
 loadDashboard();

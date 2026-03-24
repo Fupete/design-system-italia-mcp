@@ -134,8 +134,8 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
         Senza: 60 richieste/ora per IP. Con token scopo pubblico read-only: 5000/ora.
       </p>
 
-      <div class="mb-3 mt-5">
-        <h3 class="mb-4">Client</h3>
+      <div class="mb-3 mt-3">
+        <h3 class="mb-4 h5">Client</h3>
         <div class="accordion" id="acc-config">
           <div class="accordion-item">
             <h3 class="accordion-header" id="h-cd">
@@ -225,7 +225,7 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
       </div>
 
       <div class="mb-3 mt-5">
-        <h3 id="prompt-title" class="mb-3">System prompt</h3>
+        <h3 id="prompt-title" class="mb-3 h5">System prompt</h3>
         <ul class="nav nav-tabs nav-tabs-cards mb-3" role="tablist">
           <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sp-it"
               type="button" role="tab" aria-selected="true">Italiano</button></li>
@@ -277,6 +277,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
           </div>
         </div>
       </div>
+    </div>
   </section>
 
   <section id="strumenti" class="py-5 lightgrey-bg-b1" aria-labelledby="strumenti-title">
@@ -284,7 +285,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
       <h2 id="strumenti-title" class="mb-2">Strumenti</h2>
       <div class="row g-4">
         <div class="col-12 col-sm-6 col-md-3">
-          <h3>Scopri</h3>
+          <h3 class="h5">Scopri</h3>
           <ul class="tool-names">
             <li>list_components</li>
             <li>search_components</li>
@@ -293,7 +294,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
-          <h3>Componenti</h3>
+          <h3 class="h5">Componenti</h3>
           <ul class="tool-names">
             <li>get_component</li>
             <li>get_component_variant</li>
@@ -303,14 +304,14 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
-          <h3>Token</h3>
+          <h3 class="h5">Token</h3>
           <ul class="tool-names">
             <li>get_component_tokens</li>
             <li>find_token</li>
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
-          <h3>Meta</h3>
+          <h3 class="h5">Meta</h3>
           <ul class="tool-names">
             <li>ping</li>
             <li>get_project_board_status</li>
@@ -325,7 +326,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
       <h2 id="dashboard-title" class="mb-3">Dati</h2>
 
       <p id="dash-loading" class="data-empty">Caricamento...</p>
-      <div id="dash-error" class="alert alert-warning" style="display:none" role="alert">c
+      <div id="dash-error" class="alert alert-warning" style="display:none" role="alert">
         <svg class="alert-icon icon" aria-hidden="true">
           <use href="assets/vendor/bsi/svg/sprites.svg#it-warning-circle"></use>
         </svg>
@@ -417,8 +418,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             </div>
             <div id="props-list" aria-live="polite"></div>
             <div id="props-cta" class="alert alert-info mt-3" hidden>
-              <p class="mb-2">Con Filo attivo il modello identificherebbe anche gli eventuali sotto-componenti con le
-                loro props.</p>
+              <p class="mb-2">Con Filo attivo il modello identifica eventuali sotto-componenti e loro props.</p>
               <a href="#installazione" class="btn btn-secondary btn-sm">Inizia →</a>
             </div>
           </div>
@@ -455,8 +455,8 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             <li><a href="https://github.com/fupete/design-system-italia-mcp">GitHub</a></li>
           </ul>
           <div class="pt-3">
-            <p class="small mb-0" style="max-width: 45ch"> Filo è un progetto sperimentale sviluppato anche litigando con qualche LLM. <a
-                href="https://github.com/fupete/design-system-italia-mcp/issues">Issue</a>
+            <p class="small mb-0" style="max-width: 45ch">Filo è un progetto sperimentale sviluppato anche litigando con
+              qualche LLM. <a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue</a>
               benvenute.</p>
           </div>
         </div>
@@ -464,7 +464,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
       <div class="pb-5" aria-labelledby="footer-bottom-title">
         <h2 id="footer-bottom-title" class="visually-hidden">Crediti e licenze</h2>
         <div class="footer-bottom">
-          <div class="">
+          <div>
             <span>© 2026 <a href="https://github.com/fupete">Fupete - Daniele T.</a></span>
           </div>
           <div class="footer-licenses">
@@ -474,15 +474,14 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
         </div>
       </div>
     </div>
+  </footer>
 
-    </div>
-    </section>
+  <it-back-to-top it-aria-label="Torna su"></it-back-to-top>
 
-    <it-back-to-top it-aria-label="Torna su"></it-back-to-top>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/vendor/bsi/js/bootstrap-italia.bundle.min.js"></script>
+  <script type="module" src="assets/vendor/devkit/elements.js"></script>
 
-    <script src="assets/js/site.js"></script>
-    <script src="assets/vendor/bsi/js/bootstrap-italia.bundle.min.js"></script>
-    <script type="module" src="assets/vendor/devkit/elements.js"></script>
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-/* docs/assets/css/site.css — minimal override, BSI does the heavy lifting */
+/* site.css — Filo */
 
 :root {
   --filo-dark: #0B2540;
@@ -28,71 +28,7 @@ a:hover {
   line-height: 1;
 }
 
-/* Hero stat strip */
-.hero-stats {
-  border-top: 1px solid rgba(0, 0, 0, .15);
-  margin-top: 3.5rem;
-  padding-top: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.hero-stat {
-  padding: .5rem 2.5rem .5rem 0;
-  margin-right: 2.5rem;
-  border-right: 1px solid rgba(0, 0, 0, .15);
-}
-
-.hero-stat:last-child {
-  border-right: none;
-  margin-right: 0;
-}
-
-.hero-stat-val {
-  display: block;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.hero-stat-label {
-  display: block;
-  font-size: .85rem;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  margin-bottom: .3rem;
-}
-
-@media (max-width: 576px) {
-  .hero-stat {
-    border-right: none;
-    padding-right: 1.5rem;
-    margin-right: 1.5rem;
-    border-bottom: 1px solid rgba(0, 0, 0, .1);
-  }
-
-  .hero-stat:last-child {
-    border-bottom: none;
-  }
-}
-
-/* Dark sections */
-.section-dark {
-  color: #fff;
-}
-
-.section-dark h2,
-.section-dark h3,
-.section-dark h4 {
-  color: #fff;
-}
-
-.section-dark .text-muted {
-  color: rgba(255, 255, 255, .6) !important;
-}
-
-/* Code block */
+/* Code blocks */
 pre {
   background: #0d1117;
   color: #c9d1d9;
@@ -161,22 +97,13 @@ pre code {
 
 .tool-names li {
   font-family: 'Roboto Mono', monospace;
-  font-size: 1rem;
+  font-size: .85rem;
   padding: .2rem 0;
 }
 
 .tool-names li::before {
   content: '— ';
   opacity: .4;
-}
-
-/* Examples — chip tool labels in card footer */
-.it-card-footer .chip {
-  font-family: 'Roboto Mono', monospace;
-}
-
-.it-card-footer .chip-label {
-  font-size: .85rem;
 }
 
 /* Dashboard version strip */
@@ -370,7 +297,7 @@ ul.nav-tabs button.nav-link.active {
   }
 }
 
-/* Token resolution chain */
+/* Token resolution chain example */
 .chain {
   display: flex;
   flex-wrap: wrap;
@@ -419,13 +346,6 @@ ul.nav-tabs button.nav-link.active {
 }
 
 /* Guidelines */
-.gl-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .3rem;
-  margin-bottom: .6rem;
-}
-
 .gl-tag {
   font-family: 'Roboto Mono', monospace;
   font-size: .65rem;
@@ -529,7 +449,6 @@ ul.nav-tabs button.nav-link.active {
   gap: 1.5rem;
 }
 
-
 /* Readability */
 p,
 li {
@@ -539,6 +458,7 @@ li {
 
 /* BSI overrides */
 
+/* Workaround BSI 3.x #1726 — it-card-text incorrect font-size */
 ul.it-card-list li .it-card-text {
   font-size: 1rem !important;
 }
@@ -547,7 +467,7 @@ ul.it-card-list li .it-card-text {
   padding-left: 0;
 }
 
-/* workaround BSI 3.x #1726 */
+/* Workaround BSI 3.x #1726 — alert-warning on .bg-secondary */
 .bg-secondary .alert-warning {
   background-color: #fff3cd;
   color: #664d03;
@@ -609,10 +529,6 @@ ul.it-card-list li .it-card-text {
 
 .site-nav a:hover {
   border-bottom-color: var(--bsi-secondary);
-}
-
-it-callout::part(inner) {
-  background-color: white;
 }
 
 it-back-to-top::part(button) {
