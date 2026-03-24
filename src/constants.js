@@ -22,7 +22,7 @@ exports.ALPHA_WARNING = 'Bootstrap Italia 3.x and Dev Kit Italia are in alpha. '
 /** Active branch with structured token APIs — not present in 2.x */
 exports.BSI_BRANCH = '3.x';
 /**
- * Branch containing updated API markup for BSI 3.x.
+ * Branch containing updated API markup and custom properties for BSI 3.x.
  * Using feature/update-examples-api-v3 until it merges into 3.x.
  * TODO: switch back to BSI_BRANCH when feature/update-examples-api-v3 is merged into 3.x
  */
@@ -32,7 +32,7 @@ var BSI_API_MARKUP_BASE = "https://raw.githubusercontent.com/italia/bootstrap-it
 /** List of ~55 components with status, accessibility, known issues */
 exports.BSI_STATUS_URL = "".concat(BSI_RAW_BASE, "/api/components_status.json");
 /** Per-component CSS tokens --bsi-* with semantic descriptions ⚠️ alpha */
-exports.BSI_CUSTOM_PROPERTIES_URL = "".concat(BSI_RAW_BASE, "/api/custom_properties.json");
+export const BSI_CUSTOM_PROPERTIES_URL = `${BSI_API_MARKUP_BASE}/api/custom_properties.json`;
 /** HTML markup variants per component — subfolder varies by category */
 var BSI_COMPONENT_URL = function (subfolder, slug) {
     return "".concat(BSI_API_MARKUP_BASE, "/api/").concat(subfolder, "/").concat(slug, ".json");
