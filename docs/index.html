@@ -15,12 +15,12 @@
 
   <a href="#main-content" class="visually-hidden-focusable">Vai al contenuto principale</a>
 
-  <div class="it-header-slim-wrapper bg-secondary" role="note">
+  <div class="it-header-slim-wrapper bg-danger" role="note">
     <div class="container-xxl">
       <div class="row">
         <div class="col-12">
           <div class="it-header-slim-wrapper-content">
-            <span class="small text-white p-3" style="margin: 0 auto">
+            <span class="text-white p-3" style="margin: 0 auto">
               <strong>Progetto sperimentale non ufficiale</strong>: Bootstrap Italia v3 e Dev Kit Italia v1 sono
               alpha — <a href="https://github.com/fupete/design-system-italia-mcp#readme" class="text-white">README</a>
             </span>
@@ -31,7 +31,7 @@
   </div>
 
   <div class="it-header-wrapper">
-    <div class="it-header-center-wrapper it-small-header theme-light shadow-sm">
+    <div class="it-header-center-wrapper it-small-header bg-dark">
       <div class="container-xxl">
         <div class="row">
           <div class="col-12">
@@ -39,7 +39,7 @@
               <div class="it-brand-wrapper">
                 <a href="#">
                   <div class="it-brand-text">
-                    <div class="it-brand-title text-secondary">🧵 Filo </div>
+                    <div class="it-brand-title">🧵 Filo </div>
                   </div>
                 </a>
               </div>
@@ -48,7 +48,7 @@
                   <ul>
                     <li><a class="small" href="https://github.com/fupete/design-system-italia-mcp" aria-label="GitHub"
                         target="_blank" rel="noopener">
-                        <svg class="icon" aria-hidden="true" style="fill: var(--bsi-icon-secondary);">
+                        <svg class="icon" aria-hidden="true">
                           <use href="assets/vendor/bsi/svg/sprites.svg#it-github"></use>
                         </svg>
                       </a></li>
@@ -62,22 +62,23 @@
     </div>
   </div>
 
-  <nav class="site-nav border-bottom shadow-sm" aria-label="Navigazione sezioni">
+  <nav class="site-nav bg-dark shadow-lg" aria-label="Navigazione sezioni">
     <div class="site-nav-inner container-xxl">
-      <span class="site-nav-brand" aria-hidden="true">🧵 Filo</span>
-      <a href="#installazione">Installa</a>
-      <a href="#strumenti">Strumenti</a>
-      <a href="#dashboard">Dati</a>
+      <span class="site-nav-brand text-white" aria-hidden="true">🧵 Filo</span>
+      <a class="text-white" href="#installazione">Installa</a>
+      <a class="text-white" href="#strumenti">Strumenti</a>
+      <a class="text-white" href="#dashboard">Dati</a>
     </div>
   </nav>
 
-  <section class="hero lightgrey-bg-b1 border-bottom" id="main-content" aria-labelledby="hero-title">
+  <section class="hero bg-dark text-white" id="main-content" aria-labelledby="hero-title">
     <div class="container-xxl">
       <div class="row">
         <div class="col-12 col-lg-9">
           <h1 id="hero-title">🧵 Filo</h1>
           <p class="lead">MCP server sperimentale per il Design system .italia </p>
-               <p style="max-width: 55ch;"><strong>⚠️ Progetto personale non ufficiale e sperimentale</strong>. I dati sono forniti così come sono e potrebbero essere incompleti o non aggiornati. Utilizzare a proprio rischio. </p>
+          <p style="max-width: 55ch;"><strong>⚠️ Progetto personale non ufficiale e sperimentale</strong>. I dati sono
+            forniti così come sono e potrebbero essere incompleti o non aggiornati. Utilizzare a proprio rischio. </p>
           <div class="d-grid d-md-flex flex-wrap gap-3 pt-4" style="align-items: end">
             <a href="#installazione" class="btn btn-secondary btn-lg">Installa</a>
             <a href="#dashboard" class="btn btn-outline-secondary btn-lg">Dati</a>
@@ -91,7 +92,11 @@
             </div>
           </div>
         </div>
-        <a class="mt-4" href="https://github.com/Fupete/design-system-italia-mcp/releases">Changelog</a>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12 col-lg-9">
+          <a class="text-white" href="https://github.com/Fupete/design-system-italia-mcp/releases">Changelog</a>
+        </div>
       </div>
     </div>
   </section>
@@ -414,7 +419,8 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
 
           <div class="tab-pane fade px-2 px-sm-0" id="dt-dti" role="tabpanel">
             <div class="dti-toolbar mb-3">
-              <input id="dti-search" type="search" class="form-control form-control-sm" placeholder="Cerca token…"
+              <label for="dti-search mb-0">Cerca</label>
+              <input id="dti-search" type="search" class="form-control" placeholder="— scrivi —"
                 oninput="filterTokens(this.value)">
               <div class="dti-cats" id="dti-cats" role="group" aria-label="Filtra per categoria"></div>
             </div>
@@ -494,8 +500,11 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             <span>© 2026 <a href="https://github.com/fupete">Fupete - Daniele T.</a></span>
           </div>
           <div class="footer-licenses">
-            <a href="https://github.com/Fupete/design-system-italia-mcp?tab=readme-ov-file#licenza--license">BSD-3-Clause</a>
-            <a href="https://github.com/Fupete/design-system-italia-mcp?tab=readme-ov-file#provenienza-dei-dati-e-licenze--data-provenance--licenses">Provenienza dei dati e licenze</a>
+            <a
+              href="https://github.com/Fupete/design-system-italia-mcp?tab=readme-ov-file#licenza--license">BSD-3-Clause</a>
+            <a
+              href="https://github.com/Fupete/design-system-italia-mcp?tab=readme-ov-file#provenienza-dei-dati-e-licenze--data-provenance--licenses">Provenienza
+              dei dati e licenze</a>
           </div>
         </div>
       </div>
