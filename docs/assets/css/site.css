@@ -202,13 +202,13 @@ ul.nav-tabs button.nav-link.active {
 /* Components table */
 .dash-table-wrap {
   overflow-x: auto;
+  width: 100%;
+  display: block;
   color: black;
 }
 
 #dash-comp-table {
   width: 100%;
-  display: block;
-  overflow-x: auto;
   border-collapse: collapse;
 }
 
@@ -241,8 +241,6 @@ ul.nav-tabs button.nav-link.active {
 /* Token + Props tables */
 .tok-table {
   width: 100%;
-  display: block;
-  overflow-x: auto;
   border-collapse: collapse;
   font-size: .9rem;
 }
@@ -289,16 +287,6 @@ ul.nav-tabs button.nav-link.active {
   font-size: .85rem;
   color: var(--bsi-secondary-color);
   line-height: 1.5;
-}
-
-@media (max-width: 640px) {
-
-  .tok-table thead th:nth-child(2),
-  .tok-table thead th:nth-child(4),
-  .tok-table td:nth-child(2),
-  .tok-table td:nth-child(4) {
-    display: none;
-  }
 }
 
 /* Token resolution chain example */

@@ -99,7 +99,7 @@ function showTokens(comp) {
   if (!comp) { el.innerHTML = ''; cta.hidden = true; ex.hidden = false; return; }
   const toks = tokByComp[comp] || [];
   if (!toks.length) { el.innerHTML = '<p class="data-empty">Nessuna custom property.</p>'; cta.hidden = true; return; }
-  el.innerHTML = `<table class="tok-table"><thead><tr><th>Variabile</th><th>Valore</th><th>Descrizione</th></tr></thead><tbody>${toks.map((t, i) => `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(t.name)}</td><td class="token-desc">${esc(t.value)}</td><td class="token-desc">${esc(t.description)}</td></tr>`).join('')}</tbody></table>`;
+  el.innerHTML = `<div style="width:100%; overflow-x: auto; display: block;"><table class="tok-table"><thead><tr><th>Variabile</th><th>Valore</th><th>Descrizione</th></tr></thead><tbody>${toks.map((t, i) => `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(t.name)}</td><td class="token-desc">${esc(t.value)}</td><td class="token-desc">${esc(t.description)}</td></tr>`).join('')}</tbody></table></div>`;
   cta.hidden = false;
   ex.hidden = true;
 }
@@ -125,7 +125,7 @@ async function showProps(slug) {
   try {
     const s = await j(`${RAW}/devkit/props/${slug}.json`);
     if (!s?.props?.length) { el.innerHTML = '<p class="data-empty">Nessuna prop configurabile.</p>'; return; }
-    el.innerHTML = `<table class="tok-table"><thead><tr><th>Prop <code>${esc(s.tagName)}</code></th><th>Tipo</th><th>Descrizione</th><th>Default</th></tr></thead><tbody>${s.props.map((p, i) => `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(p.name)}</td><td class="token-desc">${esc(p.type || '')}</td><td class="token-desc">${p.description ? p.description.replace(/`([^`]+)`/g, (_, code) => `<code>${esc(code)}</code>`) : ''}</td><td class="token-desc">${p.default != null ? esc(String(p.default)) : ''}</td></tr>`).join('')}</tbody></table>`;
+    el.innerHTML = `<div style="width:100%; overflow-x: auto; display: block;"><table class="tok-table"><thead><tr><th>Prop <code>${esc(s.tagName)}</code></th><th>Tipo</th><th>Descrizione</th><th>Default</th></tr></thead><tbody>${s.props.map((p, i) => `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(p.name)}</td><td class="token-desc">${esc(p.type || '')}</td><td class="token-desc">${p.description ? p.description.replace(/`([^`]+)`/g, (_, code) => `<code>${esc(code)}</code>`) : ''}</td><td class="token-desc">${p.default != null ? esc(String(p.default)) : ''}</td></tr>`).join('')}</tbody></table></div>`;
     cta.hidden = false;
   } catch { el.innerHTML = '<p class="data-empty">Props non disponibili.</p>'; }
 }
