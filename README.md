@@ -8,10 +8,10 @@ Updated nightly by the `upstream-snapshot` workflow, or on-demand when upstream 
 ```
 data-fetched/
 ├── bsi/
-│   ├── components/{slug}.json     — HTML markup variants (Bootstrap Italia)
-│   ├── components-status.json     — component list + accessibility status
-│   ├── custom-properties.json     — CSS tokens --bsi-*
-│   └── root.scss                  — bridge --bsi-* → --it-*
+│   ├── components/{slug}.json     — HTML markup variants (from bsi branch feature/update-examples-api-v3)
+│   ├── components-status.json     — component list + accessibility status 
+│   ├── custom-properties.json     — CSS tokens --bsi-* (from bsi branch feature/update-examples-api-v3)
+│   └── root.scss                  — bridge --bsi-* → --it-* (from bsi branch 3.x)
 ├── devkit/
 │   ├── index.json                 — Storybook index
 │   ├── stories/{slug}.json        — copy-paste HTML markup per component
