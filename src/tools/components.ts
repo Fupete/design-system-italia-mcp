@@ -192,7 +192,7 @@ export function registerSearchComponents(server: McpServer): void {
     {
       title: 'Search Components',
       description: 'Search components by name or feature. ' +
-        'Component names are generally in English (e.g. "modal" not "modale", "button" not "bottone"). ' +
+        'Component names are generally in English (e.g. "modal" not "modale", "button" not "bottone"), with support for some Italian aliases. ' +
         'Searches name, slug and Dev Kit tags (e.g. "a11y-ok", "alpha", "web-component").',
       inputSchema: { query: z.string().describe('Search text (e.g. "button", "alpha", "accordion")') },
       annotations: { readOnlyHint: true },
