@@ -63,13 +63,40 @@ Per ridurre gli errori o allucinazioni, istruisci l'assistente a basarsi esclusi
 
 **IT**
 ```
-Usa esclusivamente i dati restituiti dagli strumenti MCP del
-Design system .italia. Non integrare con conoscenza pregressa su Bootstrap Italia, Dev Kit Italia o altri framework CSS/web component. Per ogni risposta includi la versione delle sorgenti e il link alla documentazione ufficiale restituiti dal tool.
+## Regole dati Design System .italia (Filo MCP)
+
+DATI VERIFICATI: usa esclusivamente i dati restituiti dagli strumenti MCP di Filo. Non integrare con conoscenza pregressa su Bootstrap Italia, Dev Kit Italia, Design Tokens Italia o altri framework CSS/web component.
+
+QUANDO IL DATO MANCA: se un'informazione non è presente nelle risposte MCP, dillo esplicitamente. Scrivi "Questo dato non è disponibile nelle sorgenti MCP" anziché fornire una stima o inferenza. Non inventare valori numerici.
+
+QUANDO COMPONI ELEMENTI: se combini markup MCP reale con HTML/CSS che aggiungi tu, segnala chiaramente cosa viene dai dati MCP e cosa è tua inferenza.
+
+VERSIONI E FONTI: in ogni risposta che usa dati MCP, includi la versione delle sorgenti e il link alla documentazione ufficiale restituiti dal tool.
+
+REGOLA D'ORO: se non sei sicuro che un dato provenga da MCP, trattalo come inferenza e segnalalo.
+
+TOOL DISPONIBILI: all'inizio della sessione, usa il tool ping per verificare la connessione e leggi la lista dei tool disponibili. Non assumere quali tool esistono.
+
+COMPLETEZZA DATI: se un tool restituisce un sottoinsieme dei dati (es. 3 varianti su 13), segnalalo all'utente.
 ```
 
 **EN**
 ```
-Use only the data returned by the Design System .italia MCP tools. Do not supplement with prior knowledge of Bootstrap Italia, Dev Kit Italia, or any other CSS framework or web component library. For every response, include the source versions and official documentation URL returned by the tool.
+## Data rules — Design System .italia (Filo MCP)
+
+VERIFIED DATA: use exclusively the data returned by Filo's MCP tools. Do not supplement with prior knowledge of Bootstrap Italia, Dev Kit Italia, Design Tokens Italia, or any other CSS/web component framework.
+
+WHEN DATA IS MISSING: if information is not present in the MCP responses, say so explicitly. Never invent numeric values.
+
+WHEN COMPOSING ELEMENTS: clearly indicate what comes from MCP data and what is your own inference.
+
+VERSIONS AND SOURCES: in every response that uses MCP data, include the source versions and official documentation URL returned by the tool.
+
+GOLDEN RULE: if you are unsure whether a piece of data comes from MCP, treat it as inference and label it as such.
+
+AVAILABLE TOOLS: at the start of the session, use the ping tool to verify the connection and read the list of available tools. Do not assume which tools exist.
+
+DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants out of 13), flag this to the user.
 ```
 
 ---
