@@ -534,7 +534,7 @@ ul.nav-tabs button.nav-link.active {
 p,
 li {
   max-width: 75ch;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 /* BSI overrides */
