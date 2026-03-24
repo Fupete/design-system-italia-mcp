@@ -77,6 +77,7 @@
         <div class="col-12 col-lg-9">
           <h1 id="hero-title">🧵 Filo</h1>
           <p class="lead">MCP server sperimentale per il Design system .italia </p>
+               <p style="max-width: 55ch;"><strong>⚠️ Progetto personale non ufficiale e sperimentale</strong>. I dati sono forniti così come sono e potrebbero essere incompleti o non aggiornati. Utilizzare a proprio rischio. </p>
           <div class="d-grid d-md-flex flex-wrap gap-3 pt-4" style="align-items: end">
             <a href="#installazione" class="btn btn-secondary btn-lg">Installa</a>
             <a href="#dashboard" class="btn btn-outline-secondary btn-lg">Dati</a>
@@ -134,8 +135,8 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
         Senza: 60 richieste/ora per IP. Con token scopo pubblico read-only: 5000/ora.
       </p>
 
-      <div class="mb-3 mt-5">
-        <h3 class="mb-4">Client</h3>
+      <div class="mb-3 mt-3">
+        <h3 class="mb-4 h5">Client</h3>
         <div class="accordion" id="acc-config">
           <div class="accordion-item">
             <h3 class="accordion-header" id="h-cd">
@@ -225,7 +226,7 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
       </div>
 
       <div class="mb-3 mt-5">
-        <h3 id="prompt-title" class="mb-3">System prompt</h3>
+        <h3 id="prompt-title" class="mb-3 h5">System prompt</h3>
         <ul class="nav nav-tabs nav-tabs-cards mb-3" role="tablist">
           <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sp-it"
               type="button" role="tab" aria-selected="true">Italiano</button></li>
@@ -285,7 +286,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
       <h2 id="strumenti-title" class="mb-2">Strumenti</h2>
       <div class="row g-4">
         <div class="col-12 col-sm-6 col-md-3">
-          <h3>Scopri</h3>
+          <h3 class="h5">Scopri</h3>
           <ul class="tool-names">
             <li>list_components</li>
             <li>search_components</li>
@@ -294,7 +295,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
-          <h3>Componenti</h3>
+          <h3 class="h5">Componenti</h3>
           <ul class="tool-names">
             <li>get_component</li>
             <li>get_component_variant</li>
@@ -304,14 +305,14 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
-          <h3>Token</h3>
+          <h3 class="h5">Token</h3>
           <ul class="tool-names">
             <li>get_component_tokens</li>
             <li>find_token</li>
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
-          <h3>Meta</h3>
+          <h3 class="h5">Meta</h3>
           <ul class="tool-names">
             <li>ping</li>
             <li>get_project_board_status</li>
@@ -340,11 +341,11 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
           <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#dt-comp"
               type="button" role="tab" aria-selected="true">Componenti</button></li>
           <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dt-tok" type="button"
-              role="tab" aria-selected="false">CSS custom property</button></li>
+              role="tab" aria-selected="false">BSI CSS custom properties</button></li>
           <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dt-dti" type="button"
               role="tab" aria-selected="false">Design tokens</button></li>
           <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dt-props" type="button"
-              role="tab" aria-selected="false">Props Dev Kit</button></li>
+              role="tab" aria-selected="false">Dev Kit Props</button></li>
           <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dt-gl" type="button"
               role="tab" aria-selected="false">Linee guida d'uso</button></li>
           <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dt-repo" type="button"
@@ -443,8 +444,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             </div>
             <div id="props-list" aria-live="polite"></div>
             <div id="props-cta" class="alert alert-info mt-3" hidden>
-              <p class="mb-2">Con Filo attivo il modello identificherebbe anche gli eventuali sotto-componenti con le
-                loro props.</p>
+              <p class="mb-2">Con Filo attivo il modello identifica eventuali sotto-componenti e loro props.</p>
               <a href="#installazione" class="btn btn-secondary btn-sm">Inizia →</a>
             </div>
           </div>
