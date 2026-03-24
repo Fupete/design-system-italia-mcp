@@ -96,13 +96,19 @@ pre code {
 }
 
 .tool-names li {
+  padding: .2rem 0;
+  font-size: 1rem;
+}
+
+.tool-names li span {
+  display: block;
   font-family: 'Roboto Mono', monospace;
   font-size: 1rem;
-  padding: .2rem 0;
+  font-weight: 600;
 }
 
 .tool-names li::before {
-  content: '— ';
+  content: '';
   opacity: .4;
 }
 

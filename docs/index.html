@@ -292,35 +292,35 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
       <div class="row g-4">
         <div class="col-12 col-sm-6 col-md-3">
           <h3 class="h5">Scopri</h3>
-          <ul class="tool-names">
-            <li>list_components</li>
-            <li>search_components</li>
-            <li>list_by_status</li>
-            <li>list_accessibility_issues</li>
+          <ul class="tool-names d-grid gap-3">
+            <li class="it-card p-3 border shadow-sm rounded"><span>list_components</span> Elenca tutti i componenti con stato per libreria (Bootstrap Italia, UI Kit…) e stato accessibilità. Punto di partenza per una panoramica completa.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>search_components</span> Cerca componenti per nome o feature. Supporta alias IT/EN e tag Dev Kit (es. a11y-ok, alpha, web-component).</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>list_by_status</span> Filtra i componenti per stato in una libreria specifica. Stati possibili: PRONTO, DA RIVEDERE A11Y, DA FARE, NON PRESENTE…</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>list_accessibility_issues</span> Elenca i componenti con note di accessibilità aperte o verifiche incomplete.</li>
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
           <h3 class="h5">Componenti</h3>
-          <ul class="tool-names">
-            <li>get_component</li>
-            <li>get_component_variant</li>
-            <li>get_component_full</li>
-            <li>get_component_guidelines</li>
-            <li>get_component_issues</li>
+          <ul class="tool-names d-grid gap-3">
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component</span> Markup HTML varianti Bootstrap Italia e props web component it-* Dev Kit Italia. Punto di partenza per markup e varianti.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_variant</span> Markup completo di una variante specifica per nome, da BSI o Dev Kit in modo trasparente.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_full</span> Risposta aggregata: markup + token CSS con valori risolti + linee guida + stato + props it-* + issue GitHub. Da usare quando servono dati da più sorgenti in una sola chiamata.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_guidelines</span> Linee guida d'uso da Designers Italia: quando usarlo, come usarlo, alternative consigliate, note accessibilità.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_issues</span> Issue GitHub aperte per un componente sui 4 repository del Design System .italia.</li>
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
           <h3 class="h5">Token</h3>
-          <ul class="tool-names">
-            <li>get_component_tokens</li>
-            <li>find_token</li>
+          <ul class="tool-names d-grid gap-3">
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_tokens</span> Variabili CSS --bsi-* personalizzabili per componente con descrizione semantica e valore risolto (es. var(--bsi-spacing-m) → 1.5rem).</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>find_token</span> Cerca un token CSS per nome variabile o descrizione semantica. Copre sia --bsi-* che --it-* di Design Tokens Italia.</li>
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
           <h3 class="h5">Meta</h3>
-          <ul class="tool-names">
-            <li>ping</li>
-            <li>get_project_board_status</li>
+          <ul class="tool-names d-grid gap-3">
+            <li class="it-card p-3 border shadow-sm rounded"><span>ping</span> Verifica connessione al server. Restituisce stato, versione, timestamp e warning sulle sorgenti.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_project_board_status</span> Stato aggregato delle board GitHub del Design System .italia. Link alle issue aperte per repository.</li>
           </ul>
         </div>
       </div>
@@ -336,7 +336,11 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
         <svg class="alert-icon icon" aria-hidden="true">
           <use href="assets/vendor/bsi/svg/sprites.svg#it-warning-circle"></use>
         </svg>
-        <p class="mb-0">Impossibile caricare i dati, riprova più tardi.</p>
+        <p class="mb-0">Impossibile caricare i dati.
+          <a href="https://github.com/Fupete/design-system-italia-mcp/tree/data-fetched">
+            Consulta il branch <code>data-fetched</code>
+          </a>
+        </p>
       </div>
 
       <div id="dash-content" style="display:none">
