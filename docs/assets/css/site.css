@@ -97,7 +97,7 @@ pre code {
 
 .tool-names li {
   font-family: 'Roboto Mono', monospace;
-  font-size: .85rem;
+  font-size: 1rem;
   padding: .2rem 0;
 }
 
@@ -207,6 +207,8 @@ ul.nav-tabs button.nav-link.active {
 
 #dash-comp-table {
   width: 100%;
+  display: block;
+  overflow-x: auto;
   border-collapse: collapse;
 }
 
@@ -239,6 +241,8 @@ ul.nav-tabs button.nav-link.active {
 /* Token + Props tables */
 .tok-table {
   width: 100%;
+  display: block;
+  overflow-x: auto;
   border-collapse: collapse;
   font-size: .9rem;
 }
@@ -456,7 +460,35 @@ li {
   word-break: break-word;
 }
 
-/* BSI overrides */
+/* Design Tokens Italia tab */
+.dti-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.dti-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.dti-resolved {
+  white-space: nowrap;
+}
+
+.dti-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, .15);
+  vertical-align: middle;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+/* Design Tokens Italia tab */
 
 /* Workaround BSI 3.x #1726 — it-card-text incorrect font-size */
 ul.it-card-list li .it-card-text {

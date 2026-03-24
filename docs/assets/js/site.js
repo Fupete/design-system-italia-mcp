@@ -188,6 +188,108 @@ async function showGl(slug) {
   } catch { el.innerHTML = '<p class="data-empty">Linee guida non disponibili.</p>'; }
 }
 
+/* Design Tokens Italia — SCSS parser + table */
+let dtiAll = [];
+let dtiActiveCat = 'all';
+
+function parseDTI(scss) {
+  // Build a value map first so we can resolve one level of $token references
+  const valueMap = {};
+  for (const line of scss.split('\n')) {
+    const m = line.match(/^\$([a-z0-9-]+):\s*([^;]+);/);
+    if (m) valueMap[m[1]] = m[2].trim();
+  }
+
+  const tokens = [];
+  for (const line of scss.split('\n')) {
+    const m = line.match(/^\$([a-z0-9-]+):\s*([^;]+);\s*(?:\/\/\s*(.*))?$/);
+    if (!m) continue;
+    const name = `--${m[1].replace(/_/g, '-')}`;  // expose as CSS custom property style
+    const rawVal = m[2].trim();
+    const desc = (m[3] || '').trim();
+
+    // Detect reference: $it-some-token
+    const refMatch = rawVal.match(/^\$([a-z0-9-]+)$/);
+    let ref = null;
+    let resolvedVal = rawVal;
+    if (refMatch) {
+      ref = `--${refMatch[1]}`;
+      resolvedVal = valueMap[refMatch[1]] || null;
+    }
+
+    // Category from second segment of name: --it-COLOR-..., --it-FONT-...
+    const cat = name.split('-')[2] || 'other';
+
+    tokens.push({ name, rawVal, ref, resolvedVal, desc, cat });
+  }
+  return tokens;
+}
+
+function buildDTICats(tokens) {
+  const cats = ['all', ...new Set(tokens.map(t => t.cat))].sort((a, b) => a === 'all' ? -1 : a.localeCompare(b));
+  const wrap = document.getElementById('dti-cats');
+  wrap.innerHTML = cats.map(c =>
+    ``
+  ).join('');
+}
+
+function dtiSetCat(btn, cat) {
+  dtiActiveCat = cat;
+  document.querySelectorAll('.dti-cats .btn').forEach(b => { b.classList.remove('btn-secondary'); b.classList.add('btn-outline-secondary'); });
+  btn.classList.remove('btn-outline-secondary');
+  btn.classList.add('btn-secondary');
+  filterTokens(document.getElementById('dti-search').value);
+}
+
+function colorSwatch(val) {
+  if (!val) return '';
+  const v = val.trim();
+  if (/^#[0-9a-fA-F]{3,8}$/.test(v) || /^rgba?\(/.test(v))
+    return `<span class="dti-swatch" style="background:${v}" title="${v}"></span>`;
+  return '';
+}
+
+function filterTokens(q) {
+  const s = q.toLowerCase();
+  const visible = dtiAll.filter(t =>
+    (dtiActiveCat === 'all' || t.cat === dtiActiveCat) &&
+    (!s || t.name.includes(s) || t.desc.toLowerCase().includes(s) || (t.rawVal + '').toLowerCase().includes(s))
+  );
+  const body = document.getElementById('dti-body');
+  const empty = document.getElementById('dti-empty');
+  if (!visible.length) { body.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  body.innerHTML = visible.map((t, i) => {
+    const displayVal = t.ref ? `<span class="token-name">${t.ref}</span>` : esc(t.rawVal);
+    const resolved = t.ref ? `${colorSwatch(t.resolvedVal)}${esc(t.resolvedVal || '—')}` : `${colorSwatch(t.rawVal)}`;
+    return `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}">
+      <td class="token-name">${esc(t.name)}</td>
+      <td class="token-desc">${displayVal}</td>
+      <td class="token-desc dti-resolved">${resolved}</td>
+      <td class="token-desc">${esc(t.desc)}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function loadDTI() {
+  try {
+    const scss = await fetch(`${RAW}/design-tokens/variables.scss`).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
+    dtiAll = parseDTI(scss);
+    buildDTICats(dtiAll);
+    filterTokens('');
+    document.getElementById('dti-loading').style.display = 'none';
+    document.getElementById('dti-table-wrap').style.display = '';
+  } catch {
+    document.getElementById('dti-loading').textContent = 'Impossibile caricare i token.';
+  }
+}
+
+// Lazy-load DTI only when the tab is first activated
+document.addEventListener('DOMContentLoaded', () => {
+  const dtiTab = document.querySelector('[data-bs-target="#dt-dti"]');
+  if (dtiTab) dtiTab.addEventListener('shown.bs.tab', () => { if (!dtiAll.length) loadDTI(); }, { once: true });
+});
+
 /* Load dashboard data */
 async function loadDashboard() {
   try {
