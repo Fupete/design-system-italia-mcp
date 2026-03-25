@@ -15,12 +15,12 @@
 
   <a href="#main-content" class="visually-hidden-focusable">Vai al contenuto principale</a>
 
-  <div class="it-header-slim-wrapper bg-danger" role="note">
+  <div class="it-header-slim-wrapper bg-dark" role="note">
     <div class="container-xxl">
       <div class="row">
         <div class="col-12">
           <div class="it-header-slim-wrapper-content">
-            <span class="text-white p-3" style="margin: 0 auto">
+            <span class="text-white small p-2" style="margin: 0 auto">
               <strong>Progetto sperimentale non ufficiale</strong>: Bootstrap Italia v3 e Dev Kit Italia v1 sono
               alpha — <a href="https://github.com/fupete/design-system-italia-mcp#readme" class="text-white">README</a>
             </span>
@@ -31,7 +31,7 @@
   </div>
 
   <div class="it-header-wrapper">
-    <div class="it-header-center-wrapper it-small-header bg-dark">
+    <div class="it-header-center-wrapper it-small-header theme-light">
       <div class="container-xxl">
         <div class="row">
           <div class="col-12">
@@ -39,7 +39,7 @@
               <div class="it-brand-wrapper">
                 <a href="#">
                   <div class="it-brand-text">
-                    <div class="it-brand-title">🧵 Filo </div>
+                    <div class="it-brand-title text-black">🧵 Filo</div>
                   </div>
                 </a>
               </div>
@@ -48,7 +48,7 @@
                   <ul>
                     <li><a class="small" href="https://github.com/fupete/design-system-italia-mcp" aria-label="GitHub"
                         target="_blank" rel="noopener">
-                        <svg class="icon" aria-hidden="true">
+                        GitHub<svg class="icon icon-secondary" aria-hidden="true">
                           <use href="assets/vendor/bsi/svg/sprites.svg#it-github"></use>
                         </svg>
                       </a></li>
@@ -62,25 +62,24 @@
     </div>
   </div>
 
-  <nav class="site-nav bg-dark shadow-lg" aria-label="Navigazione sezioni">
+  <nav class="site-nav shadow-sm aria-label=" Navigazione sezioni">
     <div class="site-nav-inner container-xxl">
-      <span class="site-nav-brand text-white" aria-hidden="true">🧵 Filo</span>
-      <a class="text-white" href="#installazione">Installa</a>
-      <a class="text-white" href="#strumenti">Strumenti</a>
-      <a class="text-white" href="#dashboard">Dati</a>
+      <span class="site-nav-brand" aria-hidden="true">🧵 Filo</span>
+      <a href="#installazione">Installa</a>
+      <a href="#strumenti">Strumenti</a>
+      <a href="#dashboard">Dati</a>
     </div>
   </nav>
 
-  <section class="hero bg-dark text-white" id="main-content" aria-labelledby="hero-title">
+  <section class="hero border-bottom mt-5" id="main-content" aria-labelledby="hero-title">
     <div class="container-xxl">
       <div class="row">
         <div class="col-12 col-lg-9">
-          <h1 id="hero-title">🧵 Filo</h1>
-          <p class="lead">MCP server sperimentale per il Design system .italia </p>
-          <p style="max-width: 55ch;"><strong>⚠️ Progetto personale non ufficiale e sperimentale</strong>. I dati sono
+          <h1 id="hero-title">MCP server per il Design system .italia </h1>
+          <p><strong>⚠️ Progetto personale non ufficiale e sperimentale</strong>. I dati sono
             forniti così come sono e potrebbero essere incompleti o non aggiornati. Utilizzare a proprio rischio. </p>
           <div class="d-grid d-md-flex flex-wrap gap-3 pt-4" style="align-items: end">
-            <a href="#installazione" class="btn btn-secondary btn-lg">Installa</a>
+            <a href="#installazione" class="btn btn-secondary bg-dark btn-lg">Installa</a>
             <a href="#dashboard" class="btn btn-outline-secondary btn-lg">Dati</a>
             <div class="d-flex flex-wrap gap-3 pt-4 pt-md-0 ps-md-4" style="align-items: center;">
               <a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp" class="btn btn-secondary"
@@ -101,9 +100,10 @@
     </div>
   </section>
 
-  <section id="installazione" class="py-5 border-bottom" aria-labelledby="install-title">
+  <section id="installazione" class="py-5" aria-labelledby="install-title">
     <div class="container-xxl">
-      <h2 id="install-title" class="mb-4">Installa</h2>
+      <h2 id="install-title" class="mb-0">Installa Filo</h2>
+      <p class="lead mb-5">Avvia il server MCP in un comando</p>
       <ul class="nav nav-tabs nav-tabs-cards mb-3" role="tablist">
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ti-npx" type="button"
             role="tab" aria-selected="true">npx</button></li>
@@ -286,51 +286,68 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
     </div>
   </section>
 
-  <section id="strumenti" class="py-5 lightgrey-bg-b1" aria-labelledby="strumenti-title">
+  <section id="strumenti" class="py-5 mt-3 border-top" aria-labelledby="strumenti-title">
     <div class="container-xxl">
-      <h2 id="strumenti-title" class="mb-2">Strumenti</h2>
+      <h2 id="strumenti-title" class="mb-0">Scopri gli strumenti</h2>
+      <p class="lead mb-5">Approfondisci i tool a disposizione del tuo assistente AI</p>
       <div class="row g-4">
         <div class="col-12 col-sm-6 col-md-3">
           <h3 class="h5">Scopri</h3>
           <ul class="tool-names d-grid gap-3">
-            <li class="it-card p-3 border shadow-sm rounded"><span>list_components</span> Elenca tutti i componenti con stato per libreria (Bootstrap Italia, UI Kit…) e stato accessibilità. Punto di partenza per una panoramica completa.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>search_components</span> Cerca componenti per nome o feature. Supporta alias IT/EN e tag Dev Kit (es. a11y-ok, alpha, web-component).</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>list_by_status</span> Filtra i componenti per stato in una libreria specifica. Stati possibili: PRONTO, DA RIVEDERE A11Y, DA FARE, NON PRESENTE…</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>list_accessibility_issues</span> Elenca i componenti con note di accessibilità aperte o verifiche incomplete.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>list_components</span> Elenca tutti i componenti con
+              stato per libreria (Bootstrap Italia, UI Kit…) e stato accessibilità. Punto di partenza per una panoramica
+              completa.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>search_components</span> Cerca componenti per nome o
+              feature. Supporta alias IT/EN e tag Dev Kit (es. a11y-ok, alpha, web-component).</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>list_by_status</span> Filtra i componenti per stato
+              in una libreria specifica. Stati possibili: PRONTO, DA RIVEDERE A11Y, DA FARE, NON PRESENTE…</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>list_accessibility_issues</span> Elenca i componenti
+              con note di accessibilità aperte o verifiche incomplete.</li>
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
           <h3 class="h5">Componenti</h3>
           <ul class="tool-names d-grid gap-3">
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component</span> Markup HTML varianti Bootstrap Italia e props web component it-* Dev Kit Italia. Punto di partenza per markup e varianti.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_variant</span> Markup completo di una variante specifica per nome, da BSI o Dev Kit in modo trasparente.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_full</span> Risposta aggregata: markup + token CSS con valori risolti + linee guida + stato + props it-* + issue GitHub. Da usare quando servono dati da più sorgenti in una sola chiamata.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_guidelines</span> Linee guida d'uso da Designers Italia: quando usarlo, come usarlo, alternative consigliate, note accessibilità.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_issues</span> Issue GitHub aperte per un componente sui 4 repository del Design System .italia.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component</span> Markup HTML varianti Bootstrap
+              Italia e props web component it-* Dev Kit Italia. Punto di partenza per markup e varianti.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_variant</span> Markup completo di una
+              variante specifica per nome, da BSI o Dev Kit in modo trasparente.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_full</span> Risposta aggregata: markup
+              + token CSS con valori risolti + linee guida + stato + props it-* + issue GitHub. Da usare quando servono
+              dati da più sorgenti in una sola chiamata.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_guidelines</span> Linee guida d'uso da
+              Designers Italia: quando usarlo, come usarlo, alternative consigliate, note accessibilità.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_issues</span> Issue GitHub aperte per
+              un componente sui 4 repository del Design System .italia.</li>
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
           <h3 class="h5">Token</h3>
           <ul class="tool-names d-grid gap-3">
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_tokens</span> Variabili CSS --bsi-* personalizzabili per componente con descrizione semantica e valore risolto (es. var(--bsi-spacing-m) → 1.5rem).</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>find_token</span> Cerca un token CSS per nome variabile o descrizione semantica. Copre sia --bsi-* che --it-* di Design Tokens Italia.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_tokens</span> Variabili CSS --bsi-*
+              personalizzabili per componente con descrizione semantica e valore risolto (es. var(--bsi-spacing-m) →
+              1.5rem).</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>find_token</span> Cerca un token CSS per nome
+              variabile o descrizione semantica. Copre sia --bsi-* che --it-* di Design Tokens Italia.</li>
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
           <h3 class="h5">Meta</h3>
           <ul class="tool-names d-grid gap-3">
-            <li class="it-card p-3 border shadow-sm rounded"><span>ping</span> Verifica connessione al server. Restituisce stato, versione, timestamp e warning sulle sorgenti.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_project_board_status</span> Stato aggregato delle board GitHub del Design System .italia. Link alle issue aperte per repository.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>ping</span> Verifica connessione al server.
+              Restituisce stato, versione, timestamp e warning sulle sorgenti.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>get_project_board_status</span> Stato aggregato delle
+              board GitHub del Design System .italia. Link alle issue aperte per repository.</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="dashboard" class="py-5 bg-secondary text-white" aria-labelledby="dashboard-title">
+  <section id="dashboard" class="py-5 mt-3 border-top" aria-labelledby="dashboard-title">
     <div class="container-xxl">
-      <h2 id="dashboard-title" class="mb-3">Dati</h2>
-
+      <h2 id="dashboard-title" class="mb-0">Esplora i dati</h2>
+      <p class="lead mb-5">Verifica i dati aggregati dalle fonti originali del Design system .italia</p>
       <p id="dash-loading" class="data-empty">Caricamento...</p>
       <div id="dash-error" class="alert alert-warning" style="display:none" role="alert">
         <svg class="alert-icon icon" aria-hidden="true">
@@ -344,7 +361,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
       </div>
 
       <div id="dash-content" style="display:none">
-        <div id="dash-meta" class="dash-meta"></div>
+        <div id="dash-meta" class="dash-meta border rounded shadow-sm"></div>
 
         <ul class="nav nav-tabs nav-tabs-cards mb-3" role="tablist">
           <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#dt-comp"
@@ -472,39 +489,28 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
           <div class="tab-pane fade px-2 px-sm-0" id="dt-repo" role="tabpanel">
             <div id="dash-issues" class="issue-grid"></div>
           </div>
-
         </div>
       </div>
     </div>
+    <p class="small text-center m-auto">Istantanea salvata ogni notte nel ramo <code>data-fetched</code> del repository</p>
   </section>
 
-  <footer class="site-footer pb-5" style="background-color: #313131;" role="contentinfo" aria-labelledby="footer-title">
+  <footer class="site-footer px-2 pb-4 mt-3 border-top" role="contentinfo" aria-labelledby="footer-title">
     <div class="container-xxl">
-      <div class="row g-4 mb-2">
-        <div class="col-12">
-          <h2 id="footer-title" class="h3 fw-bold mb-2">🧵 Filo</h2>
-        </div>
-        <div class="col-8">
-          <ul>
-            <li><a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp">npm</a></li>
-            <li><a href="https://ghcr.io/fupete/design-system-italia-mcp">Docker</a></li>
-            <li><a href="https://github.com/fupete/design-system-italia-mcp">GitHub</a></li>
-          </ul>
-          <div class="pt-3">
-            <p class="small mb-0" style="max-width: 45ch">Filo è un progetto sperimentale sviluppato anche litigando con
-              qualche LLM. <a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue</a>
-              benvenute.</p>
-          </div>
-        </div>
-      </div>
-      <div class="pb-5" aria-labelledby="footer-bottom-title">
-        <h2 id="footer-bottom-title" class="visually-hidden">Crediti e licenze</h2>
-        <div class="footer-bottom">
-          <div>
-            <span>© 2026 <a href="https://github.com/fupete">Fupete - Daniele T.</a></span>
-          </div>
-          <div class="footer-licenses">
-            <a
+      <div class="mb-2 d-block d-lg-flex d-md-block gap-5 align-items-center pb-5">
+        <h2 id="footer-title" class="h3 fw-bold mb-2">🧵 Filo</h2>
+        <ul class="d-flex d-lg-block d-xl-flex gap-3 align-items-center">
+          <li><a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp">npm</a></li>
+          <li><a href="https://ghcr.io/fupete/design-system-italia-mcp">Docker</a></li>
+          <li><a href="https://github.com/fupete/design-system-italia-mcp">GitHub</a></li>
+        </ul>
+        <p class="small mb-0" style="max-width: 45ch">Filo è un progetto sperimentale sviluppato anche litigando con
+          qualche LLM. <a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue</a>
+          benvenute.</p>
+        <div class="small ms-auto pt-4 pt-lg-0 text-right d-block d-xl-flex align-items-end flex-column">
+          <span><strong>Copyright 2026 <a href="https://github.com/fupete">Daniele Tabellini
+                (Fupete)</a></strong></span>
+          <div class="d-flex gap-4"><a
               href="https://github.com/Fupete/design-system-italia-mcp?tab=readme-ov-file#licenza--license">BSD-3-Clause</a>
             <a
               href="https://github.com/Fupete/design-system-italia-mcp?tab=readme-ov-file#provenienza-dei-dati-e-licenze--data-provenance--licenses">Provenienza

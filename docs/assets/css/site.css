@@ -1,7 +1,11 @@
 /* site.css — Filo */
 
 :root {
-  --filo-dark: #0B2540;
+  --filo-dark: #212121;
+}
+
+.bg-dark {
+  background-color: var(--filo-dark)!important;
 }
 
 a {
@@ -26,6 +30,10 @@ a:hover {
   font-weight: 900;
   letter-spacing: -.02em;
   line-height: 1;
+}
+
+.it-right-zone .it-socials .icon {
+  fill: black;
 }
 
 /* Code blocks */
@@ -127,7 +135,7 @@ pre code {
   flex: 1;
   min-width: 120px;
   padding: .875rem 1.25rem;
-  border-right: 1px solid #dee2e6;
+  border-right: 1px solid #666;
 }
 
 .dash-meta-item:last-child {
@@ -137,7 +145,7 @@ pre code {
 @media (max-width: 600px) {
   .dash-meta-item {
     border-right: none;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid #666;
   }
 
   .dash-meta-item:last-child {
@@ -222,10 +230,9 @@ ul.nav-tabs button.nav-link.active {
   font-size: .85rem;
   text-align: left;
   padding: .5rem .75rem;
-  background: var(--bsi-dark, #666);
-  color: white;
   font-weight: 600;
   text-transform: uppercase;
+  border-bottom: 1px solid #666;
 }
 
 #dash-comp-table td {
@@ -252,8 +259,7 @@ ul.nav-tabs button.nav-link.active {
 }
 
 .tok-table thead tr {
-  background: #1a3a6b;
-  color: #fff;
+  border-bottom: 1px solid #666;
 }
 
 .tok-table thead th {
@@ -266,15 +272,11 @@ ul.nav-tabs button.nav-link.active {
 }
 
 .tok-table tbody tr {
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px dotted #666;
 }
 
 .tok-table tbody tr:last-child {
   border-bottom: none;
-}
-
-.tok-table tbody tr.tok-alt {
-  background: #e8f1ff;
 }
 
 .tok-table td {
@@ -345,13 +347,8 @@ ul.nav-tabs button.nav-link.active {
 
 /* Guidelines */
 .gl-tag {
-  font-family: 'Roboto Mono', monospace;
-  font-size: .65rem;
-  text-transform: uppercase;
-  letter-spacing: .04em;
+  font-size: .85rem;
   border: 1px solid var(--bsi-border-color);
-  padding: .1rem .45rem;
-  border-radius: 3px;
   color: var(--bsi-secondary-color);
 }
 
@@ -401,20 +398,14 @@ ul.nav-tabs button.nav-link.active {
 /* Footer */
 .site-footer {
   padding: 3.5rem 0 2rem;
-  color: rgba(255, 255, 255, .75);
-}
-
-.site-footer h2,
-.site-footer h3 {
-  color: #fff;
 }
 
 .site-footer a {
-  color: rgba(255, 255, 255, .75);
+  color: black;
 }
 
 .site-footer a:hover {
-  color: #fff;
+  color: #666;
 }
 
 .site-footer ul {
@@ -425,26 +416,6 @@ ul.nav-tabs button.nav-link.active {
 
 .site-footer ul li {
   margin-bottom: .4rem;
-}
-
-.footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, .5);
-  margin-top: 2.5rem;
-  padding-top: 1.25rem;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: .5rem;
-  color: white;
-}
-
-.footer-bottom a {
-  text-decoration: underline;
-}
-
-.footer-licenses {
-  display: flex;
-  gap: 1.5rem;
 }
 
 /* Readability */
