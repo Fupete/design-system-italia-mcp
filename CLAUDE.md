@@ -29,13 +29,13 @@ design-system-italia-mcp/
 │   ├── types.ts                  # Tipi TypeScript condivisi
 │   ├── utils.ts                  # Utility condivise (formatTimestamp)
 │   ├── loaders/
-│   │   ├── bsi.ts                # Sorgenti #1 #2 #3 — markup, status, token BSI (da snapshot)
-│   │   ├── designers.ts          # Sorgente #4 — JSON linee guida (da snapshot, no yaml a runtime)
-│   │   ├── devkit.ts             # Sorgenti #6 #7 #7b — index + stories + props Dev Kit (da snapshot)
-│   │   ├── devkit-parser.ts      # Parser argTypes/props da stories.ts — usato solo da snapshot-static.ts (CI)
-│   │   ├── github.ts             # Sorgente #8 — GitHub Issues REST API (unica sorgente live)
-│   │   ├── meta.ts               # Sorgente #9 — versioni + designersUrl (da snapshot-meta.json)
-│   │   └── tokens.ts             # Sorgente #5 — DTI + bridge BSI→IT con valueResolved (da snapshot)
+│   │   ├── bsi.ts                # Sorgenti #1 #2 #3 #4 — markup, status, token BSI (da snapshot)
+│   │   ├── designers.ts          # Sorgente #5 — JSON linee guida (da snapshot, no yaml a runtime)
+│   │   ├── devkit.ts             # Sorgenti #7 #8 #9 — index + stories + props Dev Kit (da snapshot)
+│   │   ├── devkit-parser.ts      # Parser argTypes/props da stories.ts — usato da snapshot-static.ts (CI) e come fallback runtime in devkit.ts
+│   │   ├── github.ts             # Sorgente #10 — GitHub Issues REST API (unica sorgente live)
+│   │   ├── meta.ts               # Sorgente #11 — versioni + designersUrl (da snapshot-meta.json)
+│   │   └── tokens.ts             # Sorgente #6 — DTI + bridge BSI→IT con valueResolved (da snapshot)
 │   └── tools/
 │       ├── helpers.ts            # resolveSlug(), buildMeta() — shared tool helpers
 │       ├── components.ts         # list_components, get_component, search_components, get_component_variant
@@ -63,7 +63,12 @@ design-system-italia-mcp/
 ```
 
 **Regola soglia**: se un file supera ~400 righe, spezzarlo per modulo.
-**Naming tool**: prefisso `dsi_*` previsto in v0.4.0 (breaking change, insieme a `bsi:{}` restructure).
+**Naming tool v0.4.0** (breaking change, insieme a `bsi:{}` restructure):
+  - Prefisso `dsi_*` su tutti i tool name e register functions — NON su loader e variabili interne
+  - Verbi: `explore_` = aggregatore multi-sorgente, `get_` = atomico single-source, `list_`/`search_`/`find_` invariati
+  - `get_component_full` → `explore_component`, `get_foundation` → `explore_foundation`
+  - `get_component` + `get_component_variant` → `get_component_markup(name, variant?, source?)` — DA CONFERMARE
+  - Dettaglio completo in TODO
 
 ---
 
@@ -77,22 +82,30 @@ I loader leggono da URL `SNAPSHOT_*` definite in `src/constants.ts`
 (raw GitHub sul branch `data-fetched`). Non fetchano mai le sorgenti
 upstream direttamente — quello è compito degli script CI.
 
-| # | Sorgente | Snapshot path | Note |
-|---|----------|---------------|------|
-| 1 | BSI markup | `data-fetched/bsi/components/{slug}.json` | Stabile |
-| 2 | BSI status | `data-fetched/bsi/components-status.json` | Stabile |
-| 3 | BSI tokens | `data-fetched/bsi/custom-properties.json` | ⚠️ Alpha |
-| 3b | BSI root.scss | `data-fetched/bsi/root.scss` | Bridge --bsi-* → --it-* |
-| 4 | Designers JSON | `data-fetched/designers/components/{slug}.json` | YAML→JSON in CI, stabile |
-| 5 | Design Tokens | `data-fetched/design-tokens/variables.scss` | Stabile |
-| 6 | Dev Kit index | `data-fetched/devkit/index.json` | ⚠️ Alpha |
-| 7 | Dev Kit stories | `data-fetched/devkit/stories/{slug}.json` | ⚠️ Alpha — Playwright extracted |
-| 7b | Dev Kit props | `data-fetched/devkit/props/{slug}.json` | ⚠️ Alpha — argTypes parsed in CI |
-| 8 | GitHub Issues | live fetch runtime | Unica sorgente live — TTL 15min |
-| 9 | DS meta/nav | `data-fetched/dsnav.json` + `snapshot-meta.json` | Versioni + nav |
+| #  | Sorgente | Branch | Snapshot path | Contenuto | Note |
+|----|----------|--------|---------------|-----------|------|
+| 1  | BSI markup | `feature/update-examples-api-v3` | `bsi/components/{slug}.json` | Markup HTML varianti per componente | ⚠️ alpha, branch temporaneo |
+| 2  | BSI status | `3.x` | `bsi/components-status.json` | ~55 componenti, stato librerie (BSI/UI Kit), accessibilità, note issue | Stabile |
+| 3  | BSI tokens | `feature/update-examples-api-v3` | `bsi/custom-properties.json` | Token CSS `--bsi-*` per-componente | ⚠️ alpha, branch temporaneo |
+| 4  | BSI root.scss | `3.x` | `bsi/root.scss` | Bridge `--bsi-*` → `--it-*` | Token resolution |
+| 5  | Designers JSON | `main` | `designers/components/{slug}.json` | Linee guida d'uso, accessibilità (YAML→JSON in CI) | Stabile |
+| 6  | Design Tokens | `main` | `design-tokens/variables.scss` | Token globali `--it-*` con valori concreti | Stabile |
+| 7  | Dev Kit index | `main` | `devkit/index.json` | Indice Storybook: tag stato, varianti, importPath | ⚠️ alpha |
+| 8  | Dev Kit stories | `main` | `devkit/stories/{slug}.json` | Markup HTML per variante — Playwright extracted | ⚠️ alpha |
+| 9  | Dev Kit props | `main` | `devkit/props/{slug}.json` | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni | ⚠️ alpha |
+| 10 | GitHub Issues | live runtime | — | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | Unica sorgente live — TTL 15min |
+| 11 | DS meta/nav | snapshot | `dsnav.json` + `snapshot-meta.json` | Versioni DS/BSI/DevKit/DTI + URL verificati componenti | In ogni risposta meta |
 
-URL snapshot: costanti `SNAPSHOT_*` in `src/constants.ts`.
-URL upstream (canary + script CI): costanti senza prefisso in `src/constants.ts`.
+**Catena di risoluzione token** (sorgenti #3 → #4 → #6):
+```
+--bsi-accordion-padding: var(--bsi-spacing-m)   ← #3 custom-properties.json
+--bsi-spacing-m: var(--it-spacing-m)             ← #4 root.scss
+$it-spacing-m: 1.5rem                            ← #6 variables.scss
+```
+`tokens.ts` usa tutte e tre. `bsi.ts` gestisce solo #1 #2 #3.
+
+**URL snapshot:** costanti `SNAPSHOT_*` in `src/constants.ts`.
+**URL upstream (canary + script CI):** costanti senza prefisso in `src/constants.ts`.
 
 **Perché branch data-fetched invece di fetch live?**
 Elimina dipendenze di rete a runtime per le sorgenti core. Diff nightly
@@ -102,13 +115,13 @@ visibili su GitHub — cambio upstream rilevato prima di impattare il server.
 **Perché BSI 3.x e non 2.x?**
 BSI 2.x è stabile e ha le API di stato componenti (#2) e markup HTML (#1).
 BSI 3.x aggiunge i token CSS strutturati per componente (`custom_properties.json` — sorgente #3)
-e `_root.scss` con i bridge `--bsi-* → --it-*`, necessari per la risoluzione `valueResolved`.
+e `_root.scss` (sorgente #4) con i bridge `--bsi-* → --it-*`, necessari per la risoluzione `valueResolved`.
 Senza la 3.x non sarebbe possibile esporre il layer token. Dev Kit Italia è costruito su BSI 3.x.
 
 **Regola**: non modificare mai le URL upstream nelle costanti.
 Se una sorgente cambia struttura, aggiornare solo il loader corrispondente, non i tool.
 
-**Nota sorgente #9**: Dev Kit Italia è un monorepo workspace. Il `package.json`
+**Nota sorgente #11**: Dev Kit Italia è un monorepo workspace. Il `package.json`
 root ha `"version": "0.0.0"` — usare sempre `packages/dev-kit-italia/package.json`
 per la versione reale. `snapshot-meta.json` include le versioni di BSI, Dev Kit e DS
 al momento del fetch.

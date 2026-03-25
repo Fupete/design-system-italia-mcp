@@ -10,15 +10,15 @@
 // Used in ping (index.ts) and in meta.warnings for tools exposing data from
 // alpha sources (CSS tokens, Dev Kit Italia).
 //
-// Alpha sources:  #3 BSI custom_properties.json, #6 Dev Kit index, #7 Dev Kit stories
-// Stable sources: #1 #2 BSI markup/status, #4 Designers YAML, #5 DTI, #8 GitHub Issues
+// Alpha sources:  #3 BSI custom_properties.json, #7 Dev Kit index, #8 Dev Kit stories, #9 Dev Kit props
+// Stable sources: #1 #2 BSI markup/status, #4 BSI root.scss, #5 Designers YAML, #6 DTI, #10 GitHub Issues
 
 export const ALPHA_WARNING =
   'Bootstrap Italia 3.x and Dev Kit Italia are in alpha. ' +
   'CSS tokens (--bsi-*), and web components may have breaking changes before stable release. ' +
   'HTML markup and component status are a little more reliable.'
 
-// ─── Bootstrap Italia — sources #1 #2 #3 ────────────────────────────────────
+// ─── Bootstrap Italia — sources #1 #2 #3 #4 ─────────────────────────────────
 
 /** Active branch with structured token APIs — not present in 2.x */
 export const BSI_BRANCH = '3.x'
@@ -76,7 +76,7 @@ export const BSI_PACKAGE_JSON_URL =
 export const BSI_DOC_BASE =
   'https://italia.github.io/bootstrap-italia/docs/componenti'
 
-// ─── Designers Italia — sources #4 + part of #9 ─────────────────────────────
+// ─── Designers Italia — sources #5 + part of #11 ─────────────────────────────
 
 const DESIGNERS_RAW_BASE =
   'https://raw.githubusercontent.com/italia/designers.italia.it/main'
@@ -92,13 +92,13 @@ export const DESIGNERS_DSNAV_URL =
 /** Site base URL — to build absolute URLs from relative nav entries */
 export const DESIGNERS_SITE_BASE = 'https://designers.italia.it'
 
-// ─── Design Tokens Italia — source #5 ───────────────────────────────────────
+// ─── Design Tokens Italia — source #6 ───────────────────────────────────────
 
 /** Global --it-* tokens with concrete values (for valueResolved) */
 export const DTI_VARIABLES_SCSS_URL =
   'https://raw.githubusercontent.com/italia/design-tokens-italia/main/dist/scss/_variables.scss'
 
-// ─── Dev Kit Italia — sources #6 #7 + part of #9 ────────────────────────────
+// ─── Dev Kit Italia — sources #7 #8 #9 + part of #11 ────────────────────────────
 
 const DEVKIT_RAW_BASE =
   'https://raw.githubusercontent.com/italia/dev-kit-italia/main'
@@ -173,7 +173,7 @@ export const SNAPSHOT_DSNAV_URL =
 export const SNAPSHOT_META_URL =
   `${DATA_FETCHED_RAW_BASE}/snapshot-meta.json`
 
-// ─── GitHub REST API — source #8 ─────────────────────────────────────────────
+// ─── GitHub REST API ─────────────────────────────────────────────
 
 /** Issues search endpoint */
 export const GITHUB_SEARCH_ISSUES_URL =

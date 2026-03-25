@@ -8,7 +8,7 @@ import {
   SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL,
 } from '../constants.js'
 
-// ─── Source #2 — bsi/components-status.json ──────────────────────────────────
+// ─── Source bsi/components-status.json ──────────────────────────────────
 
 interface RawStatusEntry {
   'title': string
@@ -84,7 +84,7 @@ export async function loadStatus(slug: string): Promise<ComponentStatus | null> 
   return null
 }
 
-// ─── Source #1 — bsi/components/{slug}.json ───────────────────────────────────
+// ─── Source bsi/components/{slug}.json ───────────────────────────────────
 
 type RawVariantsJson = Array<{ name: string; content: string }>
 type RawVariantsFile = { resolvedSlug: string; data: RawVariantsJson } | RawVariantsJson
@@ -124,7 +124,7 @@ export async function loadVariantsResolvedSlug(slug: string): Promise<string> {
   return slug
 }
 
-// ─── Source #3 — bsi/custom-properties.json ──────────────────────────────────
+// ─── bsi/custom-properties.json ──────────────────────────────────
 
 type RawTokenEntry = { 'variable-name': string; value: string; description: string }
 type RawTokensJson = Record<string, RawTokenEntry[]>

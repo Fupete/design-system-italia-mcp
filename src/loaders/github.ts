@@ -25,7 +25,7 @@ async function fetchJson<T>(url: string): Promise<T> {
   return res.json() as Promise<T>
 }
 
-// ─── Source #8 — GitHub Issues REST search ────────────────────────────────────
+// ─── Source GitHub Issues REST search ────────────────────────────────────
 
 interface RawIssue {
   title: string

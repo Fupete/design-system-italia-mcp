@@ -5,7 +5,7 @@ import type { DevKitEntry, DevKitComponent, WebComponentProp, ComponentVariant, 
 import { SNAPSHOT_DEVKIT_INDEX_URL, SNAPSHOT_DEVKIT_STORY_URL, SNAPSHOT_DEVKIT_PROPS_URL, DEVKIT_STORYBOOK_BASE, DEVKIT_STORIES_URL } from '../constants.js'
 import { parseStories } from './devkit-parser.js'
 
-// ─── Source #6 — devkit/index.json ───────────────────────────────────────────
+// ─── Source devkit/index.json ───────────────────────────────────────────
 
 interface IndexEntry {
   id: string
@@ -69,7 +69,7 @@ export async function loadDevKitEntry(slug: string): Promise<DevKitEntry | null>
   return null
 }
 
-// ─── Source #7 — devkit/stories/{slug}.json ──────────────────────────────────
+// ─── Source devkit/stories/{slug}.json ──────────────────────────────────
 // Snapshot contains clean HTML markup extracted from Storybook source panels.
 // Replaces runtime TypeScript parsing (parseStoryVariants).
 

@@ -23,10 +23,10 @@
 
 ### Componenti
 * `list_components` — elenco di tutti i componenti con stato (Bootstrap Italia + Dev Kit Italia), `componentType`
-* `get_component(name, maxVariants?)` — markup per varianti HTML Bootstrap Italia e web components Dev Kit Italia ⚠️ alpha (troncate, default 3 per risorsa) ⚠️ alpha
+* `get_component(name, maxVariants?)` — markup per varianti HTML Bootstrap Italia e web components Dev Kit Italia ⚠️ alpha (troncate, default 3 per risorsa)
 * `get_component_variant(name, variantName)` — markup completo di una variante specifica per nome (BSI o Dev Kit, trasparente) ⚠️ alpha
 * `search_components(query)` — ricerca per nome, slug, alias IT/EN o tag Dev Kit
-* **Tool principale:** `get_component_full(name)` — risposta aggregata: varianti Bootstrap Italia e Dev Kit Italia + props Dev Kit ⚠️ alpha + CSS custom properties e loro token chain fino a valore risolto + linee guida d'uso + stato + issue — una sola query
+* `get_component_full(name)` — risposta aggregata: varianti Bootstrap Italia e Dev Kit Italia + props Dev Kit ⚠️ alpha + CSS custom properties e loro token chain fino a valore risolto + linee guida d'uso + stato + issue — una sola query. Da usare quando servono dati da più sorgenti insieme, non come prima chiamata.
 
 ### Design tokens e variabili CSS
 - `get_component_tokens(name)` — CSS custom properties `--bsi-*` personalizzabili con descrizioni semantiche, tokens da Design Tokens Italia e catena di risoluzione fino a valori risolti
@@ -40,6 +40,9 @@
 ### Issue e stato progetto (GitHub)
 - `get_component_issues(name)` — tutte le issue aperte su GitHub per componente
 - `get_project_board_status` — stato aggregato delle board collegate (segnaposto per funzionalità future di visione trasparente sulla gestione progetto)
+
+### Connessione e meta
+- `ping` — verifica connessione al server, versione, timestamp e warning sulle sorgenti. Da usare all'inizio della sessione per confermare i tool disponibili
 
 ---
 
@@ -176,18 +179,19 @@ I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch [`data-f
 
 | # | Repo | Contenuto | Tool MCP |
 |---|------|-----------|----------|
-| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Markup HTML varianti per componente | `get_component` `list_components` `search_components` |
+| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Markup HTML varianti per componente ⚠️ alpha | `get_component` `list_components` `search_components` |
 | 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Lista ~55 componenti, stato librerie (BSI/UI Kit), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` |
 | 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Token CSS `--bsi-*` per-componente con descrizioni semantiche ⚠️ alpha | `get_component_tokens` `find_token` |
-| 4 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `get_component_guidelines` |
-| 5 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` | `get_component_tokens` `find_token` |
-| 6 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti in italiano, importPath ⚠️ alpha | `list_components` `search_components` |
-| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML per variante, estratto da Storybook source panel ⚠️ alpha | `get_component` `get_component_variant` `get_component_full` |
-| 7b | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni ⚠️ alpha | `get_component` `get_component_full` |
-| 8 | GitHub REST API | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` |
-| 9 | designers.italia.it + BSI + Dev Kit | Versioni Design system / BSI / Dev Kit. URL verificati pagine componenti | `meta` in tutte le risposte |
+| 4 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Bridge `--bsi-*` → `--it-*` (token resolution) | `get_component_tokens` `find_token` |
+| 5 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `get_component_guidelines` |
+| 6 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `1.5rem` | `get_component_tokens` `find_token` |
+| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti, importPath ⚠️ alpha | `list_components` `search_components` |
+| 8 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML per variante, estratto da Storybook source panel ⚠️ alpha | `get_component` `get_component_variant` `get_component_full` |
+| 9 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni ⚠️ alpha | `get_component` `get_component_full` |
+| 10 | GitHub REST API | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` |
+| 11 | designers.italia.it + BSI + Dev Kit | Versioni Design System / BSI / Dev Kit / DTI. URL verificati pagine componenti | meta in tutte le risposte |
 
-Le sorgenti 1–7b e 9 sono aggiornate nightly e cached per 24h.
+Le sorgenti 1–9 e 11 sono aggiornate nightly e cached per 24h.
 La sorgente 8 (GitHub Issues) è l'unica fetchata live a runtime (cache 15 min).
 `dataFetchedAt` nelle risposte riflette la data dell'ultimo snapshot CI.
 
