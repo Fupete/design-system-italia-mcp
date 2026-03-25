@@ -252,6 +252,126 @@ function colorSwatch(val) {
   return '';
 }
 
+function spacingVisual(val) {
+  if (!val) return '';
+  const v = val.trim();
+  const m = v.match(/^([\d.]+)(px|rem|em|%)?$/);
+  if (!m) return '';
+  const num = parseFloat(m[1]);
+  const unit = m[2] || 'px';
+  let pxVal = num;
+  if (unit === 'rem' || unit === 'em') pxVal = num * 16;
+  if (unit === '%') return '';
+  const visual = Math.min(pxVal, 80);
+  const title = `${num}${unit} (${Math.round(pxVal)}px)`;
+  return `<span class="dti-spacing-visual" style="width:${visual}px;height:${visual}px" title="${title}"></span>`;
+}
+
+function fontSizeVisual(val) {
+  if (!val) return '';
+  const v = val.trim();
+  const m = v.match(/^([\d.]+)(px|rem|em)?$/);
+  if (!m) return '';
+  const num = parseFloat(m[1]);
+  const unit = m[2] || 'px';
+  let pxVal = num;
+  if (unit === 'rem' || unit === 'em') pxVal = num * 16;
+  const title = `${num}${unit} (${Math.round(pxVal)}px)`;
+  return `<span class="dti-fontsize-visual" style="font-size:${pxVal}px" title="${title}">Aa</span>`;
+}
+
+function fontWeightVisual(val) {
+  if (!val) return '';
+  const v = val.trim();
+  const m = v.match(/^(normal|bold|lighter|bolder|\d{3})$/i);
+  if (!m) return '';
+  let weightVal = 400;
+  if (v.toLowerCase() === 'bold') weightVal = 700;
+  else if (v.toLowerCase() === 'normal') weightVal = 400;
+  else if (v.toLowerCase() === 'lighter') weightVal = 300;
+  else if (v.toLowerCase() === 'bolder') weightVal = 900;
+  else if (/^\d{3}$/.test(v)) weightVal = parseInt(v);
+  const title = `${v}`;
+  return `<span class="dti-fontweight-visual" style="font-weight:${weightVal}" title="${title}">Aa</span>`;
+}
+
+function fontFamilyVisual(val) {
+  if (!val) return '';
+  const v = val.trim();
+  const title = v;
+  return `<span class="dti-fontfamily-visual" style="font-family:${v}" title="${title}">Aa</span>`;
+}
+
+function borderRadiusVisual(val) {
+  if (!val) return '';
+  const v = val.trim();
+  const m = v.match(/^([\d.]+)(px|rem|em)?$/);
+  if (!m) return '';
+  const num = parseFloat(m[1]);
+  const unit = m[2] || 'px';
+  let pxVal = num;
+  if (unit === 'rem' || unit === 'em') pxVal = num * 16;
+  const size = Math.max(12, pxVal);
+  const br = pxVal;
+  const title = `${num}${unit}`;
+  return `<span class="dti-radius-visual" style="width:${size}px;height:${size}px;border-radius:${br}px" title="${title}"></span>`;
+}
+
+function borderWidthVisual(val) {
+  if (!val) return '';
+  const v = val.trim();
+  const m = v.match(/^([\d.]+)(px|rem|em)?$/);
+  if (!m) return '';
+  const num = parseFloat(m[1]);
+  const unit = m[2] || 'px';
+  let pxVal = num;
+  if (unit === 'rem' || unit === 'em') pxVal = num * 16;
+  const width = Math.min(pxVal, 8);
+  const title = `${num}${unit} (${Math.round(pxVal)}px)`;
+  return `<span class="dti-border-visual" style="border-top:${width}px solid var(--bsi-secondary);width:96px;height:0" title="${title}"></span>`;
+}
+
+function shadowVisual(val) {
+  if (!val) return '';
+  const v = val.trim();
+  const title = v;
+  return `<span class="dti-shadow-visual" style="box-shadow:${v}" title="${title}"></span>`;
+}
+
+function elevationVisual(val) {
+  if (!val) return '';
+  const v = val.trim();
+  const title = v;
+  return `<span class="dti-elevation-visual" style="box-shadow:${v}" title="${title}"></span>`;
+}
+
+function getVisual(rawVal, resolvedVal, tokenLower) {
+  const valueLower = (rawVal || '').toLowerCase();
+  const rValueLower = (resolvedVal || '').toLowerCase();
+  const useVal = resolvedVal || rawVal;
+
+  if (tokenLower.includes('shadow')) {
+    return shadowVisual(useVal);
+  } else if (tokenLower.includes('elevation')) {
+    return elevationVisual(useVal);
+  } else if ((tokenLower.includes('spacing') || tokenLower.includes('icon-size')) && (valueLower.match(/^\d+(\.\d+)?(px|rem|em)$/) || rValueLower.match(/^\d+(\.\d+)?(px|rem|em)$/))) {
+    return spacingVisual(useVal);
+  } else if (tokenLower.includes('font-family') || tokenLower.includes('fontfamily') || tokenLower.includes('font-serif') || tokenLower.includes('font-sans') || tokenLower.includes('font-mono') || tokenLower.includes('code-font') || tokenLower.includes('data-font')) {
+    return fontFamilyVisual(useVal);
+  } else if (tokenLower.includes('font-weight') || tokenLower.includes('fontweight')) {
+    return fontWeightVisual(useVal);
+  } else if (tokenLower.includes('font-size') || tokenLower.includes('fontsize')) {
+    return fontSizeVisual(useVal);
+  } else if ((tokenLower.includes('border') || tokenLower.includes('radius')) && (tokenLower.includes('radius') || tokenLower.includes('border-radius'))) {
+    return borderRadiusVisual(useVal);
+  } else if (tokenLower.includes('border') && ((tokenLower.includes('width') || (valueLower.match(/^\d+(\.\d+)?(px|rem|em)$/) || rValueLower.match(/^\d+(\.\d+)?(px|rem|em)$/))) || tokenLower.includes('border-width'))) {
+    return borderWidthVisual(useVal);
+  } else if (tokenLower.includes('color') || rValueLower.match(/^#|rgba?\(/) || valueLower.match(/^#|rgba?\(/)) {
+    return colorSwatch(useVal);
+  }
+  return '';
+}
+
 function filterTokens(q) {
   const s = q.toLowerCase();
   const visible = dtiAll.filter(t =>
@@ -262,11 +382,15 @@ function filterTokens(q) {
   if (!visible.length) { body.innerHTML = ''; empty.style.display = ''; return; }
   empty.style.display = 'none';
   body.innerHTML = visible.map((t, i) => {
-    const displayVal = t.ref ? `<span class="token-name">${t.ref}</span>` : esc(t.rawVal);
-    const resolved = t.ref ? `${colorSwatch(t.resolvedVal)}${esc(t.resolvedVal || '—')}` : `${colorSwatch(t.rawVal)}`;
+    const refToken = t.ref ? `<span class="token-name">${t.ref}</span>` : '—';
+    const tokenLower = (t.name || '').toLowerCase();
+    const visual = getVisual(t.rawVal, t.resolvedVal, tokenLower);
+    const resolved = esc(t.resolvedVal || '');
+
     return `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}">
       <td class="token-name">${esc(t.name)}</td>
-      <td class="token-desc">${displayVal}</td>
+      <td class="token-name">${refToken}</td>
+      <td class="token-desc dti-visual">${visual}</td>
       <td class="token-desc dti-resolved">${resolved}</td>
       <td class="token-desc">${esc(t.desc)}</td>
     </tr>`;

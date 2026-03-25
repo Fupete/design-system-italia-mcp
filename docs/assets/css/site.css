@@ -288,14 +288,27 @@ ul.nav-tabs button.nav-link.active {
   font-family: 'Roboto Mono', monospace;
   font-size: .85rem;
   color: var(--bsi-secondary);
-  white-space: nowrap;
+  max-width: 240px;
+  min-width: 200px;
+  word-break: normal;
 }
 
 .token-desc {
   font-size: .85rem;
   color: var(--bsi-secondary-color);
   line-height: 1.5;
+  min-width: 200px;
+  max-width: 240px;
 }
+
+.token-desc {
+  font-size: .85rem;
+  color: var(--bsi-secondary-color);
+  line-height: 1.5;
+  min-width: 320px;
+}
+
+
 
 /* Token resolution chain example */
 .chain {
@@ -439,19 +452,128 @@ li {
 }
 
 .dti-resolved {
-  white-space: nowrap;
+  word-break: normal;
+  max-width: 240px;
+  min-width: 200px;
 }
 
 .dti-swatch {
   display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
+  width: 96px;
+  height: 16px;
+  border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, .15);
   vertical-align: middle;
   margin-right: 4px;
   flex-shrink: 0;
 }
+
+/* Tabella DTI — aggiungi colonna visual */
+
+#dti-comp-table thead tr {
+  border-bottom: 1px solid #666;
+}
+
+#dti-comp-table thead th {
+  padding: .55rem .9rem;
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  text-align: left;
+}
+
+#dti-comp-table td {
+  max-width: 180px;
+}
+
+.dti-visual {
+  text-align: center;
+  min-width: 240px;
+}
+
+.dti-spacing-visual {
+  display: inline-block;
+  background: transparent;
+  border: 2px solid #ff9500;
+  vertical-align: middle;
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+.dti-fontsize-visual {
+  display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  color: var(--bsi-secondary);
+  line-height: 1;
+  margin-right: 0;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.dti-fontweight-visual {
+  display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  color: var(--bsi-secondary);
+  line-height: 1;
+  margin-right: 0;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.dti-fontfamily-visual {
+  display: inline-block;
+  font-size: 16px;
+  color: var(--bsi-secondary);
+  line-height: 1;
+  margin-right: 0;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.dti-radius-visual {
+  display: inline-block;
+  background: var(--bsi-secondary);
+  vertical-align: middle;
+  margin-right: 0;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 102, 204, 0.3);
+}
+
+.dti-border-visual {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+.dti-shadow-visual {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: white;
+  vertical-align: middle;
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+.dti-elevation-visual {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: white;
+  vertical-align: middle;
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+.dti-resolved {
+  display: block;
+  gap: 0;
+}
+
 
 /* Workaround BSI 3.x #1726 — it-card-text incorrect font-size */
 ul.it-card-list li .it-card-text {

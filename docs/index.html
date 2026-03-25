@@ -406,6 +406,11 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
                 Mostra tutti <span id="dash-tog-n"></span>
               </button>
             </div>
+            <div id="comp-cta" class="alert alert-info mt-3">
+              <p class="mb-2">Con Filo attivo il tuo assistente AI può recuperare varianti e markup sempre aggiornato
+              </p>
+              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Inizia</a>
+            </div>
           </div>
 
           <div class="tab-pane fade px-2 px-sm-0" id="dt-tok" role="tabpanel">
@@ -417,11 +422,11 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             </div>
             <div id="tok-list" aria-live="polite"></div>
             <div id="tok-cta" class="alert alert-info mt-3" hidden>
-              <p class="mb-2">Con Filo attivo il modello riceve la catena di risoluzione completa —
+              <p class="mb-2">Con Filo attivo il tuo assistente AI riceve la catena di risoluzione completa —
                 <code>--bsi-*</code>
-                → Design Tokens Italia → valore concreto.
+                → Design Tokens Italia <code>--it-*</code> → valore concreto
               </p>
-              <a href="#installazione" class="btn btn-secondary btn-sm">Inizia →</a>
+              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Inizia</a>
             </div>
             <div id="tok-ex" class="border rounded p-3 bg-white mt-2">
               <p class="chain-label">Esempio — --bsi-accordion-padding</p>
@@ -450,15 +455,23 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
               <table id="dti-table" class="tok-table">
                 <thead>
                   <tr>
-                    <th scope="col">Token</th>
-                    <th scope="col">Valore</th>
-                    <th scope="col">Riferimento</th>
+                    <th scope="col">Token (globale o semantico)</th>
+                    <th scope="col">Eventuale token globale</th>
+                    <th scope="col">Anteprima</th>
+                    <th scope="col">Valore risolto</th>
                     <th scope="col">Descrizione</th>
                   </tr>
                 </thead>
                 <tbody id="dti-body"></tbody>
               </table>
               <p class="data-empty mt-2" id="dti-empty" style="display:none">Nessun token trovato.</p>
+            </div>
+            <div id="dti-cta" class="alert alert-info mt-3">
+              <p class="mb-2">Con Filo attivo il tuo assistente AI riceve la catena di risoluzione completa —
+                <code>--bsi-*</code>
+                → Design Tokens Italia <code>--it-*</code> → valore concreto
+              </p>
+              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Inizia</a>
             </div>
           </div>
 
@@ -471,8 +484,9 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             </div>
             <div id="props-list" aria-live="polite"></div>
             <div id="props-cta" class="alert alert-info mt-3" hidden>
-              <p class="mb-2">Con Filo attivo il modello identifica eventuali sotto-componenti e loro props.</p>
-              <a href="#installazione" class="btn btn-secondary btn-sm">Inizia →</a>
+              <p class="mb-2">Con Filo attivo il tuo assistente AI trova sotto-componenti e loro props
+              </p>
+              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Inizia</a>
             </div>
           </div>
 
@@ -492,7 +506,8 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
         </div>
       </div>
     </div>
-    <p class="small text-center m-auto">Istantanea salvata ogni notte nel ramo <code>data-fetched</code> del repository</p>
+    <p class="small text-center m-auto">Istantanea salvata ogni notte nel ramo <code>data-fetched</code> del repository
+    </p>
   </section>
 
   <footer class="site-footer px-2 pb-4 mt-3 border-top" role="contentinfo" aria-labelledby="footer-title">
