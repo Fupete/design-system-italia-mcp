@@ -11,7 +11,6 @@ function copyCode(btn) {
 }
 
 /* Dashboard */
-const FILO_SOURCES = 9;
 const RAW = 'https://raw.githubusercontent.com/Fupete/design-system-italia-mcp/data-fetched';
 const REPOS = [
   { label: 'Bootstrap Italia', slug: 'italia/bootstrap-italia' },
