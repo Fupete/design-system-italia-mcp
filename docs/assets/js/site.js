@@ -189,10 +189,8 @@ async function showGl(slug) {
 
 /* Design Tokens Italia — SCSS parser + table */
 let dtiAll = [];
-let dtiActiveCat = 'all';
 
 function parseDTI(scss) {
-  // Build a value map first so we can resolve one level of $token references
   const valueMap = {};
   for (const line of scss.split('\n')) {
     const m = line.match(/^\$([a-z0-9-]+):\s*([^;]+);/);
@@ -203,11 +201,9 @@ function parseDTI(scss) {
   for (const line of scss.split('\n')) {
     const m = line.match(/^\$([a-z0-9-]+):\s*([^;]+);\s*(?:\/\/\s*(.*))?$/);
     if (!m) continue;
-    const name = `--${m[1].replace(/_/g, '-')}`;  // expose as CSS custom property style
+    const name = `--${m[1].replace(/_/g, '-')}`;
     const rawVal = m[2].trim();
     const desc = (m[3] || '').trim();
-
-    // Detect reference: $it-some-token
     const refMatch = rawVal.match(/^\$([a-z0-9-]+)$/);
     let ref = null;
     let resolvedVal = rawVal;
@@ -215,29 +211,9 @@ function parseDTI(scss) {
       ref = `--${refMatch[1]}`;
       resolvedVal = valueMap[refMatch[1]] || null;
     }
-
-    // Category from second segment of name: --it-COLOR-..., --it-FONT-...
-    const cat = name.split('-')[2] || 'other';
-
-    tokens.push({ name, rawVal, ref, resolvedVal, desc, cat });
+    tokens.push({ name, rawVal, ref, resolvedVal, desc });
   }
   return tokens;
-}
-
-function buildDTICats(tokens) {
-  const cats = ['all', ...new Set(tokens.map(t => t.cat))].sort((a, b) => a === 'all' ? -1 : a.localeCompare(b));
-  const wrap = document.getElementById('dti-cats');
-  wrap.innerHTML = cats.map(c =>
-    ``
-  ).join('');
-}
-
-function dtiSetCat(btn, cat) {
-  dtiActiveCat = cat;
-  document.querySelectorAll('.dti-cats .btn').forEach(b => { b.classList.remove('btn-secondary'); b.classList.add('btn-outline-secondary'); });
-  btn.classList.remove('btn-outline-secondary');
-  btn.classList.add('btn-secondary');
-  filterTokens(document.getElementById('dti-search').value);
 }
 
 function colorSwatch(val) {
@@ -251,8 +227,7 @@ function colorSwatch(val) {
 function filterTokens(q) {
   const s = q.toLowerCase();
   const visible = dtiAll.filter(t =>
-    (dtiActiveCat === 'all' || t.cat === dtiActiveCat) &&
-    (!s || t.name.includes(s) || t.desc.toLowerCase().includes(s) || (t.rawVal + '').toLowerCase().includes(s))
+    !s || t.name.includes(s) || t.desc.toLowerCase().includes(s) || (t.rawVal + '').toLowerCase().includes(s)
   );
   const body = document.getElementById('dti-body');
   const empty = document.getElementById('dti-empty');
@@ -274,7 +249,6 @@ async function loadDTI() {
   try {
     const scss = await fetch(`${RAW}/design-tokens/variables.scss`).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
     dtiAll = parseDTI(scss);
-    buildDTICats(dtiAll);
     filterTokens('');
     document.getElementById('dti-loading').style.display = 'none';
     document.getElementById('dti-table-wrap').style.display = '';

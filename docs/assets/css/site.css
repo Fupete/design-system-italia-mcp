@@ -482,8 +482,6 @@ li {
   flex-shrink: 0;
 }
 
-/* Design Tokens Italia tab */
-
 /* Workaround BSI 3.x #1726 — it-card-text incorrect font-size */
 ul.it-card-list li .it-card-text {
   font-size: 1rem !important;
