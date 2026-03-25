@@ -142,17 +142,45 @@ function populateGlSel() {
 
 const mm = text => {
   if (!text) return '';
-  return text.split(/\n\n+/).map(b => {
-    b = b.trim();
-    if (!b) return '';
-    if (/^### /.test(b)) {
-      const lines = b.split('\n');
-      const heading = `<h3>${esc(lines[0].replace(/^### /, ''))}</h3>`;
-      const rest = lines.slice(1).join('\n').trim();
-      return heading + (rest ? mm(rest) : '');
+  // Split by blank lines (paragraph/block boundaries)
+  const blocks = text.split(/\n\n+/).map(b => b.trim()).filter(b => b);
+  return blocks.map(b => {
+    const lines = b.split('\n');
+    let out = '';
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i].trim();
+      if (!line) { i++; continue; }
+      // Heading h2
+      if (/^## /.test(line)) {
+        out += `<h2>${esc(line.replace(/^## /, ''))}</h2>`;
+        i++;
+        continue;
+      }
+      // Heading h3
+      if (/^### /.test(line)) {
+        out += `<h3>${esc(line.replace(/^### /, ''))}</h3>`;
+        i++;
+        continue;
+      }
+      // Bullet list (consume consecutive bullet lines)
+      if (/^[*-] /.test(line)) {
+        const listLines = [];
+        while (i < lines.length) {
+          const l = lines[i].trim();
+          if (!l) { i++; continue; }
+          if (!/^[*-] /.test(l)) break;
+          listLines.push(l);
+          i++;
+        }
+        out += `<ul>${listLines.map(l => `<li>${mi(l.replace(/^[*-] /, ''))}</li>`).join('')}</ul>`;
+        continue;
+      }
+      // Paragraph (regular text, not a heading/list)
+      out += `<p>${mi(line)}</p>`;
+      i++;
     }
-    if (/^- /m.test(b)) return `<ul>${b.split('\n').filter(l => l.trim()).map(l => `<li>${mi(l.replace(/^- /, ''))}</li>`).join('')}</ul>`;
-    return `<p>${mi(b)}</p>`;
+    return out;
   }).join('');
 };
 
