@@ -217,6 +217,8 @@ async function showGl(slug) {
 
 /* Design Tokens Italia — SCSS parser + table */
 let dtiAll = [];
+let dtiExp = false;
+const DTI_DEFAULT_N = 10;
 
 function parseDTI(scss) {
   const valueMap = {};
@@ -374,19 +376,26 @@ function getVisual(rawVal, resolvedVal, tokenLower) {
 
 function filterTokens(q) {
   const s = q.toLowerCase();
+  const isFiltering = s.length > 0;
   const visible = dtiAll.filter(t =>
     !s || t.name.includes(s) || t.desc.toLowerCase().includes(s) || (t.rawVal + '').toLowerCase().includes(s)
   );
   const body = document.getElementById('dti-body');
   const empty = document.getElementById('dti-empty');
-  if (!visible.length) { body.innerHTML = ''; empty.style.display = ''; return; }
+  const tog = document.getElementById('dti-tog');
+  const togN = document.getElementById('dti-tog-n');
+
+  if (!visible.length) { body.innerHTML = ''; empty.style.display = ''; tog.style.display = 'none'; return; }
   empty.style.display = 'none';
-  body.innerHTML = visible.map((t, i) => {
+
+  // Se sta filtrando, mostra tutto senza truncation; altrimenti rispetta dtiExp
+  const toRender = (isFiltering || dtiExp) ? visible : visible.slice(0, DTI_DEFAULT_N);
+
+  body.innerHTML = toRender.map((t, i) => {
     const refToken = t.ref ? `<span class="token-name">${t.ref}</span>` : '—';
     const tokenLower = (t.name || '').toLowerCase();
     const visual = getVisual(t.rawVal, t.resolvedVal, tokenLower);
     const resolved = esc(t.resolvedVal || '');
-
     return `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}">
       <td class="token-name">${esc(t.name)}</td>
       <td class="token-name">${refToken}</td>
@@ -395,6 +404,19 @@ function filterTokens(q) {
       <td class="token-desc">${esc(t.desc)}</td>
     </tr>`;
   }).join('');
+
+  if (isFiltering || visible.length <= DTI_DEFAULT_N) {
+    tog.style.display = 'none';
+  } else {
+    tog.style.display = '';
+    tog.firstChild.textContent = dtiExp ? 'Mostra meno ' : 'Mostra tutti ';
+    togN.textContent = dtiExp ? '' : `(${visible.length})`;
+  }
+}
+
+function toggleDTI() {
+  dtiExp = !dtiExp;
+  filterTokens(document.getElementById('dti-search').value);
 }
 
 async function loadDTI() {

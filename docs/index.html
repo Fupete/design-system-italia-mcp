@@ -479,6 +479,11 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
               </table>
               <p class="data-empty mt-2" id="dti-empty" style="display:none">Nessun token trovato.</p>
             </div>
+            <div class="mt-2 text-center">
+              <button id="dti-tog" class="btn btn-xs btn-outline-secondary" onclick="toggleDTI()" style="display:none">
+                Mostra tutti <span id="dti-tog-n"></span>
+              </button>
+            </div>
             <div id="dti-cta" class="alert alert-info mt-3">
               <p class="mb-2">Con Filo attivo il tuo assistente AI riceve la catena di risoluzione completa —
                 <code>--bsi-*</code>
