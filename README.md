@@ -18,7 +18,7 @@
 
 **EN** — Design System .italia is the official open source design system for Italian Public Administration interfaces. An initiative by [Designers Italia](https://designers.italia.it/), it is distributed across multiple independent repositories.
 
-- [Bootstrap Italia](https://github.com/italia/bootstrap-italia) — componenti e stili HTML/CSS / HTML/CSS components and styles ⚠️ v3.x alpha
+- [Bootstrap Italia](https://github.com/italia/bootstrap-italia) — componenti e stili HTML/CSS / HTML/CSS components and styles ⚠️ v3 alpha
 - [Dev Kit Italia](https://github.com/italia/dev-kit-italia) — web component `it-*` ⚠️ v1 alpha
 - [Design Tokens Italia](https://github.com/italia/design-tokens-italia) — variabili CSS e SCSS globali `--it-*` e `$it-` / global CSS and SCSS variables
 - [designers.italia.it](https://designers.italia.it/design-system/) — documentazione e linee guida d'uso / documentation and usage guidelines
