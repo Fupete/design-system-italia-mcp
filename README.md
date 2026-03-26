@@ -12,22 +12,25 @@
 
 ---
 
-## Il Design System .italia
+## Di cosa parliamo? / What are we talking about?
 
-Sistema di design ufficiale per i siti e i servizi digitali della Pubblica Amministrazione italiana, mantenuto da [Designers Italia](https://designers.italia.it/) (DTD). Le risorse sono distribuite in più repository:
+**IT** — Design system .italia è il sistema open source ufficiale per realizzare le interfacce della Pubblica Amministrazione. Una iniziativa del progetto [Designers Italia](https://designers.italia.it/), è distribuito in più repository indipendenti.
 
-- [Bootstrap Italia](https://github.com/italia/bootstrap-italia) — componenti e stili HTML/CSS ⚠️ v3.x alpha
+**EN** — Design System .italia is the official open source design system for Italian Public Administration interfaces. An initiative by [Designers Italia](https://designers.italia.it/), it is distributed across multiple independent repositories.
+
+- [Bootstrap Italia](https://github.com/italia/bootstrap-italia) — componenti e stili HTML/CSS / HTML/CSS components and styles ⚠️ v3.x alpha
 - [Dev Kit Italia](https://github.com/italia/dev-kit-italia) — web component `it-*` ⚠️ v1 alpha
-- [Design Tokens Italia](https://github.com/italia/design-tokens-italia) — variabili CSS e SCSS globali `--it-*` e `$it-`
-- [designers.italia.it](https://designers.italia.it/design-system/) — documentazione, linee guida d'uso e stato componenti
+- [Design Tokens Italia](https://github.com/italia/design-tokens-italia) — variabili CSS e SCSS globali `--it-*` e `$it-` / global CSS and SCSS variables
+- [designers.italia.it](https://designers.italia.it/design-system/) — documentazione e linee guida d'uso / documentation and usage guidelines
 
 ---
 
 ## Cos'è Filo / What is Filo 
 
-**IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia, web component e props Dev Kit Italia ⚠️ alpha, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
+**IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia v3 ⚠️ alpha, web component e props Dev Kit Italia v1 ⚠️ alpha, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
 
-**EN** — Filo is an unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia components and HTML markup, Dev Kit Italia web components and props ⚠️ alpha, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot into the `data-fetched` branch.
+**EN** — Filo is an unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia v3 components and HTML markup ⚠️ alpha, Dev Kit Italia web components and props v1 ⚠️ alpha, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot into the `data-fetched` branch.
+**EN** — Filo is an unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia v3 components and HTML markup ⚠️ alpha, Dev Kit Italia web components and props v1 ⚠️ alpha, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot into the `data-fetched` branch.
 
 ---
 
@@ -64,7 +67,7 @@ Il valore del server è la **combinazione contestuale** di sorgenti frammentate.
 
 Esempi: *"Dimmi tutto sul componente Alert"*, *"Quali token devo personalizzare nel mio css per cambiare i colori di header e footer?"*, *"..."*
 
-Ogni risposta include le versioni delle sorgenti (Design system .italia, Bootstrap Italia, Dev Kit Italia, Design Tokens Italia), URL verificato della documentazione ufficiale e `dataFetchedAt`, la data dell'ultimo snapshot CI che avviene tendenzialmente ogni notte, non il momento della richiesta.
+Ogni risposta include le versioni delle risorse (Design system .italia, Bootstrap Italia, Dev Kit Italia, Design Tokens Italia), URL verificato della documentazione ufficiale e `dataFetchedAt`, la data dell'ultimo snapshot CI che avviene tendenzialmente* ogni notte, non il momento della richiesta. (* = laddove ci sono rilasci di nuove versioni upstream).
 
 Per componenti con molte varianti (es. Card con 30+), `get_component` e `get_component_full` restituiscono di default le prime 3 con markup completo + la lista nomi di tutte. Usa `get_component_variant(name, variantName)` per richiederne altre specifiche per nome.
 
@@ -74,7 +77,7 @@ I nomi dei componenti funzionano in italiano e inglese: *"fisarmonica"*, *"dialo
 
 ## System prompt consigliato / Recommended system prompt
 
-Per ridurre gli errori o allucinazioni, istruisci l'assistente a basarsi esclusivamente sui dati restituiti dal server dsi-mcp. 
+Per ridurre gli errori o allucinazioni, istruisci il tuo assistente AI a basarsi esclusivamente sui dati restituiti da Filo.
 
 **IT**
 ```
