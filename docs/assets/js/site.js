@@ -86,7 +86,7 @@ function populateTokenSel(raw) {
   Object.keys(tokByComp).sort().forEach(c => {
     const o = document.createElement('option');
     o.value = c;
-    o.textContent = `${c} (${tokByComp[c].length})`;
+    o.textContent = `${c}`;
     sel.appendChild(o);
   });
 }
