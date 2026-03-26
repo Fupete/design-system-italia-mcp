@@ -67,6 +67,7 @@
       <span class="site-nav-brand" aria-hidden="true">
         <img class="w-75" src="assets/imgs/filo-logo.svg" alt="Filo.">
       </span>
+      <a href="#contesto">Contesto</a>
       <a href="#installazione">Installa</a>
       <a href="#strumenti">Strumenti</a>
       <a href="#dashboard">Dati</a>
@@ -110,6 +111,34 @@
         ⚠️ <strong>Progetto personale non ufficiale e sperimentale</strong> - I dati sono forniti così come sono e
         potrebbero essere incompleti o non aggiornati. Utilizzare a proprio rischio
       </p>
+    </div>
+  </section>
+
+  <section id="contesto" class="py-5 border-bottom" aria-labelledby="contesto-title">
+    <div class="container-xxl">
+      <div class="row">
+        <div class="col-12 col-lg-7 col-xl-8">
+          <h2 id="contesto-title" class="mb-0">Di cosa parliamo?</h2>
+          <p class="lead mb-4">Design system .italia è il sistema open source ufficiale per realizzare le interfacce
+            della Pubblica Amministrazione.</p>
+          <p>Una iniziativa del progetto <a href="https://designers.italia.it/">Designers Italia</a>, è distribuito in
+            più repository
+            indipendenti:</p>
+          <ul>
+            <li><a href="https://github.com/italia/bootstrap-italia">Bootstrap Italia</a>
+              (componenti e stili HTML, CSS)</li>
+            <li><a href="https://github.com/italia/dev-kit-italia">Dev Kit Italia</a> (web component
+              <code>it-*</code>)
+            </li>
+            <li><a href="https://github.com/italia/design-tokens-italia">Design Tokens
+                Italia</a> (variabili CSS e SCSS globali)</li>
+            <li><a href="https://designers.italia.it/design-system/">designers.italia.it</a> (documentazione e linee
+              guida d'uso)</li>
+          </ul>
+          <p class="mb-0">Filo aggrega queste sorgenti aggiornate nightly e le espone via MCP. È da notare che Filo fa
+            riferimento alle future v3 di Bootstrap Italia e v1 di Dev Kit Italia, attualmente in alpha.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -255,7 +284,7 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
           <div class="tab-pane fade show active" id="sp-it" role="tabpanel">
             <div class="pre-wrap">
               <pre
-                class="pre-prompt"><code>## Regole dati Design System .italia (Filo MCP)
+                class="pre-prompt"><code>## Regole dati Design system .italia (Filo MCP)
 
 DATI VERIFICATI: usa esclusivamente i dati restituiti dagli strumenti MCP di Filo. Non integrare con conoscenza pregressa su Bootstrap Italia, Dev Kit Italia, Design Tokens Italia o altri framework CSS/web component.
 
@@ -331,7 +360,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             <li class="it-card p-3 border shadow-sm rounded"><span>get_component_guidelines</span> Linee guida d'uso da
               Designers Italia: quando usarlo, come usarlo, alternative consigliate, note accessibilità.</li>
             <li class="it-card p-3 border shadow-sm rounded"><span>get_component_issues</span> Issue GitHub aperte per
-              un componente sui 4 repository del Design System .italia.</li>
+              un componente sui 4 repository del Design system .italia.</li>
           </ul>
         </div>
         <div class="col-12 col-sm-6 col-md-3">
@@ -350,7 +379,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             <li class="it-card p-3 border shadow-sm rounded"><span>ping</span> Verifica connessione al server.
               Restituisce stato, versione, timestamp e warning sulle sorgenti.</li>
             <li class="it-card p-3 border shadow-sm rounded"><span>get_project_board_status</span> Stato aggregato delle
-              board GitHub del Design System .italia. Link alle issue aperte per repository.</li>
+              board GitHub del Design system .italia. Link alle issue aperte per repository.</li>
           </ul>
         </div>
       </div>

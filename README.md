@@ -12,6 +12,17 @@
 
 ---
 
+## Il Design System .italia
+
+Sistema di design ufficiale per i siti e i servizi digitali della Pubblica Amministrazione italiana, mantenuto da [Designers Italia](https://designers.italia.it/) (DTD). Le risorse sono distribuite in più repository:
+
+- [Bootstrap Italia](https://github.com/italia/bootstrap-italia) — componenti e stili HTML/CSS ⚠️ v3.x alpha
+- [Dev Kit Italia](https://github.com/italia/dev-kit-italia) — web component `it-*` ⚠️ v1 alpha
+- [Design Tokens Italia](https://github.com/italia/design-tokens-italia) — variabili CSS e SCSS globali `--it-*` e `$it-`
+- [designers.italia.it](https://designers.italia.it/design-system/) — documentazione, linee guida d'uso e stato componenti
+
+---
+
 ## Cos'è Filo / What is Filo 
 
 **IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia, web component e props Dev Kit Italia ⚠️ alpha, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
