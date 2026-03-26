@@ -39,7 +39,7 @@
               <div class="it-brand-wrapper">
                 <a href="#">
                   <div class="it-brand-text">
-                    <div class="it-brand-title text-black">🧵 Filo</div>
+                    <img class="w-100" src="assets/imgs/filo-logo.svg" alt="Filo.">
                   </div>
                 </a>
               </div>
@@ -64,20 +64,20 @@
 
   <nav class="site-nav shadow-sm aria-label=" Navigazione sezioni">
     <div class="site-nav-inner container-xxl">
-      <span class="site-nav-brand" aria-hidden="true">🧵 Filo</span>
+      <span class="site-nav-brand" aria-hidden="true">
+        <img class="w-75" src="assets/imgs/filo-logo.svg" alt="Filo.">
+      </span>
       <a href="#installazione">Installa</a>
       <a href="#strumenti">Strumenti</a>
       <a href="#dashboard">Dati</a>
     </div>
   </nav>
 
-  <section class="hero border-bottom mt-5" id="main-content" aria-labelledby="hero-title">
+  <section class="hero border-bottom mt-2 mt-lg-5" id="main-content" aria-labelledby="hero-title">
     <div class="container-xxl">
       <div class="row">
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-7 col-xl-8">
           <h1 id="hero-title">MCP server per il Design system .italia </h1>
-          <p><strong>⚠️ Progetto personale non ufficiale e sperimentale</strong>. I dati sono
-            forniti così come sono e potrebbero essere incompleti o non aggiornati. Utilizzare a proprio rischio. </p>
           <div class="d-grid d-md-flex flex-wrap gap-3 pt-4" style="align-items: end">
             <a href="#installazione" class="btn btn-secondary bg-dark btn-lg">Installa</a>
             <a href="#dashboard" class="btn btn-outline-secondary btn-lg">Dati</a>
@@ -90,6 +90,9 @@
                 style="height: fit-content">GitHub</a>
             </div>
           </div>
+        </div>
+        <div class="col-12 mb-3 mb-lg-0 col-sm-8 col-md-6 col-lg-5 col-xl-4 order-first order-lg-2">
+          <img class="w-100 m-auto" src="assets/imgs/filo-illustration-hero.png" alt="Tenere il filo blu Italia.">
         </div>
       </div>
       <div class="row mt-4">
@@ -407,9 +410,9 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
               </button>
             </div>
             <div id="comp-cta" class="alert alert-info mt-3">
-              <p class="mb-2">Con Filo attivo il tuo assistente AI può recuperare varianti e markup sempre aggiornato
+              <p class="mb-2">Con Filo attivo il tuo assistente AI può accedere a varianti e markup dei componenti
               </p>
-              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Inizia</a>
+              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Prova</a>
             </div>
           </div>
 
@@ -426,7 +429,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
                 <code>--bsi-*</code>
                 → Design Tokens Italia <code>--it-*</code> → valore concreto
               </p>
-              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Inizia</a>
+              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Prova</a>
             </div>
             <div id="tok-ex" class="border rounded p-3 bg-white mt-2">
               <p class="chain-label">Esempio — --bsi-accordion-padding</p>
@@ -471,7 +474,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
                 <code>--bsi-*</code>
                 → Design Tokens Italia <code>--it-*</code> → valore concreto
               </p>
-              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Inizia</a>
+              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Prova</a>
             </div>
           </div>
 
@@ -486,7 +489,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
             <div id="props-cta" class="alert alert-info mt-3" hidden>
               <p class="mb-2">Con Filo attivo il tuo assistente AI trova sotto-componenti e loro props
               </p>
-              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Inizia</a>
+              <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Prova</a>
             </div>
           </div>
 
@@ -513,24 +516,29 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
   <footer class="site-footer px-2 pb-4 mt-3 border-top" role="contentinfo" aria-labelledby="footer-title">
     <div class="container-xxl">
       <div class="mb-2 d-block d-lg-flex d-md-block gap-5 align-items-center pb-5">
-        <h2 id="footer-title" class="h3 fw-bold mb-2">🧵 Filo</h2>
+        <h2 id="footer-title" class="mb-2"> <img class="" src="assets/imgs/filo-logo.svg" alt="Filo.">
+        </h2>
         <ul class="d-flex d-lg-block d-xl-flex gap-3 align-items-center">
           <li><a href="https://www.npmjs.com/package/@fupete/design-system-italia-mcp">npm</a></li>
           <li><a href="https://ghcr.io/fupete/design-system-italia-mcp">Docker</a></li>
           <li><a href="https://github.com/fupete/design-system-italia-mcp">GitHub</a></li>
         </ul>
-        <p class="small mb-0" style="max-width: 45ch">Filo è un progetto sperimentale sviluppato anche litigando con
-          qualche LLM. <a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue</a>
-          benvenute.</p>
+        <div>
+          <p class="small mb-2" style="max-width: 45ch">Filo è un progetto sperimentale sviluppato anche litigando con
+            qualche LLM. <a href="https://github.com/fupete/design-system-italia-mcp/issues">Issue</a>
+            benvenute.</p>
+        </div>
         <div class="small ms-auto pt-4 pt-lg-0 text-right d-block d-xl-flex align-items-end flex-column">
-          <span><strong>Copyright 2026 <a href="https://github.com/fupete">Daniele Tabellini
-                (Fupete)</a></strong></span>
           <div class="d-flex gap-4"><a
               href="https://github.com/Fupete/design-system-italia-mcp?tab=readme-ov-file#licenza--license">BSD-3-Clause</a>
             <a
               href="https://github.com/Fupete/design-system-italia-mcp?tab=readme-ov-file#provenienza-dei-dati-e-licenze--data-provenance--licenses">Provenienza
               dei dati e licenze</a>
           </div>
+          <span>© 2026 <a href="https://github.com/fupete">Daniele Tabellini
+              (Fupete)</a></span>
+          <p class="small mb-0 mt-2">Illustrazione hero: <a href="https://www.opendoodles.com/about">Open Doodles</a> (remix)</p>
+
         </div>
       </div>
     </div>
