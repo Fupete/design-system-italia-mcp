@@ -1,11 +1,12 @@
-# 🧵 Filo – MCP server per il Design system .italia
+![Filo.](docs/assets/imgs/filo-logo.svg)
+
+# MCP server per il Design system .italia
 
 *Non perdere il filo.*
 
-> ⚠️ **Progetto personale non ufficiale e sperimentale**
-> I dati sono forniti così come sono e potrebbero essere incompleti o non aggiornati. Utilizzare a proprio rischio.
-> ⚠️ **Unofficial & experimental personal sandbox project**
-> Data is provided as-is and may be outdated or incomplete. Use at your own risk.
+<img src="docs/assets/imgs/filo-illustration-hero.png" alt="Tenere il filo blu Italia." width="400">
+
+> ⚠️ **Progetto personale non ufficiale e sperimentale** - I dati sono forniti così come sono e potrebbero essere incompleti o non aggiornati. Utilizzare a proprio rischio. / ⚠️ **Unofficial & experimental personal sandbox project** - Data is provided as-is and may be outdated or incomplete. Use at your own risk.
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/fupete/design-system-italia-mcp) [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
 
@@ -247,31 +248,20 @@ npx @modelcontextprotocol/inspector http://localhost:8080/mcp
 
 ## Provenienza dei dati e licenze / Data provenance & licenses
 
-Il server recupera e serve dati da repository pubblici upstream.
-Le sorgenti includono Bootstrap Italia, Dev Kit Italia, Design Tokens Italia e
-Designers Italia — tutte **BSD-3-Clause**. I contenuti editoriali di Designers Italia
-(linee guida d'uso, note di accessibilità) sono licenziati sotto **CC-BY-SA 4.0**.
-I lavori derivati ereditano il requisito ShareAlike.
+Il server recupera e serve dati da repository pubblici upstream. Le sorgenti includono Bootstrap Italia, Dev Kit Italia, Design Tokens Italia e Designers Italia — tutte **BSD-3-Clause**. I contenuti editoriali di Designers Italia (linee guida d'uso, note di accessibilità) sono licenziati sotto **CC-BY-SA 4.0**. I lavori derivati ereditano il requisito ShareAlike / This server fetches and serves data from public upstream repositories. Sources include Bootstrap Italia, Dev Kit Italia, Design Tokens Italia and Designers Italia — all **BSD-3-Clause**. Editorial content from Designers Italia
+(usage guidelines, accessibility notes) is licensed under **CC-BY-SA 4.0**. Derivatives of that content inherit the ShareAlike requirement.
 
-This server fetches and serves data from public upstream repositories.
-Sources include Bootstrap Italia, Dev Kit Italia, Design Tokens Italia and
-Designers Italia — all **BSD-3-Clause**. Editorial content from Designers Italia
-(usage guidelines, accessibility notes) is licensed under **CC-BY-SA 4.0**.
-Derivatives of that content inherit the ShareAlike requirement.
-
-Dettagli completi, link agli autori upstream e riferimenti alle licenze: /
-Full provenance details, upstream author links and license references:
-[data-fetched branch README](https://github.com/Fupete/design-system-italia-mcp/blob/data-fetched/README.md)
+Dettagli completi, link agli autori upstream e riferimenti alle licenze: / Full provenance details, upstream author links and license references: [data-fetched branch README](https://github.com/Fupete/design-system-italia-mcp/blob/data-fetched/README.md)
 
 ---
 
 ## Licenza / License
 
 BSD 3-Clause — © 2026 Daniele Tabellini (Fupete)
-
 Documentazione: CC BY SA 4.0
+I dati esposti mantengono la licenza delle rispettive sorgenti
 
-I dati esposti mantengono la licenza delle rispettive sorgenti.
+Illustrazione hero: <a href="https://www.opendoodles.com/about">Open Doodles</a> (remix)
 
 ---
 
