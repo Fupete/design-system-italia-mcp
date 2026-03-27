@@ -6,8 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <meta property="og:site_name" content="Filo">
-  <meta property="og:title" content="Filo — MCP server per il Design System .italia">
-  <meta property="og:description" content="Non perdere il filo.">
+  <meta property="og:title" content="Filo — MCP server per il Design system .italia">
+  <meta property="og:description"
+    content="Server MCP per accedere al Design system .italia, per persone ed assistenti AI">
   <meta property="og:image" content="https://fupete.github.io/design-system-italia-mcp/assets/imgs/filo-seo-card.png">
   <meta property="og:url" content="https://fupete.github.io/design-system-italia-mcp/">
   <meta property="og:type" content="website">
@@ -148,14 +149,61 @@
           </ul>
           <p class="mb-0">
             Filo raccoglie e organizza le informazioni utili da queste sorgenti ogni notte e le espone via MCP.
-            È un'interfaccia per assistenti AI che offre strumenti per consultare e usare le risorse del design system in modo semplice e verificato.
-            È da notare che Filo fa riferimento alle future v3 di Bootstrap Italia e v1 di Dev Kit Italia, attualmente in alpha.
+            È un'interfaccia per assistenti AI che offre strumenti per consultare e usare le risorse del design system
+            in modo semplice e verificato.
+            È da notare che Filo fa riferimento alle future v3 di Bootstrap Italia e v1 di Dev Kit Italia, attualmente
+            in alpha.
           </p>
         </div>
         <div class="col-12 mb-3 mb-lg-0 col-sm-8 col-md-6 col-lg-5 col-xl-4 order-first d-flex">
           <img class="w-100 m-auto" src="assets/imgs/filo-illustration-hero-ds.png" alt="Tenersi al filo blu Italia.">
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="perche" class="py-5 mt-3 border-bottom" aria-labelledby="perche-title">
+    <div class="container">
+      <h2 id="perche-title" class="mb-0">Perché Filo?</h2>
+      <p class="lead mb-4">Un progetto sperimentale con alcune idee precise:</p>
+      <ul class="d-flex flex-wrap gap-3 mb-4 px-0">
+        <li class="it-card p-3 border shadow-sm rounded">
+          <div class="it-card-body">
+            <p class="it-card-text">
+              <strong>Rendere interrogabile il Design system .italia</strong> e il suo vasto ecosistema di
+              documentazione, risorse e repository
+            </p>
+          </div>
+        </li>
+        <li class="it-card p-3 border shadow-sm rounded">
+          <div class="it-card-body">
+            <p class="it-card-text">
+              <strong>Supportare persone e assistenti AI</strong> nella progettazione di interfacce, nell'esplorazione
+              della documentazione, nella generazione di codice e nella validazione di scelte e risultati
+            </p>
+          </div>
+        </li>
+        <li class="it-card p-3 border shadow-sm rounded">
+          <div class="it-card-body">
+            <p class="it-card-text">
+              <strong>Realizzare un server MCP read-only e open source</strong> che espone strumenti per interrogare dati
+              verificati e riproducibili, con versioni delle risorse sempre esplicite e note
+            </p>
+          </div>
+        </li>
+        <li class="it-card p-3 border shadow-sm rounded">
+          <div class="it-card-body">
+            <p class="it-card-text">
+              <strong>Fare un esperimento sulle possibilità di sviluppare software utile per le persone</strong>, 
+              anche mentre litighi con qualche LLM
+            </p>
+          </div>
+        </li>
+      </ul>
+      <p class="small mt-3">
+        <strong>In roadmap</strong>: strumenti per setup progetti e lettura fondamenti del design system,
+        ottimizzazione dell'uso di token LLM e risorse. Futuribile: test uso combinato con server MCP per tool di design
+      </p>
     </div>
   </section>
 
@@ -406,7 +454,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
   <section id="dashboard" class="py-5 mt-3 border-top" aria-labelledby="dashboard-title">
     <div class="container-xxl">
       <h2 id="dashboard-title" class="mb-0">Esplora i dati</h2>
-      <p class="lead mb-5">Verifica i dati aggregati dalle fonti originali del Design system .italia</p>
+      <p class="lead mb-5">Verifica i dati aggregati dalle sorgenti originali del Design system .italia</p>
       <p id="dash-loading" class="data-empty">Caricamento...</p>
       <div id="dash-error" class="alert alert-warning" style="display:none" role="alert">
         <svg class="alert-icon icon" aria-hidden="true">

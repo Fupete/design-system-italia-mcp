@@ -2,6 +2,15 @@
 
 :root {
   --filo-dark: #212121;
+  --filo-font-size-base: 16px;
+}
+
+.it-card {
+  .it-card-body {
+    .it-card-text {
+      font-size: var(--filo-font-size-base);
+    }
+  }
 }
 
 .bg-dark {
