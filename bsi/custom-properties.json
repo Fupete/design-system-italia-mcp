@@ -357,6 +357,16 @@
             "description": "Controls the text color for the avatar, using color tokens.",
             "value": "var(--bsi-color-text-secondary)",
             "variable-name": "--bsi-avatar-text-color"
+        },
+        {
+            "description": "Controls the margin left for the avatar dropdown menu.",
+            "value": "-24px",
+            "variable-name": "--bsi-avatar-dropdown-margin-left"
+        },
+        {
+            "description": "Controls the margin top for the avatar dropdown menu.",
+            "value": "24px",
+            "variable-name": "--bsi-avatar-dropdown-margin-top"
         }
     ],
     "backtop": [
@@ -729,6 +739,16 @@
             "description": "Controls the text color of links within the card, using color tokens",
             "value": "var(--bsi-color-text-secondary)",
             "variable-name": "--bsi-card-link-color"
+        },
+        {
+            "description": "Controls the vertical spacing around the card title, using the card spacing variable for consistency",
+            "value": "var(--bsi-card-spacing-y)",
+            "variable-name": "--bsi-card-title-spacing-y"
+        },
+        {
+            "description": "Controls the font size of the main card text, using font size tokens",
+            "value": "var(--bsi-font-size-3)",
+            "variable-name": "--bsi-card-text-font-size"
         },
         {
             "description": "Controls the font size of the card signature, using font size tokens",
@@ -1782,41 +1802,6 @@
     "progress": [
         {
             "description": "",
-            "value": "var(--bsi-color-border-secondary)",
-            "variable-name": "--bsi-progress-spinner-bg"
-        },
-        {
-            "description": "",
-            "value": "48px",
-            "variable-name": "--bsi-progress-spinner-size"
-        },
-        {
-            "description": "",
-            "value": "32px",
-            "variable-name": "--bsi-progress-spinner-size-sm"
-        },
-        {
-            "description": "",
-            "value": "64px",
-            "variable-name": "--bsi-progress-spinner-size-lg"
-        },
-        {
-            "description": "",
-            "value": "80px",
-            "variable-name": "--bsi-progress-spinner-size-xl"
-        },
-        {
-            "description": "",
-            "value": "4px",
-            "variable-name": "--bsi-progress-spinner-border-width"
-        },
-        {
-            "description": "",
-            "value": "0.75s",
-            "variable-name": "--bsi-progress-spinner-animation-duration"
-        },
-        {
-            "description": "",
             "value": "var(--bsi-color-background-secondary-lighter)",
             "variable-name": "--bsi-progress-bg"
         },
@@ -1854,6 +1839,41 @@
             "description": "",
             "value": "4px",
             "variable-name": "--bsi-progress-height"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-color-border-secondary)",
+            "variable-name": "--bsi-progress-spinner-bg"
+        },
+        {
+            "description": "",
+            "value": "48px",
+            "variable-name": "--bsi-progress-spinner-size"
+        },
+        {
+            "description": "",
+            "value": "32px",
+            "variable-name": "--bsi-progress-spinner-size-sm"
+        },
+        {
+            "description": "",
+            "value": "64px",
+            "variable-name": "--bsi-progress-spinner-size-lg"
+        },
+        {
+            "description": "",
+            "value": "80px",
+            "variable-name": "--bsi-progress-spinner-size-xl"
+        },
+        {
+            "description": "",
+            "value": "4px",
+            "variable-name": "--bsi-progress-spinner-border-width"
+        },
+        {
+            "description": "",
+            "value": "0.75s",
+            "variable-name": "--bsi-progress-spinner-animation-duration"
         }
     ],
     "rating": [
