@@ -2,6 +2,8 @@
 
 # MCP server per il Design system .italia
 
+[![SafeSkill 75/100](https://img.shields.io/badge/SafeSkill-75%2F100_Passes%20with%20Notes-yellow)](https://safeskill.dev/scan/fupete-design-system-italia-mcp)
+
 *Non perdere il filo.*
 
 <img src="docs/assets/imgs/filo-illustration-hero.png" alt="Tenere il filo blu Italia." width="400">
