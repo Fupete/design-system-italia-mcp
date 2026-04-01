@@ -44,11 +44,12 @@ export interface ComponentVariant {
 // ─── BSI — api/custom_properties.json ────────────────────────────────────────
 
 export interface CssToken {
-  name: string          // --bsi-accordion-body-padding-x
-  value: string         // var(--bsi-spacing-m)
+  name: string
+  value: string
   valueType: 'token-reference' | 'scss-expression' | 'literal'
-  resolvedVia: string[]        // chain: e.g. ["--bsi-spacing-m", "--it-spacing-m"]
-  valueResolved: string | null  // 1.5rem — from Design Tokens Italia
+  resolvedVia: string[]
+  valueResolved: string | null
+  valueResolvedNote?: string    // present only for scss-expression tokens
   description: string | null
 }
 
