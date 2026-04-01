@@ -56,6 +56,13 @@ export function registerGetComponentTokens(server: McpServer): void {
         warnings.push('Design Tokens Italia value resolution not available')
       }
 
+      // Add valueResolvedNote for scss-expression tokens
+      tokens = tokens.map(t =>
+        t.valueType === 'scss-expression'
+          ? { ...t, valueResolvedNote: 'scss-expression tokens cannot be resolved to a concrete value yet — value requires SCSS compilation context' }
+          : t
+      )
+
       // // Group by type for readability
       const byType = {
         tokenReference: tokens.filter((t) => t.valueType === 'token-reference'),
