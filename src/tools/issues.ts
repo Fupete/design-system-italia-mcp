@@ -59,7 +59,7 @@ export function registerGetComponentIssues(server: McpServer): void {
                 name: status?.name ?? canonicalSlug,
                 issues: {
                   live: {
-                    total: liveUnique.length,
+                    total: issuesError ? null : liveUnique.length,
                     results: liveUnique,
                   },
                   known: {
