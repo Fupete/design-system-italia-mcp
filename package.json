@@ -1,6 +1,6 @@
 {
   "name": "@fupete/design-system-italia-mcp",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "Filo – MCP server non ufficiale per il Design system .italia",
   "type": "module",
   "main": "dist/index.js",
