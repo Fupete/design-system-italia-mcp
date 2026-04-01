@@ -741,11 +741,6 @@
             "variable-name": "--bsi-card-link-color"
         },
         {
-            "description": "Controls the vertical spacing around the card title, using the card spacing variable for consistency",
-            "value": "var(--bsi-card-spacing-y)",
-            "variable-name": "--bsi-card-title-spacing-y"
-        },
-        {
             "description": "Controls the font size of the main card text, using font size tokens",
             "value": "var(--bsi-font-size-3)",
             "variable-name": "--bsi-card-text-font-size"
@@ -1994,6 +1989,128 @@
             "variable-name": "--bsi-sidebar-link-active-border-color"
         }
     ],
+    "stepper": [
+        {
+            "description": "Controls the active step underline height.",
+            "value": "2px",
+            "variable-name": "--bsi-stepper-active-indicator-height"
+        },
+        {
+            "description": "Controls the inactive step text and icon color.",
+            "value": "var(--bsi-color-text-secondary)",
+            "variable-name": "--bsi-stepper-index-color"
+        },
+        {
+            "description": "Controls the header and navigation background color. default to white.",
+            "value": "transparent",
+            "variable-name": "--bsi-stepper-background"
+        },
+        {
+            "description": "Controls the step border color.",
+            "value": "var(--bsi-color-border-subtle)",
+            "variable-name": "--bsi-stepper-border-color"
+        },
+        {
+            "description": "Controls the dot background color.",
+            "value": "var(--bsi-color-background-subtle)",
+            "variable-name": "--bsi-stepper-dot-color"
+        },
+        {
+            "description": "Controls the gap between dots.",
+            "value": "8px",
+            "variable-name": "--bsi-stepper-dot-gap"
+        },
+        {
+            "description": "Controls the dot indicator size.",
+            "value": "4px",
+            "variable-name": "--bsi-stepper-dot-size"
+        },
+        {
+            "description": "Controls the step label font size.",
+            "value": "var(--bsi-label-font-size-l)",
+            "variable-name": "--bsi-stepper-font-size"
+        },
+        {
+            "description": "Controls the icon width and height.",
+            "value": "var(--bsi-icon-size-m)",
+            "variable-name": "--bsi-stepper-icon-size"
+        },
+        {
+            "description": "Controls the icon color.",
+            "value": "var(--bsi-stepper-item-text-color)",
+            "variable-name": "--bsi-stepper-icon-color"
+        },
+        {
+            "description": "Controls the icon color for confirmed steps.",
+            "value": "var(--bsi-icon-success)",
+            "variable-name": "--bsi-stepper-icon-confirmed"
+        },
+        {
+            "description": "Controls the step index font size.",
+            "value": "var(--bsi-label-font-size-s)",
+            "variable-name": "--bsi-stepper-index-font-size"
+        },
+        {
+            "description": "Controls the step background color, default to the header/nav background.",
+            "value": "var(--bsi-stepper-background)",
+            "variable-name": "--bsi-stepper-item-background"
+        },
+        {
+            "description": "Controls the step border color when active.",
+            "value": "var(--bsi-color-border-primary)",
+            "variable-name": "--bsi-stepper-item-border-color-active"
+        },
+        {
+            "description": "Controls the step background color, default to the header/nav background.",
+            "value": "var(--bsi-color-text-muted)",
+            "variable-name": "--bsi-stepper-item-text-color"
+        },
+        {
+            "description": "Controls the navigation bar height.",
+            "value": "64px",
+            "variable-name": "--bsi-stepper-nav-height"
+        },
+        {
+            "description": "Controls the number badge active background.",
+            "value": "var(--bsi-color-background-primary)",
+            "variable-name": "--bsi-stepper-number-background-active"
+        },
+        {
+            "description": "Controls the number badge border color.",
+            "value": "var(--bsi-color-border-subtle)",
+            "variable-name": "--bsi-stepper-number-border-color"
+        },
+        {
+            "description": "Controls the number badge active text color.",
+            "value": "var(--bsi-color-text-muted)",
+            "variable-name": "--bsi-stepper-number-color"
+        },
+        {
+            "description": "Controls the number badge width and height.",
+            "value": "2rem",
+            "variable-name": "--bsi-stepper-number-size"
+        },
+        {
+            "description": "Controls the progress bar height.",
+            "value": "2px",
+            "variable-name": "--bsi-stepper-progress-height"
+        },
+        {
+            "description": "Controls the horizontal padding.",
+            "value": "var(--bsi-spacing-xs)",
+            "variable-name": "--bsi-stepper-spacing-x"
+        },
+        {
+            "description": "Controls the vertical padding for desktop steps.",
+            "value": "var(--bsi-spacing-s)",
+            "variable-name": "--bsi-stepper-spacing-y"
+        },
+        {
+            "description": "",
+            "value": "transparent",
+            "variable-name": "--bsi-stepper-background"
+        }
+    ],
     "tab": [
         {
             "description": "",
@@ -2086,6 +2203,63 @@
             "variable-name": "--bsi-tab-close-btn-color-disabled"
         }
     ],
+    "table": [
+        {
+            "description": "Controls the text color for the table, using color tokens.",
+            "value": "var(--bsi-color-text-base)",
+            "variable-name": "--bsi-table-color"
+        },
+        {
+            "description": "Controls the background color for the table, using color tokens.",
+            "value": "transparent",
+            "variable-name": "--bsi-table-bg"
+        },
+        {
+            "description": "Controls the border color for the table, using color tokens.",
+            "value": "var(--bsi-border-color)",
+            "variable-name": "--bsi-table-border-color"
+        },
+        {
+            "description": "Controls the border width for the table cell.",
+            "value": "var(--bsi-border-width)",
+            "variable-name": "--bsi-table-border-width"
+        },
+        {
+            "description": "Controls the text color for the striped rows, using color tokens.",
+            "value": "var(--bsi-color-background-muted)",
+            "variable-name": "--bsi-table-striped-bg"
+        },
+        {
+            "description": "Controls the background color for the active rows, using color tokens.",
+            "value": "var(--bsi-color-background-secondary)",
+            "variable-name": "--bsi-table-active-bg"
+        },
+        {
+            "description": "Controls the text color for the hovered rows, using color tokens.",
+            "value": "var(--bsi-color-text-base)",
+            "variable-name": "--bsi-table-hover-color"
+        },
+        {
+            "description": "Controls the background color for the hovered rows, using color tokens.",
+            "value": "var(--bsi-color-background-secondary-hover)",
+            "variable-name": "--bsi-table-hover-bg"
+        },
+        {
+            "description": "Controls the padding for the table cells, using spacing tokens.",
+            "value": "var(--bsi-spacing-xxs)",
+            "variable-name": "--bsi-table-padding"
+        },
+        {
+            "description": "Controls the font size for the table cells, using typography tokens.",
+            "value": "var(--bsi-body-font-size)",
+            "variable-name": "--bsi-table-cell-font-size"
+        },
+        {
+            "description": "Controls the vertical alignment of the table cells.",
+            "value": "top",
+            "variable-name": "--bsi-table-cell-vertical-align"
+        }
+    ],
     "tabs": [
         {
             "description": "",
@@ -2096,6 +2270,180 @@
             "description": "",
             "value": "var(--bsi-color-border-subtle)",
             "variable-name": "--bsi-tabs-border-color"
+        }
+    ],
+    "toggle": [
+        {
+            "description": "Controls the width of the toggle track.",
+            "value": "56px",
+            "variable-name": "--bsi-toggle-track-width"
+        },
+        {
+            "description": "Controls the height of the toggle track.",
+            "value": "32px",
+            "variable-name": "--bsi-toggle-track-height"
+        },
+        {
+            "description": "Controls the border radius of the track, using radius tokens.",
+            "value": "var(--bsi-radius-rounded)",
+            "variable-name": "--bsi-toggle-track-border-radius"
+        },
+        {
+            "description": "Controls the default background of the track, using color tokens.",
+            "value": "var(--bsi-color-background-secondary-light)",
+            "variable-name": "--bsi-toggle-track-background"
+        },
+        {
+            "description": "Controls the transition for the track background.",
+            "value": "background 0.3s ease",
+            "variable-name": "--bsi-toggle-track-transition"
+        },
+        {
+            "description": "Controls the width and height of the knob.",
+            "value": "24px",
+            "variable-name": "--bsi-toggle-knob-size"
+        },
+        {
+            "description": "Controls the top and left offset of the knob inside the track.",
+            "value": "4px",
+            "variable-name": "--bsi-toggle-knob-offset"
+        },
+        {
+            "description": "Controls the border radius of the knob.",
+            "value": "50%",
+            "variable-name": "--bsi-toggle-knob-border-radius"
+        },
+        {
+            "description": "Controls the background color of the knob, using color tokens.",
+            "value": "var(--bsi-color-background-inverse)",
+            "variable-name": "--bsi-toggle-knob-background"
+        },
+        {
+            "description": "Controls the shadow/aura color behind the knob.",
+            "value": "#{transparentize($primary, 0.85)}",
+            "variable-name": "--bsi-toggle-knob-shadow-color"
+        },
+        {
+            "description": "Controls the left offset of the knob when checked.",
+            "value": "28px",
+            "variable-name": "--bsi-toggle-knob-offset-checked"
+        },
+        {
+            "description": "Controls the transition for the knob.",
+            "value": "left 0.3s ease, background 0.1s ease, transform 0.1s ease",
+            "variable-name": "--bsi-toggle-knob-transition"
+        },
+        {
+            "description": "Controls the right margin of the label, using spacing tokens.",
+            "value": "var(--bsi-spacing-xs)",
+            "variable-name": "--bsi-toggle-label-spacing"
+        }
+    ],
+    "toolbar": [
+        {
+            "description": "",
+            "value": "var(--bsi-spacing-xxs)",
+            "variable-name": "--bsi-toolbar-item-margin-x"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-spacing-xs)",
+            "variable-name": "--bsi-toolbar-item-margin-y"
+        },
+        {
+            "description": "",
+            "value": "6px",
+            "variable-name": "--bsi-toolbar-link-margin-bottom-medium"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-color-background-inverse)",
+            "variable-name": "--bsi-toolbar-list-background-color"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-color-border-subtle)",
+            "variable-name": "--bsi-toolbar-divider-color"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-color-text-secondary)",
+            "variable-name": "--bsi-toolbar-link-color"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-icon-secondary)",
+            "variable-name": "--bsi-toolbar-icon-color"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-spacing-xxs)",
+            "variable-name": "--bsi-toolbar-dropdown-padding-x"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-icon-secondary)",
+            "variable-name": "--bsi-toolbar-dropdown-caret-color"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-spacing-3xs)",
+            "variable-name": "--bsi-toolbar-dropdown-caret-size"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-elevation-low)",
+            "variable-name": "--bsi-toolbar-dropdown-shadow"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-icon-size-l)",
+            "variable-name": "--bsi-toolbar-icon-font-size"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-label-font-size-xs)",
+            "variable-name": "--bsi-toolbar-more-icon-font-size"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-color-background-inverse)",
+            "variable-name": "--bsi-toolbar-badge-border-color"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-color-background-primary)",
+            "variable-name": "--bsi-toolbar-badge-background-color"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-radius-circle)",
+            "variable-name": "--bsi-toolbar-badge-border-radius"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-color-text-inverse)",
+            "variable-name": "--bsi-toolbar-badge-text-color"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-spacing-3xs)",
+            "variable-name": "--bsi-toolbar-badge-padding-x"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-label-font-size-xs)",
+            "variable-name": "--bsi-toolbar-badge-font-size"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-spacing-3xs)",
+            "variable-name": "--bsi-toolbar-label-margin-top"
+        },
+        {
+            "description": "",
+            "value": "var(--bsi-label-font-size-xs)",
+            "variable-name": "--bsi-toolbar-label-font-size"
         }
     ],
     "tooltip": [
