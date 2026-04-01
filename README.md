@@ -35,9 +35,9 @@
 
 ## Perché Filo / Why Filo
 
-**IT** — Rendere interrogabile il Design system .italia e il suo vasto ecosistema di risorse. Supportare persone e assistenti AI nella progettazione, esplorazione, generazione e validazione su dati reali e verificati. Un server MCP read-only e open source. Un esperimento sulle possibilità di sviluppare software utile per le persone, anche mentre litighi con qualche LLM.
+**IT** — Tenere il filo della qualità nell’epoca degli LLM e dell’AI come scorciatoia per tutto. Rendere interrogabile il Design system .italia e il suo vasto ecosistema di risorse. Supportare persone e assistenti AI nella progettazione, esplorazione, generazione e validazione su dati reali e verificati. Un server MCP read-only e open source. Un esperimento sulle possibilità di sviluppare software utile per le persone, anche mentre litighi con qualche LLM.
 
-**EN** — Make Italy's Design System and its vast ecosystem of resources queryable. Support people and AI assistants in design, exploration, code generation and validation — on real, verified data. A read-only, open source MCP server. An experiment in the possibilities of building software that is actually useful for people, even while arguing with a few LLMs.
+**EN** — Keep the thread of quality in the age of LLMs and AI as a shortcut for everything. Make Italy’s Design System and its vast ecosystem of resources queryable. Support people and AI assistants in design, exploration, code generation and validation — on real, verified data. A read-only, open source MCP server. An experiment in the possibilities of building software that is actually useful for people, even while arguing with a few LLMs.​​​​​​​​​​​​​​​​
 
 ---
 
