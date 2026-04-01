@@ -101,9 +101,10 @@ export function registerFindToken(server: McpServer): void {
     'find_token',
     {
       title: 'Find Token',
-      description: 'Search a CSS token by variable name or semantic description. ' +
+      description: 'Search for a Design Tokens Italia or BSI token by substring match on variable name. ' +
         'Searches all BSI components (--bsi-*) and global Design Tokens Italia tokens (--it-*). ' +
-        'Useful to find which variable controls a given visual aspect.',
+        'Examples: \'primary\', \'spacing-m\', \'blue-40\', \'radius\'. ' +
+        'Note: only substring on variable names — queries like \'primary color\' return no results.',
       inputSchema: { query: z.string().describe('Search term (e.g. "spacing", "border-radius", "padding")') },
       annotations: { readOnlyHint: true },
     },
