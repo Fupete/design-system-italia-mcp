@@ -38,13 +38,6 @@
       "options": []
     },
     {
-      "name": "icon",
-      "type": "boolean",
-      "description": "Se il pulsante mostra un'icona, è necessario aggiungere questo attributo.",
-      "default": "false",
-      "options": []
-    },
-    {
       "name": "slot",
       "type": "text",
       "description": "Testo del pulsante",
