@@ -7,6 +7,7 @@ import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
+// reads own package.json for User-Agent version string — not user input, so safe
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const packageJson = JSON.parse(
   readFileSync(join(__dirname, '../package.json'), 'utf-8')
