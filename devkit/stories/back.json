@@ -13,11 +13,11 @@
     },
     {
       "name": "pulsante",
-      "html": "<it-button variant=\"primary\" class=\"go-back\" icon=\"\">\n  <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span>Torna indietro</span>\n</it-button>\n<it-button variant=\"primary\" class=\"go-back\" icon=\"\">\n  <it-icon name=\"it-arrow-up\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span>Torna indietro</span>\n</it-button>"
+      "html": "<it-button variant=\"primary\" class=\"go-back\">\n  <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span>Torna indietro</span>\n</it-button>\n<it-button variant=\"primary\" class=\"go-back\">\n  <it-icon name=\"it-arrow-up\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span>Torna indietro</span>\n</it-button>"
     },
     {
       "name": "pulsante-con-sola-icona",
-      "html": "<it-button variant=\"primary\" class=\"go-back\" icon=\"\">\n  <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span class=\"visually-hidden\">Torna indietro</span>\n</it-button>\n<it-button variant=\"primary\" class=\"go-back\" icon=\"\">\n  <it-icon name=\"it-arrow-up\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span class=\"visually-hidden\">Torna indietro</span>\n</it-button>"
+      "html": "<it-button variant=\"primary\" class=\"go-back\">\n  <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span class=\"visually-hidden\">Torna indietro</span>\n</it-button>\n<it-button variant=\"primary\" class=\"go-back\">\n  <it-icon name=\"it-arrow-up\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span class=\"visually-hidden\">Torna indietro</span>\n</it-button>"
     }
   ]
 }

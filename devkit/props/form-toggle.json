@@ -1,0 +1,98 @@
+{
+  "slug": "form-toggle",
+  "tagName": "it-toggle",
+  "props": [
+    {
+      "name": "id",
+      "type": "text",
+      "description": "ID del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Etichetta del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "description": "Nome del campo nel form",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "value",
+      "type": "text",
+      "description": "Valore del campo",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "form",
+      "type": "text",
+      "description": "ID html del form a cui è associato il campo, se il campo non si trova all'interno di una form",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "custom-validation",
+      "type": "boolean",
+      "description": "Se la validazione del campo è fatta esternamente (lato server o con plugin js - validazione custom), impostare questo attributo a `true`.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "validity-message",
+      "type": "text",
+      "description": "Messaggio da mostrare quando il campo è invalido nel caso di validazione esterna (validazione custom). Se impostato a '' (stringa vuota) il campo viene considerato valido.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "description": null,
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "inline",
+      "type": "boolean",
+      "description": "Allinea i toggle orizzontalmente",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "group",
+      "type": "boolean",
+      "description": "Raggruppa visivamente i toggle",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "support-text",
+      "type": "text",
+      "description": "Testo di supporto/aiuto sotto il toggle",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

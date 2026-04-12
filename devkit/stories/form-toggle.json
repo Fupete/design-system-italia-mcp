@@ -1,0 +1,31 @@
+{
+  "slug": "form-toggle",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-toggle--documentazione&viewMode=docs",
+  "description": "Pulsante di tipo 'interruttore' che permette di alternare tra due stati e semplificare la gestione di opzioni o impostazioni.",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-toggle name=\"toggle-esempio\">\n  <span slot=\"label\">Label dell'interruttore</span>\n</it-toggle>"
+    },
+    {
+      "name": "stato-attivo",
+      "html": "<it-toggle name=\"toggle-esempio\" checked=\"\">\n  <span slot=\"label\">Interruttore attivo</span>\n</it-toggle>"
+    },
+    {
+      "name": "stato-disabilitato",
+      "html": "<div class=\"mb-3\">\n  <h6 class=\"mb-2\">Disabilitati</h6>\n  <it-toggle name=\"toggle-esempio\" disabled=\"\">\n    <span slot=\"label\">Interruttore disabilitato (spento)</span>\n  </it-toggle>\n</div>\n<div class=\"mb-3\">\n  <it-toggle name=\"toggle-esempio\" checked=\"\" disabled=\"\">\n    <span slot=\"label\">Interruttore disabilitato (acceso)</span>\n  </it-toggle>\n</div>"
+    },
+    {
+      "name": "testo-di-supporto",
+      "html": "<it-toggle\n  name=\"toggle-esempio\"\n  support-text=\"Abilita questa funzionalità per migliorare le prestazioni\"\n>\n  <span slot=\"label\">Abilita modalità prestazioni</span>\n</it-toggle>"
+    },
+    {
+      "name": "inline",
+      "html": "<it-toggle-group name=\"toggle-inline\" inline=\"\">\n  <span slot=\"legend\">Gruppo di toggle</span>\n  <it-toggle value=\"option1\">\n    <span slot=\"label\">Interruttore 1</span>\n  </it-toggle>\n  <it-toggle value=\"option2\" checked=\"\">\n    <span slot=\"label\">Interruttore 2</span>\n  </it-toggle>\n  <it-toggle value=\"option3\">\n    <span slot=\"label\">Interruttore 3</span>\n  </it-toggle>\n</it-toggle-group>"
+    },
+    {
+      "name": "raggruppati-visivamente",
+      "html": "<it-toggle-group name=\"toggle-esempio\" group=\"\">\n  <span slot=\"legend\">Gruppo di toggle</span>\n  <it-toggle value=\"option1\" checked=\"\">\n    <span slot=\"label\">Interruttore acceso</span>\n  </it-toggle>\n  <it-toggle value=\"option2\">\n    <span slot=\"label\">Interruttore spento</span>\n  </it-toggle>\n  <it-toggle value=\"option3\" disabled=\"\">\n    <span slot=\"label\">Interruttore disabilitato</span>\n  </it-toggle>\n</it-toggle-group>\n\n<it-toggle-group style=\"margin-top: 24px;\" name=\"toggle-esempio-1\" group=\"\">\n  <span slot=\"legend\">Gruppo di toggle</span>\n  <it-toggle\n    value=\"option1\"\n    checked=\"\"\n    support-text=\"Testo descrittivo di supporto per l'opzione selezionabile\"\n  >\n    <span slot=\"label\">Interruttore acceso</span>\n  </it-toggle>\n  <it-toggle\n    value=\"option2\"\n    support-text=\"Testo descrittivo di supporto per l'opzione selezionabile\"\n  >\n    <span slot=\"label\">Interruttore spento</span>\n  </it-toggle>\n  <it-toggle\n    value=\"option3\"\n    disabled=\"\"\n    support-text=\"Testo descrittivo di supporto per l'opzione selezionabile\"\n  >\n    <span slot=\"label\">Interruttore disabilitato</span>\n  </it-toggle>\n</it-toggle-group>"
+    }
+  ]
+}

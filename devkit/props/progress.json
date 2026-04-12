@@ -1,0 +1,79 @@
+{
+  "slug": "progress",
+  "tagName": "it-progress",
+  "props": [
+    {
+      "name": "type",
+      "type": "select",
+      "description": "Tipologia di progress indicator",
+      "default": "bar",
+      "options": [
+        "bar",
+        "donut",
+        "spinner"
+      ]
+    },
+    {
+      "name": "value",
+      "type": "range",
+      "description": "Percentuale di avanzamento (da 0 a 100)",
+      "default": "50",
+      "options": []
+    },
+    {
+      "name": "show-value",
+      "type": "boolean",
+      "description": "mostra la percentuale di avanzamento <br/><i>(solo per `type=\"bar\"`)</i>",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "se si vuole mostrare un testo personalizzato per l\\",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "indeterminate",
+      "type": "boolean",
+      "description": "stato indeterminato (animazione infinita) <br/><i>(solo per `type=\"bar\"`)</i>",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "color",
+      "type": "text",
+      "description": "<strong>Bar:</strong> default|success|info|warning|danger. <br/><br/><strong>Donut:</strong>  colore CSS della barra (default: `var(--bsi-secondary)`)<br/><br/><i>(solo per `type=\"bar\"` e `type=\"donut\"`)</i>",
+      "default": "default",
+      "options": []
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "description": "attiva/disattiva l\\",
+      "default": "true",
+      "options": []
+    },
+    {
+      "name": "double",
+      "type": "boolean",
+      "description": "variante doppia <br/><i>(solo per `type=\"spinner\"`)</i>",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "size",
+      "type": "select",
+      "description": "dimensione <br/><i>(solo per `type=\"spinner\"`)</i>",
+      "default": "md",
+      "options": [
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ]
+    }
+  ],
+  "subcomponents": []
+}

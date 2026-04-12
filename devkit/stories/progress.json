@@ -1,0 +1,39 @@
+{
+  "slug": "progress",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-progress--documentazione&viewMode=docs",
+  "description": null,
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-delcomponente",
+      "html": "<it-progress type=\"bar\" value=\"50\" it-aria-label=\"Caricamento\"></it-progress>"
+    },
+    {
+      "name": "con-etichetta",
+      "html": "<it-progress type=\"bar\" it-aria-label=\"Progresso\" value=\"35\" show-value=\"\">\n  35%\n</it-progress>"
+    },
+    {
+      "name": "indeterminato",
+      "html": "<it-progress\n  type=\"bar\"\n  it-aria-label=\"In elaborazione...\"\n  indeterminate=\"\"\n></it-progress>"
+    },
+    {
+      "name": "colori",
+      "html": "<div style=\"display: flex; flex-direction: column; gap: 12px;\">\n  <it-progress\n    type=\"bar\"\n    value=\"25\"\n    color=\"success\"\n    it-aria-label=\"Caricamento - successo\"\n  ></it-progress>\n  <it-progress\n    type=\"bar\"\n    value=\"33\"\n    color=\"info\"\n    it-aria-label=\"Caricamento - info\"\n  ></it-progress>\n  <it-progress\n    type=\"bar\"\n    value=\"50\"\n    color=\"warning\"\n    it-aria-label=\"Caricamento - warning\"\n  ></it-progress>\n  <it-progress\n    type=\"bar\"\n    value=\"66\"\n    color=\"danger\"\n    it-aria-label=\"Caricamento - danger\"\n  ></it-progress>\n</div>"
+    },
+    {
+      "name": "pulsante-con-progress-bar",
+      "html": "<it-button variant=\"primary\" disabled=\"\" class=\"m-4\">\n  Label del pulsante\n  <it-icon name=\"it-github\" color=\"inverse\"></it-icon>\n\n  <it-progress type=\"bar\" value=\"50\" it-aria-label=\"Caricamento\"></it-progress>\n</it-button>\n\n<it-button variant=\"secondary\" disabled=\"\" class=\"m-4\">\n  Label del pulsante\n  <it-icon name=\"it-github\" color=\"inverse\"></it-icon>\n\n  <it-progress type=\"bar\" value=\"50\" it-aria-label=\"Caricamento\"></it-progress>\n</it-button>"
+    },
+    {
+      "name": "donut",
+      "html": "<div class=\"row\">\n  <div class=\"col-6 px-5\">\n    <div class=\"text-center mb-3\">Stato iniziale<br />(0%):</div>\n\n    <it-progress\n      type=\"donut\"\n      value=\"0\"\n      it-aria-label=\"Caricamento\"\n      color=\"default\"\n    ></it-progress>\n  </div>\n  <div class=\"col-6 px-5\">\n    <div class=\"text-center mb-3\">Stato di avanzamento<br />(75%):</div>\n\n    <it-progress\n      type=\"donut\"\n      value=\"75\"\n      it-aria-label=\"Caricamento\"\n      color=\"default\"\n    ></it-progress>\n  </div>\n</div>"
+    },
+    {
+      "name": "spinner",
+      "html": "<div class=\"row\">\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner standard</p>\n\n    <it-progress type=\"spinner\" size=\"md\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner attivo</p>\n\n    <it-progress type=\"spinner\" active=\"\" size=\"md\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner small</p>\n\n    <it-progress type=\"spinner\" size=\"sm\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner small attivo</p>\n\n    <it-progress type=\"spinner\" active=\"\" size=\"sm\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n</div>\n<div class=\"row\">\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner large</p>\n\n    <it-progress type=\"spinner\" size=\"lg\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner large attivo</p>\n\n    <it-progress type=\"spinner\" active=\"\" size=\"lg\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner extralarge</p>\n\n    <it-progress type=\"spinner\" size=\"xl\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner extralarge attivo</p>\n\n    <it-progress type=\"spinner\" active=\"\" size=\"xl\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n</div>"
+    },
+    {
+      "name": "spinner-doppio",
+      "html": "<div class=\"row\">\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner doppio standard</p>\n\n    <it-progress type=\"spinner\" double=\"\" size=\"md\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner doppio attivo</p>\n\n    <it-progress\n      type=\"spinner\"\n      active=\"\"\n      double=\"\"\n      size=\"md\"\n      it-aria-label=\"Caricamento\"\n    >\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner doppio small</p>\n\n    <it-progress type=\"spinner\" double=\"\" size=\"sm\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner doppio small attivo</p>\n\n    <it-progress\n      type=\"spinner\"\n      active=\"\"\n      double=\"\"\n      size=\"sm\"\n      it-aria-label=\"Caricamento\"\n    >\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n</div>\n<div class=\"row\">\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner doppio large</p>\n\n    <it-progress type=\"spinner\" double=\"\" size=\"lg\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner doppio large attivo</p>\n\n    <it-progress\n      type=\"spinner\"\n      active=\"\"\n      double=\"\"\n      size=\"lg\"\n      it-aria-label=\"Caricamento\"\n    >\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner doppio extralarge</p>\n\n    <it-progress type=\"spinner\" double=\"\" size=\"xl\" it-aria-label=\"Caricamento\">\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n  <div class=\"col-3\">\n    <p class=\"my-3\">Spinner doppio extralarge attivo</p>\n\n    <it-progress\n      type=\"spinner\"\n      active=\"\"\n      double=\"\"\n      size=\"xl\"\n      it-aria-label=\"Caricamento\"\n    >\n      <span class=\"visually-hidden\">Caricamento...</span>\n    </it-progress>\n  </div>\n</div>"
+    }
+  ]
+}
