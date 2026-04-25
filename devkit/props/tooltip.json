@@ -1,0 +1,14 @@
+{
+  "slug": "tooltip",
+  "tagName": "it-tooltip",
+  "props": [
+    {
+      "name": "placement",
+      "type": "select",
+      "description": "Posizione del Tooltip rispetto al suo elemento trigger",
+      "default": "top",
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

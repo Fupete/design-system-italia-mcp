@@ -77,7 +77,7 @@
     },
     {
       "name": "lista-con-toggle",
-      "html": "<div class=\"link-list-wrapper\">\n  <ul class=\"link-list\">\n    <li>\n      <div class=\"toggles\">\n        <label for=\"toggle1\">\n          Label per toggle\n          <input type=\"checkbox\" id=\"toggle1\" /><span class=\"lever\"></span>\n        </label>\n      </div>\n    </li>\n    <li>\n      <div class=\"toggles\">\n        <label for=\"toggle2\">\n          Label per toggle disabilitato\n          <input\n            type=\"checkbox\"\n            id=\"toggle2\"\n            disabled=\"\"\n            aria-disabled=\"true\"\n          /><span class=\"lever\"></span>\n        </label>\n      </div>\n    </li>\n  </ul>\n</div>"
+      "html": "<div class=\"link-list-wrapper\">\n  <ul class=\"link-list\">\n    <li>\n      <it-toggle name=\"toggle1\">\n        <span slot=\"label\">Label per toggle</span>\n      </it-toggle>\n    </li>\n    <li>\n      <it-toggle name=\"toggle2\" disabled=\"\">\n        <span slot=\"label\">Label per toggle disabilitato</span>\n      </it-toggle>\n    </li>\n  </ul>\n</div>"
     },
     {
       "name": "lista-con-checkbox",

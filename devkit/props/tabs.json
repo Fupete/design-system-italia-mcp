@@ -1,0 +1,63 @@
+{
+  "slug": "tabs",
+  "tagName": "it-tabs",
+  "props": [
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Testo dell'`aria-label` per la tablist. Consigliato quando non è presente un'intestazione visiva adiacente al componente.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "auto",
+      "type": "boolean",
+      "description": "Se `true`, i tab si espandono per occupare l'intera larghezza disponibile.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "hide-scrollbar",
+      "type": "boolean",
+      "description": "Se `true`, nasconde visivamente la scrollbar orizzontale. **Effetto visibile solo con `auto: true` in viewport intermedi (≥768px e <1200px).**",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "vertical-background",
+      "type": "boolean",
+      "description": "Se `true`, applica uno sfondo primario chiaro sul tab selezionato. **Effetto visibile solo in layout verticale: `placement=\"start\"` o `placement=\"end\"`**.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "dark",
+      "type": "boolean",
+      "description": "Se `true`, abilita la variante con sfondo scuro per la tablist. **Ignorato quando `cards: true`, le due varianti non sono compatibili.**",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "cards",
+      "type": "boolean",
+      "description": "Se `true`, applica lo stile \"card\". Nota: `dismissible` è disponibile solo con `cards: true`.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "dismissible",
+      "type": "boolean",
+      "description": "Se `true`, abilita la chiusura dei tab tramite pulsante × e tasti Delete/Backspace. **Funziona solo con `cards: true`, altrimenti non ha effetto.**",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "placement",
+      "type": "select",
+      "description": "Posizione della tablist rispetto ai pannelli. `start`/`end` attivano automaticamente il layout verticale.",
+      "default": "top",
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

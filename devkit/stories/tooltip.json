@@ -1,0 +1,31 @@
+{
+  "slug": "tooltip",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-tooltip--documentazione&viewMode=docs",
+  "description": "Breve messaggio a comparsa per fornire spiegazioni contestuali e suggerimenti",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-tooltip placement=\"top\">\n  <it-button slot=\"trigger\" variant=\"primary\">Mostra tooltip</it-button>\n  <span slot=\"content\">Testo del tooltip</span>\n</it-tooltip>"
+    },
+    {
+      "name": "indicazioni-generali",
+      "html": "<p style=\"max-width:400px;line-height:2\">\n  Il tooltip può essere usato su qualsiasi elemento interattivo, come i\n  <it-tooltip placement=\"top\">\n    <a slot=\"trigger\" href=\"#\">link in una frase</a>\n    <span slot=\"content\">Primo link con tooltip</span>\n  </it-tooltip>\n  di testo, per fornire informazioni contestuali senza occupare spazio nella\n  pagina. Basta passare il mouse o portare il focus su un\n  <it-tooltip placement=\"top\">\n    <a slot=\"trigger\" href=\"#\">elemento con tooltip</a>\n    <span slot=\"content\">Secondo link con tooltip</span>\n  </it-tooltip>\n  per vedere l'etichetta comparire.\n</p>"
+    },
+    {
+      "name": "posizione",
+      "html": "<it-tooltip placement=\"bottom\" style=\"grid-column:2;grid-row:1\">\n  <it-button slot=\"trigger\" variant=\"primary\">Giù</it-button>\n  <span slot=\"content\">Tooltip in basso</span>\n</it-tooltip>\n<it-tooltip placement=\"top\" style=\"grid-column:2;grid-row:3\">\n  <it-button slot=\"trigger\" variant=\"primary\">Su</it-button>\n  <span slot=\"content\">Tooltip in alto</span>\n</it-tooltip>\n<it-tooltip placement=\"right\" style=\"grid-column:1;grid-row:2\">\n  <it-button slot=\"trigger\" variant=\"primary\">Destra</it-button>\n  <span slot=\"content\">Tooltip a destra</span>\n</it-tooltip>\n<it-tooltip placement=\"left\" style=\"grid-column:3;grid-row:2\">\n  <it-button slot=\"trigger\" variant=\"primary\">Sinistra</it-button>\n  <span slot=\"content\">Tooltip a sinistra</span>\n</it-tooltip>"
+    },
+    {
+      "name": "codice-html-personalizzato",
+      "html": "<it-tooltip placement=\"right\">\n  <it-button slot=\"trigger\" variant=\"primary\">Mostra tooltip</it-button>\n  <span slot=\"content\"><em>Tooltip</em> <u>con</u> <strong>HTML</strong></span>\n</it-tooltip>"
+    },
+    {
+      "name": "attivazione-controllata",
+      "html": "<it-tooltip placement=\"bottom\" controlled=\"\">\n  <it-button slot=\"trigger\" variant=\"primary\">Target</it-button>\n  <span slot=\"content\">Tooltip controllato</span>\n</it-tooltip>\n<button class=\"btn btn-secondary\">Hover qui per mostrare il tooltip</button>"
+    },
+    {
+      "name": "metodi-ed-eventi",
+      "html": "<it-tooltip placement=\"right\">\n  <it-button slot=\"trigger\" variant=\"primary\">Hover o focus</it-button>\n  <span slot=\"content\">Tooltip con eventi</span>\n</it-tooltip>"
+    }
+  ]
+}

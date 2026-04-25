@@ -1,0 +1,28 @@
+{
+  "slug": "timeline",
+  "tagName": "it-timeline",
+  "props": [
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Variante colore del pin: vuota (futuro), `current` (presente, azzurro), `past` (passato, blu scuro)",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "date",
+      "type": "text",
+      "description": "Etichetta testuale del periodo (es. MAGGIO 2026)",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "heading-level",
+      "type": "select",
+      "description": "Livello heading del pin. Adattare alla gerarchia della pagina.",
+      "default": "h3",
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

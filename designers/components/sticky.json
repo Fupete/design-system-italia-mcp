@@ -122,8 +122,8 @@
                     },
                     {
                       "tag": {
-                        "label": "Verifica in corso",
-                        "addonClasses": "bg-warning"
+                        "label": "Pronto",
+                        "addonClasses": "bg-success"
                       }
                     },
                     {

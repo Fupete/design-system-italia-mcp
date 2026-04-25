@@ -300,7 +300,7 @@
                     {
                       "simpleCta": {
                         "label": "Scheda Storybook",
-                        "url": "https://italia.github.io/design-react-kit/?path=/docs/documentazione-menu-di-navigazione-header--documentazione",
+                        "url": "https://italia.github.io/design-react-kit/latest/?path=/docs/documentazione-menu-di-navigazione-header--documentazione",
                         "blank": true,
                         "screenReaderText": " (si apre in una nuova finestra)",
                         "icon": {
@@ -326,7 +326,7 @@
                     {
                       "simpleCta": {
                         "label": "Scheda documentazione",
-                        "url": "https://italia.github.io/design-angular-kit/design-angular-kit#/componenti/header",
+                        "url": "https://italia.github.io/design-angular-kit/design-angular-kit#/menu-di-navigazione/header",
                         "blank": true,
                         "screenReaderText": " (si apre in una nuova finestra)",
                         "icon": {

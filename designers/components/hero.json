@@ -300,7 +300,7 @@
                     {
                       "simpleCta": {
                         "label": "Scheda Storybook",
-                        "url": "https://italia.github.io/design-react-kit/?path=/docs/documentazione-menu-di-navigazione-hero--documentazione",
+                        "url": "https://italia.github.io/design-react-kit/latest/?path=/docs/documentazione-menu-di-navigazione-hero--documentazione",
                         "blank": true,
                         "screenReaderText": " (si apre in una nuova finestra)",
                         "icon": {

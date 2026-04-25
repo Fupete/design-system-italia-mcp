@@ -1,0 +1,39 @@
+{
+  "slug": "dimmer",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-dimmer--documentazione&viewMode=docs",
+  "description": "Elemento che oscura una porzione di pagina per focalizzare l'attenzione su un contenuto specifico",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-dimmer>\n  <p slot=\"content\">\n    Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper\n    dignissim cras.\n  </p>\n\n  <div class=\"row\">\n    <div class=\"col-12 col-md-6\">\n      <it-card>\n        <figure slot=\"image\" class=\"figure img-full\">\n          <img\n            src=\"https://placeholderimage.eu/api/city/800/600\"\n            alt=\"Breve descrizione immagine\"\n          />\n        </figure>\n        <a slot=\"title\" href=\"#\">Titolo del contenuto</a>\n        <span slot=\"text\">\n          Questo è un testo breve che riassume il contenuto della pagina di\n          destinazione in massimo tre o quattro righe, senza troncamento.\n        </span>\n        <time slot=\"footer\" class=\"it-card-date\" datetime=\"2026-04-22\"\n          >22 aprile 2026</time\n        >\n      </it-card>\n    </div>\n    <div class=\"col-12 col-md-6\">\n      <it-card>\n        <figure slot=\"image\" class=\"figure img-full\">\n          <img\n            src=\"https://placeholderimage.eu/api/city/800/600\"\n            alt=\"Breve descrizione immagine\"\n          />\n        </figure>\n        <a slot=\"title\" href=\"#\">Titolo del contenuto</a>\n        <span slot=\"text\">\n          Questo è un testo breve che riassume il contenuto della pagina di\n          destinazione in massimo tre o quattro righe, senza troncamento.\n        </span>\n        <time slot=\"footer\" class=\"it-card-date\" datetime=\"2026-04-22\"\n          >22 aprile 2026</time\n        >\n      </it-card>\n    </div>\n  </div>\n</it-dimmer>"
+    },
+    {
+      "name": "variante-primaria",
+      "html": "<div>\n  <div class=\"mb-3\">\n    <it-button variant=\"primary\" id=\"btn-dimmer\">Toggle dimmer</it-button>\n  </div>\n  <it-dimmer id=\"dimmer\" active variant=\"primary\" icon-name=\"it-pa\">\n    <p slot=\"content\">\n      Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras.\n      Dictum sit amet justo donec enim diam vulputate ut. Eu nisl nunc mi ipsum faucibus.\n      Nulla vulputate luctus sem, eu maximus lacus faucibus eget.\n    </p>\n    <!-- contenuto di sfondo -->\n  </it-dimmer>\n  <script>\n    const dimmer = document.querySelector('#dimmer');\n    document.querySelector('#btn-dimmer').addEventListener('click', () => dimmer.toggle());\n  </script>\n</div>"
+    },
+    {
+      "name": "variante-scura",
+      "html": "<div>\n  <div class=\"mb-3\">\n    <it-button variant=\"primary\" id=\"btn-dimmer\">Toggle dimmer</it-button>\n  </div>\n  <it-dimmer id=\"dimmer\" active variant=\"dark\" icon-name=\"it-pa\">\n    <p slot=\"content\">\n      Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras.\n      Dictum sit amet justo donec enim diam vulputate ut. Eu nisl nunc mi ipsum faucibus.\n      Nulla vulputate luctus sem, eu maximus lacus faucibus eget.\n    </p>\n    <!-- contenuto di sfondo -->\n  </it-dimmer>\n  <script>\n    const dimmer = document.querySelector('#dimmer');\n    document.querySelector('#btn-dimmer').addEventListener('click', () => dimmer.toggle());\n  </script>\n</div>"
+    },
+    {
+      "name": "dimmer-con-azioni",
+      "html": "<div>\n  <div class=\"mb-3\">\n    <it-button variant=\"primary\" id=\"btn-dimmer\">Toggle dimmer</it-button>\n  </div>\n  <it-dimmer id=\"dimmer\" active variant=\"primary\" icon-name=\"it-pa\">\n    <div slot=\"content\">\n      <h4>Titolo Dimmer</h4>\n      <div class=\"dimmer-buttons bg-dark\">\n        <it-button variant=\"primary\">Azione primaria</it-button>\n        <it-button variant=\"primary\" outline=\"\">Azione secondaria</it-button>\n      </div>\n    </div>\n    <!-- contenuto di sfondo -->\n  </it-dimmer>\n  <script>\n    const dimmer = document.querySelector('#dimmer');\n    document.querySelector('#btn-dimmer').addEventListener('click', () => dimmer.toggle());\n  </script>\n</div>"
+    },
+    {
+      "name": "dimmer-con-azioni-nella-variante-scura",
+      "html": "<div>\n  <div class=\"mb-3\">\n    <it-button variant=\"primary\" id=\"btn-dimmer\">Toggle dimmer</it-button>\n  </div>\n  <it-dimmer id=\"dimmer\" active variant=\"dark\" icon-name=\"it-info-circle\">\n    <div slot=\"content\">\n      <h4>Titolo Dimmer</h4>\n      <p>Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras.</p>\n      <div class=\"dimmer-buttons bg-dark\">\n        <it-button variant=\"primary\">Azione primaria</it-button>\n        <it-button variant=\"primary\" outline>Azione secondaria</it-button>\n      </div>\n    </div>\n    <!-- contenuto di sfondo -->\n  </it-dimmer>\n  <script>\n    const dimmer = document.querySelector('#dimmer');\n    document.querySelector('#btn-dimmer').addEventListener('click', () => dimmer.toggle());\n  </script>\n</div>"
+    },
+    {
+      "name": "azione-singola",
+      "html": "<div>\n  <div class=\"mb-3\">\n    <it-button variant=\"primary\" id=\"btn-dimmer\">Toggle dimmer</it-button>\n  </div>\n  <it-dimmer id=\"dimmer\" active variant=\"primary\" icon-name=\"it-pa\">\n    <div slot=\"content\">\n      <h4>Titolo Dimmer</h4>\n      <div class=\"dimmer-buttons bg-dark\">\n        <it-button variant=\"primary\">Azione primaria</it-button>\n      </div>\n    </div>\n    <!-- contenuto di sfondo -->\n  </it-dimmer>\n  <script>\n    const dimmer = document.querySelector('#dimmer');\n    document.querySelector('#btn-dimmer').addEventListener('click', () => dimmer.toggle());\n  </script>\n</div>"
+    },
+    {
+      "name": "attivo-di-default",
+      "html": "<div>\n  <div class=\"mb-3\">\n    <it-button variant=\"primary\" id=\"btn-dimmer\">Toggle dimmer</it-button>\n  </div>\n  <it-dimmer id=\"dimmer\" icon-name=\"it-info-circle\" active>\n    <p slot=\"content\">Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras.</p>\n    <!-- contenuto di sfondo -->\n  </it-dimmer>\n  <script>\n    const dimmer = document.querySelector('#dimmer');\n    // Usa show(), hide() o toggle() per controllare lo stato del dimmer\n    document.querySelector('#btn-dimmer').addEventListener('click', () => dimmer.toggle());\n  </script>\n</div>"
+    },
+    {
+      "name": "metodi",
+      "html": "<div>\n  <div class=\"mb-3 d-flex gap-2\">\n    <it-button variant=\"primary\" id=\"btn-show\">show()</it-button>\n    <it-button variant=\"primary\" outline id=\"btn-hide\">hide()</it-button>\n    <it-button variant=\"secondary\" outline id=\"btn-toggle\">toggle()</it-button>\n  </div>\n  <it-dimmer id=\"js-dimmer\" icon-name=\"it-info-circle\">\n    <p slot=\"content\">Controllato via show(), hide() e toggle().</p>\n    <!-- contenuto di sfondo -->\n  </it-dimmer>\n  <script>\n    const dimmer = document.querySelector('#js-dimmer');\n    document.querySelector('#btn-show').addEventListener('click', () => dimmer.show());\n    document.querySelector('#btn-hide').addEventListener('click', () => dimmer.hide());\n    document.querySelector('#btn-toggle').addEventListener('click', () => dimmer.toggle());\n  </script>\n</div>"
+    }
+  ]
+}

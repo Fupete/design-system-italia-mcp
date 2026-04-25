@@ -1,14 +1,14 @@
 {
-  "fetchedAt": "2026-04-19T05:57:31.453Z",
+  "fetchedAt": "2026-04-25T05:20:38.380Z",
   "versions": {
-    "designSystem": "v1.10.1",
-    "bootstrapItalia": "3.0.0-alpha.8",
+    "designSystem": "v1.11.0",
+    "bootstrapItalia": "3.0.0-alpha.9",
     "devKitItalia": "1.0.0-alpha.8",
     "designTokensItalia": "1.3.3"
   },
   "stats": {
-    "total": 149,
-    "ok": 149,
+    "total": 154,
+    "ok": 154,
     "failed": 0
   },
   "sources": {
@@ -198,6 +198,9 @@
     "devkit/props/back-to-top.json": {
       "ok": true
     },
+    "devkit/props/bottomnav.json": {
+      "ok": true
+    },
     "devkit/props/breadcrumbs.json": {
       "ok": true
     },
@@ -217,6 +220,9 @@
       "ok": true
     },
     "devkit/props/collapse.json": {
+      "ok": true
+    },
+    "devkit/props/dimmer.json": {
       "ok": true
     },
     "devkit/props/dropdown.json": {
@@ -283,6 +289,15 @@
       "ok": true
     },
     "devkit/props/sticky.json": {
+      "ok": true
+    },
+    "devkit/props/tabs.json": {
+      "ok": true
+    },
+    "devkit/props/timeline.json": {
+      "ok": true
+    },
+    "devkit/props/tooltip.json": {
       "ok": true
     },
     "devkit/props/video-player.json": {

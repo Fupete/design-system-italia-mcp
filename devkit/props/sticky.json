@@ -32,6 +32,16 @@
         "sticky",
         "fixed"
       ]
+    },
+    {
+      "name": "position",
+      "type": "select",
+      "description": "Indica il bordo del viewport a cui agganciare l'elemento. Usa `'bottom'` con `position-type=\\",
+      "default": "top",
+      "options": [
+        "top",
+        "bottom"
+      ]
     }
   ],
   "subcomponents": []

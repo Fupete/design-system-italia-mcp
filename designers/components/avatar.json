@@ -298,7 +298,7 @@
                     {
                       "simpleCta": {
                         "label": "Scheda Storybook",
-                        "url": "https://italia.github.io/design-react-kit/?path=/docs/documentazione-componenti-avatar--documentazione",
+                        "url": "https://italia.github.io/design-react-kit/latest/?path=/docs/documentazione-componenti-avatar--documentazione",
                         "blank": true,
                         "screenReaderText": " (si apre in una nuova finestra)",
                         "icon": {

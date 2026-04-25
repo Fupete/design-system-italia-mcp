@@ -22,6 +22,10 @@
     {
       "name": "versione-impilabile",
       "html": "<it-sticky stackable=\"\">\n  <div class=\"bg-primary text-white p-3\">Elemento Sticky</div>\n</it-sticky>"
+    },
+    {
+      "name": "position-bottom",
+      "html": "<it-sticky position=\"bottom\" position-type=\"fixed\">\n  <div class=\"bg-primary text-white p-3\">Barra fissa in fondo</div>\n</it-sticky>"
     }
   ]
 }

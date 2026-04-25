@@ -5,7 +5,7 @@
     {
       "name": "placement",
       "type": "select",
-      "description": null,
+      "description": "Posizione del Popover rispetto al suo elemento trigger",
       "default": "bottom-start",
       "options": [
         "top",

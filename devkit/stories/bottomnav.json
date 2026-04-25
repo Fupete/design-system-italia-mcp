@@ -1,0 +1,19 @@
+{
+  "slug": "bottomnav",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-bottomnav--documentazione&viewMode=docs",
+  "description": "Barra di navigazione fissa a fondo pagina per dispositivi mobile",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-bottom-nav it-aria-label=\"Navigazione principale\">\n  <it-bottom-nav-item active=\"\">\n    <a href=\"#\">\n      <it-icon name=\"it-comment\"></it-icon>\n      <span class=\"bottom-nav-label\">messaggi</span>\n    </a>\n  </it-bottom-nav-item>\n  <it-bottom-nav-item>\n    <a href=\"#\">\n      <it-icon name=\"it-camera\"></it-icon>\n      <span class=\"bottom-nav-label\">immagini</span>\n    </a>\n  </it-bottom-nav-item>\n  <it-bottom-nav-item>\n    <a href=\"#\">\n      <it-icon name=\"it-file\"></it-icon>\n      <span class=\"bottom-nav-label\">documenti</span>\n    </a>\n  </it-bottom-nav-item>\n</it-bottom-nav>"
+    },
+    {
+      "name": "badge-e-alert",
+      "html": "<it-bottom-nav it-aria-label=\"Navigazione principale\">\n  <it-bottom-nav-item active=\"\">\n    <a href=\"#\">\n      <div class=\"badge-wrapper\">\n        <span class=\"bottom-nav-badge\" aria-hidden=\"true\">1</span>\n      </div>\n      <it-icon name=\"it-comment\"></it-icon>\n      <span class=\"bottom-nav-label\">\n        messaggi\n        <span class=\"visually-hidden\">1 messaggio da leggere</span>\n      </span>\n    </a>\n  </it-bottom-nav-item>\n  <it-bottom-nav-item>\n    <a href=\"#\">\n      <it-icon name=\"it-camera\"></it-icon>\n      <span class=\"bottom-nav-label\"> immagini </span>\n    </a>\n  </it-bottom-nav-item>\n  <it-bottom-nav-item>\n    <a href=\"#\">\n      <div class=\"badge-wrapper\">\n        <span class=\"bottom-nav-badge\" aria-hidden=\"true\">42</span>\n      </div>\n      <it-icon name=\"it-file\"></it-icon>\n      <span class=\"bottom-nav-label\"\n        >documenti\n        <span class=\"visually-hidden\">42 documenti da visualizzare</span></span\n      >\n    </a>\n  </it-bottom-nav-item>\n</it-bottom-nav>"
+    },
+    {
+      "name": "badge-e-alert-2",
+      "html": "<it-bottom-nav it-aria-label=\"Navigazione principale\">\n  <it-bottom-nav-item active=\"\">\n    <a href=\"#\">\n      <div class=\"badge-wrapper\">\n        <span class=\"bottom-nav-alert\" aria-hidden=\"true\"></span>\n      </div>\n      <it-icon name=\"it-comment\"></it-icon>\n      <span class=\"bottom-nav-label\">\n        messaggi\n        <span class=\"visually-hidden\">ci sono nuovi messaggi da leggere</span>\n      </span>\n    </a>\n  </it-bottom-nav-item>\n  <it-bottom-nav-item>\n    <a href=\"#\">\n      <it-icon name=\"it-camera\"></it-icon>\n      <span class=\"bottom-nav-label\">immagini</span>\n    </a>\n  </it-bottom-nav-item>\n  <it-bottom-nav-item>\n    <a href=\"#\">\n      <it-icon name=\"it-file\"></it-icon>\n      <span class=\"bottom-nav-label\">documenti</span>\n    </a>\n  </it-bottom-nav-item>\n</it-bottom-nav>"
+    }
+  ]
+}

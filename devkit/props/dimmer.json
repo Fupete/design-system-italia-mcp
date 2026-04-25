@@ -1,0 +1,21 @@
+{
+  "slug": "dimmer",
+  "tagName": "it-dimmer",
+  "props": [
+    {
+      "name": "active",
+      "type": "boolean",
+      "description": "Stato del dimmer (visibile/nascosto), il default è `false`",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Variante cromatica del dimmer, il default è primary",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}
