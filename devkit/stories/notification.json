@@ -1,0 +1,39 @@
+{
+  "slug": "notification",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-notification--documentazione&viewMode=docs",
+  "description": "Messaggio di testo a comparsa per informare l'utente di eventi, aggiornamenti o azioni che richiedono la sua attenzione",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<div>\n  <p class=\"mb-4\"><strong>Notification standard</strong></p>\n  <it-notification>\n    <span slot=\"title\">Titolo notifica</span>\n  </it-notification>\n</div>\n\n<div>\n  <p class=\"mb-4\"><strong>Notification con icona</strong></p>\n  <it-notification icon=\"it-info-circle\">\n    <span slot=\"title\">Titolo notifica</span>\n  </it-notification>\n</div>"
+    },
+    {
+      "name": "testo-supplementare",
+      "html": "<div>\n  <p class=\"mb-4\"><strong>Notifica standard con testo</strong></p>\n  <it-notification>\n    <span slot=\"title\">Titolo notifica</span>\n    <p>\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n      tempor…\n    </p>\n  </it-notification>\n</div>\n\n<div>\n  <p class=\"mb-4\"><strong>Notifica con icona e testo</strong></p>\n  <it-notification icon=\"it-info-circle\">\n    <span slot=\"title\">Titolo notifica</span>\n    <p>\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n      tempor…\n    </p>\n  </it-notification>\n</div>"
+    },
+    {
+      "name": "pulsante-di-chiusura",
+      "html": "<div>\n  <p class=\"mb-4\"><strong>Notification standard</strong></p>\n  <it-notification dismissable=\"\">\n    <span slot=\"title\">Titolo notifica</span>\n  </it-notification>\n</div>\n\n<div>\n  <p class=\"mb-4\"><strong>Notification con icona</strong></p>\n  <it-notification status=\"success\" dismissable=\"\" icon=\"it-info-circle\">\n    <span slot=\"title\">Titolo notifica</span>\n    <p>\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n      tempor…\n    </p>\n  </it-notification>\n</div>"
+    },
+    {
+      "name": "stati",
+      "html": "<div>\n  <p class=\"mb-4\"><strong>Successo</strong></p>\n  <it-notification status=\"success\" icon=\"it-check-circle\">\n    <span slot=\"title\">Titolo notifica</span>\n  </it-notification>\n</div>\n\n<div>\n  <p class=\"mb-4\"><strong>Errore</strong></p>\n  <it-notification status=\"error\" icon=\"it-close-circle\">\n    <span slot=\"title\">Titolo notifica</span>\n  </it-notification>\n</div>\n\n<div>\n  <p class=\"mb-4\"><strong>Info</strong></p>\n  <it-notification status=\"info\" icon=\"it-info-circle\">\n    <span slot=\"title\">Titolo notifica</span>\n  </it-notification>\n</div>\n\n<div>\n  <p class=\"mb-4\"><strong>Precauzione</strong></p>\n  <it-notification status=\"warning\" icon=\"it-error\">\n    <span slot=\"title\">Titolo notifica</span>\n  </it-notification>\n</div>"
+    },
+    {
+      "name": "posizione-predefinita",
+      "html": "<it-notification icon=\"it-check-circle\" status=\"success\">\n  <span slot=\"title\">Titolo notifica</span>\n  <p>\n    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n    tempor…\n  </p>\n</it-notification>"
+    },
+    {
+      "name": "posizione-fissa",
+      "html": "<it-notification icon=\"it-check-circle\" status=\"success\" fix=\"top\">\n  <span slot=\"title\">Top fix</span>\n  <p>\n    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n    tempor…\n  </p>\n</it-notification>\n<it-notification icon=\"it-check-circle\" status=\"success\" fix=\"bottom\">\n  <span slot=\"title\">Bottom fix</span>\n  <p>\n    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n    tempor…\n  </p>\n</it-notification>\n<it-notification icon=\"it-check-circle\" status=\"success\" fix=\"left\">\n  <span slot=\"title\">Titolo notifica</span>\n</it-notification>\n<it-notification icon=\"it-check-circle\" status=\"success\" fix=\"right\">\n  <span slot=\"title\">Titolo notifica</span>\n</it-notification>"
+    },
+    {
+      "name": "notifiche-a-scomparsa-automatica",
+      "html": "<div id=\"esempio-attivazione\">\n  <it-button type=\"button\" variant=\"primary\">Inviami una notifica</it-button>\n  <it-button type=\"button\" variant=\"primary\" id=\"five-sec\">\n    Inviami una notifica (durata 5 secondi)\n  </it-button>\n  <it-notification icon=\"it-check-circle\" status=\"success\">\n    <span slot=\"title\">Titolo notifica</span>\n    <p>\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n      tempor…\n    </p>\n  </it-notification>\n</div>\n\n<script>\n  document.querySelector('#esempio-attivazione it-button').addEventListener('click', () => {\n    document.querySelector('#esempio-attivazione it-notification').show();\n  });\n  document.querySelector('#esempio-attivazione it-button#five-sec').addEventListener('click', () => {\n    document.querySelector('#esempio-attivazione it-notification').show(5000);\n  });\n</script>"
+    },
+    {
+      "name": "notifiche-a-scomparsa-manuale",
+      "html": "<div id=\"esempio-eliminazione\">\n  <it-button type=\"button\" variant=\"primary\">Inviami una notifica</it-button>\n  <it-button type=\"button\" variant=\"primary\" id=\"delete-notification\">\n    Rimuovi notifica\n  </it-button>\n  <it-notification icon=\"it-check-circle\" status=\"success\" dismissable=\"\">\n    <span slot=\"title\">Titolo notifica</span>\n    <p>\n      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n      tempor…\n    </p>\n  </it-notification>\n</div>\n\n<script>\n  document.querySelector('#esempio-eliminazione it-button').addEventListener('click', () => {\n    document.querySelector('#esempio-eliminazione it-notification').show();\n  });\n  document.querySelector('#esempio-eliminazione it-button#delete-notification').addEventListener('click', () => {\n    document.querySelector('#esempio-eliminazione it-notification').hide();\n  });\n</script>"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "slug": "notification",
+  "tagName": "it-notification",
+  "props": [
+    {
+      "name": "heading-level",
+      "type": "select",
+      "description": "Livello di heading da usare per il titolo della notifica. Se non specificato, viene usato h2. Vedi la sezione \"Accessibilità\" della documentazione per maggiori dettagli.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "icon",
+      "type": "text",
+      "description": "Nome dell'icona da visualizzare nella notifica.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "status",
+      "type": "select",
+      "description": "Stato della notifica, che ne influenza il colore.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "dismissable",
+      "type": "boolean",
+      "description": "Se presente, mostra un pulsante per chiudere la notifica.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "fix",
+      "type": "select",
+      "description": "Fissa la posizione della notifica nel lato scelto dello schermo.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "timeout",
+      "type": "number",
+      "description": "Tempo di permanenza della notifica, espresso in millisecondi.",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

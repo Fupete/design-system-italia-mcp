@@ -1,0 +1,39 @@
+{
+  "slug": "form-upload",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-upload--documentazione&viewMode=docs",
+  "description": "Elementi dei form dedicati al caricamento file",
+  "variants": [
+    {
+      "name": "upload-con-lista-di-file",
+      "html": "<it-upload variant=\"default\" auto-success=\"\">\n  <span slot=\"label\">Carica file</span>\n</it-upload>"
+    },
+    {
+      "name": "con-anteprima-delle-immagini",
+      "html": "<it-upload id=\"upload-states\" multiple image-preview name=\"upload-states\">\n  <span slot=\"label\">Carica file</span>\n</it-upload>\n\n<script>\n  const upload = document.getElementById('upload-states');\n\n  // 1. Aggiungi i file (genera gli ID interni)\n  const id1 = upload.addFile(new File([''], 'nome-file-01.jpg', { type: 'image/jpeg' }));\n  const id2 = upload.addFile(new File([''], 'nome-file-02-nome-file-lungo-per-ellissi.jpg', { type: 'image/jpeg' }));\n  const id3 = upload.addFile(new File([''], 'nome-file-03.jpg', { type: 'image/jpeg' }));\n  const id4 = upload.addFile(new File([''], 'nome-file-04.jpg', { type: 'image/jpeg' }));\n\n  // 2. Imposta lo stato e il progresso\n  upload.setFileStatus(id1, 'success');\n  upload.setFileStatus(id2, 'success');\n  upload.setFileStatus(id3, 'loading', 43); // 43%\n  upload.setFileStatus(id4, 'error');\n\n  // 3. Imposta le thumbnail\n  upload.setFileThumbnail(id1, 'https://picsum.photos/seed/upload1/128/128');\n  upload.setFileThumbnail(id2, 'https://picsum.photos/seed/upload2/128/128');\n  upload.setFileThumbnail(id3, 'https://picsum.photos/seed/upload3/128/128');\n  upload.setFileThumbnail(id4, 'https://picsum.photos/seed/upload4/128/128');\n</script>"
+    },
+    {
+      "name": "upload-gallery",
+      "html": "<it-upload id=\"upload-gallery\" variant=\"gallery\" multiple accept=\"image/*\" name=\"upload-gallery\">\n  <span slot=\"label\">Carica immagini</span>\n</it-upload>\n\n<script>\n  const gallery = document.getElementById('upload-gallery');\n\n  // Aggiungi programmaticamente le immagini alla galleria\n  const id1 = gallery.addFile(new File([''], 'foto-01.jpg', { type: 'image/jpeg' }));\n  const id2 = gallery.addFile(new File([''], 'foto-02.jpg', { type: 'image/jpeg' }));\n\n  // Imposta le thumbnail e segnale come completate\n  gallery.setFileThumbnail(id1, 'https://picsum.photos/seed/upload1/128/128');\n  gallery.setFileThumbnail(id2, 'https://picsum.photos/seed/upload2/128/128');\n\n  gallery.setFileStatus(id1, 'success');\n  gallery.setFileStatus(id2, 'success');\n</script>"
+    },
+    {
+      "name": "upload-con-avatar",
+      "html": "<it-upload-avatar\n  src=\"https://randomuser.me/api/portraits/men/21.jpg\"\n  alt=\"Mario Rossi\"\n  size=\"xxl\"\n></it-upload-avatar>"
+    },
+    {
+      "name": "upload-con-avatar-2",
+      "html": "<div style=\"display: flex; gap: 3rem; flex-wrap: wrap; align-items: flex-start;\">\n  <div>\n    <h5 style=\"margin-top: 0;\">Dimensione Standard</h5>\n    <it-upload-avatar\n      src=\"https://randomuser.me/api/portraits/men/21.jpg\"\n      alt=\"Mario Rossi\"\n      size=\"xxl\"\n      name=\"avatar-standard\"\n    ></it-upload-avatar>\n  </div>\n  <div>\n    <h5 style=\"margin-top: 0;\">Dimensione Piccola</h5>\n    <it-upload-avatar\n      src=\"https://randomuser.me/api/portraits/women/21.jpg\"\n      alt=\"Laura Bianchi\"\n      size=\"xl\"\n      name=\"avatar-sm\"\n    ></it-upload-avatar>\n  </div>\n</div>\n\n<script>\n  const avatarStandard = document.querySelector('it-upload-avatar[name=\"avatar-standard\"]');\n\n  // Recupera il file selezionato dall'utente per effettuare l'upload\n  avatarStandard.addEventListener('it-change', (event) => {\n    const newAvatarFile = event.detail.files[0];\n    console.log('Nuovo avatar selezionato:', newAvatarFile);\n  });\n</script>"
+    },
+    {
+      "name": "upload-drag--drop",
+      "html": "<it-upload-drag-drop></it-upload-drag-drop>"
+    },
+    {
+      "name": "gestione-automatica-e-manuale-dello-stato",
+      "html": "<div style=\"display: flex; flex-direction: column; gap: 3rem;\">\n\n  <div>\n    <h5>Default</h5>\n    <it-upload-drag-drop name=\"upload-dd-idle\"></it-upload-drag-drop>\n  </div>\n\n  <div>\n    <h5>Simula caricamento</h5>\n    <it-upload-drag-drop id=\"dd-loading\" name=\"upload-dd-loading\"></it-upload-drag-drop>\n  </div>\n\n  <div>\n    <h5>Processo completato</h5>\n    <it-upload-drag-drop id=\"dd-success\" name=\"upload-dd-success\"></it-upload-drag-drop>\n  </div>\n\n  <div>\n    <h5>Esempio animato</h5>\n    <button type=\"button\" id=\"btn-simulate\" class=\"btn btn-primary mb-3\">Simula Upload</button>\n    <it-upload-drag-drop id=\"dd-interactive\" name=\"upload-dd-demo\"></it-upload-drag-drop>\n  </div>\n\n</div>\n\n<script>\n  // -- 2. Setup Loading State --\n  const ddLoading = document.getElementById('dd-loading');\n  ddLoading.start();\n\n  // -- 3. Setup Success State --\n  const ddSuccess = document.getElementById('dd-success');\n  ddSuccess.start();\n  ddSuccess.progress(1);\n  ddSuccess.success();\n\n  // -- 4. Setup Interactive/Animated --\n  const ddInteractive = document.getElementById('dd-interactive');\n  const btnSimulate = document.getElementById('btn-simulate');\n  let simulationTimer;\n\n  const startSimulation = () => {\n    clearInterval(simulationTimer);\n    ddInteractive.reset();\n    ddInteractive.start();\n    let p = 0;\n\n    simulationTimer = setInterval(() => {\n      p = Math.min(1, p + 0.1);\n      ddInteractive.progress(p);\n\n      if (p >= 1) {\n        clearInterval(simulationTimer);\n        setTimeout(() => ddInteractive.success(), 500);\n      }\n    }, 300);\n  };\n\n  // Avvia l'animazione al click del bottone o quando l'utente seleziona/trascina un file reale\n  btnSimulate.addEventListener('click', startSimulation);\n  ddInteractive.addEventListener('it-dd-drop', (e) => { e.preventDefault(); startSimulation(); });\n</script>"
+    },
+    {
+      "name": "integrazione-form-e-validazione",
+      "html": "<form id=\"demo-form\" style=\"display: flex; flex-direction: column; gap: 2rem;\">\n  <div>\n    <h5>Lista file (obbligatorio)</h5>\n    <it-upload name=\"allegati\" required multiple accept=\"image/*,.pdf\">\n      <span slot=\"label\">Allega documenti</span>\n    </it-upload>\n  </div>\n\n  <div>\n    <h5>Avatar (obbligatorio)</h5>\n    <it-upload-avatar\n      name=\"foto-profilo\"\n      required\n      alt=\"Mario Rossi\"\n    ></it-upload-avatar>\n  </div>\n\n  <div>\n    <h5>Drag &amp; Drop (obbligatorio)</h5>\n    <it-upload-drag-drop name=\"documento\" required></it-upload-drag-drop>\n  </div>\n\n  <div>\n    <it-button type=\"submit\" variant=\"primary\">Invia</it-button>\n  </div>\n</form>\n\n<script>\n  document.getElementById('demo-form').addEventListener('submit', (event) => {\n    event.preventDefault();\n    alert('Form inviato con successo!');\n  });\n</script>"
+    }
+  ]
+}

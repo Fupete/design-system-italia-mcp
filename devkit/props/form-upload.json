@@ -1,0 +1,45 @@
+{
+  "slug": "form-upload",
+  "tagName": "it-upload",
+  "props": [
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Layout del componente.",
+      "default": "default",
+      "options": [
+        "default",
+        "gallery"
+      ]
+    },
+    {
+      "name": "multiple",
+      "type": "boolean",
+      "description": "Consente la selezione multipla di file.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "accept",
+      "type": "text",
+      "description": "Tipi di file accettati, es. \"image/*,.pdf\".",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Disabilita il componente.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "description": "Rende il campo obbligatorio nella validazione del form.",
+      "default": "false",
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

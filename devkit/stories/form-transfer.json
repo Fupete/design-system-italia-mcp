@@ -1,0 +1,43 @@
+{
+  "slug": "form-transfer",
+  "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-form-transfer--documentazione&viewMode=docs",
+  "description": "Componente per la creazione e gestione di liste di checkbox con trasferimento di elementi tra una lista sorgente e una lista destinazione.",
+  "variants": [
+    {
+      "name": "anteprima-e-attributi-del-componente",
+      "html": "<it-transfer name=\"transfer-items\">\n  <it-transfer-item value=\"item1\">Voce 1</it-transfer-item>\n  <it-transfer-item value=\"item2\">Voce 2</it-transfer-item>\n  <it-transfer-item value=\"item3\">Voce 3</it-transfer-item>\n  <it-transfer-item value=\"item4\">Voce 4</it-transfer-item>\n  <it-transfer-item value=\"item5\">Voce 5</it-transfer-item>\n  <it-transfer-item value=\"item6\">Voce 6</it-transfer-item>\n</it-transfer>"
+    },
+    {
+      "name": "con-valori-preimpostati",
+      "html": "<it-transfer name=\"preset\">\n  <it-transfer-item value=\"item7\">Voce 7</it-transfer-item>\n  <it-transfer-item value=\"item8\">Voce 8</it-transfer-item>\n  <it-transfer-item value=\"item9\">Voce 9</it-transfer-item>\n  <it-transfer-item value=\"item10\" target=\"\">Voce 10</it-transfer-item>\n  <it-transfer-item value=\"item11\" target=\"\">Voce 11</it-transfer-item>\n  <it-transfer-item value=\"item12\" target=\"\">Voce 12</it-transfer-item>\n</it-transfer>"
+    },
+    {
+      "name": "etichette-personalizzate",
+      "html": "<it-transfer\n  name=\"custom-labels\"\n  source-label=\"Comuni disponibili\"\n  target-label=\"Comuni selezionati\"\n>\n  <it-transfer-item value=\"rm\">Roma</it-transfer-item>\n  <it-transfer-item value=\"mi\">Milano</it-transfer-item>\n  <it-transfer-item value=\"na\">Napoli</it-transfer-item>\n  <it-transfer-item value=\"to\">Torino</it-transfer-item>\n</it-transfer>"
+    },
+    {
+      "name": "elemento-singolo-non-trasferibile",
+      "html": "<it-transfer name=\"disabled-item\">\n  <it-transfer-item value=\"a\">Voce A</it-transfer-item>\n  <it-transfer-item value=\"b\" disabled=\"\"\n    >Voce B (non trasferibile)</it-transfer-item\n  >\n  <it-transfer-item value=\"c\">Voce C</it-transfer-item>\n</it-transfer>"
+    },
+    {
+      "name": "stato-disabilitato",
+      "html": "<it-transfer name=\"disabled-example\" disabled=\"\">\n  <it-transfer-item value=\"a\">Voce A</it-transfer-item>\n  <it-transfer-item value=\"b\">Voce B</it-transfer-item>\n  <it-transfer-item value=\"c\" target=\"\">Voce C</it-transfer-item>\n</it-transfer>"
+    },
+    {
+      "name": "validazione-e-gestione-degli-errori",
+      "html": "<form>\n  <it-transfer name=\"required-transfer\" required=\"\">\n    <it-transfer-item value=\"item1\">Voce 1</it-transfer-item>\n    <it-transfer-item value=\"item2\">Voce 2</it-transfer-item>\n    <it-transfer-item value=\"item3\">Voce 3</it-transfer-item>\n    <it-transfer-item value=\"item4\">Voce 4</it-transfer-item>\n    <it-transfer-item value=\"item5\">Voce 5</it-transfer-item>\n    <it-transfer-item value=\"item6\">Voce 6</it-transfer-item>\n  </it-transfer>\n\n  <div class=\"mt-3\">\n    <it-button type=\"submit\" variant=\"primary\">Invia</it-button>\n    <it-button type=\"reset\" variant=\"secondary\" class=\"ms-2\"\n      >Reimposta</it-button\n    >\n  </div>\n</form>"
+    },
+    {
+      "name": "campo-valido",
+      "html": "<it-transfer\n  name=\"custom-validation-transfer\"\n  custom-validation=\"\"\n  validity-message=\"Questo campo è obbligatorio!!!\"\n>\n  <it-transfer-item value=\"item1\">Voce 1</it-transfer-item>\n  <it-transfer-item value=\"item2\">Voce 2</it-transfer-item>\n  <it-transfer-item value=\"item3\">Voce 3</it-transfer-item>\n  <it-transfer-item value=\"item4\">Voce 4</it-transfer-item>\n  <it-transfer-item value=\"item5\">Voce 5</it-transfer-item>\n  <it-transfer-item value=\"item6\">Voce 6</it-transfer-item>\n</it-transfer>"
+    },
+    {
+      "name": "gestione-degli-eventi",
+      "html": "<script>\n  document.querySelector('it-transfer#event-transfer-example').addEventListener('it-transfer', (e) => {\n    if (e.detail.action === 'transfer') {\n      e.preventDefault();\n      // eslint-disable-next-line no-alert\n      alert('Trasferimento bloccato dal listener it-transfer!');\n    }\n  });\n  document.querySelector('it-transfer#event-transfer-example').addEventListener('it-change', (e) => {\n    console.log('Lista destinazione:', e.detail.value);\n  });\n</script>\n<it-transfer id=\"event-transfer-example\" name=\"event-example\">\n  <it-transfer-item value=\"a\">Voce A</it-transfer-item>\n  <it-transfer-item value=\"b\">Voce B</it-transfer-item>\n  <it-transfer-item value=\"c\">Voce C</it-transfer-item>\n</it-transfer>"
+    },
+    {
+      "name": "-1",
+      "html": "<div class=\"hide-preview\"></div>"
+    }
+  ]
+}

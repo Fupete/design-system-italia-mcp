@@ -1,0 +1,49 @@
+{
+  "slug": "thumbnav",
+  "tagName": "it-thumbnav",
+  "props": [
+    {
+      "name": "small",
+      "type": "boolean",
+      "description": "Usa thumbnail di dimensione ridotta (120px invece di 240px).",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "vertical",
+      "type": "boolean",
+      "description": "Dispone le thumbnail in colonna verticale invece che orizzontale.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "fixed",
+      "type": "boolean",
+      "description": "Imposta larghezza fissa per ogni thumbnail: 240px per default, 120px se combinato con `small`.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "hover",
+      "type": "select",
+      "description": "Personalizza l'effetto al passaggio del mouse. Ometti l'attributo per lo zoom predefinito. Usa `nozoom` per disabilitarlo, `black` o `primary` per aggiungere un layer colorato sull'immagine.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "auto",
+      "type": "select",
+      "description": "Attiva la griglia a larghezza automatica e imposta il numero di thumbnail per riga (2, 3, 4 o 5).",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "position",
+      "type": "select",
+      "description": "Posiziona la Thumbnav in overlay rispetto a un contenitore con classe `.position-relative`. Usa `bottom` o `top` per la versione orizzontale, `left` o `right` per la verticale (il comportamento verticale viene applicato automaticamente). Questo attributo non ha effetto nell'esempio interattivo: richiede la struttura HTML corretta con un contenitore esterno. Vedi le stories dedicate agli overlay.",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

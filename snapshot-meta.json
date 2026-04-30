@@ -1,14 +1,14 @@
 {
-  "fetchedAt": "2026-04-26T06:05:42.381Z",
+  "fetchedAt": "2026-04-30T06:10:38.191Z",
   "versions": {
     "designSystem": "v1.11.0",
     "bootstrapItalia": "3.0.0-alpha.9",
-    "devKitItalia": "1.0.0-alpha.8",
+    "devKitItalia": "1.0.0-alpha.9",
     "designTokensItalia": "1.3.3"
   },
   "stats": {
-    "total": 154,
-    "ok": 154,
+    "total": 158,
+    "ok": 158,
     "failed": 0
   },
   "sources": {
@@ -255,6 +255,12 @@
     "devkit/props/form-toggle.json": {
       "ok": true
     },
+    "devkit/props/form-transfer.json": {
+      "ok": true
+    },
+    "devkit/props/form-upload.json": {
+      "ok": true
+    },
     "devkit/props/hero.json": {
       "ok": true
     },
@@ -268,6 +274,9 @@
       "ok": true
     },
     "devkit/props/navscroll.json": {
+      "ok": true
+    },
+    "devkit/props/notification.json": {
       "ok": true
     },
     "devkit/props/pagination.json": {
@@ -292,6 +301,9 @@
       "ok": true
     },
     "devkit/props/tabs.json": {
+      "ok": true
+    },
+    "devkit/props/thumbnav.json": {
       "ok": true
     },
     "devkit/props/timeline.json": {

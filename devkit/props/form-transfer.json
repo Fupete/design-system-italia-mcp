@@ -1,0 +1,56 @@
+{
+  "slug": "form-transfer",
+  "tagName": "it-transfer",
+  "props": [
+    {
+      "name": "name",
+      "type": "text",
+      "description": "Il nome del campo nel form, usato nella sottomissione.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "source-label",
+      "type": "text",
+      "description": "Etichetta descrittiva per la lista sorgente (sinistra). Sovrascrive il default i18n.",
+      "default": "Sorgente",
+      "options": []
+    },
+    {
+      "name": "target-label",
+      "type": "text",
+      "description": "Etichetta descrittiva per la lista destinazione (destra). Sovrascrive il default i18n.",
+      "default": "Destinazione",
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Disabilita il componente.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "description": "Rende il campo obbligatorio: la lista destinazione non può essere vuota alla sottomissione del form.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "custom-validation",
+      "type": "boolean",
+      "description": "Disabilita la validazione nativa e usa `validity-message` per mostrare un errore personalizzato.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "validity-message",
+      "type": "text",
+      "description": "Messaggio di errore personalizzato (richiede `custom-validation`).",
+      "default": null,
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}
