@@ -10,21 +10,21 @@
       "options": []
     },
     {
-      "name": "paddingTop",
+      "name": "padding-top",
       "type": "number",
       "description": "Indica la distanza dall'elemento in sticky dal margine superiore",
       "default": null,
       "options": []
     },
     {
-      "name": "stickyClassName",
+      "name": "sticky-class-name",
       "type": "text",
       "description": "Classi CSS da applicare all'elemento quando viene attivata la funzionalità sticky",
       "default": null,
       "options": []
     },
     {
-      "name": "positionType",
+      "name": "position-type",
       "type": "select",
       "description": "Indica il valore della proprietà CSS `position`. I valori ammessi sono `sticky` o `fixed`",
       "default": "sticky",
@@ -32,6 +32,20 @@
         "sticky",
         "fixed"
       ]
+    },
+    {
+      "name": "trigger-offset",
+      "type": "number",
+      "description": "Definisce un offset in pixel tra l'elemento e il margine superiore per ritardare l'attivazione dello sticky",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "trigger-selector",
+      "type": "text",
+      "description": "Selettore CSS di un elemento della pagina da usare come soglia di attivazione dello sticky",
+      "default": null,
+      "options": []
     },
     {
       "name": "position",

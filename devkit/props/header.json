@@ -1,0 +1,52 @@
+{
+  "slug": "header",
+  "tagName": "it-header",
+  "props": [
+    {
+      "name": "breakpoint",
+      "type": "number",
+      "description": "Larghezza in pixel sotto la quale si attiva la modalita mobile.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "open-aria-label",
+      "type": "text",
+      "description": "Etichetta ARIA del pulsante che apre la navigazione mobile.",
+      "default": "Mostra la navigazione",
+      "options": []
+    },
+    {
+      "name": "close-aria-label",
+      "type": "text",
+      "description": "Etichetta ARIA del pulsante che chiude la navigazione mobile.",
+      "default": "Chiudi la navigazione",
+      "options": []
+    },
+    {
+      "name": "modal-aria-label",
+      "type": "text",
+      "description": "Etichetta ARIA della modale usata per la navigazione mobile.",
+      "default": "Navigazione del sito",
+      "options": []
+    },
+    {
+      "name": "hide-header-brand",
+      "type": "boolean",
+      "description": "Nasconde la fascia contente il brand, nell header della modale del menu su mobile.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "modal-header-theme",
+      "type": "select",
+      "description": "Tema del background dell'header della modale mobile. Se non valorizzato, usa il tema di default usato nell'Header Center.",
+      "default": "default (auto)",
+      "options": [
+        "dark",
+        "light"
+      ]
+    }
+  ],
+  "subcomponents": []
+}

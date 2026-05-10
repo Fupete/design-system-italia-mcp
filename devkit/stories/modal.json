@@ -5,7 +5,7 @@
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",
-      "html": "<it-modal\n  position=\"\"\n  close-label=\"Chiudi finestra modale\"\n  modal-title=\"Titolo modale\"\n  modal-description=\"Descrizione della modale\"\n>\n  <it-button variant=\"primary\" slot=\"trigger\"\n    >Lancia la demo della modale</it-button\n  >\n  <span slot=\"header\">Titolo modale</span>\n  <span slot=\"description\">Descrizione della modale</span>\n  <p slot=\"content\">\n    Contenuto della modale. Può includere testo, form, o qualsiasi altro\n    elemento.\n  </p>\n  <it-button slot=\"footer\" variant=\"outline-primary\">Annulla</it-button>\n  <it-button slot=\"footer\" variant=\"primary\">Conferma</it-button>\n</it-modal>"
+      "html": "<it-modal\n  position=\"\"\n  close-label=\"Chiudi finestra modale\"\n  close-button-placement=\"header\"\n  modal-title=\"Titolo modale\"\n  modal-description=\"Descrizione della modale\"\n  custom-header=\"false\"\n>\n  <it-button variant=\"primary\" slot=\"trigger\"\n    >Lancia la demo della modale</it-button\n  >\n  <span slot=\"header\">Titolo modale</span>\n  <span slot=\"description\">Descrizione della modale</span>\n  <p slot=\"content\">\n    Contenuto della modale. Può includere testo, form, o qualsiasi altro\n    elemento.\n  </p>\n  <it-button slot=\"footer\" variant=\"outline-primary\">Annulla</it-button>\n  <it-button slot=\"footer\" variant=\"primary\">Conferma</it-button>\n</it-modal>"
     },
     {
       "name": "con-pulsante-di-chiusura",

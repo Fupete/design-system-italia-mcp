@@ -1,0 +1,28 @@
+{
+  "slug": "toolbar",
+  "tagName": "it-toolbar",
+  "props": [
+    {
+      "name": "size",
+      "type": "select",
+      "description": "Dimensione della toolbar",
+      "default": "lg",
+      "options": []
+    },
+    {
+      "name": "orientation",
+      "type": "select",
+      "description": "Orientamento della toolbar",
+      "default": "horizontal",
+      "options": []
+    },
+    {
+      "name": "it-aria-label",
+      "type": "text",
+      "description": "Aria label per la navigazione",
+      "default": "Toolbar",
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

@@ -67,6 +67,13 @@
       "description": "Stile scuro per il menu dropdown",
       "default": "false",
       "options": []
+    },
+    {
+      "name": "offset",
+      "type": "number",
+      "description": "Imposta l'offset del menu dropdown rispetto al pulsante",
+      "default": null,
+      "options": []
     }
   ],
   "subcomponents": []
