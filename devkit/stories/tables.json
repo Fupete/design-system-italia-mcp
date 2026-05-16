@@ -1,7 +1,7 @@
 {
   "slug": "tables",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-tables--documentazione&viewMode=docs",
-  "description": "Rappresentazione organizzata di dati in righe e colonne per visualizzare informazioni in modo strutturato e facilitare il confronto tra più elementi",
+  "description": null,
   "variants": [
     {
       "name": "anteprima-del-componente",
