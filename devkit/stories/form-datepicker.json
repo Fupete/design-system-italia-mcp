@@ -9,11 +9,11 @@
     },
     {
       "name": "limitare-la-selezione-a-un-intervallo-specifico",
-      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-05-17\" max=\"2026-05-20\">\n  <span slot=\"label\">Scegli una data nel periodo</span>\n</it-input>"
+      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-05-19\" max=\"2026-05-22\">\n  <span slot=\"label\">Scegli una data nel periodo</span>\n</it-input>"
     },
     {
       "name": "limitare-la-selezione-a-intervalli-regolari",
-      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-05-18\" step=\"7\">\n  <span slot=\"label\">Scegli una data</span>\n</it-input>"
+      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-05-25\" step=\"7\">\n  <span slot=\"label\">Scegli una data</span>\n</it-input>"
     }
   ]
 }
