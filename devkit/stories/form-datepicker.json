@@ -9,7 +9,7 @@
     },
     {
       "name": "limitare-la-selezione-a-un-intervallo-specifico",
-      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-06-03\" max=\"2026-06-06\">\n  <span slot=\"label\">Scegli una data nel periodo</span>\n</it-input>"
+      "html": "<it-input type=\"date\" name=\"inputDate\" min=\"2026-06-04\" max=\"2026-06-07\">\n  <span slot=\"label\">Scegli una data nel periodo</span>\n</it-input>"
     },
     {
       "name": "limitare-la-selezione-a-intervalli-regolari",
