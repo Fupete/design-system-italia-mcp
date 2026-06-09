@@ -1,0 +1,21 @@
+{
+  "slug": "stepper",
+  "tagName": "it-stepper",
+  "props": [
+    {
+      "name": "current",
+      "type": "number",
+      "description": "Indice (0-based) dello step attivo.",
+      "default": "0",
+      "options": []
+    },
+    {
+      "name": "dark",
+      "type": "boolean",
+      "description": "Visualizza lo stepper su sfondo scuro.",
+      "default": "false",
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}
