@@ -29,6 +29,7 @@ import {
   SNAPSHOT_DEVKIT_STORY_URL,
   SNAPSHOT_BSI_STATUS_URL,
   SNAPSHOT_DEVKIT_INDEX_URL,
+  SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL,
   GITHUB_CONTENTS_DEVKIT_STORIES_URL,
 } from "../src/constants.js";
 
@@ -112,7 +113,7 @@ export const UPSTREAM_HEALTH: StaticSource[] = [
     url: DEVKIT_PACKAGE_JSON_URL,
     jsonField: "version",
   },
-    {
+  {
     name: "[upstream] Design Tokens package.json",
     url: DTI_PACKAGE_JSON_URL,
     jsonField: "version",
@@ -226,6 +227,26 @@ export const SNAPSHOT_FRESHNESS: PipelineCheck[] = [
         };
       }
       return { url: storiesUrl, ok: true, ms: Date.now() - t0 };
+    },
+  },
+  {
+    name: "[snapshot] BSI custom_properties — no malformed variable names",
+    async run({ get }) {
+      const t0 = Date.now();
+      const res = await get(SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL);
+      if (!res.ok) {
+        return { url: SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${res.status}` };
+      }
+      const raw = JSON.parse(res.body) as Record<string, Array<{ 'variable-name': string }>>;
+      const malformed = Object.values(raw).flat()
+        .filter(e => !/^--bsi-[a-z0-9-]+$/.test(e['variable-name']?.trim() ?? ''));
+      if (malformed.length > 0) {
+        return {
+          url: SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, ok: false, ms: Date.now() - t0,
+          error: `${malformed.length} malformed variable names: ${malformed.map(e => e['variable-name']).slice(0, 3).join(', ')}`,
+        };
+      }
+      return { url: SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, ok: true, ms: Date.now() - t0 };
     },
   },
 ];
