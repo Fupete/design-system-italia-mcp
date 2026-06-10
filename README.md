@@ -18,7 +18,7 @@
 
 **EN** — Design System .italia is the official open source design system for Italian Public Administration interfaces. An initiative by [Designers Italia](https://designers.italia.it/), it is distributed across multiple independent repositories.
 
-- [Bootstrap Italia](https://github.com/italia/bootstrap-italia) — componenti e stili HTML/CSS / HTML/CSS components and styles ⚠️ v3 alpha
+- [Bootstrap Italia](https://github.com/italia/bootstrap-italia) — componenti e stili HTML/CSS / HTML/CSS components and styles ⚠️ v3 beta
 - [Dev Kit Italia](https://github.com/italia/dev-kit-italia) — web component `it-*` ⚠️ v1 alpha
 - [Design Tokens Italia](https://github.com/italia/design-tokens-italia) — variabili CSS e SCSS globali `--it-*` e `$it-` / global CSS and SCSS variables
 - [designers.italia.it](https://designers.italia.it/design-system/) — documentazione e linee guida d'uso / documentation and usage guidelines
@@ -27,9 +27,9 @@
 
 ## Cos'è Filo / What is Filo 
 
-**IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia v3 ⚠️ alpha, web component e props Dev Kit Italia v1 ⚠️ alpha, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
+**IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia v3 ⚠️ beta, web component e props Dev Kit Italia v1 ⚠️ alpha, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
 
-**EN** — Filo is an unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia v3 components and HTML markup ⚠️ alpha, Dev Kit Italia web components and props v1 ⚠️ alpha, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot into the `data-fetched` branch.
+**EN** — Filo is an unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia v3 components and HTML markup ⚠️ beta, Dev Kit Italia web components and props v1 ⚠️ alpha, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot into the `data-fetched` branch.
 
 ---
 
@@ -201,10 +201,10 @@ I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch [`data-f
 
 | # | Repo | Contenuto | Tool MCP |
 |---|------|-----------|----------|
-| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Markup HTML varianti per componente ⚠️ alpha | `get_component` `list_components` `search_components` |
+| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Markup HTML varianti per componente ⚠️ beta | `get_component` `list_components` `search_components` |
 | 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Lista ~55 componenti, stato librerie (BSI/UI Kit), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` |
-| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Token CSS `--bsi-*` per-componente con descrizioni semantiche ⚠️ alpha | `get_component_tokens` `find_token` |
-| 4 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Bridge `--bsi-*` → `--it-*` (token resolution) | `get_component_tokens` `find_token` |
+| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Token CSS `--bsi-*` per-componente con descrizioni semantiche ⚠️ beta | `get_component_tokens` `find_token` |
+| 4 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Bridge `--bsi-*` → `--it-*` (token resolution) ⚠️ beta | `get_component_tokens` `find_token` |
 | 5 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `get_component_guidelines` |
 | 6 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `1.5rem` | `get_component_tokens` `find_token` |
 | 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti, importPath ⚠️ alpha | `list_components` `search_components` |
@@ -214,12 +214,12 @@ I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch [`data-f
 | 11 | designers.italia.it + BSI + Dev Kit | Versioni Design System / BSI / Dev Kit / DTI. URL verificati pagine componenti | meta in tutte le risposte |
 
 Le sorgenti 1–9 e 11 sono aggiornate nightly e cached per 24h.
-La sorgente 8 (GitHub Issues) è l'unica fetchata live a runtime (cache 15 min).
+La sorgente 10 (GitHub Issues) è l'unica fetchata live a runtime (cache 15 min).
 `dataFetchedAt` nelle risposte riflette la data dell'ultimo snapshot CI.
 
-> ⚠️ **Layer token e web component in fase alpha** — Il server usa Bootstrap Italia 3.x (alpha) e Dev Kit Italia (alpha). Token CSS `--bsi-*` e web component `it-*` possono avere breaking changes prima della release stabile.
+> ⚠️ **Layer token e web component in sviluppo attivo** — Il server usa Bootstrap Italia 3.x (beta) e Dev Kit Italia (alpha). Token CSS `--bsi-*` e web component `it-*` possono avere breaking changes prima della release stabile.
 
-> ⚠️ **Token and web component layer in alpha** — This server uses Bootstrap Italia 3.x (alpha) and Dev Kit Italia (alpha). CSS tokens `--bsi-*` and web components `it-*` may have breaking changes before stable release.
+> ⚠️ **Token and web component layer in active development** — This server uses Bootstrap Italia 3.x (beta) and Dev Kit Italia (alpha). CSS tokens `--bsi-*` and web components `it-*` may have breaking changes before stable release.
 
 ---
 

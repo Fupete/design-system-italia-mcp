@@ -84,10 +84,10 @@ upstream direttamente — quello è compito degli script CI.
 
 | #  | Sorgente | Branch | Snapshot path | Contenuto | Note |
 |----|----------|--------|---------------|-----------|------|
-| 1  | BSI markup | `feature/update-examples-api-v3` | `bsi/components/{slug}.json` | Markup HTML varianti per componente | ⚠️ alpha, branch temporaneo |
+| 1  | BSI markup | `3.x` | `bsi/components/{slug}.json` | Markup HTML varianti per componente | ⚠️ beta, branch temporaneo |
 | 2  | BSI status | `3.x` | `bsi/components-status.json` | ~55 componenti, stato librerie (BSI/UI Kit), accessibilità, note issue | Stabile |
-| 3  | BSI tokens | `feature/update-examples-api-v3` | `bsi/custom-properties.json` | Token CSS `--bsi-*` per-componente | ⚠️ alpha, branch temporaneo |
-| 4  | BSI root.scss | `3.x` | `bsi/root.scss` | Bridge `--bsi-*` → `--it-*` | Token resolution |
+| 3  | BSI tokens | `3.x` | `bsi/custom-properties.json` | Token CSS `--bsi-*` per-componente | ⚠️ beta, branch temporaneo |
+| 4  | BSI root.scss | `3.x` | `bsi/root.scss` | Bridge `--bsi-*` → `--it-*` | ⚠️ beta, token resolution |
 | 5  | Designers JSON | `main` | `designers/components/{slug}.json` | Linee guida d'uso, accessibilità (YAML→JSON in CI) | Stabile |
 | 6  | Design Tokens | `main` | `design-tokens/variables.scss` | Token globali `--it-*` con valori concreti | Stabile |
 | 7  | Dev Kit index | `main` | `devkit/index.json` | Indice Storybook: tag stato, varianti, importPath | ⚠️ alpha |
@@ -361,7 +361,7 @@ BSI variants e Dev Kit variants usano la stessa interfaccia:
 
 ```json
 {
-  "@modelcontextprotocol/sdk": "^1.27.0",
+  "@modelcontextprotocol/sdk": "^1.29.0",
   "zod": "^3.23.0"
 }
 ```
