@@ -1,6 +1,6 @@
 {
   "name": "@fupete/design-system-italia-mcp",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "description": "Filo – MCP server non ufficiale per il Design system .italia",
   "type": "module",
   "main": "dist/index.js",
@@ -39,18 +39,18 @@
     "url": "https://github.com/Fupete/design-system-italia-mcp.git"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.0.0",
-    "js-yaml": "^4.1.0",
-    "playwright": "^1.58.2",
-    "tsx": "^4.19.0",
+    "js-yaml": "^4.2.0",
+    "playwright": "^1.60.0",
+    "tsx": "^4.22.4",
     "typescript": "^5.7.0",
     "@italia/dev-kit-italia": "^1.0.0-alpha.6",
-    "bootstrap-italia": "^3.0.0-alpha.5"
+    "bootstrap-italia": "^3.0.0-beta.1"
   },
   "engines": {
     "node": ">=22.0.0"
