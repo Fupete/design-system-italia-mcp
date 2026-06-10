@@ -103,9 +103,18 @@ function showTokens(comp) {
   ex.hidden = true;
 }
 
-/* Dev Kit props — update slug list when new components added to data-fetched/devkit/props/ */
-const PROPS_SLUGS = ['accordion', 'avatar', 'back-to-top', 'breadcrumbs', 'button', 'callout', 'card', 'carousel', 'chip', 'collapse', 'dropdown', 'form-autocomplete', 'form-checkbox', 'form-datepicker', 'form-input', 'form-number-input', 'form-radio-button', 'form-select', 'form-timepicker', 'hero', 'icon', 'megamenu', 'modal', 'navscroll', 'pagination', 'popover', 'rating', 'section', 'skiplinks', 'sticky', 'video-player'];
-
+/* Dev Kit props — XXX update slug list when new components added to data-fetched/devkit/props/ */
+const PROPS_SLUGS = [
+  'accordion', 'avatar', 'back-to-top', 'bottomnav', 'breadcrumbs', 
+  'button', 'callout', 'card', 'carousel', 'chip', 'collapse', 
+  'dimmer', 'dropdown', 'form-autocomplete', 'form-checkbox', 
+  'form-datepicker', 'form-input', 'form-number-input', 'form-radio-button', 
+  'form-select', 'form-timepicker', 'form-toggle', 'form-transfer', 
+  'form-upload', 'header', 'hero', 'icon', 'megamenu', 'modal', 
+  'navscroll', 'notification', 'pagination', 'popover', 'progress', 
+  'rating', 'section', 'skiplinks', 'stepper', 'sticky', 'tabs', 
+  'thumbnav', 'timeline', 'toolbar', 'tooltip', 'video-player'
+];
 function populatePropsSel() {
   const sel = document.getElementById('props-sel');
   PROPS_SLUGS.forEach(s => {
