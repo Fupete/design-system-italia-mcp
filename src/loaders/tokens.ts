@@ -4,10 +4,10 @@ import type { CssToken } from '../types.js'
 import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL, SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, } from '../constants.js'
 
 // Map 1: --bsi-* component tokens (custom-properties.json) — token-reference entries only
-// Map 2: --bsi-* → --it-* bridge (BSI scss/base/root.scss v3)
+// Map 2: --bsi-* → --it-* bridge (BSI _root.scss v3 — Sass compile-time via #{tokens.$it-*})
 // Map 3: --it-* → value or --it-* reference (design-tokens-italia > _variables.scss)
 //
-// Resolution chain: --bsi-accordion-padding → --bsi-spacing-m → --it-spacing-m → 1.5rem (24px)
+// Resolution chain: --bsi-accordion-padding → --bsi-spacing-m → --it-spacing-m → --it-spacing-6x → 24px
 
 // ─── Parsers ──────────────────────────────────────────────────────────────────
 
@@ -33,14 +33,14 @@ function parseDesignTokens(scss: string): DtiMap {
   return map
 }
 
-// Format: --#{$prefix}spacing-m: var(--it-spacing-m);
+// Format: --#{$prefix}spacing-m: #{tokens.$it-spacing-m};
 function parseBridge(scss: string): BridgeMap {
   const map: BridgeMap = new Map()
   for (const line of scss.split('\n')) {
-    const match = line.match(/--#\{\$prefix\}([a-z0-9-]+):\s*var\((--it-[a-z0-9-]+)\)/)
+    const match = line.match(/--#\{\$prefix\}([a-z0-9-]+):\s*#\{tokens\.\$it-([a-z0-9-]+)\}/)
     if (!match) continue
-    const [, bsiSuffix, itName] = match
-    map.set(`--bsi-${bsiSuffix}`, itName)
+    const [, bsiSuffix, itSuffix] = match
+    map.set(`--bsi-${bsiSuffix}`, `--it-${itSuffix}`)
   }
   return map
 }
