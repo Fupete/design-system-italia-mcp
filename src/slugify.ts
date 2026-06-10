@@ -73,7 +73,7 @@ const SLUG_ALIASES: Record<string, string[]> = {
   'list': ['liste', 'lista'],
   'megamenu': ['megamenus'],
   'modal': ['modale', 'dialog', 'finestra-modale'],
-  'notifications': ['notifiche', 'notifica', 'toast', 'toasts'],
+  'notifications': ['notifiche', 'notifica', 'toast', 'toasts', 'notification'],
   'number-input': ['input-numerico', 'numeric-input', 'form-numeric-input'],
   'overlay': ['sovrapposizione'],
   'pagination': ['paginazione', 'pages'],
