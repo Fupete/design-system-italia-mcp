@@ -105,14 +105,14 @@ function showTokens(comp) {
 
 /* Dev Kit props — XXX update slug list when new components added to data-fetched/devkit/props/ */
 const PROPS_SLUGS = [
-  'accordion', 'avatar', 'back-to-top', 'bottomnav', 'breadcrumbs', 
-  'button', 'callout', 'card', 'carousel', 'chip', 'collapse', 
-  'dimmer', 'dropdown', 'form-autocomplete', 'form-checkbox', 
-  'form-datepicker', 'form-input', 'form-number-input', 'form-radio-button', 
-  'form-select', 'form-timepicker', 'form-toggle', 'form-transfer', 
-  'form-upload', 'header', 'hero', 'icon', 'megamenu', 'modal', 
-  'navscroll', 'notification', 'pagination', 'popover', 'progress', 
-  'rating', 'section', 'skiplinks', 'stepper', 'sticky', 'tabs', 
+  'accordion', 'avatar', 'back-to-top', 'bottomnav', 'breadcrumbs',
+  'button', 'callout', 'card', 'carousel', 'chip', 'collapse',
+  'dimmer', 'dropdown', 'form-autocomplete', 'form-checkbox',
+  'form-datepicker', 'form-input', 'form-number-input', 'form-radio-button',
+  'form-select', 'form-timepicker', 'form-toggle', 'form-transfer',
+  'form-upload', 'header', 'hero', 'icon', 'megamenu', 'modal',
+  'navscroll', 'notification', 'pagination', 'popover', 'progress',
+  'rating', 'section', 'skiplinks', 'stepper', 'sticky', 'tabs',
   'thumbnav', 'timeline', 'toolbar', 'tooltip', 'video-player'
 ];
 function populatePropsSel() {
@@ -446,6 +446,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (dtiTab) dtiTab.addEventListener('shown.bs.tab', () => { if (!dtiAll.length) loadDTI(); }, { once: true });
 });
 
+// Alias BSI slug → Dev Kit slug (estratti da slugify.ts)
+const DK_SLUG_ALIASES = {
+  'buttons': 'button',
+  'chips': 'chip',
+  'notifications': 'notification',
+  'progress-indicators': 'progress',
+  'sections': 'section',
+  'steppers': 'stepper',
+  'toggles': 'toggle',
+};
+
 /* Load dashboard data */
 async function loadDashboard() {
   try {
@@ -482,7 +493,8 @@ async function loadDashboard() {
 
     allComps = (status.items || []).map(c => {
       const name = (c.title || '').replace(/`/g, '').replace(/\s*-\s*check\s+a11y.*$/i, '').trim();
-      return { name, bsi: c['bootstrap Italia'] || '', uik: c['uI Kit Italia'] || '', dk: dkSlugs.has(name.toLowerCase().replace(/\s+/g, '-')) };
+      const bsiSlug = name.toLowerCase().replace(/\s+/g, '-');
+      return { name, bsi: c['bootstrap Italia'] || '', uik: c['uI Kit Italia'] || '', dk: dkSlugs.has(DK_SLUG_ALIASES[bsiSlug] ?? bsiSlug) };
     }).filter(c => c.name).sort((a, b) => a.name.localeCompare(b.name));
 
     document.getElementById('f-all').textContent = allComps.length;

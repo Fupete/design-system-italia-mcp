@@ -90,8 +90,10 @@ const SLUG_ALIASES: Record<string, string[]> = {
   'tabs': ['tab'],
   'timeline': ['timelines'],
   'timepicker': ['input-ora', 'time-picker', 'form-timepicker'],
-  'toggles': ['toggle', 'switch', 'switches'],
+  'toggles': ['toggle', 'switch', 'switches', 'form-toggle'],
   'tooltip': ['tooltips', 'suggerimento'],
+  'transfer': ['form-transfer'],
+  'upload': ['form-upload'],
   'video-player': ['video', 'player'],
 }
 
