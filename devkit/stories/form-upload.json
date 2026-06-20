@@ -25,7 +25,7 @@
     },
     {
       "name": "upload-drag--drop",
-      "html": "<it-upload-drag-drop></it-upload-drag-drop>"
+      "html": "<it-upload-drag-drop heading-level=\"h3\"></it-upload-drag-drop>"
     },
     {
       "name": "gestione-automatica-e-manuale-dello-stato",

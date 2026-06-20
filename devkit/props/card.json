@@ -17,6 +17,13 @@
       "options": []
     },
     {
+      "name": "ratio",
+      "type": "select",
+      "description": "Rapporto d'aspetto dell'immagine della card.",
+      "default": null,
+      "options": []
+    },
+    {
       "name": "border-top",
       "type": "select",
       "description": "Aggiunge un bordo superiore colorato alla card per evidenziarla",
@@ -27,6 +34,13 @@
       "name": "heading-level",
       "type": "select",
       "description": "Livello di heading da usare per il titolo della card. Se non specificato, viene usato h3. Vedi la sezione \"Accessibilità\" della documentazione per maggiori dettagli.",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "heading-size",
+      "type": "select",
+      "description": "Dimensione visiva del titolo della card. Se \"sm\" applica la classe h4, se \"md\" applica la classe h3. Se non specificato, la dimensione è determinata dalla variante.",
       "default": null,
       "options": []
     },
