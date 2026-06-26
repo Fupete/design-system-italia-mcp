@@ -50,6 +50,10 @@
     {
       "name": "menu-dark",
       "html": "<it-dropdown dark=\"\" label=\"Apri dropdown\" variant=\"primary\">\n  <h4 slot=\"header\" class=\"link-list-heading dropdown-header\">Intestazione</h4>\n  <it-dropdown-item href=\"#\">Azione 1</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 2</it-dropdown-item>\n  <it-dropdown-item href=\"#\">Azione 3</it-dropdown-item>\n</it-dropdown>"
+    },
+    {
+      "name": "menu-azioni",
+      "html": "<it-dropdown label=\"Modifica\" it-role=\"menu\" variant=\"primary\">\n  <it-dropdown-item>Copia</it-dropdown-item>\n  <it-dropdown-item>Taglia</it-dropdown-item>\n  <it-dropdown-item>Incolla</it-dropdown-item>\n  <it-dropdown-item separator=\"\"></it-dropdown-item>\n  <it-dropdown-item>Elimina</it-dropdown-item>\n</it-dropdown>"
     }
   ]
 }
