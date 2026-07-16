@@ -5,19 +5,23 @@
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",
-      "html": "<a href=\"#\" class=\"go-back\">\n  <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"primary\"></it-icon>\n  <span>Torna indietro</span>\n</a>"
+      "html": "<it-back>\n  <a href=\"#\" class=\"go-back\">\n    <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"primary\"></it-icon>\n    <span>Torna indietro</span>\n  </a>\n</it-back>"
+    },
+    {
+      "name": "indicazioni-generali",
+      "html": "<it-back id=\"back-custom\">\n  <a href=\"#\" class=\"go-back\">\n    <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"primary\"></it-icon>\n    <span>Torna indietro</span>\n  </a>\n</it-back>\n\n<script type=\"module\">\n  const back = document.getElementById('back-custom');\n  back.addEventListener('it-back-navigate', (e) => {\n    e.preventDefault(); // impedisce window.history.back()\n    // ...naviga indietro secondo il router del tuo framework...\n    console.log('Navigazione indietro gestita dal framework');\n  });\n</script>"
     },
     {
       "name": "link",
-      "html": "<a href=\"#\" class=\"go-back\">\n  <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"primary\"></it-icon>\n  <span>Torna indietro</span>\n</a>"
+      "html": "<it-back>\n  <a href=\"#\" class=\"go-back\">\n    <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"primary\"></it-icon>\n    <span>Torna indietro</span>\n  </a>\n</it-back>"
     },
     {
       "name": "pulsante",
-      "html": "<it-button variant=\"primary\" class=\"go-back\">\n  <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span>Torna indietro</span>\n</it-button>\n<it-button variant=\"primary\" class=\"go-back\">\n  <it-icon name=\"it-arrow-up\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span>Torna indietro</span>\n</it-button>"
+      "html": "<it-back>\n  <it-button variant=\"primary\" class=\"go-back\">\n    <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"inverse\"></it-icon>\n    <span>Torna indietro</span>\n  </it-button>\n</it-back>\n<it-back>\n  <it-button variant=\"primary\" class=\"go-back\">\n    <it-icon name=\"it-arrow-up\" size=\"sm\" color=\"inverse\"></it-icon>\n    <span>Torna indietro</span>\n  </it-button>\n</it-back>"
     },
     {
       "name": "pulsante-con-sola-icona",
-      "html": "<it-button variant=\"primary\" class=\"go-back\">\n  <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span class=\"visually-hidden\">Torna indietro</span>\n</it-button>\n<it-button variant=\"primary\" class=\"go-back\">\n  <it-icon name=\"it-arrow-up\" size=\"sm\" color=\"inverse\"></it-icon>\n  <span class=\"visually-hidden\">Torna indietro</span>\n</it-button>"
+      "html": "<it-back>\n  <it-button variant=\"primary\" class=\"go-back\">\n    <it-icon name=\"it-arrow-left\" size=\"sm\" color=\"inverse\"></it-icon>\n    <span class=\"visually-hidden\">Torna indietro</span>\n  </it-button>\n</it-back>\n<it-back>\n  <it-button variant=\"primary\" class=\"go-back\">\n    <it-icon name=\"it-arrow-up\" size=\"sm\" color=\"inverse\"></it-icon>\n    <span class=\"visually-hidden\">Torna indietro</span>\n  </it-button>\n</it-back>"
     }
   ]
 }

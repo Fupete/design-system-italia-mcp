@@ -5,7 +5,11 @@
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",
-      "html": "<script type=\"module\">\n  document.querySelectorAll('a.forward').forEach(link => {\n    link.addEventListener('click', (e) => {\n      e.preventDefault();\n      const targetId = link.getAttribute('href');\n      const targetElement = document.querySelector(targetId);\n      if (targetElement) {\n        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n        targetElement.scrollIntoView({\n          behavior: prefersReducedMotion ? 'auto' : 'smooth',\n          block: 'start'\n        });\n        targetElement.setAttribute('tabindex', '-1');\n        targetElement.focus({ preventScroll: true });\n      }\n    });\n  });\n</script>\n\n<a href=\"#sezione-di-esempio\" class=\"forward\" aria-label=\"Vai a: Sezione di esempio\">\n  <it-icon name=\"it-expand\" size=\"lg\" color=\"primary\"></it-icon>\n</a>\n\n<div id=\"sezione-di-esempio\">\n  <h2>Sezione di esempio</h2>\n  <p>Et et consectetur ipsum labore excepteur...</p>\n</div>"
+      "html": "<script type=\"module\">\n  import '@italia/forward/it-forward.js';\n</script>\n\n<it-forward>\n  <a href=\"#sezione-di-esempio\" class=\"forward\" aria-label=\"Vai a: Sezione di esempio\">\n    <it-icon name=\"it-expand\" size=\"lg\" color=\"primary\"></it-icon>\n  </a>\n</it-forward>\n\n<div id=\"sezione-di-esempio\">\n  <h2>Sezione di esempio</h2>\n  <p>Et et consectetur ipsum labore excepteur...</p>\n</div>"
+    },
+    {
+      "name": "eventi-e-personalizzazione",
+      "html": "<it-forward id=\"forward-custom\">\n  <a href=\"#sezione-target\" class=\"forward\" aria-label=\"Vai a: Sezione di esempio\">\n    <it-icon name=\"it-expand\" size=\"lg\" color=\"primary\"></it-icon>\n  </a>\n</it-forward>\n\n<script type=\"module\">\n  const forward = document.getElementById('forward-custom');\n  forward.addEventListener('it-forward-navigate', (e) => {\n    e.preventDefault(); // impedisce lo scorrimento di default\n    console.log('Navigazione verso', e.detail.href);\n    // ...logica personalizzata (es. routing del framework)...\n    if (e.detail.target) forward.navigateTo(e.detail.target);\n  });\n</script>"
     }
   ]
 }

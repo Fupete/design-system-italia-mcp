@@ -1,0 +1,14 @@
+{
+  "slug": "alert",
+  "tagName": "it-alert",
+  "props": [
+    {
+      "name": "variant",
+      "type": "select",
+      "description": "Colore dell'alert.",
+      "default": "primary",
+      "options": []
+    }
+  ],
+  "subcomponents": []
+}

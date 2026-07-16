@@ -33,7 +33,11 @@
     },
     {
       "name": "chip-con-chiusura",
-      "html": "<it-chip label=\"Etichetta\" size=\"sm\" variant=\"primary\" dismissable id=\"chip-dismissable\">\n  <it-button\n    slot=\"dismiss-button\"\n    it-aria-label=\"Elimina etichetta\"\n    it-aria-description=\"Puoi premere per eliminare la chip.\"\n  >\n    <it-icon name=\"it-close\" size=\"sm\"></it-icon>\n  </it-button>\n</it-chip>\n\n<script type=\"module\">\n  const dismissButtons = document.querySelectorAll('it-chip#chip-dismissable [slot=\"dismiss-button\"]');\n\n  dismissButtons.forEach((btn) => {\n    const removeChip = (e) => {\n      const chip = btn.closest('it-chip');\n      if (chip) chip.remove();\n    };\n\n    btn.addEventListener('click', removeChip);\n    btn.addEventListener('keydown', (e) => {\n      if (e.key === 'Enter' || e.key === ' ') {\n        e.preventDefault();\n        removeChip(e);\n      }\n    });\n  });\n</script>"
+      "html": "<it-chip label=\"Etichetta\" size=\"sm\" variant=\"primary\" dismissable id=\"chip-dismissable\">\n  <it-button\n    slot=\"dismiss-button\"\n    it-aria-label=\"Elimina etichetta\"\n    it-aria-description=\"Puoi premere per eliminare la chip.\"\n  >\n    <it-icon name=\"it-close\" size=\"sm\"></it-icon>\n  </it-button>\n</it-chip>"
+    },
+    {
+      "name": "logica-di-rimozione-personalizzata",
+      "html": "<it-chip\n  label=\"Etichetta\"\n  size=\"sm\"\n  variant=\"primary\"\n  dismissable\n  id=\"chip-conferma\"\n>\n  <it-button slot=\"dismiss-button\" it-aria-label=\"Elimina etichetta\">\n    <it-icon name=\"it-close\" size=\"sm\"></it-icon>\n  </it-button>\n</it-chip>\n\n<script type=\"module\">\n  const chip = document.getElementById('chip-conferma');\n  chip.addEventListener('it-chip-close', (e) => {\n    e.preventDefault(); // impedisce la rimozione di default\n    if (confirm('Rimuovere questa chip?')) chip.close();\n  });\n</script>"
     },
     {
       "name": "chip-disabilitata",

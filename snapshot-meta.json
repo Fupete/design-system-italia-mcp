@@ -1,14 +1,14 @@
 {
-  "fetchedAt": "2026-07-15T05:38:54.270Z",
+  "fetchedAt": "2026-07-16T05:46:28.694Z",
   "versions": {
-    "designSystem": "v1.12.0",
-    "bootstrapItalia": "3.0.0-beta.1",
-    "devKitItalia": "1.0.0-alpha.18",
+    "designSystem": "v1.13.0",
+    "bootstrapItalia": "3.0.0-beta.2",
+    "devKitItalia": "1.0.0-beta.0",
     "designTokensItalia": "1.3.3"
   },
   "stats": {
-    "total": 161,
-    "ok": 161,
+    "total": 164,
+    "ok": 164,
     "failed": 0
   },
   "sources": {
@@ -192,7 +192,13 @@
     "devkit/props/accordion.json": {
       "ok": true
     },
+    "devkit/props/alert.json": {
+      "ok": true
+    },
     "devkit/props/avatar.json": {
+      "ok": true
+    },
+    "devkit/props/back.json": {
       "ok": true
     },
     "devkit/props/back-to-top.json": {
@@ -259,6 +265,9 @@
       "ok": true
     },
     "devkit/props/form-upload.json": {
+      "ok": true
+    },
+    "devkit/props/forward.json": {
       "ok": true
     },
     "devkit/props/header.json": {
