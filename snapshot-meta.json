@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-30T05:49:58.381Z",
+  "fetchedAt": "2026-07-31T06:19:46.780Z",
   "versions": {
     "designSystem": "v1.13.0",
-    "bootstrapItalia": "3.0.0-beta.2",
+    "bootstrapItalia": "3.0.0-beta.3",
     "devKitItalia": "1.0.0-beta.0",
     "designTokensItalia": "1.3.3"
   },
