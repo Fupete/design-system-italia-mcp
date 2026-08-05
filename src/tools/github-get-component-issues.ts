@@ -18,12 +18,12 @@ export function registerGithubGetComponentIssues(server: McpServer): void {
         'across the 4 Design System .italia repositories: bootstrap-italia, ' +
         'design-ui-kit, dev-kit-italia, design-tokens-italia. ' +
         'Also includes known issues already present in components_status.json.',
-      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
+      inputSchema: { component: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
     },
-    async ({ name }) => {
-      name = name.trim()
-      const slug = slugify(name)
+    async ({ component }) => {
+      component = component.trim()
+      const slug = slugify(component)
       const warnings: string[] = []
 
       const [{ issues: liveIssues, error: issuesError }, status] = await Promise.all([

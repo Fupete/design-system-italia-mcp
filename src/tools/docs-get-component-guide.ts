@@ -18,12 +18,12 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
       description: 'Returns usage guidelines for a component from Designers Italia website: ' +
         'when to use it, how to use it, recommended alternatives, accessibility notes ' +
         'and library status (Bootstrap Italia, UI Kit Italia, ...).',
-      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
+      inputSchema: { component: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
     },
-    async ({ name }) => {
-      name = name.trim()
-      const slug = slugify(name)
+    async ({ component }) => {
+      component = component.trim()
+      const slug = slugify(component)
       const warnings: string[] = []
 
       const [guidelines, status, devKitEntry, dsMeta] = await Promise.all([
