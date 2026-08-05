@@ -158,8 +158,15 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
     const ref = token.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
     if (!ref) return token
 
-    const { value, chain } = resolveChain(token.name, maps.bsiMap, maps.bridge, maps.dtiRaw)
-    return { ...token, valueResolved: value, resolvedVia: chain }
+    // Resolve from the token's own declared reference (ref), not from a
+    // re-lookup of token.name in bsiMap. custom_properties.json can contain
+    // duplicate variable-names across components with different values —
+    // bsiMap is a flat Map keyed by name, so a re-lookup by name can return
+    // a different component's value (last write wins). Starting from `ref`,
+    // read directly from this token's own value field, sidesteps that
+    // ambiguity entirely.
+    const { value, chain } = resolveChain(ref, maps.bsiMap, maps.bridge, maps.dtiRaw)
+    return { ...token, valueResolved: value, resolvedVia: [ref, ...chain] }
   })
 }
 
