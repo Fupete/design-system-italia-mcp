@@ -1,17 +1,17 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { formatTimestamp } from '../utils.js'
-import { loadComponentIssues, getProjectBoardStatus } from '../loaders/github.js'
+import { loadComponentIssues } from '../loaders/github.js'
 import { loadStatus } from '../loaders/bsi.js'
 import { slugify } from '../slugify.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS, BSI_STATUS_URL } from '../constants.js'
 import { buildMeta } from './helpers.js'
 
-// ─── Tool: get_component_issues ───────────────────────────────────────────────
+// ─── Tool: github_get_component_issues ────────────────────────────────────────
 
-export function registerGetComponentIssues(server: McpServer): void {
+export function registerGithubGetComponentIssues(server: McpServer): void {
   server.registerTool(
-    'get_component_issues',
+    'github_get_component_issues',
     {
       title: 'Get Component Issues',
       description: 'Returns open GitHub issues for a component ' +

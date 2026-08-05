@@ -12,9 +12,9 @@ import { registerDsiListComponents } from './tools/dsi-list-components.js'
 import { registerDsiSearchComponents } from './tools/dsi-search-components.js'
 import { registerGetComponentTokens } from './tools/get-component-tokens.js' 
 import { registerFindToken } from './tools/find-token.js'
-import { registerGetComponentGuidelines } from './tools/get-component-guidelines.js'
-import { registerGetComponentIssues } from './tools/get-component-issues.js'
-import { registerGetProjectBoardStatus } from './tools/get-project-board-status.js' 
+import { registerDocsGetComponentGuide } from './tools/docs-get-component-guide.js'
+import { registerGithubGetComponentIssues } from './tools/github-get-component-issues.js'
+import { registerGithubGetProjectRepoLinks } from './tools/github-get-project-repo-links.js'
 import { registerBsiListComponentVariants } from './tools/bsi-list-component-variants.js'
 import { registerBsiGetComponentMarkup } from './tools/bsi-get-component-markup.js'
 import { registerDevkitListComponentVariants } from './tools/devkit-list-component-variants.js'
@@ -76,10 +76,10 @@ function createMcpServer(): McpServer {
                 'devkit_get_component_markup',
                 'devkit_list_component_props',
                 'bsi_list_components_by_status',
-                'get_component_guidelines',
-                'get_component_issues',
+                'docs_get_component_guide',
+                'github_get_component_issues',
                 'get_component_tokens',
-                'get_project_board_status',
+                'github_get_project_repo_links',
                 'dsi_list_components',
                 'dsi_search_components',
               ],
@@ -94,11 +94,13 @@ function createMcpServer(): McpServer {
 
   registerFindToken(s)
 
-  registerGetComponentGuidelines(s)
-  registerGetComponentIssues(s)
+
+  registerDocsGetComponentGuide(s)
+
   registerGetComponentTokens(s)
 
-  registerGetProjectBoardStatus(s)
+  registerGithubGetComponentIssues(s)
+  registerGithubGetProjectRepoLinks(s)
 
   registerBsiListComponentVariants(s)
   registerBsiGetComponentMarkup(s)

@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
-import { loadAllStatuses, loadStatus } from '../loaders/bsi.js'
+import { loadStatus } from '../loaders/bsi.js'
 import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
@@ -8,13 +8,13 @@ import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
 import { ALPHA_WARNING, BSI_STATUS_URL, DESIGNERS_COMPONENT_URL, DEVKIT_INDEX_URL } from '../constants.js'
 
-// ─── Tool: get_component_guidelines ──────────────────────────────────────────
+// ─── Tool: docs_get_component_guide ───────────────────────────────────────────
 
-export function registerGetComponentGuidelines(server: McpServer): void {
+export function registerDocsGetComponentGuide(server: McpServer): void {
   server.registerTool(
-    'get_component_guidelines',
+    'docs_get_component_guide',
     {
-      title: 'Get Component Guidelines',
+      title: 'Get Component Guide',
       description: 'Returns usage guidelines for a component from Designers Italia website: ' +
         'when to use it, how to use it, recommended alternatives, accessibility notes ' +
         'and library status (Bootstrap Italia, UI Kit Italia, ...).',
