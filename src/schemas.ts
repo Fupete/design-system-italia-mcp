@@ -29,7 +29,7 @@ export const ZCssToken = z.object({
 
 // ─── get_component_tokens ─────────────────────────────────────────────────────
 
-export const ZGetComponentTokensOutput = z.object({
+export const ZTokensListComponentVarsOutput = z.object({
   component: z.string(),
   total: z.number(),
   tokens: z.array(ZCssToken),

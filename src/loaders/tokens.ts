@@ -1,6 +1,7 @@
 import { fetchText, fetchJson } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import type { CssToken } from '../types.js'
+import { loadAllTokens, classifyValue } from './bsi.js'
 import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL, SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, } from '../constants.js'
 
 // Map 1: --bsi-* component tokens (custom-properties.json) — token-reference entries only
@@ -187,6 +188,91 @@ export async function searchDesignTokens(
     }
   }
 
+  return results
+}
+
+// ─── Multi-form token name normalization ──────────────────────────────────────
+// tokens_resolve and tokens_find_components accept any point in the chain:
+// --bsi-*, --it-*, or the Sass source form $it-* (as written in
+// design-tokens-italia/_variables.scss, before compilation to a CSS custom
+// property). Everything downstream (bridge, dtiRaw) already keys on --it-*,
+// so $it-* just needs converting before the first lookup.
+
+function normalizeTokenName(input: string): string {
+  if (input.startsWith('$it-')) return `--it-${input.slice(4)}`
+  if (input.startsWith('--bsi-') || input.startsWith('--it-')) return input
+  // Defensive: bare name without -- prefix (e.g. "it-spacing-m", "bsi-accordion-padding")
+  if (input.startsWith('it-') || input.startsWith('bsi-')) return `--${input}`
+  return input
+}
+
+// ─── Single token resolution (tokens_resolve) ─────────────────────────────────
+
+export async function resolveToken(input: string): Promise<{
+  name: string
+  value: string | null
+  resolvedVia: string[]
+}> {
+  const name = normalizeTokenName(input)
+  const { bsiMap, bridge, dtiRaw } = await loadMaps()
+  const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
+  return { name, value, resolvedVia: chain }
+}
+
+// ─── Global bridge-pair listing (tokens_list_globals) ─────────────────────────
+// Iterates the --bsi-* -> --it-* map parsed live from BSI's root.scss — grows
+// automatically as BSI adds bridge entries. Never a hardcoded list, never a
+// null or non-bridged row (see memory: count canaries are noise, this isn't one).
+
+export async function listGlobalBridgePairs(): Promise<Array<{
+  it: string
+  bsiGlobal: string
+  value: string | null
+  resolvedVia: string[]
+}>> {
+  const { bsiMap, bridge, dtiRaw } = await loadMaps()
+  const results: Array<{ it: string; bsiGlobal: string; value: string | null; resolvedVia: string[] }> = []
+
+  for (const [bsiGlobal, it] of bridge) {
+    const { value, chain } = resolveChain(it, bsiMap, bridge, dtiRaw)
+    results.push({ it, bsiGlobal, value, resolvedVia: chain })
+  }
+  return results
+}
+
+// ─── Inverse lookup (tokens_find_components) ──────────────────────────────────
+// Given a token name, finds every BSI component whose token resolves through
+// it — either directly (the token itself) or as an intermediate hop in the
+// --bsi-* -> --it-* chain.
+
+export async function findComponentsByToken(input: string): Promise<Array<{
+  component: string
+  token: string
+  resolvedVia: string[]
+  valueResolved: string | null
+}>> {
+  const target = normalizeTokenName(input)
+  const [allTokens, maps] = await Promise.all([loadAllTokens(), loadMaps()])
+  const { bsiMap, bridge, dtiRaw } = maps
+  const results: Array<{ component: string; token: string; resolvedVia: string[]; valueResolved: string | null }> = []
+
+  for (const [component, entries] of Object.entries(allTokens)) {
+    for (const e of entries) {
+      const name = e['variable-name']
+
+      if (name === target) {
+        results.push({ component, token: name, resolvedVia: [], valueResolved: e.value })
+        continue
+      }
+
+      if (classifyValue(e.value) !== 'token-reference') continue
+
+      const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
+      if (chain.includes(target)) {
+        results.push({ component, token: name, resolvedVia: chain, valueResolved: value })
+      }
+    }
+  }
   return results
 }
 
