@@ -105,12 +105,12 @@ function showTokens(comp) {
 
 /* Dev Kit props — XXX update slug list when new components added to data-fetched/devkit/props/ */
 const PROPS_SLUGS = [
-  'accordion', 'avatar', 'back-to-top', 'bottomnav', 'breadcrumbs',
-  'button', 'callout', 'card', 'carousel', 'chip', 'collapse',
+  'accordion', 'alert', 'avatar', 'back', 'back-to-top', 'bottomnav',
+  'breadcrumbs', 'button', 'callout', 'card', 'carousel', 'chip', 'collapse',
   'dimmer', 'dropdown', 'form-autocomplete', 'form-checkbox',
   'form-datepicker', 'form-input', 'form-number-input', 'form-radio-button',
   'form-select', 'form-timepicker', 'form-toggle', 'form-transfer',
-  'form-upload', 'header', 'hero', 'icon', 'megamenu', 'modal',
+  'form-upload', 'forward', 'header', 'hero', 'icon', 'megamenu', 'modal',
   'navscroll', 'notification', 'pagination', 'popover', 'progress',
   'rating', 'section', 'skiplinks', 'stepper', 'sticky', 'tabs',
   'thumbnav', 'timeline', 'toolbar', 'tooltip', 'video-player'
