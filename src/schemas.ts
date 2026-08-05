@@ -24,6 +24,7 @@ export const ZCssToken = z.object({
   valueResolved: z.string().nullable(),
   resolvedVia: z.array(z.string()),
   description: z.string().nullable(),
+  valueResolvedNote: z.string().optional(),
 })
 
 // ─── get_component_tokens ─────────────────────────────────────────────────────
