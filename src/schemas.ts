@@ -44,48 +44,27 @@ export const ZGetComponentTokensOutput = z.object({
   }),
 })
 
-// ─── get_component ─────────────────────────────────────────────────────────
+// ─── bsi_get_component_markup ─────────────────────────────────────────────────
 
-export const ZStoryVariants = z.object({
-  count: z.number(),
-  available: z.array(z.string()),
-  variants: z.array(z.object({
+export const ZBsiGetComponentMarkupOutput = z.object({
+  component: z.string(),
+  variant: z.string().nullable(),
+  result: z.object({
     name: z.string(),
     html: z.string(),
-  })),
-})
-
-export const ZGetComponentOutput = z.object({
-  name: z.string(),
-  slug: z.string(),
-  variantsCount: z.number(),
-  variantsAvailable: z.array(z.string()),
-  variants: z.array(z.object({
-    name: z.string(),
-    html: z.string(),
-  })),
-  devKit: z.object({
-    slug: z.string(),
-    tags: z.array(z.string()),
-    storybookUrl: z.string(),
-    pattern: z.enum(['dedicated', 'bundle']),
-    componentType: z.enum(['web-component', 'html-bsi']),
-    description: z.string().nullable(),
-    storyVariants: ZStoryVariants.nullable(),
   }).nullable(),
   meta: ZMeta,
 })
 
-// ─── get_component_variant ─────────────────────────────────────────────────
+// ─── devkit_get_component_markup ──────────────────────────────────────────────
 
-export const ZGetComponentVariantOutput = z.object({
+export const ZDevkitGetComponentMarkupOutput = z.object({
   component: z.string(),
-  variantName: z.string(),
-  results: z.array(z.object({
+  variant: z.string().nullable(),
+  result: z.object({
     name: z.string(),
     html: z.string(),
-    source: z.enum(['bsi', 'devkit-story']),
-  })),
+  }).nullable(),
   meta: ZMeta,
 })
 
