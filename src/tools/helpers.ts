@@ -94,7 +94,13 @@ export async function buildComponentUnion(): Promise<{ rows: UnionRow[]; dsMeta:
   for (const [bsiSlug, s] of statuses) {
     const devKitSlug = slugsToTry(bsiSlug).find((a) => devKitSlugs.has(a)) ?? null
     const dk = devKitSlug ? devKitIndex.get(devKitSlug)! : null
-    if (devKitSlug) claimed.add(devKitSlug)
+    // Claim every alias of the matched slug, not just the literal match —
+    // otherwise a second Dev Kit entry that's alias-equivalent to this one
+    // (e.g. "video" vs "video-player") slips through pass 2 as a phantom
+    // standalone component.
+    if (devKitSlug) {
+      for (const alias of slugsToTry(devKitSlug)) claimed.add(alias)
+    }
 
     rows.push({
       name: s.name,
@@ -113,10 +119,15 @@ export async function buildComponentUnion(): Promise<{ rows: UnionRow[]; dsMeta:
     })
   }
 
-  // Pass 2: Dev Kit-only slugs — no BSI counterpart claimed in pass 1.
-  // Known today: "icon" (delta confirmed against 2026-08-05 snapshot).
+  // Pass 2: Dev Kit-only slugs — no BSI counterpart claimed (directly or via
+  // alias) in pass 1. Known today: "icon".
+  // Note: the reverse case (two distinct BSI slugs both aliasing to the same
+  // Dev Kit slug, producing duplicate devkit blocks on two rows) is not
+  // guarded here — no known occurrence in current data, low-risk follow-up
+  // if it ever surfaces.
   for (const [dkSlug, dk] of devKitIndex) {
-    if (claimed.has(dkSlug)) continue
+    if (slugsToTry(dkSlug).some((a) => claimed.has(a))) continue
+    claimed.add(dkSlug)
     rows.push({
       name: dk.displayName,
       slug: dkSlug,
@@ -125,6 +136,6 @@ export async function buildComponentUnion(): Promise<{ rows: UnionRow[]; dsMeta:
     })
   }
 
-  rows.sort((a, b) => a.name.localeCompare(b.name))
+  rows.sort((a, b) => a.name.localeCompare(b.name, 'it'))
   return { rows, dsMeta }
 }
