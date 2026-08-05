@@ -19,22 +19,22 @@ export function registerTokensResolve(server: McpServer): void {
         'following the full chain (--bsi-* → --it-* → value). ' +
         'Accepts --bsi-*, --it-*, or the Sass source form $it-*. ' +
         'Examples: "--bsi-accordion-padding", "--it-spacing-m", "$it-spacing-m".',
-      inputSchema: { name: z.string().describe('Token name in any form: --bsi-*, --it-*, or $it-*') },
+      inputSchema: { variable: z.string().describe('Token name in any form: --bsi-*, --it-*, or $it-*') },
       annotations: { readOnlyHint: true },
     },
-    async ({ name }) => {
-      name = name.trim()
+    async ({ variable }) => {
+      variable = variable.trim()
       const warnings: string[] = [ALPHA_WARNING]
       const dsMeta = await loadDsMeta()
 
-      const result = await resolveToken(name)
+      const result = await resolveToken(variable)
       if (result.value === null) {
-        warnings.push(`Could not resolve "${name}" — not found in the --bsi-*/--it-* resolution chain`)
+        warnings.push(`Could not resolve "${variable}" — not found in the --bsi-*/--it-* resolution chain`)
       }
 
       const output = {
-        input: name,
-        resolved: result.name,
+        input: variable,
+        normalizedName: result.name,
         value: result.value,
         resolvedVia: result.resolvedVia,
         meta: buildMeta({

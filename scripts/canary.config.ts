@@ -30,8 +30,11 @@ import {
   SNAPSHOT_BSI_STATUS_URL,
   SNAPSHOT_DEVKIT_INDEX_URL,
   SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL,
+  SNAPSHOT_BSI_ROOT_SCSS_URL,
+  SNAPSHOT_DTI_VARIABLES_SCSS_URL,
   GITHUB_CONTENTS_DEVKIT_STORIES_URL,
 } from "../src/constants.js";
+import { parseBridge, parseDesignTokens } from "../src/loaders/tokens.js";
 
 // ── Shared result type ────────────────────────────────────────────────────────
 
@@ -250,37 +253,35 @@ export const SNAPSHOT_FRESHNESS: PipelineCheck[] = [
     },
   },
   {
-    name: "[upstream] $it- bridge chain resolves (spacing-m)",
-    async run({ get }) {
-      const t0 = Date.now();
-      const [rootRes, varsRes] = await Promise.all([
-        get(BSI_ROOT_SCSS_URL),
-        get(DTI_VARIABLES_SCSS_URL),
-      ]);
-      if (!rootRes.ok) return { url: BSI_ROOT_SCSS_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${rootRes.status}` };
-      if (!varsRes.ok) return { url: DTI_VARIABLES_SCSS_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${varsRes.status}` };
+  name: "[snapshot] \$it- bridge chain resolves (spacing-m)",
+  async run({ get }) {
+    const t0 = Date.now();
+    const [rootRes, varsRes] = await Promise.all([
+      get(SNAPSHOT_BSI_ROOT_SCSS_URL),
+      get(SNAPSHOT_DTI_VARIABLES_SCSS_URL),
+    ]);
+    if (!rootRes.ok) return { url: SNAPSHOT_BSI_ROOT_SCSS_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${rootRes.status}` };
+    if (!varsRes.ok) return { url: SNAPSHOT_DTI_VARIABLES_SCSS_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${varsRes.status}` };
 
-      // Same regex as parseBridge() in src/loaders/tokens.ts — keep in sync if that changes.
-      const bridgeMatch = rootRes.body.match(/--#\{\$prefix\}spacing-m:\s*#\{tokens\.\$it-([a-z0-9-]+)\}/);
-      if (!bridgeMatch) {
-        return {
-          url: BSI_ROOT_SCSS_URL, ok: false, ms: Date.now() - t0,
-          error: "bridge entry for spacing-m not found — parseBridge() may be out of sync with root.scss format",
-        };
-      }
-      const itName = `it-${bridgeMatch[1]}`;
+    const bridge = parseBridge(rootRes.body);
+    const dti = parseDesignTokens(varsRes.body);
 
-      // Same regex as parseDesignTokens() in src/loaders/tokens.ts
-      const dtiMatch = varsRes.body.match(new RegExp(`^\\$${itName}:\\s*([^;]+);`, "m"));
-      if (!dtiMatch) {
-        return {
-          url: DTI_VARIABLES_SCSS_URL, ok: false, ms: Date.now() - t0,
-          error: `$${itName} not found in _variables.scss — chain breaks after bridge`,
-        };
-      }
-      return { url: DTI_VARIABLES_SCSS_URL, ok: true, ms: Date.now() - t0 };
-    },
+    const itName = bridge.get("--bsi-spacing-m");
+    if (!itName) {
+      return {
+        url: SNAPSHOT_BSI_ROOT_SCSS_URL, ok: false, ms: Date.now() - t0,
+        error: "bridge entry for --bsi-spacing-m not found in snapshot — parseBridge() may be out of sync with root.scss format",
+      };
+    }
+    if (!dti.has(itName)) {
+      return {
+        url: SNAPSHOT_DTI_VARIABLES_SCSS_URL, ok: false, ms: Date.now() - t0,
+        error: `${itName} not found in snapshot _variables.scss — chain breaks after bridge`,
+      };
+    }
+    return { url: SNAPSHOT_DTI_VARIABLES_SCSS_URL, ok: true, ms: Date.now() - t0 };
   },
+},
 ];
 
 // ── Legacy exports for canary.ts compatibility ────────────────────────────────

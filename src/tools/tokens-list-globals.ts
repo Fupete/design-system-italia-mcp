@@ -1,4 +1,5 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import { z } from 'zod'
 import { listGlobalBridgePairs } from '../loaders/tokens.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
@@ -13,22 +14,36 @@ export function registerTokensListGlobals(server: McpServer): void {
     'tokens_list_globals',
     {
       title: 'List Global Tokens',
-      description: 'Lists global design tokens bridged between Bootstrap Italia (--bsi-*) and ' +
-        'Design Tokens Italia (--it-*), with resolved concrete values. ' +
-        'Only tokens with a bridge entry in root.scss are included.',
-      inputSchema: {},
+      description: 'Lists the global design tokens of the Design System that Bootstrap Italia actually uses. ' +
+        'Each entry pairs the central Design Token (--it-*/$it-*, not overridable per-project) with the ' +
+        'corresponding global --bsi-* CSS custom property (project-overridable), plus its resolved value. ' +
+        'Without arguments returns all global tokens; pass category to filter (e.g. "spacing", "color"). ' +
+        'Only tokens bridged into BSI are listed. For per-component variables use tokens_list_component_vars.',
+      inputSchema: {
+        category: z.string().optional().describe('Filter by category keyword, e.g. "spacing", "color". Omit to list all.'),
+      },
       annotations: { readOnlyHint: true },
     },
-    async () => {
+    async ({ category }) => {
       const warnings: string[] = [ALPHA_WARNING]
       const [pairs, dsMeta] = await Promise.all([
         listGlobalBridgePairs(),
         loadDsMeta(),
       ])
 
+      const q = category?.trim().toLowerCase()
+      const filtered = q
+        ? pairs.filter((p) => p.it.toLowerCase().includes(q) || p.bsiGlobal.toLowerCase().includes(q))
+        : pairs
+
+      if (q && filtered.length === 0) {
+        warnings.push(`No global tokens found matching category "${category}"`)
+      }
+
       const output = {
-        total: pairs.length,
-        tokens: pairs,
+        category: category ?? null,
+        total: filtered.length,
+        tokens: filtered,
         meta: buildMeta({
           dsMeta,
           sourceUrls: [BSI_ROOT_SCSS_URL, DTI_VARIABLES_SCSS_URL],

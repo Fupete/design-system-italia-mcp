@@ -12,27 +12,27 @@ export function registerTokensFindComponents(server: McpServer): void {
     'tokens_find_components',
     {
       title: 'Find Components By Token',
-      description: 'Finds all Bootstrap Italia components whose CSS custom properties resolve ' +
-        'through a given token, directly or via the --bsi-* → --it-* chain. ' +
-        'Accepts --bsi-*, --it-*, or the Sass source form $it-*. ' +
-        'Example: "--it-spacing-m" → every --bsi-*-spacing-m across all components.',
-      inputSchema: { name: z.string().describe('Token name in any form: --bsi-*, --it-*, or $it-*') },
+      description: 'Returns the Bootstrap Italia components impacted by a given design variable, ' +
+        'including indirect impact via the resolution chain. Accepts --bsi-* (direct usage) or ' +
+        '--it-*/$it-* (impact traced through the chain). Useful for theming: identifies what changes ' +
+        'if you override a variable.',
+      inputSchema: { variable: z.string().describe('Token name in any form: --bsi-*, --it-*, or $it-*') },
       annotations: { readOnlyHint: true },
     },
-    async ({ name }) => {
-      name = name.trim()
+    async ({ variable }) => {
+      variable = variable.trim()
       const warnings: string[] = [ALPHA_WARNING]
       const [results, dsMeta] = await Promise.all([
-        findComponentsByToken(name),
+        findComponentsByToken(variable),
         loadDsMeta(),
       ])
 
       if (results.length === 0) {
-        warnings.push(`No components found referencing "${name}"`)
+        warnings.push(`No components found referencing "${variable}"`)
       }
 
       const output = {
-        query: name,
+        query: variable,
         total: results.length,
         results,
         meta: buildMeta({

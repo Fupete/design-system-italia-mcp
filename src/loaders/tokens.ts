@@ -1,8 +1,8 @@
 import { fetchText, fetchJson } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
-import type { CssToken } from '../types.js'
 import { loadAllTokens, classifyValue } from './bsi.js'
-import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL, SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, } from '../constants.js'
+import type { CssToken, ResolvedHop, TokenRole } from '../types.js'
+import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL, SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL } from '../constants.js'
 
 // Map 1: --bsi-* component tokens (custom-properties.json) — token-reference entries only
 // Map 2: --bsi-* → --it-* bridge (BSI _root.scss v3 — Sass compile-time via #{tokens.$it-*})
@@ -11,13 +11,16 @@ import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL, SNAPSHOT_B
 // Resolution chain: --bsi-accordion-padding → --bsi-spacing-m → --it-spacing-m → --it-spacing-6x → 24px
 
 // ─── Parsers ──────────────────────────────────────────────────────────────────
+// Exported so canary.config.ts validates the live chain with the exact same
+// parsing logic the server uses, instead of a duplicated regex that can drift
+// out of sync (this drift is what caused the v0.3.12 root.scss bug).
 
 type DtiMap = Map<string, string>     // --it-* → value or --it-* reference
 type BridgeMap = Map<string, string>  // --bsi-* → --it-* (root.scss)
 type BsiMap = Map<string, string>     // --bsi-* → --bsi-* or --it-* (custom-properties.json, token-reference only)
 
 // Format: $it-spacing-m: 1.5rem; // 24px
-function parseDesignTokens(scss: string): DtiMap {
+export function parseDesignTokens(scss: string): DtiMap {
   const map: DtiMap = new Map()
   for (const line of scss.split('\n')) {
     const match = line.match(/^\$([a-z0-9-]+):\s*([^;]+);(?:\s*\/\/\s*(.+))?/)
@@ -35,7 +38,7 @@ function parseDesignTokens(scss: string): DtiMap {
 }
 
 // Format: --#{$prefix}spacing-m: #{tokens.$it-spacing-m};
-function parseBridge(scss: string): BridgeMap {
+export function parseBridge(scss: string): BridgeMap {
   const map: BridgeMap = new Map()
   for (const line of scss.split('\n')) {
     const match = line.match(/--#\{\$prefix\}([a-z0-9-]+):\s*#\{tokens\.\$it-([a-z0-9-]+)\}/)
@@ -47,7 +50,8 @@ function parseBridge(scss: string): BridgeMap {
 }
 
 // Extract --bsi-* → var(--bsi-* | --it-*) from custom-properties.json
-// Only token-reference entries — literals are already concrete
+// Only token-reference entries — literals are already concrete (see
+// resolveToken()'s literal fallback for those).
 type RawTokensJson = Record<string, Array<{ 'variable-name': string; value: string }>>
 
 function parseBsiMap(raw: RawTokensJson): BsiMap {
@@ -62,14 +66,32 @@ function parseBsiMap(raw: RawTokensJson): BsiMap {
   return map
 }
 
+// ─── Manipulability role ────────────────────────────────────────────────────
+// A node's role is intrinsic to what it is, not to how it was reached:
+// a --bsi-* name that's a key in the global bridge is "bsi-global"
+// (root.scss level, e.g. --bsi-spacing-m); any other --bsi-* is
+// "bsi-component" (per-component custom-properties.json entry); anything
+// --it-* is "dti" (central Design Token, not overridable per-project).
+
+function roleFor(name: string, bridge: BridgeMap): TokenRole {
+  if (name.startsWith('--it-')) return 'dti'
+  if (bridge.has(name)) return 'bsi-global'
+  return 'bsi-component'
+}
+
+function hopFor(name: string, bridge: BridgeMap): ResolvedHop {
+  return { name, role: roleFor(name, bridge), overridable: !name.startsWith('--it-') }
+}
+
 // ─── Unified resolver ─────────────────────────────────────────────────────────
 //
 // Follows the full chain: --bsi-* → --bsi-* → --it-* → --it-* → concrete value
-// Returns { value, chain } where chain is every intermediate hop (excluding start and final value)
+// Returns { value, chain } where chain is every intermediate hop (excluding
+// the starting name), each labeled with its manipulability role.
 
 interface ResolveResult {
   value: string | null
-  chain: string[]
+  chain: ResolvedHop[]
 }
 
 function resolveChain(
@@ -87,7 +109,7 @@ function resolveChain(
     const next = bsiMap.get(name) ?? bridge.get(name)
     if (!next) return { value: null, chain: [] }
     const result = resolveChain(next, bsiMap, bridge, dtiRaw, visited)
-    return { value: result.value, chain: [next, ...result.chain] }
+    return { value: result.value, chain: [hopFor(next, bridge), ...result.chain] }
   }
 
   // --it-* → follow dtiRaw
@@ -96,7 +118,7 @@ function resolveChain(
     if (!val) return { value: null, chain: [] }
     if (val.startsWith('--it-')) {
       const result = resolveChain(val, bsiMap, bridge, dtiRaw, visited)
-      return { value: result.value, chain: [val, ...result.chain] }
+      return { value: result.value, chain: [hopFor(val, bridge), ...result.chain] }
     }
     return { value: val, chain: [] }
   }
@@ -163,11 +185,10 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
     // re-lookup of token.name in bsiMap. custom_properties.json can contain
     // duplicate variable-names across components with different values —
     // bsiMap is a flat Map keyed by name, so a re-lookup by name can return
-    // a different component's value (last write wins). Starting from `ref`,
-    // read directly from this token's own value field, sidesteps that
-    // ambiguity entirely.
+    // a different component's value (last write wins). Starting from `ref`
+    // sidesteps that ambiguity entirely.
     const { value, chain } = resolveChain(ref, maps.bsiMap, maps.bridge, maps.dtiRaw)
-    return { ...token, valueResolved: value, resolvedVia: [ref, ...chain] }
+    return { ...token, valueResolved: value, resolvedVia: [hopFor(ref, maps.bridge), ...chain] }
   })
 }
 
@@ -175,10 +196,10 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
 
 export async function searchDesignTokens(
   query: string
-): Promise<Array<{ name: string; value: string; resolvedVia: string[] }>> {
+): Promise<Array<{ name: string; value: string; resolvedVia: ResolvedHop[] }>> {
   const { bsiMap, bridge, dtiRaw } = await loadMaps()
   const q = query.toLowerCase()
-  const results: Array<{ name: string; value: string; resolvedVia: string[] }> = []
+  const results: Array<{ name: string; value: string; resolvedVia: ResolvedHop[] }> = []
 
   for (const [name] of dtiRaw) {
     const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
@@ -199,45 +220,78 @@ export async function searchDesignTokens(
 // so $it-* just needs converting before the first lookup.
 
 function normalizeTokenName(input: string): string {
-  if (input.startsWith('$it-')) return `--it-${input.slice(4)}`
-  if (input.startsWith('--bsi-') || input.startsWith('--it-')) return input
+  const trimmed = input.trim()
+  if (trimmed.startsWith('$')) return `--${trimmed.slice(1)}`
+  if (trimmed.startsWith('--bsi-') || trimmed.startsWith('--it-')) return trimmed
   // Defensive: bare name without -- prefix (e.g. "it-spacing-m", "bsi-accordion-padding")
-  if (input.startsWith('it-') || input.startsWith('bsi-')) return `--${input}`
-  return input
-}
-
-// ─── Single token resolution (tokens_resolve) ─────────────────────────────────
-
-export async function resolveToken(input: string): Promise<{
-  name: string
-  value: string | null
-  resolvedVia: string[]
-}> {
-  const name = normalizeTokenName(input)
-  const { bsiMap, bridge, dtiRaw } = await loadMaps()
-  const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
-  return { name, value, resolvedVia: chain }
+  if (trimmed.startsWith('it-') || trimmed.startsWith('bsi-')) return `--${trimmed}`
+  return trimmed
 }
 
 // ─── Global bridge-pair listing (tokens_list_globals) ─────────────────────────
 // Iterates the --bsi-* -> --it-* map parsed live from BSI's root.scss — grows
 // automatically as BSI adds bridge entries. Never a hardcoded list, never a
-// null or non-bridged row (see memory: count canaries are noise, this isn't one).
+// null or non-bridged row.
 
 export async function listGlobalBridgePairs(): Promise<Array<{
   it: string
   bsiGlobal: string
   value: string | null
-  resolvedVia: string[]
+  resolvedVia: ResolvedHop[]
 }>> {
   const { bsiMap, bridge, dtiRaw } = await loadMaps()
-  const results: Array<{ it: string; bsiGlobal: string; value: string | null; resolvedVia: string[] }> = []
+  const results: Array<{ it: string; bsiGlobal: string; value: string | null; resolvedVia: ResolvedHop[] }> = []
 
   for (const [bsiGlobal, it] of bridge) {
     const { value, chain } = resolveChain(it, bsiMap, bridge, dtiRaw)
     results.push({ it, bsiGlobal, value, resolvedVia: chain })
   }
   return results
+}
+
+// ─── Single token resolution (tokens_resolve) ─────────────────────────────────
+
+export interface ResolveTokenResult {
+  name: string
+  value: string | null
+  resolvedVia: ResolvedHop[]
+  // Present only when the input is a literal --bsi-* value that differs
+  // across components — cannot pick one without guessing which component
+  // the caller means. Surfaced instead of an arbitrary answer.
+  ambiguous?: Array<{ component: string; value: string }>
+}
+
+export async function resolveToken(input: string): Promise<ResolveTokenResult> {
+  const name = normalizeTokenName(input)
+  const { bsiMap, bridge, dtiRaw } = await loadMaps()
+  const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
+
+  if (value !== null) {
+    return { name, value, resolvedVia: chain }
+  }
+
+  // Fallback: name may be a literal --bsi-* value (e.g. "0", "1px"), which
+  // parseBsiMap never indexes because it only captures token-reference
+  // entries. Search the raw per-component data directly instead of
+  // declaring a token that genuinely exists "not found".
+  if (name.startsWith('--bsi-')) {
+    const allTokens = await loadAllTokens()
+    const matches: Array<{ component: string; value: string }> = []
+    for (const [component, entries] of Object.entries(allTokens)) {
+      for (const e of entries) {
+        if (e['variable-name'] === name) matches.push({ component, value: e.value })
+      }
+    }
+    const distinctValues = new Set(matches.map((m) => m.value))
+    if (distinctValues.size === 1) {
+      return { name, value: matches[0].value, resolvedVia: [] }
+    }
+    if (distinctValues.size > 1) {
+      return { name, value: null, resolvedVia: [], ambiguous: matches }
+    }
+  }
+
+  return { name, value: null, resolvedVia: chain }
 }
 
 // ─── Inverse lookup (tokens_find_components) ──────────────────────────────────
@@ -248,66 +302,38 @@ export async function listGlobalBridgePairs(): Promise<Array<{
 export async function findComponentsByToken(input: string): Promise<Array<{
   component: string
   token: string
-  resolvedVia: string[]
+  resolvedVia: ResolvedHop[]
   valueResolved: string | null
 }>> {
   const target = normalizeTokenName(input)
   const [allTokens, maps] = await Promise.all([loadAllTokens(), loadMaps()])
   const { bsiMap, bridge, dtiRaw } = maps
-  const results: Array<{ component: string; token: string; resolvedVia: string[]; valueResolved: string | null }> = []
+  const results: Array<{ component: string; token: string; resolvedVia: ResolvedHop[]; valueResolved: string | null }> = []
 
   for (const [component, entries] of Object.entries(allTokens)) {
     for (const e of entries) {
       const name = e['variable-name']
+      const isDirectMatch = name === target
 
-      if (name === target) {
-        results.push({ component, token: name, resolvedVia: [], valueResolved: e.value })
+      if (classifyValue(e.value) !== 'token-reference') {
+        // Literal token — no chain possible. Include only on direct match,
+        // with its raw value (nothing to resolve further).
+        if (isDirectMatch) {
+          results.push({ component, token: name, resolvedVia: [], valueResolved: e.value })
+        }
         continue
       }
 
-      if (classifyValue(e.value) !== 'token-reference') continue
+      const ref = e.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
+      if (!ref) continue
 
-      const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
-      if (chain.includes(target)) {
-        results.push({ component, token: name, resolvedVia: chain, valueResolved: value })
+      const { value, chain } = resolveChain(ref, bsiMap, bridge, dtiRaw)
+      const fullChain = [hopFor(ref, bridge), ...chain]
+
+      if (isDirectMatch || fullChain.some((h) => h.name === target)) {
+        results.push({ component, token: name, resolvedVia: fullChain, valueResolved: value })
       }
     }
   }
   return results
 }
-
-// Debug: uncomment to diagnose token resolution chain (bridge/DTI sizes, key matching)
-// export async function debugTokenResolution(): Promise<string[]> {
-//   const logs: string[] = []
-
-//   try {
-//     const [rootScss, variablesScss] = await Promise.all([
-//       fetchText(BSI_ROOT_SCSS_URL),
-//       fetchText(DTI_VARIABLES_SCSS_URL),
-//     ])
-
-//     const bridge = parseBridge(rootScss)
-//     const dtiRaw = parseDesignTokens(variablesScss)
-
-//     logs.push(`bridge.size: ${bridge.size}`)
-//     logs.push(`dtiRaw.size: ${dtiRaw.size}`)
-
-//     // Count concrete vs reference values in DTI
-//     let concrete = 0, refs = 0
-//     for (const val of dtiRaw.values()) {
-//       if (val.startsWith('--it-')) refs++
-//       else concrete++
-//     }
-//     logs.push(`dtiRaw: ${concrete} concrete, ${refs} references`)
-
-//     // Sample bridge entries and check if DTI has them
-//     const sample = [...bridge.entries()].slice(0, 3)
-//     for (const [bsi, it] of sample) {
-//       logs.push(`${bsi} → ${it} → dtiRaw.has: ${dtiRaw.has(it)}`)
-//     }
-//   } catch (err) {
-//     logs.push(`error: ${(err as Error).message}`)
-//   }
-
-//   return logs
-// }
