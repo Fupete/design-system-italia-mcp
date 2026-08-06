@@ -66,6 +66,7 @@ export interface ComponentGuidelines {
 
 export interface DevKitEntry {
   slug: string
+  id: string              // Storybook entry id — the one guaranteed-unique identifier
   displayName: string    // human-readable name, from Storybook title's last segment (e.g. "Video player")
   tags: string[]         // ['a11y-ok', 'web-component', 'alpha'…]
   storybookUrl: string

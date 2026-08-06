@@ -50,6 +50,7 @@ export async function loadDevKitIndex(): Promise<DevKitIndex> {
 
     const devKitEntry: DevKitEntry = {
       slug,
+      id: entry.id,
       displayName,
       tags: entry.tags.filter((t) => !['dev', 'test', 'attached-mdx', 'unattached-mdx'].includes(t)),
       storybookUrl: `${DEVKIT_STORYBOOK_BASE}/?path=/docs/${entry.id}`,

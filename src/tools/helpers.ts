@@ -6,7 +6,7 @@ import { loadDevKitIndex } from '../loaders/devkit.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { slugify, slugsToTry } from '../slugify.js'
 import { BSI_DOC_BASE } from '../constants.js'
-import type { DsMeta, StabilityLevel, StatusValue } from '../types.js'
+import type { ComponentStatus, DevKitEntry, DsMeta, StabilityLevel, StatusValue } from '../types.js'
 
 // ─── resolveSlug ──────────────────────────────────────────────────────────────
 // Resolves user input to canonical slug via components_status.json.
@@ -79,21 +79,28 @@ export interface UnionRow {
   } | null
 }
 
-export async function buildComponentUnion(): Promise<{ rows: UnionRow[]; dsMeta: DsMeta | null }> {
-  const [statuses, devKitIndex, dsMeta] = await Promise.all([
-    loadAllStatuses(),
-    loadDevKitIndex(),
-    loadDsMeta(),
-  ])
+// Pure union logic — no fetching, easy to test with fixtures. A component is
+// one entity with two possible implementations, never two parallel entities:
+// bsi and devkit are independently null — filter client-side on either field
+// to get BSI-only or DevKit-only rows. Never iterate BSI-only and silently
+// drop DevKit-only components (the bug this replaces).
 
-  const claimedEntries = new Set<string>()   // key: dk.importPath — real identity, not slug string
+export function unionRows(
+  statuses: Map<string, ComponentStatus>,
+  devKitIndex: Map<string, DevKitEntry>
+): UnionRow[] {
+  const claimedEntries = new Set<string>()   // key: dk.id — Storybook's guaranteed-unique identifier
   const rows: UnionRow[] = []
 
   // Pass 1: every BSI slug, cross-matched to its Dev Kit counterpart via slugsToTry.
   for (const [bsiSlug, s] of statuses) {
     const devKitSlug = slugsToTry(bsiSlug).find((a) => devKitIndex.has(a)) ?? null
     const dk = devKitSlug ? devKitIndex.get(devKitSlug)! : null
-    if (dk) claimedEntries.add(dk.importPath)
+    // If this Dev Kit entry was already claimed by an earlier BSI slug (two
+    // BSI slugs aliasing to the same Dev Kit entry), this row gets bsi-only:
+    // the devkit block stays attached to whichever BSI row claimed it first.
+    const alreadyClaimed = dk ? claimedEntries.has(dk.id) : false
+    if (dk && !alreadyClaimed) claimedEntries.add(dk.id)
 
     rows.push({
       name: s.name,
@@ -106,18 +113,18 @@ export async function buildComponentUnion(): Promise<{ rows: UnionRow[]; dsMeta:
         accessibility: { checkCompleted: s.accessibility.checkCompleted },
         docUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(bsiSlug),
       },
-      devkit: dk
+      devkit: dk && !alreadyClaimed
         ? { slug: dk.slug, tags: dk.tags, storybookUrl: dk.storybookUrl, pattern: dk.pattern, componentType: dk.componentType }
         : null,
     })
   }
 
-  // Pass 2: Dev Kit-only entries — no BSI counterpart claimed this importPath in pass 1.
-  // Identity is the entry itself (importPath), not the slug string: two different
-  // Storybook titles that happen to share aliases (e.g. "chips" vs a real "tag"
-  // entry) must never collapse into one, even though slugsToTry links them.
+  // Pass 2: Dev Kit-only entries — no BSI counterpart claimed this id in pass 1.
+  // Identity is the Storybook entry id, not the slug string: two different
+  // entries whose slugs happen to alias to each other (e.g. a genuine "tag"
+  // entry aliasing to "chips") must never collapse into one.
   for (const [, dk] of devKitIndex) {
-    if (claimedEntries.has(dk.importPath)) continue
+    if (claimedEntries.has(dk.id)) continue
     rows.push({
       name: dk.displayName,
       slug: dk.slug,
@@ -127,5 +134,14 @@ export async function buildComponentUnion(): Promise<{ rows: UnionRow[]; dsMeta:
   }
 
   rows.sort((a, b) => a.name.localeCompare(b.name, 'it'))
-  return { rows, dsMeta }
+  return rows
+}
+
+export async function buildComponentUnion(): Promise<{ rows: UnionRow[]; dsMeta: DsMeta | null }> {
+  const [statuses, devKitIndex, dsMeta] = await Promise.all([
+    loadAllStatuses(),
+    loadDevKitIndex(),
+    loadDsMeta(),
+  ])
+  return { rows: unionRows(statuses, devKitIndex), dsMeta }
 }
