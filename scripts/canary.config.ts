@@ -77,12 +77,12 @@ export const UPSTREAM_HEALTH: StaticSource[] = [
     jsonField: "name",
   },
   {
-    name: "[upstream] BSI custom_properties.json ⚠️ alpha",
+    name: "[upstream] BSI custom_properties.json ⚠️ beta",
     url: BSI_CUSTOM_PROPERTIES_URL,
     jsonField: "accordion",
   },
   {
-    name: "[upstream] BSI _root.scss bridge ⚠️ alpha",
+    name: "[upstream] BSI _root.scss bridge ⚠️ beta",
     url: BSI_ROOT_SCSS_URL,
     minLength: 500,
   },
@@ -102,7 +102,7 @@ export const UPSTREAM_HEALTH: StaticSource[] = [
     minLength: 500,
   },
   {
-    name: "[upstream] Dev Kit index.json ⚠️ alpha",
+    name: "[upstream] Dev Kit index.json ⚠️ beta",
     url: DEVKIT_INDEX_URL,
     jsonField: "entries",
   },

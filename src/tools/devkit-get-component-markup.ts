@@ -63,7 +63,7 @@ export function registerDevkitGetComponentMarkup(server: McpServer): void {
           dsMeta,
           sourceUrls: [devKitEntry ? DEVKIT_STORIES_URL(devKitEntry.importPath) : DEVKIT_INDEX_URL],
           warnings,
-          stability: 'alpha',
+          stability: 'beta',
         }),
       }
 

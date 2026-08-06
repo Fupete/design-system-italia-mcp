@@ -19,7 +19,7 @@
 **EN** — Design System .italia is the official open source design system for Italian Public Administration interfaces. An initiative by [Designers Italia](https://designers.italia.it/), it is distributed across multiple independent repositories.
 
 - [Bootstrap Italia](https://github.com/italia/bootstrap-italia) — componenti e stili HTML/CSS / HTML/CSS components and styles ⚠️ v3 beta
-- [Dev Kit Italia](https://github.com/italia/dev-kit-italia) — web component `it-*` ⚠️ v1 alpha
+- [Dev Kit Italia](https://github.com/italia/dev-kit-italia) — web component `it-*` ⚠️ v1 beta
 - [Design Tokens Italia](https://github.com/italia/design-tokens-italia) — variabili CSS e SCSS globali `--it-*` e `$it-` / global CSS and SCSS variables
 - [designers.italia.it](https://designers.italia.it/design-system/) — documentazione e linee guida d'uso / documentation and usage guidelines
 
@@ -27,9 +27,9 @@
 
 ## Cos'è Filo / What is Filo 
 
-**IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia v3 ⚠️ beta, web component e props Dev Kit Italia v1 ⚠️ alpha, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
+**IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia v3 ⚠️ beta, web component e props Dev Kit Italia v1 ⚠️ beta, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
 
-**EN** — Filo is an unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia v3 components and HTML markup ⚠️ beta, Dev Kit Italia web components and props v1 ⚠️ alpha, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot into the `data-fetched` branch.
+**EN** — Filo is an unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia v3 components and HTML markup ⚠️ beta, Dev Kit Italia web components and props v1 ⚠️ beta, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot into the `data-fetched` branch.
 
 ---
 
@@ -45,10 +45,10 @@
 
 ### Componenti
 * `list_components` — elenco di tutti i componenti con stato (Bootstrap Italia + Dev Kit Italia), `componentType`
-* `get_component(name, maxVariants?)` — markup per varianti HTML Bootstrap Italia e web components Dev Kit Italia ⚠️ alpha (troncate, default 3 per risorsa)
-* `get_component_variant(name, variantName)` — markup completo di una variante specifica per nome (BSI o Dev Kit, trasparente) ⚠️ alpha
+* `get_component(name, maxVariants?)` — markup per varianti HTML Bootstrap Italia e web components Dev Kit Italia ⚠️ beta (troncate, default 3 per risorsa)
+* `get_component_variant(name, variantName)` — markup completo di una variante specifica per nome (BSI o Dev Kit, trasparente) ⚠️ beta
 * `search_components(query)` — ricerca per nome, slug, alias IT/EN o tag Dev Kit
-* `get_component_full(name)` — risposta aggregata: varianti Bootstrap Italia e Dev Kit Italia + props Dev Kit ⚠️ alpha + CSS custom properties e loro token chain fino a valore risolto + linee guida d'uso + stato + issue — una sola query. Da usare quando servono dati da più sorgenti insieme, non come prima chiamata.
+* `get_component_full(name)` — risposta aggregata: varianti Bootstrap Italia e Dev Kit Italia + props Dev Kit ⚠️ beta + CSS custom properties e loro token chain fino a valore risolto + linee guida d'uso + stato + issue — una sola query. Da usare quando servono dati da più sorgenti insieme, non come prima chiamata.
 
 ### Design tokens e variabili CSS
 - `get_component_tokens(name)` — CSS custom properties `--bsi-*` personalizzabili con descrizioni semantiche, tokens da Design Tokens Italia e catena di risoluzione fino a valori risolti
@@ -207,9 +207,9 @@ I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch [`data-f
 | 4 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Bridge `--bsi-*` → `--it-*` (token resolution) ⚠️ beta | `get_component_tokens` `find_token` |
 | 5 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `get_component_guidelines` |
 | 6 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `1.5rem` | `get_component_tokens` `find_token` |
-| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti, importPath ⚠️ alpha | `list_components` `search_components` |
-| 8 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML per variante, estratto da Storybook source panel ⚠️ alpha | `get_component` `get_component_variant` `get_component_full` |
-| 9 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni ⚠️ alpha | `get_component` `get_component_full` |
+| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti, importPath ⚠️ beta | `list_components` `search_components` |
+| 8 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML per variante, estratto da Storybook source panel ⚠️ beta | `get_component` `get_component_variant` `get_component_full` |
+| 9 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni ⚠️ beta | `get_component` `get_component_full` |
 | 10 | GitHub REST API | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` |
 | 11 | designers.italia.it + BSI + Dev Kit | Versioni Design System / BSI / Dev Kit / DTI. URL verificati pagine componenti | meta in tutte le risposte |
 
@@ -217,9 +217,9 @@ Le sorgenti 1–9 e 11 sono aggiornate nightly e cached per 24h.
 La sorgente 10 (GitHub Issues) è l'unica fetchata live a runtime (cache 15 min).
 `dataFetchedAt` nelle risposte riflette la data dell'ultimo snapshot CI.
 
-> ⚠️ **Layer token e web component in sviluppo attivo** — Il server usa Bootstrap Italia 3.x (beta) e Dev Kit Italia (alpha). Token CSS `--bsi-*` e web component `it-*` possono avere breaking changes prima della release stabile.
+> ⚠️ **Layer token e web component in sviluppo attivo** — Il server usa Bootstrap Italia 3.x (beta) e Dev Kit Italia (beta). Token CSS `--bsi-*` e web component `it-*` possono avere breaking changes prima della release stabile.
 
-> ⚠️ **Token and web component layer in active development** — This server uses Bootstrap Italia 3.x (beta) and Dev Kit Italia (alpha). CSS tokens `--bsi-*` and web components `it-*` may have breaking changes before stable release.
+> ⚠️ **Token and web component layer in active development** — This server uses Bootstrap Italia 3.x (beta) and Dev Kit Italia (beta). CSS tokens `--bsi-*` and web components `it-*` may have breaking changes before stable release.
 
 ---
 

@@ -26,7 +26,7 @@ import { registerDevkitListComponentProps } from './tools/devkit-list-component-
 import { registerBsiListComponentsByStatus } from './tools/bsi-list-components-by-status.js'
 import { cache } from './cache.js'
 import { getHealth } from './health.js'
-import { ALPHA_WARNING } from './constants.js'
+import { BETA_WARNING } from './constants.js'
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -49,7 +49,7 @@ function createMcpServer(): McpServer {
     version: VERSION,
   })
 
-  // ping — first tool executed by any client, includes alpha warning
+  // ping — first tool executed by any client, includes beta warning
   s.registerTool(
     'ping',
     {
@@ -69,7 +69,7 @@ function createMcpServer(): McpServer {
               version: VERSION,
               timestamp: new Date().toISOString(),
               message: 'Filo – unofficial MCP server for Design System .italia. Use dsi_list_components to get started.',
-              warnings: ALPHA_WARNING,
+              warnings: BETA_WARNING,
               tools: [
                 'ping',
                 'tokens_list_component_vars',
@@ -224,7 +224,7 @@ if (TRANSPORT === 'stdio') {
     console.log(`   Health → http://localhost:${PORT}/health`)
     console.log(`   Cache  → POST http://localhost:${PORT}/cache/invalidate`)
     console.log(`   Auth   → ${CACHE_TOKEN ? '✓ token configured' : '⚠️  CACHE_INVALIDATION_TOKEN not set'}`)
-    console.log(`   ⚠️  Token layer alpha: BSI 3.x and Dev Kit Italia in alpha`)
+    console.log(`   ⚠️  Token layer beta: BSI 3.x and Dev Kit Italia in beta`)
   })
 
   process.on('SIGTERM', () => {

@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { listGlobalBridgePairs } from '../loaders/tokens.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { ALPHA_WARNING, BSI_ROOT_SCSS_URL, DTI_VARIABLES_SCSS_URL } from '../constants.js'
+import { BETA_WARNING, BSI_ROOT_SCSS_URL, DTI_VARIABLES_SCSS_URL } from '../constants.js'
 
 // ─── Tool: tokens_list_globals ─────────────────────────────────────────────────
 // Bridge-pair view: only components with a --bsi-* -> --it-* entry in root.scss
@@ -25,7 +25,7 @@ export function registerTokensListGlobals(server: McpServer): void {
       annotations: { readOnlyHint: true },
     },
     async ({ match }) => {
-      const warnings: string[] = [ALPHA_WARNING]
+      const warnings: string[] = [BETA_WARNING]
       const [pairs, dsMeta] = await Promise.all([
         listGlobalBridgePairs(),
         loadDsMeta(),
@@ -48,7 +48,7 @@ export function registerTokensListGlobals(server: McpServer): void {
           dsMeta,
           sourceUrls: [BSI_ROOT_SCSS_URL, DTI_VARIABLES_SCSS_URL],
           warnings,
-          stability: 'alpha',
+          stability: 'beta',
           extra: { versions: dsMeta?.versions ?? undefined },
         }),
       }

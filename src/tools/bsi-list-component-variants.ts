@@ -58,7 +58,7 @@ export function registerBsiListComponentVariants(server: McpServer): void {
             ),
           ],
           warnings,
-          stability: 'alpha',
+          stability: 'beta',
           extra: { versions: dsMeta?.versions ?? undefined },
         }),
       }

@@ -67,7 +67,7 @@ export function registerBsiGetComponentMarkup(server: McpServer): void {
           dsMeta,
           sourceUrls: [sourceUrl],
           warnings,
-          stability: 'alpha',
+          stability: 'beta',
         }),
       }
 

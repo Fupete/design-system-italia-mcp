@@ -6,7 +6,7 @@ import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { ALPHA_WARNING, BSI_STATUS_URL, DESIGNERS_COMPONENT_URL, DEVKIT_INDEX_URL } from '../constants.js'
+import { BETA_WARNING, BSI_STATUS_URL, DESIGNERS_COMPONENT_URL, DEVKIT_INDEX_URL } from '../constants.js'
 
 // ─── Tool: docs_get_component_guide ───────────────────────────────────────────
 
@@ -44,7 +44,7 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
 
       warnings.push('Guidelines content © Designers Italia — CC-BY-SA 4.0. Derivatives inherit ShareAlike requirement. See https://designers.italia.it')
 
-      warnings.push(ALPHA_WARNING)
+      warnings.push(BETA_WARNING)
 
       return {
         content: [
@@ -86,7 +86,7 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
                   dsMeta,
                   sourceUrls: [DESIGNERS_COMPONENT_URL(canonicalSlug), BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   warnings,
-                  stability: 'alpha',
+                  stability: 'beta',
                   extra: { versions: dsMeta?.versions ?? undefined },
                 }),
               },

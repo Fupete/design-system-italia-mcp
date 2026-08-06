@@ -31,11 +31,11 @@ description:
     features:
       - Espone 12 tool MCP per accesso strutturato al Design System .italia
       - Aggrega 9 sorgenti dati tramite snapshot CI nightly (solo GitHub Issues live)
-      - Risoluzione catena token CSS (--bsi-* → --it-* → valore concreto) (alpha BSI v3)
+      - Risoluzione catena token CSS (--bsi-* → --it-* → valore concreto) (beta BSI v3)
       - Linee guida d'uso e stato accessibilità per componente
       - Issue GitHub live sui repository del design system
       - Cache con due bucket TTL. Snapshot 24h, GitHub Issues 15min
-      - Versioni verificate di Design system, Bootstrap Italia e Dev Kit Italia (alpha v1)
+      - Versioni verificate di Design system, Bootstrap Italia e Dev Kit Italia (beta v1)
       - Deploy universale via Docker (locale o VPS EU)
   en:
     localisedName: "MCP Server for Design System .italia"
@@ -57,10 +57,10 @@ description:
     features:
       - Exposes 12 MCP tools for structured access to Italy's Design System
       - Aggregates 9 official data sources in real time
-      - CSS token chain resolution (--bsi-* → --it-* → concrete value) (alpha BSI v3)
+      - CSS token chain resolution (--bsi-* → --it-* → concrete value) (beta BSI v3)
       - Usage guidelines and accessibility status per component
       - Live GitHub issues from design system repositories
-      - Verified versions of Design System, Bootstrap Italia and Dev Kit Italia (alpha v1)
+      - Verified versions of Design System, Bootstrap Italia and Dev Kit Italia (beta v1)
       - Configurable TTL cache per data source
       - Universal Docker deploy (local or EU VPS)
 legal:

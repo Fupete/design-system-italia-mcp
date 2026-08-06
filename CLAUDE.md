@@ -90,9 +90,9 @@ upstream direttamente — quello è compito degli script CI.
 | 4  | BSI root.scss | `3.x` | `bsi/root.scss` | Bridge `--bsi-*` → `--it-*` | ⚠️ beta, token resolution |
 | 5  | Designers JSON | `main` | `designers/components/{slug}.json` | Linee guida d'uso, accessibilità (YAML→JSON in CI) | Stabile |
 | 6  | Design Tokens | `main` | `design-tokens/variables.scss` | Token globali `--it-*` con valori concreti | Stabile |
-| 7  | Dev Kit index | `main` | `devkit/index.json` | Indice Storybook: tag stato, varianti, importPath | ⚠️ alpha |
-| 8  | Dev Kit stories | `main` | `devkit/stories/{slug}.json` | Markup HTML per variante — Playwright extracted | ⚠️ alpha |
-| 9  | Dev Kit props | `main` | `devkit/props/{slug}.json` | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni | ⚠️ alpha |
+| 7  | Dev Kit index | `main` | `devkit/index.json` | Indice Storybook: tag stato, varianti, importPath | ⚠️ beta |
+| 8  | Dev Kit stories | `main` | `devkit/stories/{slug}.json` | Markup HTML per variante — Playwright extracted | ⚠️ beta |
+| 9  | Dev Kit props | `main` | `devkit/props/{slug}.json` | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni | ⚠️ beta |
 | 10 | GitHub Issues | live runtime | — | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | Unica sorgente live — TTL 15min |
 | 11 | DS meta/nav | snapshot | `dsnav.json` + `snapshot-meta.json` | Versioni DS/BSI/DevKit/DTI + URL verificati componenti | In ogni risposta meta |
 
@@ -159,8 +159,8 @@ Ogni risposta include `meta.versions` con tre campi distinti:
 ```typescript
 versions: {
   designSystem: string        // da snapshot-meta.json, es. "v1.10.1"
-  bootstrapItalia: string     // da snapshot-meta.json, es. "3.0.0-alpha.2"
-  devKitItalia: string        // da snapshot-meta.json, es. "1.0.0-alpha.5"
+  bootstrapItalia: string     // da snapshot-meta.json, es. "3.0.0-beta.2"
+  devKitItalia: string        // da snapshot-meta.json, es. "1.0.0-beta.5"
   designTokensItalia: string  // da snapshot-meta.json, es. "1.3.2"
 }
 ```
@@ -258,7 +258,7 @@ meta: {
   warnings: string[],            // sorgenti mancanti o errori non fatali
   versions?: DsVersions,         // designSystem / bootstrapItalia / devKitItalia / designTokensItalia
   designersUrl?: string | null,  // URL verificato da dsnav.json, non dedotto
-  stability: 'alpha' | 'stable', // alpha se include token BSI 3.x o Dev Kit
+  stability: 'beta' | 'stable', // beta se include token BSI 3.x o Dev Kit
 }
 ```
 
@@ -266,7 +266,7 @@ Se una sorgente non risponde, includere nel campo `warnings` e
 restituire comunque i dati delle sorgenti disponibili.
 
 **Nota warnings**: aggiungere sempre un warning se `bootstrapItalia` o `devKitItalia`
-contengono `alpha` nel numero di versione — il client deve sapere che il layer token
+contengono `beta` nel numero di versione — il client deve sapere che il layer token
 potrebbe avere breaking changes.
 
 **Nota CC-BY-SA**: `get_component_guidelines` e `get_component_full` includono

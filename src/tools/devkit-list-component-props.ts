@@ -57,7 +57,7 @@ export function registerDevkitListComponentProps(server: McpServer): void {
           // person can actually open to see the same props documented.
           sourceUrls: [devKitEntry?.storybookUrl ?? DEVKIT_INDEX_URL],
           warnings,
-          stability: 'alpha',
+          stability: 'beta',
         }),
       }
 

@@ -195,7 +195,7 @@ export interface DevKitPropsSnapshot {
 
 // ─── Aggregated response get_component_full ───────────────────────────────────
 
-export type StabilityLevel = 'alpha' | 'stable'
+export type StabilityLevel = 'beta' | 'stable'
 
 export interface ComponentFull {
   name: string
