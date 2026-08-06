@@ -129,13 +129,13 @@ export async function loadVariantsResolvedSlug(slug: string): Promise<string> {
 type RawTokenEntry = { 'variable-name': string; value: string; description: string }
 type RawTokensJson = Record<string, RawTokenEntry[]>
 
-function classifyValue(value: string): CssToken['valueType'] {
+export function classifyValue(value: string): CssToken['valueType'] {
   if (value.startsWith('#{') || value.startsWith('escape-svg(')) return 'scss-expression'
   if (value.startsWith('var(')) return 'token-reference'
   return 'literal'
 }
 
-async function loadAllTokens(): Promise<RawTokensJson> {
+export async function loadAllTokens(): Promise<RawTokensJson> {
   const cached = cache.get<RawTokensJson>(CACHE_KEYS.bsiTokens())
   if (cached) return cached
 

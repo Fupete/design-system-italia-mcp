@@ -1,30 +1,30 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
-import { ZGetComponentTokensOutput } from '../schemas.js'
-import { loadStatus, loadTokens, searchTokens } from '../loaders/bsi.js'
-import { resolveTokenValues, searchDesignTokens } from '../loaders/tokens.js'
+import { ZTokensListComponentVarsOutput } from '../schemas.js'
+import { loadStatus, loadTokens } from '../loaders/bsi.js'
+import { resolveTokenValues } from '../loaders/tokens.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
 import { ALPHA_WARNING, BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
 
-// ─── Tool: get_component_tokens ───────────────────────────────────────────────
+// ─── Tool: tokens_list_component_vars ─────────────────────────────────────────
 
-export function registerGetComponentTokens(server: McpServer): void {
+export function registerTokensListComponentVars(server: McpServer): void {
   server.registerTool(
-    'get_component_tokens',
+    'tokens_list_component_vars',
     {
-      title: 'Get Component Tokens',
+      title: 'List Component Tokens',
       description: 'Returns customizable CSS --bsi-* variables for a component, ' +
         'with semantic description and resolved value (e.g. var(--bsi-spacing-m) → 1.5rem). ' +
         'Useful to understand concrete values behind CSS custom properties or design tokens.',
-      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
+      inputSchema: { component: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
-      outputSchema: ZGetComponentTokensOutput,
+      outputSchema: ZTokensListComponentVarsOutput,
     },
-    async ({ name }) => {
-      name = name.trim()
-      const slug = slugify(name)
+    async ({ component }) => {
+      component = component.trim()
+      const slug = slugify(component)
       const warnings: string[] = []
 
       const [status, dsMeta] = await Promise.all([
@@ -33,7 +33,6 @@ export function registerGetComponentTokens(server: McpServer): void {
       ])
       const canonicalSlug = status?.slug ?? slug
 
-      // Load BSI tokens
       const rawTokens = await loadTokens(canonicalSlug)
 
       if (rawTokens.length === 0) {
@@ -42,28 +41,19 @@ export function registerGetComponentTokens(server: McpServer): void {
 
       warnings.push(ALPHA_WARNING)
 
-      // Resolve values via Design Tokens Italia
       let tokens = rawTokens
       try {
         tokens = await resolveTokenValues(rawTokens)
-        // Debug: uncomment to diagnose token resolution (see also debugTokenResolution in loaders/tokens.ts)
-        // const resolved = tokens.filter(t => t.valueResolved !== null).length
-        // const refs = tokens.filter(t => t.valueType === 'token-reference').length
-        // warnings.push(`[debug] ${refs} token-references, ${resolved} resolved`)
-        // const debugLogs = await debugTokenResolution()
-        // warnings.push(...debugLogs.map(l => `[debug] ${l}`))
       } catch {
         warnings.push('Design Tokens Italia value resolution not available')
       }
 
-      // Add valueResolvedNote for scss-expression tokens
       tokens = tokens.map(t =>
         t.valueType === 'scss-expression'
           ? { ...t, valueResolvedNote: 'scss-expression tokens cannot be resolved to a concrete value yet — value requires SCSS compilation context' }
           : t
       )
 
-      // // Group by type for readability
       const byType = {
         tokenReference: tokens.filter((t) => t.valueType === 'token-reference'),
         literal: tokens.filter((t) => t.valueType === 'literal'),

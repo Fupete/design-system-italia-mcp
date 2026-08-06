@@ -17,19 +17,27 @@ export const ZMeta = z.object({
   versions: ZVersions.optional(),
 })
 
+const ZResolvedHop = z.object({
+  name: z.string(),
+  sourceName: z.string(),
+  form: z.enum(['css-custom-property', 'sass-variable']),
+  role: z.enum(['bsi-component', 'bsi-global', 'dti']),
+  overridable: z.boolean(),
+})
+
 export const ZCssToken = z.object({
   name: z.string(),
   value: z.string(),
   valueType: z.enum(['token-reference', 'scss-expression', 'literal']),
   valueResolved: z.string().nullable(),
-  resolvedVia: z.array(z.string()),
+  resolvedVia: z.array(ZResolvedHop),
   description: z.string().nullable(),
   valueResolvedNote: z.string().optional(),
 })
 
 // ─── get_component_tokens ─────────────────────────────────────────────────────
 
-export const ZGetComponentTokensOutput = z.object({
+export const ZTokensListComponentVarsOutput = z.object({
   component: z.string(),
   total: z.number(),
   tokens: z.array(ZCssToken),

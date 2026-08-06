@@ -43,11 +43,21 @@ export interface ComponentVariant {
 
 // ─── BSI — api/custom_properties.json ────────────────────────────────────────
 
+export type TokenRole = 'bsi-component' | 'bsi-global' | 'dti'
+
+export interface ResolvedHop {
+  name: string                                  // normalized internal key
+  sourceName: string                            // "$it-spacing-6x" for dti, "--bsi-spacing-m" for bsi-*
+  form: 'css-custom-property' | 'sass-variable'
+  role: TokenRole
+  overridable: boolean   // true for --bsi-* (project-overridable at runtime), false for --it-*/$it-* (central, not overridable per-project)
+}
+
 export interface CssToken {
   name: string
   value: string
   valueType: 'token-reference' | 'scss-expression' | 'literal'
-  resolvedVia: string[]
+  resolvedVia: ResolvedHop[]
   valueResolved: string | null
   valueResolvedNote?: string    // present only for scss-expression tokens
   description: string | null
@@ -230,3 +240,4 @@ export interface ComponentFull {
     designersUrl?: string | null
   }
 }
+
