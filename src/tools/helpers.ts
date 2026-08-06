@@ -86,21 +86,14 @@ export async function buildComponentUnion(): Promise<{ rows: UnionRow[]; dsMeta:
     loadDsMeta(),
   ])
 
-  const devKitSlugs = new Set(devKitIndex.keys())
-  const claimed = new Set<string>()
+  const claimedEntries = new Set<string>()   // key: dk.importPath — real identity, not slug string
   const rows: UnionRow[] = []
 
   // Pass 1: every BSI slug, cross-matched to its Dev Kit counterpart via slugsToTry.
   for (const [bsiSlug, s] of statuses) {
-    const devKitSlug = slugsToTry(bsiSlug).find((a) => devKitSlugs.has(a)) ?? null
+    const devKitSlug = slugsToTry(bsiSlug).find((a) => devKitIndex.has(a)) ?? null
     const dk = devKitSlug ? devKitIndex.get(devKitSlug)! : null
-    // Claim every alias of the matched slug, not just the literal match —
-    // otherwise a second Dev Kit entry that's alias-equivalent to this one
-    // (e.g. "video" vs "video-player") slips through pass 2 as a phantom
-    // standalone component.
-    if (devKitSlug) {
-      for (const alias of slugsToTry(devKitSlug)) claimed.add(alias)
-    }
+    if (dk) claimedEntries.add(dk.importPath)
 
     rows.push({
       name: s.name,
@@ -119,18 +112,15 @@ export async function buildComponentUnion(): Promise<{ rows: UnionRow[]; dsMeta:
     })
   }
 
-  // Pass 2: Dev Kit-only slugs — no BSI counterpart claimed (directly or via
-  // alias) in pass 1. Known today: "icon".
-  // Note: the reverse case (two distinct BSI slugs both aliasing to the same
-  // Dev Kit slug, producing duplicate devkit blocks on two rows) is not
-  // guarded here — no known occurrence in current data, low-risk follow-up
-  // if it ever surfaces.
-  for (const [dkSlug, dk] of devKitIndex) {
-    if (slugsToTry(dkSlug).some((a) => claimed.has(a))) continue
-    claimed.add(dkSlug)
+  // Pass 2: Dev Kit-only entries — no BSI counterpart claimed this importPath in pass 1.
+  // Identity is the entry itself (importPath), not the slug string: two different
+  // Storybook titles that happen to share aliases (e.g. "chips" vs a real "tag"
+  // entry) must never collapse into one, even though slugsToTry links them.
+  for (const [, dk] of devKitIndex) {
+    if (claimedEntries.has(dk.importPath)) continue
     rows.push({
       name: dk.displayName,
-      slug: dkSlug,
+      slug: dk.slug,
       bsi: null,
       devkit: { slug: dk.slug, tags: dk.tags, storybookUrl: dk.storybookUrl, pattern: dk.pattern, componentType: dk.componentType },
     })
