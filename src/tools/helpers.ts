@@ -90,18 +90,39 @@ export function unionRows(
   devKitIndex: Map<string, DevKitEntry>
 ): UnionRow[] {
   const claimedEntries = new Set<string>()   // key: dk.id — Storybook's guaranteed-unique identifier
-  const rows: UnionRow[] = []
+  const matches = new Map<string, DevKitEntry | null>()   // bsiSlug -> matched entry (or null)
 
-  // Pass 1: every BSI slug, cross-matched to its Dev Kit counterpart via slugsToTry.
-  for (const [bsiSlug, s] of statuses) {
-    const devKitSlug = slugsToTry(bsiSlug).find((a) => devKitIndex.has(a)) ?? null
+  // Pass 1a: exact slug matches first. These must win over alias matches
+  // regardless of Map iteration order — otherwise which BSI slug claims a
+  // shared Dev Kit entry would depend on source ordering, not semantics.
+  for (const bsiSlug of statuses.keys()) {
+    const dk = devKitIndex.get(bsiSlug) ?? null
+    if (dk && !claimedEntries.has(dk.id)) {
+      claimedEntries.add(dk.id)
+      matches.set(bsiSlug, dk)
+    }
+  }
+
+  // Pass 1b: alias matches (via slugsToTry) for whatever wasn't claimed by
+  // an exact match above.
+  for (const bsiSlug of statuses.keys()) {
+    if (matches.has(bsiSlug)) continue
+    const devKitSlug = slugsToTry(bsiSlug).find((a) => {
+      const dk = devKitIndex.get(a)
+      return dk && !claimedEntries.has(dk.id)
+    })
     const dk = devKitSlug ? devKitIndex.get(devKitSlug)! : null
     // If this Dev Kit entry was already claimed by an earlier BSI slug (two
-    // BSI slugs aliasing to the same Dev Kit entry), this row gets bsi-only:
-    // the devkit block stays attached to whichever BSI row claimed it first.
-    const alreadyClaimed = dk ? claimedEntries.has(dk.id) : false
-    if (dk && !alreadyClaimed) claimedEntries.add(dk.id)
+    // BSI slugs aliasing to the same Dev Kit entry), dk is null here — this
+    // row gets bsi-only: the devkit block stays attached to whichever BSI
+    // row claimed it first (in exact-match or alias order).
+    if (dk) claimedEntries.add(dk.id)
+    matches.set(bsiSlug, dk)
+  }
 
+  const rows: UnionRow[] = []
+  for (const [bsiSlug, s] of statuses) {
+    const dk = matches.get(bsiSlug) ?? null
     rows.push({
       name: s.name,
       slug: bsiSlug,
@@ -113,16 +134,16 @@ export function unionRows(
         accessibility: { checkCompleted: s.accessibility.checkCompleted },
         docUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(bsiSlug),
       },
-      devkit: dk && !alreadyClaimed
+      devkit: dk
         ? { slug: dk.slug, tags: dk.tags, storybookUrl: dk.storybookUrl, pattern: dk.pattern, componentType: dk.componentType }
         : null,
     })
   }
 
-  // Pass 2: Dev Kit-only entries — no BSI counterpart claimed this id in pass 1.
-  // Identity is the Storybook entry id, not the slug string: two different
-  // entries whose slugs happen to alias to each other (e.g. a genuine "tag"
-  // entry aliasing to "chips") must never collapse into one.
+  // Pass 2: Dev Kit-only entries — no BSI counterpart claimed this id in
+  // pass 1a/1b. Identity is the Storybook entry id, not the slug string:
+  // two different entries whose slugs happen to alias to each other (e.g.
+  // a genuine "tag" entry aliasing to "chips") must never collapse into one.
   for (const [, dk] of devKitIndex) {
     if (claimedEntries.has(dk.id)) continue
     rows.push({

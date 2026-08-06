@@ -83,6 +83,20 @@ describe('unionRows — identity by entry.id', () => {
     const devkitRows = rows.filter((r) => r.devkit !== null)
     assert.equal(devkitRows.length, devKit.size)
   })
+
+  it('exact slug match wins over an alias match, regardless of iteration order', () => {
+    // Dev Kit has "button" (exact match for BSI "button") but BSI also
+    // has "buttons", which aliases to "button" too. "button" must win.
+    const statuses = new Map([
+      ['buttons', status('buttons', 'Buttons')],
+      ['button', status('button', 'Button')],
+    ])
+    const devKit = new Map([['button', devKitEntry({ slug: 'button', id: 'componenti-button--documentazione' })]])
+    const rows = unionRows(statuses, devKit)
+    const withDevkit = rows.filter((r) => r.devkit !== null)
+    assert.equal(withDevkit.length, 1)
+    assert.equal(withDevkit[0].slug, 'button')   // exact match, not the alias "buttons"
+  })
 })
 
 // ─── DevKit-only rows ───────────────────────────────────────────────────────
