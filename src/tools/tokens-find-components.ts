@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { findComponentsByToken } from '../loaders/tokens.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { ALPHA_WARNING, BSI_CUSTOM_PROPERTIES_URL, BSI_ROOT_SCSS_URL, DTI_VARIABLES_SCSS_URL } from '../constants.js'
+import { BETA_WARNING, BSI_CUSTOM_PROPERTIES_URL, BSI_ROOT_SCSS_URL, DTI_VARIABLES_SCSS_URL } from '../constants.js'
 
 // ─── Tool: tokens_find_components ─────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ export function registerTokensFindComponents(server: McpServer): void {
     },
     async ({ variable }) => {
       variable = variable.trim()
-      const warnings: string[] = [ALPHA_WARNING]
+      const warnings: string[] = [BETA_WARNING]
       const [results, dsMeta] = await Promise.all([
         findComponentsByToken(variable),
         loadDsMeta(),
@@ -39,7 +39,7 @@ export function registerTokensFindComponents(server: McpServer): void {
           dsMeta,
           sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, BSI_ROOT_SCSS_URL, DTI_VARIABLES_SCSS_URL],
           warnings,
-          stability: 'alpha',
+          stability: 'beta',
           extra: { versions: dsMeta?.versions ?? undefined },
         }),
       }

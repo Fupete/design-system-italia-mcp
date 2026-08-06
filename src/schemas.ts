@@ -13,7 +13,7 @@ export const ZMeta = z.object({
   dataFetchedAt: z.string().nullable(),
   sourceUrls: z.array(z.string()),
   warnings: z.array(z.string()),
-  stability: z.enum(['alpha', 'stable']),
+  stability: z.enum(['beta', 'stable']),
   versions: ZVersions.optional(),
 })
 

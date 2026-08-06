@@ -6,17 +6,16 @@
 // If a source changes structure, update only the corresponding loader.
 // If a branch or base URL changes, update here.
 
-// ─── Alpha warning ────────────────────────────────────────────────────────────
+// ─── Beta warning ────────────────────────────────────────────────────────────
 // Used in ping (index.ts) and in meta.warnings for tools exposing data from
-// alpha sources (CSS tokens, Dev Kit Italia).
+// beta sources (CSS tokens, Dev Kit Italia).
 //
-// Alpha sources:  #3 BSI custom_properties.json, #7 Dev Kit index, #8 Dev Kit stories, #9 Dev Kit props
+// Beta sources:  #3 BSI custom_properties.json, #7 Dev Kit index, #8 Dev Kit stories, #9 Dev Kit props
 // Stable sources: #1 #2 BSI markup/status, #4 BSI root.scss, #5 Designers YAML, #6 DTI, #10 GitHub Issues
 
-export const ALPHA_WARNING =
-  'Bootstrap Italia 3.x and Dev Kit Italia are in alpha. ' +
-  'CSS tokens (--bsi-*), and web components may have breaking changes before stable release. ' +
-  'HTML markup and component status are a little more reliable.'
+export const BETA_WARNING =
+  'BSI 3.x and DevKit are in beta. ' +
+  'There may be a few breaking changes before stable release.'
 
 // ─── Bootstrap Italia — sources #1 #2 #3 #4 ─────────────────────────────────
 
@@ -30,7 +29,7 @@ const BSI_RAW_BASE =
 export const BSI_STATUS_URL =
   `${BSI_RAW_BASE}/api/components_status.json`
 
-/** Per-component CSS tokens --bsi-* with semantic descriptions ⚠️ alpha */
+/** Per-component CSS tokens --bsi-* with semantic descriptions ⚠️ beta */
 export const BSI_CUSTOM_PROPERTIES_URL =
   `${BSI_RAW_BASE}/api/custom_properties.json`
 
@@ -94,7 +93,7 @@ const DEVKIT_RAW_BASE =
   'https://raw.githubusercontent.com/italia/dev-kit-italia/main'
 
 /**
- * Storybook index: status tags, Italian variants, importPath → exact stories.ts path ⚠️ alpha
+ * Storybook index: status tags, Italian variants, importPath → exact stories.ts path ⚠️ beta
  * GitHub Pages URL — not raw GitHub
  */
 export const DEVKIT_INDEX_URL =
@@ -105,7 +104,7 @@ export const DEVKIT_STORYBOOK_BASE =
   'https://italia.github.io/dev-kit-italia'
 
 /**
- * Component stories — path from importPath in index.json ⚠️ alpha
+ * Component stories — path from importPath in index.json ⚠️ beta
  * Always use importPath from loader, do not assume pattern from name.
  * importPath has "./" prefix — removed here.
  */

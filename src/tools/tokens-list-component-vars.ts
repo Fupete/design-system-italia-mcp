@@ -6,7 +6,7 @@ import { resolveTokenValues } from '../loaders/tokens.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { ALPHA_WARNING, BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
+import { BETA_WARNING, BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL } from '../constants.js'
 
 // ─── Tool: tokens_list_component_vars ─────────────────────────────────────────
 
@@ -39,7 +39,7 @@ export function registerTokensListComponentVars(server: McpServer): void {
         warnings.push(`No CSS tokens found for "${canonicalSlug}"`)
       }
 
-      warnings.push(ALPHA_WARNING)
+      warnings.push(BETA_WARNING)
 
       let tokens = rawTokens
       try {
@@ -73,7 +73,7 @@ export function registerTokensListComponentVars(server: McpServer): void {
           dsMeta,
           sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL, BSI_ROOT_SCSS_URL],
           warnings,
-          stability: 'alpha',
+          stability: 'beta',
           extra: {
             versions: dsMeta?.versions ?? undefined,
             note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +

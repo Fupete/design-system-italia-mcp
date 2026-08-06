@@ -46,7 +46,7 @@ export function registerDsiSearchComponents(server: McpServer): void {
                   dsMeta,
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   warnings: [],
-                  stability: 'alpha',
+                  stability: 'beta',
                   extra: { versions: dsMeta?.versions ?? undefined },
                 }),
               },
