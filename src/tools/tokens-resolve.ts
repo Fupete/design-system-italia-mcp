@@ -31,10 +31,7 @@ export function registerTokensResolve(server: McpServer): void {
       if (result.value === null && !result.ambiguous && !result.note) {
         warnings.push(`Could not resolve "${variable}" — not found in the --bsi-*/--it-* resolution chain`)
       } else if (result.ambiguous) {
-        warnings.push(
-          `"${variable}" has different literal values across components — cannot resolve without a specific ` +
-          `component. Use tokens_list_component_vars for a specific component.`
-        )
+        warnings.push(result.note ?? `"${variable}" has different values across occurrences.`)
       } else if (result.note) {
         warnings.push(result.note)
       }

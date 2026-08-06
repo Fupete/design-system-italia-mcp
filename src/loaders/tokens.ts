@@ -15,8 +15,8 @@ import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL, SNAPSHOT_B
 // parsing logic the server uses, instead of a duplicated regex that can drift
 // out of sync (this drift is what caused the v0.3.12 root.scss bug).
 
-type DtiMap = Map<string, string>     // --it-* → value or --it-* reference
-type BridgeMap = Map<string, string>  // --bsi-* → --it-* (root.scss)
+export type DtiMap = Map<string, string>     // --it-* → value or --it-* reference
+export type BridgeMap = Map<string, string>  // --bsi-* → --it-* (root.scss)
 type BsiMap = Map<string, string>     // --bsi-* → --bsi-* or --it-* (custom-properties.json, token-reference only)
 
 // Format: $it-spacing-m: 1.5rem; // 24px
@@ -73,17 +73,17 @@ function parseBsiMap(raw: RawTokensJson): BsiMap {
 // "bsi-component" (per-component custom-properties.json entry); anything
 // --it-* is "dti" (central Design Token, not overridable per-project).
 
-function roleFor(name: string, bridge: BridgeMap): TokenRole {
-  if (name.startsWith('--it-')) return 'dti'
+export function roleFor(name: string, dtiRaw: DtiMap, bridge: BridgeMap): TokenRole {
+  if (dtiRaw.has(name)) return 'dti'
   if (bridge.has(name)) return 'bsi-global'
   return 'bsi-component'
 }
 
-function hopFor(name: string, bridge: BridgeMap): ResolvedHop {
-  const role = roleFor(name, bridge)
+export function hopFor(name: string, dtiRaw: DtiMap, bridge: BridgeMap): ResolvedHop {
+  const role = roleFor(name, dtiRaw, bridge)
   return {
     name,
-    sourceName: role === 'dti' ? `$${name.slice(2)}` : name,
+    sourceName: role === 'dti' ? `$${name.replace(/^--/, '')}` : name,
     form: role === 'dti' ? 'sass-variable' : 'css-custom-property',
     role,
     overridable: role !== 'dti',
@@ -116,7 +116,7 @@ function resolveChain(
     const next = bsiMap.get(name) ?? bridge.get(name)
     if (!next) return { value: null, chain: [] }
     const result = resolveChain(next, bsiMap, bridge, dtiRaw, visited)
-    return { value: result.value, chain: [hopFor(next, bridge), ...result.chain] }
+    return { value: result.value, chain: [hopFor(next, dtiRaw, bridge), ...result.chain] }
   }
 
   // --it-* → follow dtiRaw
@@ -125,7 +125,7 @@ function resolveChain(
     if (!val) return { value: null, chain: [] }
     if (val.startsWith('--it-')) {
       const result = resolveChain(val, bsiMap, bridge, dtiRaw, visited)
-      return { value: result.value, chain: [hopFor(val, bridge), ...result.chain] }
+      return { value: result.value, chain: [hopFor(val, dtiRaw, bridge), ...result.chain] }
     }
     return { value: val, chain: [] }
   }
@@ -195,7 +195,7 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
     // a different component's value (last write wins). Starting from `ref`
     // sidesteps that ambiguity entirely.
     const { value, chain } = resolveChain(ref, maps.bsiMap, maps.bridge, maps.dtiRaw)
-    return { ...token, valueResolved: value, resolvedVia: [hopFor(ref, maps.bridge), ...chain] }
+    return { ...token, valueResolved: value, resolvedVia: [hopFor(ref, maps.dtiRaw, maps.bridge), ...chain] }
   })
 }
 
@@ -226,15 +226,20 @@ export async function searchDesignTokens(
 // property). Everything downstream (bridge, dtiRaw) already keys on --it-*,
 // so $it-* just needs converting before the first lookup.
 
-function normalizeTokenName(input: string): string {
-  const trimmed = input.trim()
-  // var(--bsi-accordion-padding) — the exact value field the model just read
-  // from tokens_list_component_vars, likely the single most common input.
-  const varMatch = trimmed.match(/^var\((--[a-z0-9-]+)\)/)
+export function normalizeTokenName(input: string): string {
+  const trimmed = input.trim().toLowerCase()
+
+  // #{tokens.$it-spacing-m} or tokens.$it-spacing-m — Sass source forms
+  // copied directly from root.scss, the same source the $it- gate targets.
+  const tokensDotMatch = trimmed.match(/tokens\.\$it-([a-z0-9-]+)/)
+  if (tokensDotMatch) return `--it-${tokensDotMatch[1]}`
+
+  // var(--bsi-x) or var(--bsi-x, fallback) — allow a fallback after the name
+  const varMatch = trimmed.match(/^var\(\s*(--[a-z0-9-]+)/)
   if (varMatch) return varMatch[1]
+
   if (trimmed.startsWith('$')) return `--${trimmed.slice(1)}`
   if (trimmed.startsWith('--bsi-') || trimmed.startsWith('--it-')) return trimmed
-  // Defensive: bare name without -- prefix (e.g. "it-spacing-m", "bsi-accordion-padding")
   if (trimmed.startsWith('it-') || trimmed.startsWith('bsi-')) return `--${trimmed}`
   return trimmed
 }
@@ -279,16 +284,13 @@ export interface ResolveTokenResult {
 export async function resolveToken(input: string): Promise<ResolveTokenResult> {
   const name = normalizeTokenName(input)
   const { bsiMap, bridge, dtiRaw } = await loadMaps()
-  const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
 
-  if (value !== null) {
-    return { name, value, resolvedVia: chain }
-  }
-
-  // Fallback: name may be a literal --bsi-* value (e.g. "0", "1px"), which
-  // parseBsiMap never indexes because it only captures token-reference
-  // entries. Search the raw per-component data directly instead of
-  // declaring a token that genuinely exists "not found".
+  // For --bsi-* names, check ambiguity across ALL declarations first — a
+  // primary chain resolution via bsiMap (last-write-wins) can silently
+  // return a plausible-looking wrong value if this variable-name is
+  // declared multiple times with different values (e.g. per-component
+  // responsive/theme variants). Ambiguity must be decided before attempting
+  // resolution, not just as a fallback triggered when resolution fails.
   if (name.startsWith('--bsi-')) {
     const allTokens = await loadAllTokens()
     const matches: Array<{ component: string; value: string; type: ReturnType<typeof classifyValue> }> = []
@@ -300,33 +302,41 @@ export async function resolveToken(input: string): Promise<ResolveTokenResult> {
       }
     }
 
-    const literals = matches.filter((m) => m.type === 'literal')
-    const distinctLiteralValues = new Set(literals.map((m) => m.value))
+    if (matches.length > 0) {
+      const distinctValues = new Set(matches.map((m) => m.value))
 
-    if (distinctLiteralValues.size === 1 && matches.length === literals.length) {
-      return { name, value: literals[0].value, resolvedVia: [] }
-    }
-    if (distinctLiteralValues.size > 1) {
-      return {
-        name, value: null, resolvedVia: [],
-        ambiguous: matches.map(({ component, value }) => ({ component, value })),
+      if (distinctValues.size > 1) {
+        // Multiple distinct declared values — cannot pick one without guessing.
+        const components = [...new Set(matches.map((m) => m.component))]
+        const scope = components.length === 1
+          ? `declared ${matches.length} times within "${components[0]}"`
+          : `declared with different values across ${components.length} components`
+        return {
+          name, value: null, resolvedVia: [],
+          ambiguous: matches.map(({ component, value }) => ({ component, value })),
+          note: `${scope} — likely responsive/theme variants this dataset flattens. ` +
+            `Use tokens_list_component_vars for a specific component, or check BSI docs for context.`,
+        }
       }
-    }
-    if (matches.some((m) => m.type === 'scss-expression')) {
-      return {
-        name, value: null, resolvedVia: [],
-        note: 'scss-expression value(s) found — cannot resolve to a concrete value (requires SCSS compilation context)',
+
+      // Single distinct value declared everywhere — safe to resolve directly.
+      const single = matches[0]
+      if (single.type === 'literal') {
+        return { name, value: single.value, resolvedVia: [] }
       }
-    }
-    if (matches.some((m) => m.type === 'token-reference')) {
-      return {
-        name, value: null, resolvedVia: [],
-        note: 'found as a token-reference but its chain could not be resolved',
+      if (single.type === 'scss-expression') {
+        return {
+          name, value: null, resolvedVia: [],
+          note: 'scss-expression value(s) found — cannot resolve to a concrete value (requires SCSS compilation context)',
+        }
       }
+      // type === 'token-reference' and unambiguous — fall through to the
+      // normal chain resolution below, which follows this single reference.
     }
   }
 
-  return { name, value: null, resolvedVia: chain }
+  const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
+  return { name, value, resolvedVia: chain }
 }
 
 // ─── Inverse lookup (tokens_find_components) ──────────────────────────────────
@@ -362,15 +372,16 @@ export async function findComponentsByToken(input: string): Promise<Array<{
       const ref = e.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
       if (!ref) {
         // var(--x, fallback) or other unmatched form — still report on
-        // direct match so the token doesn't silently vanish from results.
+        // direct match so the token doesn't silently vanish from results,
+        // but don't claim an unresolved raw string as a resolved value.
         if (isDirectMatch) {
-          results.push({ component, token: name, resolvedVia: [], valueResolved: e.value })
+          results.push({ component, token: name, resolvedVia: [], valueResolved: null })
         }
         continue
       }
 
       const { value, chain } = resolveChain(ref, bsiMap, bridge, dtiRaw)
-      const fullChain = [hopFor(ref, bridge), ...chain]
+      const fullChain = [hopFor(ref, dtiRaw, bridge), ...chain]
 
       if (isDirectMatch || fullChain.some((h) => h.name === target)) {
         results.push({ component, token: name, resolvedVia: fullChain, valueResolved: value })
