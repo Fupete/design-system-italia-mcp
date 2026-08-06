@@ -20,28 +20,28 @@ export function registerTokensListGlobals(server: McpServer): void {
         'Without arguments returns all global tokens; pass category to filter (e.g. "spacing", "color"). ' +
         'Only tokens bridged into BSI are listed. For per-component variables use tokens_list_component_vars.',
       inputSchema: {
-        category: z.string().optional().describe('Filter by category keyword, e.g. "spacing", "color". Omit to list all.'),
+        match: z.string().optional().describe('Substring filter on token/variable name (e.g. "spacing", "blue"). Not a semantic category — matches literal text in the name only. Omit to list all.'),
       },
       annotations: { readOnlyHint: true },
     },
-    async ({ category }) => {
+    async ({ match }) => {
       const warnings: string[] = [ALPHA_WARNING]
       const [pairs, dsMeta] = await Promise.all([
         listGlobalBridgePairs(),
         loadDsMeta(),
       ])
 
-      const q = category?.trim().toLowerCase()
+      const q = match?.trim().toLowerCase()
       const filtered = q
         ? pairs.filter((p) => p.it.toLowerCase().includes(q) || p.bsiGlobal.toLowerCase().includes(q))
         : pairs
 
       if (q && filtered.length === 0) {
-        warnings.push(`No global tokens found matching category "${category}"`)
+        warnings.push(`No global tokens found matching "${match}"`)
       }
 
       const output = {
-        category: category ?? null,
+        match: match ?? null,
         total: filtered.length,
         tokens: filtered,
         meta: buildMeta({

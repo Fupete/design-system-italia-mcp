@@ -46,7 +46,9 @@ export interface ComponentVariant {
 export type TokenRole = 'bsi-component' | 'bsi-global' | 'dti'
 
 export interface ResolvedHop {
-  name: string
+  name: string                                  // normalized internal key
+  sourceName: string                            // "$it-spacing-6x" for dti, "--bsi-spacing-m" for bsi-*
+  form: 'css-custom-property' | 'sass-variable'
   role: TokenRole
   overridable: boolean   // true for --bsi-* (project-overridable at runtime), false for --it-*/$it-* (central, not overridable per-project)
 }

@@ -19,6 +19,8 @@ export const ZMeta = z.object({
 
 const ZResolvedHop = z.object({
   name: z.string(),
+  sourceName: z.string(),
+  form: z.enum(['css-custom-property', 'sass-variable']),
   role: z.enum(['bsi-component', 'bsi-global', 'dti']),
   overridable: z.boolean(),
 })

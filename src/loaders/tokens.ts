@@ -80,7 +80,14 @@ function roleFor(name: string, bridge: BridgeMap): TokenRole {
 }
 
 function hopFor(name: string, bridge: BridgeMap): ResolvedHop {
-  return { name, role: roleFor(name, bridge), overridable: !name.startsWith('--it-') }
+  const role = roleFor(name, bridge)
+  return {
+    name,
+    sourceName: role === 'dti' ? `$${name.slice(2)}` : name,
+    form: role === 'dti' ? 'sass-variable' : 'css-custom-property',
+    role,
+    overridable: role !== 'dti',
+  }
 }
 
 // ─── Unified resolver ─────────────────────────────────────────────────────────
@@ -221,6 +228,10 @@ export async function searchDesignTokens(
 
 function normalizeTokenName(input: string): string {
   const trimmed = input.trim()
+  // var(--bsi-accordion-padding) — the exact value field the model just read
+  // from tokens_list_component_vars, likely the single most common input.
+  const varMatch = trimmed.match(/^var\((--[a-z0-9-]+)\)/)
+  if (varMatch) return varMatch[1]
   if (trimmed.startsWith('$')) return `--${trimmed.slice(1)}`
   if (trimmed.startsWith('--bsi-') || trimmed.startsWith('--it-')) return trimmed
   // Defensive: bare name without -- prefix (e.g. "it-spacing-m", "bsi-accordion-padding")
@@ -259,6 +270,10 @@ export interface ResolveTokenResult {
   // across components — cannot pick one without guessing which component
   // the caller means. Surfaced instead of an arbitrary answer.
   ambiguous?: Array<{ component: string; value: string }>
+  // Present when value is null but the token exists with a value that
+  // genuinely can't be resolved (scss-expression, or a broken chain) —
+  // distinguishes "found but unresolvable" from "not found at all".
+  note?: string
 }
 
 export async function resolveToken(input: string): Promise<ResolveTokenResult> {
@@ -276,18 +291,38 @@ export async function resolveToken(input: string): Promise<ResolveTokenResult> {
   // declaring a token that genuinely exists "not found".
   if (name.startsWith('--bsi-')) {
     const allTokens = await loadAllTokens()
-    const matches: Array<{ component: string; value: string }> = []
+    const matches: Array<{ component: string; value: string; type: ReturnType<typeof classifyValue> }> = []
     for (const [component, entries] of Object.entries(allTokens)) {
       for (const e of entries) {
-        if (e['variable-name'] === name) matches.push({ component, value: e.value })
+        if (e['variable-name'] === name) {
+          matches.push({ component, value: e.value, type: classifyValue(e.value) })
+        }
       }
     }
-    const distinctValues = new Set(matches.map((m) => m.value))
-    if (distinctValues.size === 1) {
-      return { name, value: matches[0].value, resolvedVia: [] }
+
+    const literals = matches.filter((m) => m.type === 'literal')
+    const distinctLiteralValues = new Set(literals.map((m) => m.value))
+
+    if (distinctLiteralValues.size === 1 && matches.length === literals.length) {
+      return { name, value: literals[0].value, resolvedVia: [] }
     }
-    if (distinctValues.size > 1) {
-      return { name, value: null, resolvedVia: [], ambiguous: matches }
+    if (distinctLiteralValues.size > 1) {
+      return {
+        name, value: null, resolvedVia: [],
+        ambiguous: matches.map(({ component, value }) => ({ component, value })),
+      }
+    }
+    if (matches.some((m) => m.type === 'scss-expression')) {
+      return {
+        name, value: null, resolvedVia: [],
+        note: 'scss-expression value(s) found — cannot resolve to a concrete value (requires SCSS compilation context)',
+      }
+    }
+    if (matches.some((m) => m.type === 'token-reference')) {
+      return {
+        name, value: null, resolvedVia: [],
+        note: 'found as a token-reference but its chain could not be resolved',
+      }
     }
   }
 
@@ -325,7 +360,14 @@ export async function findComponentsByToken(input: string): Promise<Array<{
       }
 
       const ref = e.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
-      if (!ref) continue
+      if (!ref) {
+        // var(--x, fallback) or other unmatched form — still report on
+        // direct match so the token doesn't silently vanish from results.
+        if (isDirectMatch) {
+          results.push({ component, token: name, resolvedVia: [], valueResolved: e.value })
+        }
+        continue
+      }
 
       const { value, chain } = resolveChain(ref, bsiMap, bridge, dtiRaw)
       const fullChain = [hopFor(ref, bridge), ...chain]
