@@ -43,8 +43,15 @@ export async function loadDevKitIndex(): Promise<DevKitIndex> {
       .filter((e) => e.type === 'story' && e.title === entry.title)
       .map((e) => e.name)
 
+    // "name" in the raw index is always the literal string "Documentazione" for docs
+    // entries — not a display name. The real human-readable name is the last
+    // segment of "title" (e.g. "Componenti/Video player" → "Video player").
+    const displayName = entry.title.split('/').pop()?.trim() || slug
+
     const devKitEntry: DevKitEntry = {
       slug,
+      id: entry.id,
+      displayName,
       tags: entry.tags.filter((t) => !['dev', 'test', 'attached-mdx', 'unattached-mdx'].includes(t)),
       storybookUrl: `${DEVKIT_STORYBOOK_BASE}/?path=/docs/${entry.id}`,
       importPath,

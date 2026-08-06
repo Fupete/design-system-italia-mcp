@@ -8,18 +8,16 @@ import { createServer, IncomingMessage, ServerResponse } from 'node:http'
 import { createRequire } from 'node:module'
 
 // ─── Tools ───────────────────────────────────────────────────────────────────
-import { registerListComponents } from './tools/list-components.js'
+import { registerDsiListComponents } from './tools/dsi-list-components.js'
 import { registerGetComponent } from './tools/get-component.js'
-import { registerSearchComponents } from './tools/search-components.js'
+import { registerDsiSearchComponents } from './tools/dsi-search-components.js'
 import { registerGetComponentVariant } from './tools/get-component-variant.js'
 import { registerGetComponentTokens } from './tools/get-component-tokens.js' 
 import { registerFindToken } from './tools/find-token.js'
 import { registerGetComponentGuidelines } from './tools/get-component-guidelines.js'
 import { registerListByStatus } from './tools/list-by-status.js'
-import { registerListAccessibilityIssues } from './tools/list-accessibility-issues.js'
 import { registerGetComponentIssues } from './tools/get-component-issues.js'
 import { registerGetProjectBoardStatus } from './tools/get-project-board-status.js' 
-import { registerGetComponentFull } from './tools/get-component-full.js'
 import { cache } from './cache.js'
 import { getHealth } from './health.js'
 import { ALPHA_WARNING } from './constants.js'
@@ -64,22 +62,20 @@ function createMcpServer(): McpServer {
               server: 'design-system-italia-mcp',
               version: VERSION,
               timestamp: new Date().toISOString(),
-              message: 'Filo – unofficial MCP server for Design System .italia. Use list_components to get started.',
+              message: 'Filo – unofficial MCP server for Design System .italia. Use dsi_list_components to get started.',
               warnings: ALPHA_WARNING,
               tools: [
                 'ping',
                 'find_token',
                 'get_component',
-                'get_component_full',
                 'get_component_guidelines',
                 'get_component_issues',
                 'get_component_tokens',
                 'get_component_variant',
                 'get_project_board_status',
-                'list_accessibility_issues',
                 'list_by_status',
-                'list_components',
-                'search_components',
+                'dsi_list_components',
+                'dsi_search_components',
               ],
             },
             null,
@@ -93,18 +89,16 @@ function createMcpServer(): McpServer {
   registerFindToken(s)
 
   registerGetComponent(s)
-  registerGetComponentFull(s)
   registerGetComponentGuidelines(s)
   registerGetComponentIssues(s)
   registerGetComponentTokens(s)
   registerGetComponentVariant(s)
 
   registerGetProjectBoardStatus(s)
-  registerListAccessibilityIssues(s)
   registerListByStatus(s)
 
-  registerListComponents(s)
-  registerSearchComponents(s)
+  registerDsiListComponents(s)
+  registerDsiSearchComponents(s)
 
   return s
 }
