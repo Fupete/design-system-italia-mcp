@@ -5,37 +5,37 @@ import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
 import { BSI_STATUS_URL } from '../constants.js'
 
-// ─── Tool: list_by_status ─────────────────────────────────────────────────────
+// ─── Tool: bsi_list_components_by_status ──────────────────────────────────────
+// Only Bootstrap Italia is filterable here — uiKitItalia status lives in Figma, not this API.
 
-export function registerListByStatus(server: McpServer): void {
+export function registerBsiListComponentsByStatus(server: McpServer): void {
   server.registerTool(
-    'list_by_status',
+    'bsi_list_components_by_status',
     {
-      title: 'List By Status',
-      description: 'Lists components filtered by status in a specific library. ' +
-        'Available libraries: bootstrapItalia, uiKitItalia, ... ' +
-        'Possible statuses: PRONTO, DA RIVEDERE A11Y, DA RIVEDERE, IN REVIEW, ' +
-        'DA COMPLETARE VARIANTI, NON PRESENTE, DA FARE, N/D.',
+      title: 'List Components By Status',
+      description: 'Lists Bootstrap Italia components filtered by implementation status. ' +
+        'Valid values: PRONTO, DA RIVEDERE A11Y, DA RIVEDERE, IN REVIEW, ' +
+        'DA COMPLETARE VARIANTI, NON PRESENTE, DA FARE, N/D. ' +
+        'Use dsi_list_components for full status overview.',
       inputSchema: {
-        library: z.enum(['bootstrapItalia', 'uiKitItalia']).describe('Library to filter'),
         status: z.string().describe('Status to filter (e.g. "PRONTO", "DA FARE", "NON PRESENTE")'),
       },
       annotations: { readOnlyHint: true },
     },
-    async ({ library, status }) => {
+    async ({ status }) => {
       status = status.trim()
       const [allStatuses, dsMeta] = await Promise.all([
         loadAllStatuses(),
         loadDsMeta(),
       ])
-      const statusUpper = status.toUpperCase().trim()
+      const statusUpper = status.toUpperCase()
 
       const results = [...allStatuses.values()]
-        .filter((s) => s.libraryStatus[library].toUpperCase() === statusUpper)
+        .filter((s) => s.libraryStatus.bootstrapItalia.toUpperCase() === statusUpper)
         .map((s) => ({
           name: s.name,
           slug: s.slug,
-          status: s.libraryStatus[library],
+          status: s.libraryStatus.bootstrapItalia,
           bsiDoc: s.sourceUrls.bsiDoc ?? null,
         }))
 
@@ -45,7 +45,6 @@ export function registerListByStatus(server: McpServer): void {
             type: 'text',
             text: JSON.stringify(
               {
-                library,
                 status: statusUpper,
                 total: results.length,
                 results,

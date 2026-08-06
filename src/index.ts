@@ -9,15 +9,18 @@ import { createRequire } from 'node:module'
 
 // ─── Tools ───────────────────────────────────────────────────────────────────
 import { registerDsiListComponents } from './tools/dsi-list-components.js'
-import { registerGetComponent } from './tools/get-component.js'
 import { registerDsiSearchComponents } from './tools/dsi-search-components.js'
-import { registerGetComponentVariant } from './tools/get-component-variant.js'
 import { registerGetComponentTokens } from './tools/get-component-tokens.js' 
 import { registerFindToken } from './tools/find-token.js'
 import { registerGetComponentGuidelines } from './tools/get-component-guidelines.js'
-import { registerListByStatus } from './tools/list-by-status.js'
 import { registerGetComponentIssues } from './tools/get-component-issues.js'
 import { registerGetProjectBoardStatus } from './tools/get-project-board-status.js' 
+import { registerBsiListComponentVariants } from './tools/bsi-list-component-variants.js'
+import { registerBsiGetComponentMarkup } from './tools/bsi-get-component-markup.js'
+import { registerDevkitListComponentVariants } from './tools/devkit-list-component-variants.js'
+import { registerDevkitGetComponentMarkup } from './tools/devkit-get-component-markup.js'
+import { registerDevkitListComponentProps } from './tools/devkit-list-component-props.js'
+import { registerBsiListComponentsByStatus } from './tools/bsi-list-components-by-status.js'
 import { cache } from './cache.js'
 import { getHealth } from './health.js'
 import { ALPHA_WARNING } from './constants.js'
@@ -67,13 +70,16 @@ function createMcpServer(): McpServer {
               tools: [
                 'ping',
                 'find_token',
-                'get_component',
+                'bsi_list_component_variants',
+                'bsi_get_component_markup',
+                'devkit_list_component_variants',
+                'devkit_get_component_markup',
+                'devkit_list_component_props',
+                'bsi_list_components_by_status',
                 'get_component_guidelines',
                 'get_component_issues',
                 'get_component_tokens',
-                'get_component_variant',
                 'get_project_board_status',
-                'list_by_status',
                 'dsi_list_components',
                 'dsi_search_components',
               ],
@@ -88,15 +94,19 @@ function createMcpServer(): McpServer {
 
   registerFindToken(s)
 
-  registerGetComponent(s)
   registerGetComponentGuidelines(s)
   registerGetComponentIssues(s)
   registerGetComponentTokens(s)
-  registerGetComponentVariant(s)
 
   registerGetProjectBoardStatus(s)
-  registerListByStatus(s)
 
+  registerBsiListComponentVariants(s)
+  registerBsiGetComponentMarkup(s)
+  registerDevkitListComponentVariants(s)
+  registerDevkitGetComponentMarkup(s)
+  registerDevkitListComponentProps(s)
+  registerBsiListComponentsByStatus(s)
+  
   registerDsiListComponents(s)
   registerDsiSearchComponents(s)
 
