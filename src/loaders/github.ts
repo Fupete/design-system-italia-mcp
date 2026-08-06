@@ -97,6 +97,6 @@ export function getProjectBoardStatus(): BoardStatus {
     note:
       'GitHub Projects v2 board (project #17) not integrated — ' +
       'requires read:project scope. ' +
-      'Use get_component_issues for component-specific issues.',
+      'Use github_get_component_issues for component-specific issues.',
   }
 }

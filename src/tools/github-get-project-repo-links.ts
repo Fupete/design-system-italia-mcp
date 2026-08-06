@@ -2,16 +2,18 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { formatTimestamp } from '../utils.js'
 import { getProjectBoardStatus } from '../loaders/github.js'
 
-// ─── Tool: get_project_board_status ───────────────────────────────────────────
+// ─── Tool: github_get_project_repo_links ──────────────────────────────────────
+// Repo issue links, not live board card data — GitHub Projects v2 board
+// (project #17) is not integrated (requires read:project scope).
 
-export function registerGetProjectBoardStatus(server: McpServer): void {
+export function registerGithubGetProjectRepoLinks(server: McpServer): void {
   server.registerTool(
-    'get_project_board_status',
+    'github_get_project_repo_links',
     {
-      title: 'Get Project Board Status',
-      description: 'Returns the aggregated status of Design System .italia GitHub boards. ' +
-        'Includes links to open issues for each repository.' +
-        'use get_component_issues for component-specific issues.',
+      title: 'Get Project Repo Links',
+      description: 'Returns links to open issues for each Design System .italia repository. ' +
+        'Does not include live GitHub Projects v2 board card data (not integrated). ' +
+        'Use github_get_component_issues for component-specific issues.',
       inputSchema: {},
       annotations: { readOnlyHint: true },
     },

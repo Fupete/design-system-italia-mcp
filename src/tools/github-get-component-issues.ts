@@ -1,29 +1,29 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { formatTimestamp } from '../utils.js'
-import { loadComponentIssues, getProjectBoardStatus } from '../loaders/github.js'
+import { loadComponentIssues } from '../loaders/github.js'
 import { loadStatus } from '../loaders/bsi.js'
 import { slugify } from '../slugify.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS, BSI_STATUS_URL } from '../constants.js'
 import { buildMeta } from './helpers.js'
 
-// ─── Tool: get_component_issues ───────────────────────────────────────────────
+// ─── Tool: github_get_component_issues ────────────────────────────────────────
 
-export function registerGetComponentIssues(server: McpServer): void {
+export function registerGithubGetComponentIssues(server: McpServer): void {
   server.registerTool(
-    'get_component_issues',
+    'github_get_component_issues',
     {
       title: 'Get Component Issues',
       description: 'Returns open GitHub issues for a component ' +
         'across the 4 Design System .italia repositories: bootstrap-italia, ' +
         'design-ui-kit, dev-kit-italia, design-tokens-italia. ' +
         'Also includes known issues already present in components_status.json.',
-      inputSchema: { name: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
+      inputSchema: { component: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
     },
-    async ({ name }) => {
-      name = name.trim()
-      const slug = slugify(name)
+    async ({ component }) => {
+      component = component.trim()
+      const slug = slugify(component)
       const warnings: string[] = []
 
       const [{ issues: liveIssues, error: issuesError }, status] = await Promise.all([
