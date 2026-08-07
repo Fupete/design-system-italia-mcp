@@ -25,7 +25,7 @@
 
 ---
 
-## Cos'è Filo / What is Filo 
+## Cos'è Filo / What is Filo
 
 **IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia v3 ⚠️ beta, web component e props Dev Kit Italia v1 ⚠️ beta, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
 
@@ -43,42 +43,54 @@
 
 ## Strumenti disponibili / Available tools
 
-### Componenti
-* `list_components` — elenco di tutti i componenti con stato (Bootstrap Italia + Dev Kit Italia), `componentType`
-* `get_component(name, maxVariants?)` — markup per varianti HTML Bootstrap Italia e web components Dev Kit Italia ⚠️ beta (troncate, default 3 per risorsa)
-* `get_component_variant(name, variantName)` — markup completo di una variante specifica per nome (BSI o Dev Kit, trasparente) ⚠️ beta
-* `search_components(query)` — ricerca per nome, slug, alias IT/EN o tag Dev Kit
-* `get_component_full(name)` — risposta aggregata: varianti Bootstrap Italia e Dev Kit Italia + props Dev Kit ⚠️ beta + CSS custom properties e loro token chain fino a valore risolto + linee guida d'uso + stato + issue — una sola query. Da usare quando servono dati da più sorgenti insieme, non come prima chiamata.
+I tool sono organizzati per sorgente/namespace: `dsi_` (inventario unificato componenti Design system .italia), `bsi_` e `devkit_` (markup/varianti/props da Bootstrap Italia e Dev Kit Italia — mirror solo dove le sorgenti producono artefatti distinti), `tokens_` (design token e variabili CSS, asse sorgente unico), `docs_` (da schede linee guida Designers Italia), `github_` (issue dalle repo dell'ecosistema). Rispetto alle prime release, per un approccio di risparmio token, non esiste più un tool aggregatore `full`: combinare più fonti in un'unica risposta è responsabilità del client, componendo più chiamate mirate. 
 
-### Design tokens e variabili CSS
-- `get_component_tokens(name)` — CSS custom properties `--bsi-*` personalizzabili con descrizioni semantiche, tokens da Design Tokens Italia e catena di risoluzione fino a valori risolti
-- `find_token(query)` — ricerca per nome token o descrizione
+### Componenti — `dsi_`
+- `dsi_list_components()` — inventario unificato di tutti i componenti: una riga per componente con `bsi:{status, accessibility}` (`null` se non presente in Bootstrap Italia) e `devkit:{tags, storybookUrl, componentType}` (`null` se non presente in Dev Kit Italia). Un componente è un'unica entità con due possibili implementazioni. Punto di partenza prima di markup, token o props.
+- `dsi_search_components(query)` — ricerca sulla stessa unione, per nome, slug, alias IT/EN o tag Dev Kit.
 
-### Linee guida componenti e stato accessibilità (documentazione su Designers Italia)
-- `get_component_guidelines(name)` — linee guida d'uso, quando/come usarlo, stato verifiche accessibilità
-- `list_by_status(status)` — componenti per stato
-- `list_accessibility_issues` — componenti con note di accessibilità aperte (liste manuali)
+### Markup e varianti — `bsi_` / `devkit_`
+- `bsi_list_component_variants(component)` — nomi di tutte le varianti Bootstrap Italia disponibili, senza markup.
+- `bsi_get_component_markup(component, variant?)` — markup HTML completo di una variante specifica (`variant` omesso → prima variante).
+- `bsi_list_components_by_status(status)` — componenti Bootstrap Italia filtrati per stato di implementazione (PRONTO, DA RIVEDERE, DA FARE, ...).
+- `devkit_list_component_variants(component)` — nomi di tutte le varianti Dev Kit Italia disponibili.
+- `devkit_get_component_markup(component, variant?)` — markup HTML di una variante Dev Kit, estratto da Storybook via snapshot CI (`variant` omesso → prima variante).
+- `devkit_list_component_props(component)` — attributi HTML `it-*` di un web component Dev Kit: nome, tipo, descrizione, default, opzioni — incluse le props dei subcomponenti (es. `it-accordion-item`).
 
-### Issue e stato progetto (GitHub)
-- `get_component_issues(name)` — tutte le issue aperte su GitHub per componente
-- `get_project_board_status` — stato aggregato delle board collegate (segnaposto per funzionalità future di visione trasparente sulla gestione progetto)
+### Design tokens e variabili CSS — `tokens_`
+- `tokens_list_component_vars(component)` — variabili CSS `--bsi-*` personalizzabili di un componente, con descrizione semantica, catena di risoluzione e valore risolto.
+- `tokens_list_globals(match?)` — coppie di token globali che Bootstrap Italia usa davvero: Design Token centrale (`--it-*`/`$it-*`, non sovrascrivibile per progetto) + `--bsi-*` corrispondente (sovrascrivibile a runtime), con valore risolto. `match` filtra per sottostringa nel nome, omesso restituisce tutti.
+- `tokens_resolve(variable)` — risolve qualunque variabile (`--bsi-*`, `--it-*` o `$it-*`) al valore concreto, seguendo l'intera catena.
+- `tokens_find_components(variable)` — componenti Bootstrap Italia impattati da una variabile, incluso l'impatto indiretto tracciato lungo la catena. Utile per capire cosa cambia sovrascrivendo una variabile.
+- `tokens_search(query)` — ricerca per sottostringa nel nome della variabile, su token BSI e Design Tokens Italia globali.
+
+Ogni token include `resolvedVia`: l'elenco degli hop intermedi della catena di risoluzione, ciascuno con `role` (`bsi-component` | `bsi-global` | `dti`) e `overridable` (`true` per le `--bsi-*` sovrascrivibili a runtime, `false` per i Design Token centrali `--it-*`/`$it-*`, definiti upstream).
+
+### Linee guida componenti e stato accessibilità — `docs_`
+- `docs_get_component_guide(component)` — linee guida d'uso da Designers Italia: descrizione, quando/come usarlo, stato verifiche accessibilità, stato libreria (Bootstrap Italia, UI Kit Italia, Dev Kit Italia). Lo stato accessibilità per-componente è disponibile anche in `dsi_list_components` (campo `bsi.accessibility`).
+
+### Issue e stato progetto — `github_`
+- `github_get_component_issues(component)` — issue GitHub aperte per componente sulle repository monitorate (bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia), più le issue note già registrate in `components_status.json`.
+- `github_get_project_repo_links()` — link alle issue aperte di ciascuna repository. Non include i dati live delle board GitHub Projects v2 (non ancora integrate).
 
 ### Connessione e meta
-- `ping` — verifica connessione al server, versione, timestamp e warning sulle sorgenti. Da usare all'inizio della sessione per confermare i tool disponibili
+- `ping` — verifica connessione al server, versione, timestamp e warning sulle sorgenti in beta. Da usare all'inizio della sessione per confermare i tool disponibili.
 
 ---
 
 ## Query consigliata / Recommended Query
 
-Il valore del server è la **combinazione contestuale** di sorgenti frammentate.
+Il valore del server è la **combinazione contestuale** di sorgenti frammentate — componendo più chiamate mirate.
 
-Esempi: *"Dimmi tutto sul componente Alert"*, *"Quali token devo personalizzare nel mio css per cambiare i colori di header e footer?"*, *"..."*
+Esempi: *"Quali varianti ha l'Accordion e quali token posso personalizzare?"*, *"Quali variabili devo sovrascrivere nel mio CSS per cambiare i colori di header e footer?"*, *"..."*
+
+Flusso tipico: `dsi_list_components`/`dsi_search_components` per orientarsi → `bsi_list_component_variants`/`devkit_list_component_variants` per i nomi delle varianti → `bsi_get_component_markup`/`devkit_get_component_markup` per il markup di una variante specifica → `tokens_list_component_vars`/`tokens_resolve` per i token.
 
 Ogni risposta include le versioni delle risorse (Design system .italia, Bootstrap Italia, Dev Kit Italia, Design Tokens Italia), URL verificato della documentazione ufficiale e `dataFetchedAt`, la data dell'ultimo snapshot CI che avviene tendenzialmente* ogni notte, non il momento della richiesta. (* = laddove ci sono rilasci di nuove versioni upstream).
 
-Per componenti con molte varianti (es. Card con 30+), `get_component` e `get_component_full` restituiscono di default le prime 3 con markup completo + la lista nomi di tutte. Usa `get_component_variant(name, variantName)` per richiederne altre specifiche per nome.
+I tool `bsi_get_component_markup`/`devkit_get_component_markup` restituiscono sempre una sola variante per chiamata; usa prima `bsi_list_component_variants`/`devkit_list_component_variants` per scoprire i nomi delle varianti disponibili.
 
-I nomi dei componenti funzionano in italiano e inglese: *"fisarmonica"*, *"dialog"*, *"pulsante"* trovano accordion, modal, buttons.
+I nomi dei componenti funzionano in italiano e inglese: *"fisarmonica"*, *"dialog"*, *"pulsante"* trovano accordion, modal, button.
 
 ---
 
@@ -102,7 +114,7 @@ REGOLA D'ORO: se non sei sicuro che un dato provenga da MCP, trattalo come infer
 
 TOOL DISPONIBILI: all'inizio della sessione, usa il tool ping per verificare la connessione e leggi la lista dei tool disponibili. Non assumere quali tool esistono.
 
-COMPLETEZZA DATI: se un tool restituisce un sottoinsieme dei dati (es. 3 varianti su 13), segnalalo all'utente.
+COMPLETEZZA DATI: se un componente non è presente in una sorgente (es. `devkit: null` in dsi_list_components/dsi_search_components), segnalalo all'utente invece di presumerne l'assenza totale.
 ```
 
 **EN**
@@ -121,7 +133,7 @@ GOLDEN RULE: if you are unsure whether a piece of data comes from MCP, treat it 
 
 AVAILABLE TOOLS: at the start of the session, use the ping tool to verify the connection and read the list of available tools. Do not assume which tools exist.
 
-DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants out of 13), flag this to the user.
+DATA COMPLETENESS: if a component is missing from one source (e.g. `devkit: null` in dsi_list_components/dsi_search_components), flag this to the user instead of assuming it doesn't exist at all.
 ```
 
 ---
@@ -189,7 +201,7 @@ docker run -e GITHUB_TOKEN=your_token -p 8080:8080 \
 > ⚠️ **Docker multiarch** — se `docker pull` scarica un'architettura incompatibile,
 > fai una build locale: `docker build -t design-system-italia-mcp .`
 
-> ℹ️ **`GITHUB_TOKEN` (opzionale ma consigliato)** — serve per il tool `get_component_issues`.
+> ℹ️ **`GITHUB_TOKEN` (opzionale ma consigliato)** — serve per il tool `github_get_component_issues`.
 > Senza token: 60 richieste/ora per IP. Con token: 5000 richieste/ora.
 > Basta un token con scope pubblico read-only — nessun permesso speciale richiesto.
 
@@ -201,25 +213,25 @@ I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch [`data-f
 
 | # | Repo | Contenuto | Tool MCP |
 |---|------|-----------|----------|
-| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Markup HTML varianti per componente ⚠️ beta | `get_component` `list_components` `search_components` |
-| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Lista ~55 componenti, stato librerie (BSI/UI Kit), accessibilità, note issue | `list_components` `list_by_status` `list_accessibility_issues` |
-| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Token CSS `--bsi-*` per-componente con descrizioni semantiche ⚠️ beta | `get_component_tokens` `find_token` |
-| 4 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Bridge `--bsi-*` → `--it-*` (token resolution) ⚠️ beta | `get_component_tokens` `find_token` |
-| 5 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `get_component_guidelines` |
-| 6 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | Token globali `--it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `1.5rem` | `get_component_tokens` `find_token` |
-| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti, importPath ⚠️ beta | `list_components` `search_components` |
-| 8 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML per variante, estratto da Storybook source panel ⚠️ beta | `get_component` `get_component_variant` `get_component_full` |
-| 9 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni ⚠️ beta | `get_component` `get_component_full` |
-| 10 | GitHub REST API | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `get_component_issues` `get_project_board_status` |
+| 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Markup HTML varianti per componente | `bsi_get_component_markup` `bsi_list_component_variants` |
+| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Lista ~55 componenti, stato librerie (BSI/UI Kit), accessibilità, note issue | `dsi_list_components` `dsi_search_components` `bsi_list_components_by_status` |
+| 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Token CSS `--bsi-*` per-componente con descrizioni semantiche | `tokens_list_component_vars` `tokens_search` `tokens_find_components` |
+| 4 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Bridge `--bsi-*` → `--it-*` (token resolution) | `tokens_list_globals` `tokens_resolve` `tokens_find_components` |
+| 5 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `docs_get_component_guide` |
+| 6 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | Token globali `--it-*`/`$it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `1.5rem` | `tokens_list_globals` `tokens_resolve` `tokens_search` |
+| 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti, id univoco | `dsi_list_components` `dsi_search_components` `devkit_list_component_variants` |
+| 8 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML per variante, estratto da Storybook source panel | `devkit_get_component_markup` `devkit_list_component_variants` |
+| 9 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni | `devkit_list_component_props` |
+| 10 | GitHub REST API | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `github_get_component_issues` `github_get_project_repo_links` |
 | 11 | designers.italia.it + BSI + Dev Kit | Versioni Design System / BSI / Dev Kit / DTI. URL verificati pagine componenti | meta in tutte le risposte |
 
 Le sorgenti 1–9 e 11 sono aggiornate nightly e cached per 24h.
 La sorgente 10 (GitHub Issues) è l'unica fetchata live a runtime (cache 15 min).
 `dataFetchedAt` nelle risposte riflette la data dell'ultimo snapshot CI.
 
-> ⚠️ **Layer token e web component in sviluppo attivo** — Il server usa Bootstrap Italia 3.x (beta) e Dev Kit Italia (beta). Token CSS `--bsi-*` e web component `it-*` possono avere breaking changes prima della release stabile.
+> ⚠️ **Layer token e web component in beta** — Il server usa Bootstrap Italia 3.x (beta) e Dev Kit Italia (beta). Token CSS `--bsi-*` e web component `it-*` possono avere alcune breaking change prima della release stabile.
 
-> ⚠️ **Token and web component layer in active development** — This server uses Bootstrap Italia 3.x (beta) and Dev Kit Italia (beta). CSS tokens `--bsi-*` and web components `it-*` may have breaking changes before stable release.
+> ⚠️ **Token and web component layer in beta** — This server uses Bootstrap Italia 3.x (beta) and Dev Kit Italia (beta). CSS tokens `--bsi-*` and web components `it-*` may have some breaking changes before stable release.
 
 ---
 
@@ -243,8 +255,12 @@ cp .env.example .env
 # aggiungi GITHUB_TOKEN in .env
 npm run dev
 
+# Typecheck
+npm run typecheck
+# Test unitari
+npm run test
 # Verifica sorgenti upstream e freschezza snapshot
-npx tsx scripts/canary.ts
+npm run canary
 ```
 
 Server disponibile su `http://localhost:8080/mcp`
