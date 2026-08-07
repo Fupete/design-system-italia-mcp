@@ -16,6 +16,8 @@ interface RawStatusEntry {
   'bootstrap Italia - url'?: string
   'uI Kit Italia': StatusValue
   'uI Kit Italia - url'?: string
+  'dev Kit Italia': StatusValue
+  'dev Kit Italia - url'?: string
   'visivamente accessibile': StatusValue
   'amichevole con lettori di schermo': StatusValue
   'navigabile': StatusValue
@@ -48,6 +50,7 @@ export async function loadAllStatuses(): Promise<Map<string, ComponentStatus>> {
       libraryStatus: {
         bootstrapItalia: entry['bootstrap Italia'] ?? 'N/D',
         uiKitItalia: entry['uI Kit Italia'] ?? 'N/D',
+        devKitItalia: entry['dev Kit Italia'] ?? 'N/D',
       },
       accessibility: {
         visivamenteAccessibile: entry['visivamente accessibile'] ?? 'N/D',

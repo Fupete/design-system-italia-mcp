@@ -18,6 +18,7 @@ export interface ComponentStatus {
   libraryStatus: {
     bootstrapItalia: StatusValue
     uiKitItalia: StatusValue
+    devKitItalia: StatusValue
   }
   accessibility: {
     visivamenteAccessibile: StatusValue

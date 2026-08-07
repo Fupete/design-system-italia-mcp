@@ -89,6 +89,7 @@ export const ZComponentStatus = z.object({
   libraryStatus: z.object({
     bootstrapItalia: ZStatusValue,
     uiKitItalia: ZStatusValue,
+    devKitItalia: ZStatusValue,
   }),
   accessibility: z.object({
     visivamenteAccessibile: ZStatusValue,

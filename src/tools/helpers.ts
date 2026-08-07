@@ -66,7 +66,7 @@ export interface UnionRow {
   name: string
   slug: string
   bsi: {
-    status: { bootstrapItalia: StatusValue; uiKitItalia: StatusValue }
+    status: { bootstrapItalia: StatusValue; uiKitItalia: StatusValue; devKitItalia: StatusValue }
     accessibility: { checkCompleted: boolean }
     docUrl: string
   } | null
@@ -130,6 +130,7 @@ export function unionRows(
         status: {
           bootstrapItalia: s.libraryStatus.bootstrapItalia,
           uiKitItalia: s.libraryStatus.uiKitItalia,
+          devKitItalia: s.libraryStatus.devKitItalia,
         },
         accessibility: { checkCompleted: s.accessibility.checkCompleted },
         docUrl: s.sourceUrls.bsiDoc ?? bsiDocUrl(bsiSlug),
