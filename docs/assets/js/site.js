@@ -98,7 +98,22 @@ function showTokens(comp) {
   if (!comp) { el.innerHTML = ''; cta.hidden = true; ex.hidden = false; return; }
   const toks = tokByComp[comp] || [];
   if (!toks.length) { el.innerHTML = '<p class="data-empty">Nessuna custom property.</p>'; cta.hidden = true; return; }
-  el.innerHTML = `<div style="width:100%; overflow-x: auto; display: block;"><table class="tok-table"><thead><tr><th>Variabile</th><th>Valore</th><th>Descrizione</th></tr></thead><tbody>${toks.map((t, i) => `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(t.name)}</td><td class="token-desc">${esc(t.value)}</td><td class="token-desc">${esc(t.description)}</td></tr>`).join('')}</tbody></table></div>`;
+
+  el.innerHTML = `<div style="width:100%; overflow-x: auto; display: block;"><table class="tok-table"><thead><tr><th>Variabile</th><th>Valore risolto</th><th>Descrizione</th></tr></thead><tbody>${toks.map((t, i) => {
+    const raw = t.value || '';
+    let cell;
+    if (raw.startsWith('var(') && bsiResolveMaps) {
+      const resolved = resolveBsiChain(t.name, bsiResolveMaps.bsiMap, bsiResolveMaps.bridge, bsiResolveMaps.dtiRaw);
+      cell = resolved
+        ? esc(resolved)
+        : `<span class="token-unresolved" title="Riferimento non risolvibile con i dati disponibili">${esc(raw)}</span>`;
+    } else if (raw.includes('#{')) {
+      cell = `<span class="token-unresolved" title="Espressione SCSS — richiede compilazione, non risolvibile staticamente">${esc(raw)}</span>`;
+    } else {
+      cell = esc(raw); // already a concrete literal (e.g. 1.25rem, rotate(-180deg))
+    }
+    return `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(t.name)}</td><td class="token-desc">${cell}</td><td class="token-desc">${esc(t.description)}</td></tr>`;
+  }).join('')}</tbody></table></div>`;
   cta.hidden = false;
   ex.hidden = true;
 }
@@ -229,6 +244,19 @@ let dtiAll = [];
 let dtiExp = false;
 const DTI_DEFAULT_N = 10;
 
+function resolveDtiValue(rawVal, valueMap, visited = new Set()) {
+  // Substitute every $token-name occurrence found anywhere in the string,
+  // recursively — composite values (e.g. a box-shadow shorthand mixing
+  // literals and multiple $refs) need in-place substitution, not just a
+  // whole-value match.
+  return rawVal.replace(/\$([a-z0-9-]+)/g, (whole, refName) => {
+    if (visited.has(refName)) return whole; // cycle guard — leave as-is
+    const next = valueMap[refName];
+    if (next === undefined) return whole; // unknown ref — leave visible, don't silently blank it
+    return resolveDtiValue(next, valueMap, new Set(visited).add(refName));
+  });
+}
+
 function parseDTI(scss) {
   const valueMap = {};
   for (const line of scss.split('\n')) {
@@ -244,16 +272,98 @@ function parseDTI(scss) {
     const rawVal = m[2].trim();
     const desc = (m[3] || '').trim();
     const refMatch = rawVal.match(/^\$([a-z0-9-]+)$/);
-    let ref = null;
-    let resolvedVal = rawVal;
-    if (refMatch) {
-      ref = `--${refMatch[1]}`;
-      resolvedVal = valueMap[refMatch[1]] || null;
-    }
+    const ref = refMatch ? `--${refMatch[1]}` : null;
+    const resolvedVal = /\$[a-z0-9-]+/.test(rawVal) ? resolveDtiValue(rawVal, valueMap) : rawVal;
     tokens.push({ name, rawVal, ref, resolvedVal, desc });
   }
   return tokens;
 }
+
+/* BSI custom properties — chain resolution, mirrors tokens.ts (server-side) */
+let bsiResolveMaps = null; // { bsiMap, bridge, dtiRaw } — lazy-loaded once, same pattern as DTI
+
+// Format: --#{$prefix}spacing-m: #{tokens.$it-spacing-m};
+function parseBridgeClient(scss) {
+  const map = new Map();
+  for (const line of scss.split('\n')) {
+    const m = line.match(/--#\{\$prefix\}([a-z0-9-]+):\s*#\{tokens\.\$it-([a-z0-9-]+)\}/);
+    if (!m) continue;
+    map.set(`--bsi-${m[1]}`, `--it-${m[2]}`);
+  }
+  return map;
+}
+
+// Format: $it-spacing-m: 1.5rem; // 24px
+function parseDtiRawClient(scss) {
+  const map = new Map();
+  for (const line of scss.split('\n')) {
+    const m = line.match(/^\$([a-z0-9-]+):\s*([^;]+);(?:\s*\/\/\s*(.+))?/);
+    if (!m) continue;
+    const [, varName, rawValue, comment] = m;
+    const value = rawValue.trim();
+    const isRef = value.startsWith('$');
+    map.set(`--${varName}`, isRef ? `--${value.slice(1)}` : (comment ? `${value} (${comment.trim()})` : value));
+  }
+  return map;
+}
+
+// --bsi-* -> var(--bsi-*|--it-*) references from custom-properties.json — same
+// restriction as server-side parseBsiMap: only token-reference values, literals
+// and #{...} scss-expressions are intentionally excluded (nothing to follow).
+function parseBsiMapClient(raw) {
+  const map = new Map();
+  for (const entries of Object.values(raw || {})) {
+    for (const e of (entries || [])) {
+      const v = e.value || '';
+      if (!v.startsWith('var(')) continue;
+      const ref = v.match(/^var\((--[a-z0-9-]+)\)/)?.[1];
+      if (ref) map.set(e['variable-name'], ref);
+    }
+  }
+  return map;
+}
+
+// Mirrors resolveChain in tokens.ts — null exactly where the server would
+// also return null (dead end mid-chain, or nothing to follow at all).
+function resolveBsiChain(name, bsiMap, bridge, dtiRaw, visited = new Set()) {
+  if (visited.has(name)) return null;
+  visited.add(name);
+
+  if (name.startsWith('--bsi-')) {
+    const next = bsiMap.get(name) ?? bridge.get(name);
+    return next ? resolveBsiChain(next, bsiMap, bridge, dtiRaw, visited) ?? next : null;
+  }
+  if (name.startsWith('--it-')) {
+    const val = dtiRaw.get(name);
+    if (!val) return null;
+    return val.startsWith('--it-') ? (resolveBsiChain(val, bsiMap, bridge, dtiRaw, visited) ?? val) : val;
+  }
+  return null;
+}
+
+async function loadBsiResolveMaps() {
+  try {
+    const [rootScss, variablesScss, customPropsRaw] = await Promise.all([
+      fetch(`${RAW}/bsi/root.scss`).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); }),
+      fetch(`${RAW}/design-tokens/variables.scss`).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); }),
+      j(`${RAW}/bsi/custom-properties.json`),
+    ]);
+    bsiResolveMaps = {
+      bridge: parseBridgeClient(rootScss),
+      dtiRaw: parseDtiRawClient(variablesScss),
+      bsiMap: parseBsiMapClient(customPropsRaw),
+    };
+  } catch {
+    bsiResolveMaps = null; // resolution unavailable — table falls back to raw values, not blank
+  }
+  const sel = document.getElementById('tok-sel');
+  if (sel && sel.value) showTokens(sel.value); // re-render if the user already picked a component
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const tokTab = document.querySelector('[data-bs-target="#dt-tok"]');
+  if (tokTab) tokTab.addEventListener('shown.bs.tab', () => { if (!bsiResolveMaps) loadBsiResolveMaps(); }, { once: true });
+});
 
 function colorSwatch(val) {
   if (!val) return '';

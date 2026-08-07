@@ -14,7 +14,7 @@
 }
 
 .bg-dark {
-  background-color: var(--filo-dark)!important;
+  background-color: var(--filo-dark) !important;
 }
 
 a {
@@ -581,6 +581,11 @@ li {
 .dti-resolved {
   display: block;
   gap: 0;
+}
+
+.token-unresolved {
+  font-style: italic;
+  color: var(--bsi-secondary-color);
 }
 
 
