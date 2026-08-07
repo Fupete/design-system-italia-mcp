@@ -190,6 +190,7 @@ ul.nav-tabs {
   flex-wrap: nowrap;
   background-color: inherit;
   margin-bottom: 0 !important;
+  border-bottom: 0;
 }
 
 div.tab-content {
