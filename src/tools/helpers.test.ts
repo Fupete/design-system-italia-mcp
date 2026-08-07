@@ -9,7 +9,7 @@ function status(slug: string, name: string): ComponentStatus {
   return {
     slug,
     name,
-    libraryStatus: { bootstrapItalia: 'PRONTO', uiKitItalia: 'PRONTO' },
+    libraryStatus: { bootstrapItalia: 'PRONTO', uiKitItalia: 'PRONTO', devKitItalia: 'PRONTO' },
     accessibility: {
       visivamenteAccessibile: 'PRONTO',
       amichevoleConLettoriDiSchermo: 'PRONTO',
