@@ -480,22 +480,38 @@ async function loadDashboard() {
       [fa, 'Snapshot CI', fr],
     ].map(([val, lab, sub]) => `<div class="dash-meta-item"><span class="dash-meta-label">${lab}</span><span class="dash-meta-val">${val}</span>${sub ? `<span class="dash-meta-sub">${sub}</span>` : ''}</div>`).join('');
 
-    const dkSlugs = new Set();
+    // Map slug -> {id, displayName}, not just a Set of slugs — need the
+    // full entry to add Dev Kit-only components below.
+    const dkEntries = new Map();
     if (dki?.entries) {
       Object.values(dki.entries)
         .filter(e => e.type === 'docs' && e.id.startsWith('componenti-'))
         .forEach(e => {
           const p = (e.title || '').split('/');
-          const s = (p[p.length - 1] || '').toLowerCase().trim().replace(/\s+/g, '-');
-          if (s) dkSlugs.add(s);
+          const displayName = (p[p.length - 1] || '').trim() || e.id;
+          const s = displayName.toLowerCase().replace(/\s+/g, '-');
+          if (s) dkEntries.set(s, { id: e.id, displayName });
         });
     }
 
+    const claimedDkIds = new Set();
     allComps = (status.items || []).map(c => {
       const name = (c.title || '').replace(/`/g, '').replace(/\s*-\s*check\s+a11y.*$/i, '').trim();
       const bsiSlug = name.toLowerCase().replace(/\s+/g, '-');
-      return { name, bsi: c['bootstrap Italia'] || '', uik: c['uI Kit Italia'] || '', dk: dkSlugs.has(DK_SLUG_ALIASES[bsiSlug] ?? bsiSlug) };
-    }).filter(c => c.name).sort((a, b) => a.name.localeCompare(b.name));
+      const dkEntry = dkEntries.get(DK_SLUG_ALIASES[bsiSlug] ?? bsiSlug);
+      if (dkEntry) claimedDkIds.add(dkEntry.id);
+      return { name, bsi: c['bootstrap Italia'] || '', uik: c['uI Kit Italia'] || '', dk: !!dkEntry };
+    }).filter(c => c.name);
+
+    // Dev Kit-only components (e.g. Icon) have no BSI status entry, so the
+    // .map() above never sees them. Same principle as the server-side union
+    // (dsi_list_components): never silently drop them.
+    for (const entry of dkEntries.values()) {
+      if (claimedDkIds.has(entry.id)) continue;
+      allComps.push({ name: entry.displayName, bsi: '', uik: '', dk: true });
+    }
+
+    allComps.sort((a, b) => a.name.localeCompare(b.name));
 
     document.getElementById('f-all').textContent = allComps.length;
     document.getElementById('f-dk').textContent = allComps.filter(c => c.dk).length;
