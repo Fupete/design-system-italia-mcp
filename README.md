@@ -52,7 +52,7 @@ I tool sono organizzati per sorgente/namespace: `dsi_` (inventario unificato com
 ### Markup e varianti — `bsi_` / `devkit_`
 - `bsi_list_component_variants(component)` — nomi di tutte le varianti Bootstrap Italia disponibili, senza markup.
 - `bsi_get_component_markup(component, variant?)` — markup HTML completo di una variante specifica (`variant` omesso → prima variante).
-- `bsi_list_components_by_status(status)` — componenti Bootstrap Italia filtrati per stato di implementazione (PRONTO, DA RIVEDERE, DA FARE, ...).
+- `bsi_list_components_by_status(status, library?)` — componenti filtrati per stato di implementazione (PRONTO, DA RIVEDERE, DA FARE, ...). `library` sceglie la colonna: `bootstrapItalia` (default) o `devKitItalia` — cambia anche a cosa punta `docUrl` nel risultato (documentazione BSI o pagina Storybook). `uiKitItalia` non è ancora filtrabile qui (vive solo su Figma).
 - `devkit_list_component_variants(component)` — nomi di tutte le varianti Dev Kit Italia disponibili.
 - `devkit_get_component_markup(component, variant?)` — markup HTML di una variante Dev Kit, estratto da Storybook via snapshot CI (`variant` omesso → prima variante).
 - `devkit_list_component_props(component)` — attributi HTML `it-*` di un web component Dev Kit: nome, tipo, descrizione, default, opzioni — incluse le props dei subcomponenti (es. `it-accordion-item`).
@@ -67,7 +67,7 @@ I tool sono organizzati per sorgente/namespace: `dsi_` (inventario unificato com
 Ogni token include `resolvedVia`: l'elenco degli hop intermedi della catena di risoluzione, ciascuno con `role` (`bsi-component` | `bsi-global` | `dti`) e `overridable` (`true` per le `--bsi-*` sovrascrivibili a runtime, `false` per i Design Token centrali `--it-*`/`$it-*`, definiti upstream).
 
 ### Linee guida componenti e stato accessibilità — `docs_`
-- `docs_get_component_guide(component)` — linee guida d'uso da Designers Italia: descrizione, quando/come usarlo, stato verifiche accessibilità, stato libreria (Bootstrap Italia, UI Kit Italia, Dev Kit Italia). Lo stato accessibilità per-componente è disponibile anche in `dsi_list_components` (campo `bsi.accessibility`).
+- `docs_get_component_guide(component)` — linee guida d'uso da Designers Italia: descrizione, quando/come usarlo, stato verifiche accessibilità, stato libreria (Bootstrap Italia, UI Kit Italia, Dev Kit Italia). Lo stato accessibilità per-componente è disponibile anche in `dsi_list_components` (campo `bsi.accessibility`). Se l'URL Dev Kit registrato nella board diverge da quello reale su Storybook, la risposta lo segnala in `warnings` invece di sceglierne uno in silenzio.
 
 ### Issue e stato progetto — `github_`
 - `github_get_component_issues(component)` — issue GitHub aperte per componente sulle repository monitorate (bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia), più le issue note già registrate in `components_status.json`.

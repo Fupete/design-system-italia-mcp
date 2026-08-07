@@ -84,6 +84,7 @@ design-system-italia-mcp/
   - **Nessun tool `list_accessibility_issues`**: rimosso, sovrapposizione con `github_get_component_issues` — un solo canale per le issue. Lo stato a11y per-componente resta in `dsi_list_components` (campo `bsi.accessibility`) e `docs_get_component_guide`.
   - 17 tool totali (16 registrati via `register*` + `ping`, quest'ultimo definito direttamente in `index.ts`).
   - Deviazioni note codice↔CSV contratto (`toolsroadmapfullwithbumps.csv`), da allineare: `bsi_list_component_variants` senza `maxVariants` (lista sempre completa); `*_get_component_markup` con `variant` opzionale invece di `variantName` richiesto; `tokens_list_globals` usa il parametro `match` nel codice contro `category` nel CSV.
+  - `bsi_list_components_by_status` ora accetta `library` (`bootstrapItalia` default | `devKitItalia`) — `components_status.json` traccia lo stato anche per Dev Kit Italia. **Breaking**: il campo `bsiDoc` nel risultato è rinominato `docUrl` (dipende da quale libreria filtri).
 
 ---
 
@@ -100,7 +101,7 @@ upstream direttamente — quello è compito degli script CI.
 | #  | Sorgente | Branch | Snapshot path | Contenuto | Note |
 |----|----------|--------|---------------|-----------|------|
 | 1  | BSI markup | `3.x` | `bsi/components/{slug}.json` | Markup HTML varianti per componente | ⚠️ beta, branch temporaneo |
-| 2  | BSI status | `3.x` | `bsi/components-status.json` | ~55 componenti, stato librerie (BSI/UI Kit), accessibilità, note issue | Stabile |
+| 2  | BSI status | `3.x` | `bsi/components-status.json` | ~55 componenti, stato librerie (BSI/UI Kit/Dev Kit), accessibilità, note issue | Stabile |
 | 3  | BSI tokens | `3.x` | `bsi/custom-properties.json` | Token CSS `--bsi-*` per-componente | ⚠️ beta, branch temporaneo |
 | 4  | BSI root.scss | `3.x` | `bsi/root.scss` | Bridge `--bsi-*` → `--it-*` | ⚠️ beta, token resolution |
 | 5  | Designers JSON | `main` | `designers/components/{slug}.json` | Linee guida d'uso, accessibilità (YAML→JSON in CI) | Stabile |
@@ -264,6 +265,40 @@ possono essere condivisi da componenti bundle-pattern. Risolve in due sotto-pass
 (1a exact match, poi 1b alias match) così l'ordine di iterazione della Map non
 decide chi vince un Dev Kit entry conteso da due slug BSI che aliasano allo stesso
 componente.
+
+---
+
+## Coherence check tra sorgenti — pattern riusabile
+
+Alcune sorgenti descrivono lo stesso dato reale da punti diversi, aggiornati
+con cadenze diverse: una board a mano (`components_status.json`, editata da
+persone) contro uno snapshot derivato in automatico (`devkit/index.json`,
+CI). Quando questo succede, non c'è una fonte "giusta" a priori — solo due
+osservazioni dello stesso fatto che possono disallinearsi nel tempo.
+
+Pattern: funzione pura in `helpers.ts`, confronto di uguaglianza, ritorna
+`null` se combaciano o se manca uno dei due valori (niente da confrontare),
+altrimenti un messaggio pronto per `warnings`. Mai un errore fatale — nessuna
+delle due sorgenti è più autorevole dell'altra, si segnala la divergenza e
+si lascia decidere al chiamante.
+
+```typescript
+// helpers.ts
+export function devKitUrlMismatch(
+  slug: string,
+  boardUrl: string | null | undefined,
+  storybookUrl: string | null | undefined
+): string | null {
+  if (!boardUrl || !storybookUrl || boardUrl === storybookUrl) return null
+  return `Dev Kit URL mismatch for "${slug}": components_status.json has "${boardUrl}", ` +
+    `Dev Kit index.json has "${storybookUrl}" — one source may be stale.`
+}
+```
+
+Usato oggi da `docs_get_component_guide` (`sourceUrls.devKitDoc` vs
+`devKit.storybookUrl`). Stesso pattern applicabile ad altre coppie
+board/snapshot se emergono — funzione pura testabile con fixture
+(`helpers_test.ts`), non richiede fetch né stato.
 
 ---
 
