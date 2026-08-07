@@ -17,7 +17,7 @@ function status(slug: string, name: string): ComponentStatus {
       comprensibile: 'PRONTO',
       checkCompleted: true,
     },
-    sourceUrls: { bsiDoc: null, figma: null },
+    sourceUrls: { bsiDoc: null, figma: null, devKitDoc: null },
     notes: null,
     knownIssueUrls: [],
   }

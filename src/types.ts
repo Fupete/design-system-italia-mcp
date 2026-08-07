@@ -32,6 +32,7 @@ export interface ComponentStatus {
   sourceUrls: {
     bsiDoc: string | null
     figma: string | null
+    devKitDoc: string | null // via components_status.json, to compare with devKit.storybookUrl one
   }
 }
 

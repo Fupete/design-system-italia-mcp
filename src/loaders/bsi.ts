@@ -69,6 +69,7 @@ export async function loadAllStatuses(): Promise<Map<string, ComponentStatus>> {
       sourceUrls: {
         bsiDoc: entry['bootstrap Italia - url'] ?? null,
         figma: entry['uI Kit Italia - url'] ?? null,
+        devKitDoc: entry['dev Kit Italia - url'] ?? null,
       },
     }
     result.set(slug, status)

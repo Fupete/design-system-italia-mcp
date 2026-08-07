@@ -103,6 +103,7 @@ export const ZComponentStatus = z.object({
   sourceUrls: z.object({
     bsiDoc: z.string().nullable(),
     figma: z.string().nullable(),
+    devKitDoc: z.string().nullable(),
   }),
 })
 

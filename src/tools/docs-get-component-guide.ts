@@ -35,6 +35,13 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
 
       const canonicalSlug = status?.slug ?? slug
 
+      if (status?.sourceUrls.devKitDoc && devKitEntry?.storybookUrl && status.sourceUrls.devKitDoc !== devKitEntry.storybookUrl) {
+        warnings.push(
+          `Dev Kit URL mismatch for "${canonicalSlug}": BSI components_status.json has "${status.sourceUrls.devKitDoc}", ` +
+          `Dev Kit index.json has "${devKitEntry.storybookUrl}" — BSI source may be stale.`
+        )
+      }
+
       if (!guidelines) {
         warnings.push(`Designers Italia component guidelines not found for "${canonicalSlug}"`)
       }
@@ -81,6 +88,7 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
                   designersItalia: dsMeta.components.get(canonicalSlug)?.absoluteUrl ?? designersUrl(canonicalSlug),
                   bsiDoc: status?.sourceUrls.bsiDoc ?? null,
                   figma: status?.sourceUrls.figma ?? null,
+                  devKitDoc: status?.sourceUrls.devKitDoc ?? null,
                 },
                 meta: buildMeta({
                   dsMeta,
