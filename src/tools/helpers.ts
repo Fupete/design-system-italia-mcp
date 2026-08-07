@@ -51,6 +51,23 @@ export function buildMeta(opts: {
   }
 }
 
+// ─── Dev Kit URL coherence check ───────────────────────────────────────────
+// Compares the Dev Kit doc URL recorded in components_status.json (board,
+// hand-maintained) against the one derived live from devkit/index.json
+// (Storybook snapshot). A mismatch means one of the two sources is stale —
+// surfaced as a warning, not treated as an error (neither source is
+// authoritative over the other).
+
+export function devKitUrlMismatch(
+  slug: string,
+  boardUrl: string | null | undefined,
+  storybookUrl: string | null | undefined
+): string | null {
+  if (!boardUrl || !storybookUrl || boardUrl === storybookUrl) return null
+  return `Dev Kit URL mismatch for "${slug}": components_status.json has "${boardUrl}", ` +
+    `Dev Kit index.json has "${storybookUrl}" — one source may be stale.`
+}
+
 // ─── Component union ───────────────────────────────────────────────────────────
 // Shared by dsi_list_components and dsi_search_components. A component is one
 // entity with two possible implementations, never two parallel entities:

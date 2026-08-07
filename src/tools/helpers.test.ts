@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { unionRows } from './helpers.js'
+import { unionRows, devKitUrlMismatch } from './helpers.js'
 import type { ComponentStatus, DevKitEntry } from '../types.js'
 
 // ─── Fixtures ───────────────────────────────────────────────────────────────
@@ -109,5 +109,25 @@ describe('unionRows — Dev Kit-only components', () => {
     assert.equal(rows.length, 1)
     assert.equal(rows[0].bsi, null)
     assert.equal(rows[0].name, 'Icon')
+  })
+})
+
+// ─── devKitUrlMismatch ──────────────────────────────────────────────────────
+
+describe('devKitUrlMismatch', () => {
+  it('returns null when URLs match', () => {
+    assert.equal(devKitUrlMismatch('accordion', 'https://a', 'https://a'), null)
+  })
+
+  it('flags a mismatch between board and Storybook URL', () => {
+    const result = devKitUrlMismatch('accordion', 'https://board/accordion', 'https://storybook/accordion')
+    assert.match(result!, /mismatch/)
+    assert.match(result!, /accordion/)
+  })
+
+  it('returns null when either URL is missing — nothing to compare', () => {
+    assert.equal(devKitUrlMismatch('accordion', null, 'https://storybook/accordion'), null)
+    assert.equal(devKitUrlMismatch('accordion', 'https://board/accordion', undefined), null)
+    assert.equal(devKitUrlMismatch('accordion', null, null), null)
   })
 })

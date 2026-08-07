@@ -5,7 +5,7 @@ import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
-import { buildMeta } from './helpers.js'
+import { buildMeta, devKitUrlMismatch } from './helpers.js'
 import { BETA_WARNING, BSI_STATUS_URL, DESIGNERS_COMPONENT_URL, DEVKIT_INDEX_URL } from '../constants.js'
 
 // ─── Tool: docs_get_component_guide ───────────────────────────────────────────
@@ -35,19 +35,15 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
 
       const canonicalSlug = status?.slug ?? slug
 
-      if (status?.sourceUrls.devKitDoc && devKitEntry?.storybookUrl && status.sourceUrls.devKitDoc !== devKitEntry.storybookUrl) {
-        warnings.push(
-          `Dev Kit URL mismatch for "${canonicalSlug}": BSI components_status.json has "${status.sourceUrls.devKitDoc}", ` +
-          `Dev Kit index.json has "${devKitEntry.storybookUrl}" — BSI source may be stale.`
-        )
-      }
-
       if (!guidelines) {
         warnings.push(`Designers Italia component guidelines not found for "${canonicalSlug}"`)
       }
       if (!status) {
         warnings.push(`Component status not found for "${canonicalSlug}"`)
       }
+
+      const mismatch = devKitUrlMismatch(canonicalSlug, status?.sourceUrls.devKitDoc, devKitEntry?.storybookUrl)
+      if (mismatch) warnings.push(mismatch)
 
       warnings.push('Guidelines content © Designers Italia — CC-BY-SA 4.0. Derivatives inherit ShareAlike requirement. See https://designers.italia.it')
 
