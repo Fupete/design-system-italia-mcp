@@ -35,7 +35,7 @@ jobs:
         run: |
           # Fetch current upstream versions
           BSI=$(curl -sf https://registry.npmjs.org/bootstrap-italia/beta | jq -r '.version')
-          DK=$(curl -sf "https://registry.npmjs.org/@italia%2Fdev-kit-italia/latest" | jq -r '.version')
+          DK=$(curl -sf "https://registry.npmjs.org/@italia%2Fdev-kit-italia/beta" | jq -r '.version')
           DS=$(curl -sf https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/dsnav.yaml \
                | grep "^  label:" | head -1 | sed 's/.*label: *//' | tr -d '"')
 
