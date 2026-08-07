@@ -15,9 +15,13 @@ export function registerTokensListComponentVars(server: McpServer): void {
     'tokens_list_component_vars',
     {
       title: 'List Component Tokens',
-      description: 'Returns customizable CSS --bsi-* variables for a component, ' +
-        'with semantic description and resolved value (e.g. var(--bsi-spacing-m) → 1.5rem). ' +
-        'Useful to understand concrete values behind CSS custom properties or design tokens.',
+      description: 'Lists the CSS custom properties (--bsi-) you can override in your own ' + 
+        'CSS to customize a Bootstrap Italia component, each with a semantic description, ' +
+        'resolution chain (resolvedVia), and concrete resolved value (e.g. ' + 
+        'var(--bsi-spacing-m) → 1.5rem). These --bsi- variables are always safe to override ' +
+        'at runtime; the central Design Tokens they resolve through (--it-/$it-, visible in ' +
+        'resolvedVia) are not meant to be overridden per-project, override the --bsi- ' +
+        'variable itself instead.',
       inputSchema: { component: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
       outputSchema: ZTokensListComponentVarsOutput,
