@@ -33,7 +33,8 @@
         <div class="col-12">
           <div class="it-header-slim-wrapper-content">
             <span class="text-white small p-2" style="margin: 0 auto">
-              <strong>Progetto sperimentale non ufficiale</strong>: Bootstrap Italia v3 e Dev Kit Italia v1 sono in beta — <a href="https://github.com/fupete/design-system-italia-mcp#readme" class="text-white">README</a>
+              <strong>Progetto sperimentale non ufficiale</strong>: Bootstrap Italia v3 e Dev Kit Italia v1 sono in beta
+              — <a href="https://github.com/fupete/design-system-italia-mcp#readme" class="text-white">README</a>
             </span>
           </div>
         </div>
@@ -150,7 +151,7 @@
             Filo raccoglie e organizza le informazioni utili da queste sorgenti ogni notte e le espone via MCP.
             È un'interfaccia per assistenti AI che offre strumenti per consultare e usare le risorse del design system
             in modo semplice e verificato.
-            È da notare che Filo fa riferimento alle v3 di Bootstrap Italia e v1 di Dev Kit Italia oggi 
+            È da notare che Filo fa riferimento alle v3 di Bootstrap Italia e v1 di Dev Kit Italia oggi
             in beta.
           </p>
         </div>
@@ -192,7 +193,8 @@
         <li class="it-card p-3 border shadow-sm rounded">
           <div class="it-card-body">
             <p class="it-card-text">
-              <strong>Realizzare un server MCP read-only e open source</strong> che espone strumenti per interrogare dati
+              <strong>Realizzare un server MCP read-only e open source</strong> che espone strumenti per interrogare
+              dati
               verificati e riproducibili, con versioni delle risorse sempre esplicite e note
             </p>
           </div>
@@ -200,7 +202,7 @@
         <li class="it-card p-3 border shadow-sm rounded">
           <div class="it-card-body">
             <p class="it-card-text">
-              <strong>Fare un esperimento sulle possibilità di sviluppare software utile per le persone</strong>, 
+              <strong>Fare un esperimento sulle possibilità di sviluppare software utile per le persone</strong>,
               anche mentre litighi con qualche LLM
             </p>
           </div>
@@ -249,7 +251,7 @@ npm install && npm run dev</code></pre><button class="copy-btn" onclick="copyCod
         </div>
       </div>
       <p class="small mt-4 mx-auto text-center"><strong>GITHUB_TOKEN</strong> (opzionale ma consigliato) per
-        <code>get_component_issues</code>.
+        <code>github_get_component_issues</code>.
         Senza: 60 richieste/ora per IP. Con token scopo pubblico read-only: 5000/ora.
       </p>
 
@@ -369,7 +371,7 @@ REGOLA D'ORO: se non sei sicuro che un dato provenga da MCP, trattalo come infer
 
 TOOL DISPONIBILI: all'inizio della sessione, usa il tool ping per verificare la connessione e leggi la lista dei tool disponibili. Non assumere quali tool esistono.
 
-COMPLETEZZA DATI: se un tool restituisce un sottoinsieme dei dati (es. 3 varianti su 13), segnalalo all'utente.</code></pre>
+COMPLETEZZA DATI: se un componente non è presente in una sorgente (es. `devkit: null` in dsi_list_components/dsi_search_components), segnalalo all'utente invece di presumerne l'assenza totale.</code></pre>
               <button class="copy-btn" onclick="copyCode(this)">Copia</button>
             </div>
           </div>
@@ -390,7 +392,7 @@ GOLDEN RULE: if you are unsure whether a piece of data comes from MCP, treat it 
 
 AVAILABLE TOOLS: at the start of the session, use the ping tool to verify the connection and read the list of available tools. Do not assume which tools exist.
 
-DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants out of 13), flag this to the user.</code></pre>
+DATA COMPLETENESS: if a component is missing from one source (e.g. `devkit: null` in dsi_list_components/dsi_search_components), flag this to the user instead of assuming it doesn't exist at all.</code></pre>
               <button class="copy-btn" onclick="copyCode(this)">Copia</button>
             </div>
           </div>
@@ -402,55 +404,69 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
   <section id="strumenti" class="py-5 mt-3 border-top" aria-labelledby="strumenti-title">
     <div class="container-xxl">
       <h2 id="strumenti-title" class="mb-0">Scopri gli strumenti</h2>
-      <p class="lead mb-5">Approfondisci i tool a disposizione del tuo assistente AI</p>
+      <p class="lead mb-5">Approfondisci i tool a disposizione del tuo assistente AI, organizzati per sorgente</p>
       <div class="row g-4">
-        <div class="col-12 col-sm-6 col-md-3">
-          <h3 class="h5">Scopri</h3>
-          <ul class="tool-names d-grid gap-3">
-            <li class="it-card p-3 border shadow-sm rounded"><span>list_components</span> Elenca tutti i componenti con
-              stato per libreria (Bootstrap Italia, UI Kit…) e stato accessibilità. Punto di partenza per una panoramica
-              completa.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>search_components</span> Cerca componenti per nome o
-              feature. Supporta alias IT/EN e tag Dev Kit (es. a11y-ok, alpha, web-component).</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>list_by_status</span> Filtra i componenti per stato
-              in una libreria specifica. Stati possibili: PRONTO, DA RIVEDERE A11Y, DA FARE, NON PRESENTE…</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>list_accessibility_issues</span> Elenca i componenti
-              con note di accessibilità aperte o verifiche incomplete.</li>
-          </ul>
-        </div>
-        <div class="col-12 col-sm-6 col-md-3">
+        <div class="col-12 col-sm-6 col-md-4">
           <h3 class="h5">Componenti</h3>
           <ul class="tool-names d-grid gap-3">
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component</span> Markup HTML varianti Bootstrap
-              Italia e props web component it-* Dev Kit Italia. Punto di partenza per markup e varianti.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_variant</span> Markup completo di una
-              variante specifica per nome, da BSI o Dev Kit in modo trasparente.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_full</span> Risposta aggregata: markup
-              + token CSS con valori risolti + linee guida + stato + props it-* + issue GitHub. Da usare quando servono
-              dati da più sorgenti in una sola chiamata.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_guidelines</span> Linee guida d'uso da
-              Designers Italia: quando usarlo, come usarlo, alternative consigliate, note accessibilità.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_issues</span> Issue GitHub aperte per
-              un componente sui 4 repository del Design system .italia.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>dsi_list_components</span> Inventario unificato di
+              tutti i componenti: una riga per componente, con stato Bootstrap Italia e Dev Kit Italia, null dove un
+              componente non esiste in una delle due sorgenti. Punto di partenza prima di markup, token o props.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>dsi_search_components</span> Cerca sulla stessa
+              unione, per nome, slug, alias IT/EN o tag Dev Kit (es. a11y-ok, web-component).</li>
           </ul>
         </div>
-        <div class="col-12 col-sm-6 col-md-3">
-          <h3 class="h5">Token</h3>
+        <div class="col-12 col-sm-6 col-md-4">
+          <h3 class="h5">Bootstrap Italia</h3>
           <ul class="tool-names d-grid gap-3">
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_component_tokens</span> Variabili CSS --bsi-*
-              personalizzabili per componente con descrizione semantica e valore risolto (es. var(--bsi-spacing-m) →
-              1.5rem).</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>find_token</span> Cerca un token CSS per nome
-              variabile o descrizione semantica. Copre sia --bsi-* che --it-* di Design Tokens Italia.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>bsi_list_component_variants</span> Nomi di tutte le
+              varianti disponibili per un componente, senza markup.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>bsi_get_component_markup</span> Markup HTML completo
+              di una variante specifica, o della prima se non ne specifichi una.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>bsi_list_components_by_status</span> Componenti
+              filtrati per stato di implementazione, su Bootstrap Italia o Dev Kit Italia.</li>
           </ul>
         </div>
-        <div class="col-12 col-sm-6 col-md-3">
-          <h3 class="h5">Meta</h3>
+        <div class="col-12 col-sm-6 col-md-4">
+          <h3 class="h5">Dev Kit Italia</h3>
           <ul class="tool-names d-grid gap-3">
+            <li class="it-card p-3 border shadow-sm rounded"><span>devkit_list_component_variants</span> Nomi di tutte
+              le varianti disponibili per un web component.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>devkit_get_component_markup</span> Markup HTML di una
+              variante, estratto da Storybook via snapshot CI.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>devkit_list_component_props</span> Attributi HTML
+              it-* di un web component: nome, tipo, descrizione, default, opzioni, incluse le props dei subcomponenti.
+            </li>
+          </ul>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4">
+          <h3 class="h5">Design tokens</h3>
+          <ul class="tool-names d-grid gap-3">
+            <li class="it-card p-3 border shadow-sm rounded"><span>tokens_list_component_vars</span> Variabili CSS
+              --bsi-* personalizzabili di un componente, con descrizione semantica e valore risolto (es.
+              var(--bsi-spacing-m) → 1.5rem).</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>tokens_list_globals</span> Coppie di token globali
+              che Bootstrap Italia usa davvero: Design Token centrale + --bsi-* corrispondente, con valore risolto.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>tokens_resolve</span> Risolve una variabile qualsiasi
+              (--bsi-*, --it-* o $it-*) al valore concreto, seguendo l'intera catena.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>tokens_find_components</span> Componenti impattati da
+              una variabile, incluso l'impatto indiretto. Utile per capire cosa cambia sovrascrivendola.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>tokens_search</span> Cerca un token per sottostringa
+              nel nome della variabile, su BSI e Design Tokens Italia globali.</li>
+          </ul>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4">
+          <h3 class="h5">Documentazione, issue e stato</h3>
+          <ul class="tool-names d-grid gap-3">
+            <li class="it-card p-3 border shadow-sm rounded"><span>docs_get_component_guide</span> Linee guida d'uso da
+              Designers Italia: quando e come usarlo, stato verifiche accessibilità, stato libreria.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>github_get_component_issues</span> Issue GitHub
+              aperte per un componente sui repository monitorati del Design system .italia.</li>
+            <li class="it-card p-3 border shadow-sm rounded"><span>github_get_project_repo_links</span> Link alle issue
+              aperte per ciascun repository.</li>
             <li class="it-card p-3 border shadow-sm rounded"><span>ping</span> Verifica connessione al server.
-              Restituisce stato, versione, timestamp e warning sulle sorgenti.</li>
-            <li class="it-card p-3 border shadow-sm rounded"><span>get_project_board_status</span> Stato aggregato delle
-              board GitHub del Design system .italia. Link alle issue aperte per repository.</li>
+              Restituisce stato, versione, timestamp, warning sulle sorgenti beta e la lista completa dei tool
+              disponibili.</li>
           </ul>
         </div>
       </div>
@@ -552,7 +568,7 @@ DATA COMPLETENESS: if a tool returns a subset of available data (e.g. 3 variants
                 <span class="chain-arr">→</span>
                 <span class="chain-val resolved">1.5rem</span>
               </div>
-              <p class="chain-tool">get_component_tokens("accordion")</p>
+              <p class="chain-tool">tokens_list_component_vars("accordion")</p>
             </div>
           </div>
 

@@ -75,6 +75,8 @@ design-system-italia-mcp/
 └── tsconfig.json
 ```
 
+**Nota manutenzione**: l'array `tools` nel payload di `ping` (in `index.ts`) è mantenuto a mano, non derivato programmaticamente dai `register*` — se aggiungi o rimuovi un tool, aggiornalo anche lì. 
+
 **Regola soglia**: se un file supera ~400 righe, spezzarlo per modulo.
 
 **Naming tool (v0.4.0 — mersato)**:
