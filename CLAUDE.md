@@ -116,9 +116,10 @@ upstream direttamente — quello è compito degli script CI.
 
 **Catena di risoluzione token** (sorgenti #3 → #4 → #6, in `loaders/tokens.ts`):
 ```
---bsi-accordion-padding: var(--bsi-spacing-m)   ← #3 custom-properties.json (bsiMap)
---bsi-spacing-m: #{tokens.$it-spacing-m}         ← #4 root.scss (bridge, post @use/@forward)
-$it-spacing-m: 1.5rem                            ← #6 variables.scss (dtiRaw)
+--bsi-accordion-body-padding-x: var(--bsi-spacing-m)   ← #3 custom-properties.json (bsiMap)
+--bsi-spacing-m: #{tokens.$it-spacing-m}                ← #4 root.scss (bridge, post @use/@forward)
+$it-spacing-m: $it-spacing-6x                           ← #6 variables.scss (dtiRaw, alias)
+$it-spacing-6x: 24px // 6x la dimensione della baseline ← #6 variables.scss (dtiRaw, literal + comment)
 ```
 `resolveChain()` segue la catena ricorsivamente e restituisce sia il valore finale
 che ogni hop intermedio come `ResolvedHop`. `bsi.ts` gestisce solo #1 #2 #3.
