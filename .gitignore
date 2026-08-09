@@ -6,3 +6,4 @@ data-fetched/
 .DS_Store
 docs/assets/vendor/
 serve-docs.mjs
+review-*.log
