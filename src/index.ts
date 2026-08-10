@@ -116,7 +116,7 @@ function createMcpServer(): McpServer {
   registerDevkitGetComponentMarkup(s)
   registerDevkitListComponentProps(s)
   registerBsiListComponentsByStatus(s)
-  
+
   registerDsiListComponents(s)
   registerDsiSearchComponents(s)
 
@@ -126,89 +126,98 @@ function createMcpServer(): McpServer {
 // ─── HTTP Server ──────────────────────────────────────────────────────────────
 
 const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse) => {
-  const url = new URL(req.url ?? '/', `http://localhost:${PORT}`)
+  try {
+    const url = new URL(req.url ?? '/', `http://localhost:${PORT}`)
 
-  // CORS — restrict /cache/invalidate to same origin
-  if (url.pathname === '/cache/invalidate') {
-    res.setHeader('Access-Control-Allow-Origin', 'null')
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization')
+    // CORS — restrict /cache/invalidate to same origin
+    if (url.pathname === '/cache/invalidate') {
+      res.setHeader('Access-Control-Allow-Origin', 'null')
+    } else {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization')
 
 
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204)
-    res.end()
-    return
-  }
-
-  // Health check
-  if (url.pathname === '/health') {
-    const uptimeSec = Math.floor((Date.now() - START_TIME) / 1000)
-    const health = await getHealth(uptimeSec)
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ version: VERSION, ...health }, null, 2))
-    return
-  }
-
-  // Cache invalidation
-  if (url.pathname === '/cache/invalidate' && req.method === 'POST') {
-    const auth = req.headers.authorization ?? ''
-    const expected = `Bearer ${CACHE_TOKEN}`
-    const authOk = auth.length === expected.length &&
-      timingSafeEqual(Buffer.from(auth), Buffer.from(expected))
-    if (!CACHE_TOKEN || !authOk) {
-      res.writeHead(401, { 'Content-Type': 'application/json' })
-      res.end(JSON.stringify({ error: 'Unauthorized' }))
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204)
+      res.end()
       return
     }
-    let body = ''
-    let bodySize = 0
-    for await (const chunk of req) {
-      bodySize += chunk.length
-      if (bodySize > 1024) {
-        res.writeHead(413, { 'Content-Type': 'application/json' })
-        res.end(JSON.stringify({ error: 'Request body too large' }))
+
+    // Health check
+    if (url.pathname === '/health') {
+      const uptimeSec = Math.floor((Date.now() - START_TIME) / 1000)
+      const health = await getHealth(uptimeSec)
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ version: VERSION, ...health }, null, 2))
+      return
+    }
+
+    // Cache invalidation
+    if (url.pathname === '/cache/invalidate' && req.method === 'POST') {
+      const authBuf = Buffer.from(req.headers.authorization ?? '')
+      const expectedBuf = Buffer.from(`Bearer ${CACHE_TOKEN}`)
+      const authOk = authBuf.length === expectedBuf.length &&
+        timingSafeEqual(authBuf, expectedBuf)
+      if (!CACHE_TOKEN || !authOk) {
+        res.writeHead(401, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Unauthorized' }))
         return
       }
-      body += chunk
-    }
+      let body = ''
+      let bodySize = 0
+      for await (const chunk of req) {
+        bodySize += chunk.length
+        if (bodySize > 1024) {
+          res.writeHead(413, { 'Content-Type': 'application/json' })
+          res.end(JSON.stringify({ error: 'Request body too large' }))
+          return
+        }
+        body += chunk
+      }
 
-    let source: string | undefined
-    try {
-      source = JSON.parse(body || '{}').source
-    } catch {
-      res.writeHead(400, { 'Content-Type': 'application/json' })
-      res.end(JSON.stringify({ error: 'Invalid JSON body' }))
+      let source: string | undefined
+      try {
+        source = JSON.parse(body || '{}').source
+      } catch {
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Invalid JSON body' }))
+        return
+      }
+
+      if (!source || source === 'all') {
+        cache.invalidateAll()
+      } else {
+        cache.invalidate(source)
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ invalidated: source ?? 'all', timestamp: new Date().toISOString() }))
       return
     }
 
-    if (!source || source === 'all') {
-      cache.invalidateAll()
-    } else {
-      cache.invalidate(source)
+    // MCP endpoint
+    if (url.pathname === '/mcp') {
+      const transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: undefined,
+      })
+      const s = createMcpServer()
+      await s.connect(transport)
+      await transport.handleRequest(req, res)
+      return
     }
 
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ invalidated: source ?? 'all', timestamp: new Date().toISOString() }))
-    return
-  }
+    res.writeHead(404, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ error: 'Not found' }))
 
-  // MCP endpoint
-  if (url.pathname === '/mcp') {
-    const transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: undefined,
-    })
-    const s = createMcpServer()
-    await s.connect(transport)
-    await transport.handleRequest(req, res)
-    return
+  } catch (err) {
+    console.error('Unhandled error in HTTP handler:', err)
+    if (!res.headersSent) {
+      res.writeHead(500, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ error: 'Internal server error' }))
+    }
   }
-
-  res.writeHead(404, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({ error: 'Not found' }))
 })
 
 const TRANSPORT = process.env.TRANSPORT ?? 'http'
