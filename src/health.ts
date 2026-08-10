@@ -29,7 +29,7 @@ interface HealthResult {
 // Injectable dependencies — overridable in tests without module mocking
 export interface HealthDeps {
   fetchFn: typeof fetch
-  loadMeta: () => Promise<unknown>
+  loadMeta: () => Promise<{ ok: boolean }>
 }
 
 const defaultDeps: HealthDeps = {
@@ -107,10 +107,10 @@ function checkGithubApi(fetchFn: typeof fetch): Promise<SourceResult> {
  * Reads from cache.ts if warm (< 1ms), fetches upstream if cold.
  * Confirms meta is parseable and servable end-to-end.
  */
-function checkSnapshotMeta(loadMeta: () => Promise<unknown>): Promise<SourceResult> {
+function checkSnapshotMeta(loadMeta: () => Promise<{ ok: boolean }>): Promise<SourceResult> {
   return probe(async () => {
     const meta = await loadMeta()
-    if (!meta) throw new Error('null meta')
+    if (!meta.ok) throw new Error('snapshot-meta.json fetch failed — meta is fallback data')
   })
 }
 

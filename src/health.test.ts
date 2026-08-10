@@ -11,6 +11,7 @@ const okMeta = async () => ({
   components: new Map(),
   foundations: [],
   fetchedAt: '2026-03-17T00:00:00Z',
+  ok: true,
 })
 
 function makeOkFetch(): typeof fetch {
@@ -47,7 +48,7 @@ describe('getHealth', () => {
   it('marks a source as degraded when it exceeds the probe timeout', async () => {
     _resetHealthCache()
 
-    const neverResolves = new Promise<never>(() => {/* intentionally hangs */})
+    const neverResolves = new Promise<never>(() => {/* intentionally hangs */ })
     const deps: HealthDeps = {
       fetchFn: async () => { await neverResolves; return {} as Response },
       loadMeta: okMeta,
@@ -59,6 +60,28 @@ describe('getHealth', () => {
     assert.equal(result.sources.dataFetched.ok, false)
     assert.equal(result.sources.githubApi.ok, false)
     assert.match(result.sources.dataFetched.error ?? '', /timeout/)
+  })
+
+  it('marks snapshotMeta as degraded when loadMeta reports ok: false', async () => {
+    _resetHealthCache()
+
+    const staleMeta = async () => ({
+      versions: {},
+      components: new Map(),
+      foundations: [],
+      fetchedAt: new Date().toISOString(),  // fallback timestamp, not real snapshot data
+      ok: false,
+    })
+    const deps: HealthDeps = {
+      fetchFn: makeOkFetch(),
+      loadMeta: staleMeta,
+    }
+
+    const result = await getHealth(1, deps)
+
+    assert.equal(result.status, 'degraded')
+    assert.equal(result.sources.snapshotMeta.ok, false)
+    assert.match(result.sources.snapshotMeta.error ?? '', /snapshot-meta\.json fetch failed/)
   })
 
 })

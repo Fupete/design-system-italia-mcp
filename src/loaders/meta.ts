@@ -117,9 +117,10 @@ export async function loadDsMeta(): Promise<DsMeta> {
     fetchedAt: snapshotMetaResult.status === 'fulfilled'
       ? snapshotMetaResult.value.fetchedAt  // ← from snapshot-meta.json
       : new Date().toISOString(),           // ← fallback
+    ok: snapshotMetaResult.status === 'fulfilled',
   }
 
-  cache.set(CACHE_KEYS.dsMeta(), meta, TTL.snapshot)
+  cache.set(CACHE_KEYS.dsMeta(), meta, meta.ok ? TTL.snapshot : TTL.snapshotDegraded)
   return meta
 }
 

@@ -149,6 +149,7 @@ export interface DsMeta {
   components: Map<string, DsNavEntry>   // slug → entry
   foundations: DsNavEntry[]             // foundations list
   fetchedAt: string
+  ok: boolean                           // false if snapshot-meta.json fetch failed — versions/fetchedAt are fallback values, not real snapshot data
 }
 
 // ─── Snapshot metadata — data-fetched/snapshot-meta.json ─────────────────────

@@ -60,14 +60,17 @@ class Cache {
 export const cache = new Cache()
 
 // ─── Per-source TTL (ms) ──────────────────────────────────────────────────────
-// Two buckets:
-//   snapshot — all sources from data-fetched branch (updated nightly)
-//   issues   — GitHub Issues (only live source at runtime)
+// Three buckets:
+//   snapshot         — all sources from data-fetched branch (updated nightly)
+//   snapshotDegraded — same data, but the fetch failed and we fell back to
+//                       stale/empty values — retry sooner, don't wait the full 24h
+//   issues           — GitHub Issues (only live source at runtime)
 
 const DEV = process.env.NODE_ENV !== 'production'
 
 export const TTL = {
   snapshot: DEV ? 60 * 60_000 : 24 * 60 * 60_000,  // 1h dev, 24h prod
+  snapshotDegraded: 15 * 60_000,                     // 15 min always — fast recovery on transient failures
   githubIssues: 15 * 60_000,                         // 15 min always
 }
 
