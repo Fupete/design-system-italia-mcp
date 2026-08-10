@@ -218,7 +218,7 @@ I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch [`data-f
 | 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Token CSS `--bsi-*` per-componente con descrizioni semantiche | `tokens_list_component_vars` `tokens_search` `tokens_find_components` |
 | 4 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Bridge `--bsi-*` → `--it-*` (token resolution) | `tokens_list_globals` `tokens_resolve` `tokens_find_components` |
 | 5 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `docs_get_component_guide` |
-| 6 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) | Token globali `--it-*`/`$it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `1.5rem` | `tokens_list_globals` `tokens_resolve` `tokens_search` |
+| 6 | [design-tokens-italia](https://github.com/italia/design-tokens-italia) |Token globali `--it-*`/`$it-*` con valori concreti. Risolve `var(--bsi-spacing-m)` → `24px` | `tokens_list_globals` `tokens_resolve` `tokens_search` |
 | 7 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Indice Storybook: tag stato, varianti, id univoco | `dsi_list_components` `dsi_search_components` `devkit_list_component_variants` |
 | 8 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Markup HTML per variante, estratto da Storybook source panel | `devkit_get_component_markup` `devkit_list_component_variants` |
 | 9 | [dev-kit-italia](https://github.com/italia/dev-kit-italia) | Props `it-*`: attributi HTML, tipo, descrizione, default, opzioni | `devkit_list_component_props` |

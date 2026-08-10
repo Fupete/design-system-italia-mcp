@@ -442,9 +442,9 @@ DATA COMPLETENESS: if a component is missing from one source (e.g. `devkit: null
         <div class="col-12 col-sm-6 col-md-4">
           <h3 class="h5">Design tokens</h3>
           <ul class="tool-names d-grid gap-3">
-            <li class="it-card p-3 border shadow-sm rounded"><span>tokens_list_component_vars</span> Variabili CSS
-              --bsi-* personalizzabili di un componente, con descrizione semantica e valore risolto (es.
-              var(--bsi-spacing-m) → 1.5rem).</li>
+            <li class="it-card p-3 border shadow-sm rounded"></li><span>tokens_list_component_vars</span> Variabili CSS
+            --bsi-* personalizzabili di un componente, con descrizione semantica e valore risolto (es.
+            var(--bsi-spacing-m) → 24px).</li>
             <li class="it-card p-3 border shadow-sm rounded"><span>tokens_list_globals</span> Coppie di token globali
               che Bootstrap Italia usa davvero: Design Token centrale + --bsi-* corrispondente, con valore risolto.</li>
             <li class="it-card p-3 border shadow-sm rounded"><span>tokens_resolve</span> Risolve una variabile qualsiasi
@@ -558,15 +558,15 @@ DATA COMPLETENESS: if a component is missing from one source (e.g. `devkit: null
               <a href="#installazione" class="btn btn-secondary bg-black btn-xs">Prova</a>
             </div>
             <div id="tok-ex" class="border rounded p-3 bg-white mt-2">
-              <p class="chain-label">Esempio — --bsi-accordion-padding</p>
+              <p class="chain-label">Esempio — --bsi-accordion-border-radius</p>
               <div class="chain">
-                <span class="chain-val">--bsi-accordion-padding</span>
+                <span class="chain-val">--bsi-accordion-border-radius</span>
                 <span class="chain-arr">→</span>
-                <span class="chain-val mid">var(--bsi-spacing-m)</span>
+                <span class="chain-val mid">var(--bsi-radius-smooth)</span>
                 <span class="chain-arr">→</span>
-                <span class="chain-val mid">var(--it-spacing-m)</span>
+                <span class="chain-val mid">var(--it-radius-smooth)</span>
                 <span class="chain-arr">→</span>
-                <span class="chain-val resolved">1.5rem</span>
+                <span class="chain-val resolved">4px</span>
               </div>
               <p class="chain-tool">tokens_list_component_vars("accordion")</p>
             </div>

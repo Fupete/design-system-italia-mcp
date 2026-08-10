@@ -14,8 +14,11 @@ export function registerTokensFindComponents(server: McpServer): void {
       title: 'Find Components By Token',
       description: 'Returns the Bootstrap Italia components impacted by a given design variable, ' +
         'including indirect impact via the resolution chain. Accepts --bsi-* (direct usage) or ' +
-        '--it-*/$it-* (impact traced through the chain). Useful for theming: identifies what changes ' +
-        'if you override a variable.',
+        '--it-*/$it-* (impact traced through the chain). Useful for theming: identifies what ' +
+        'changes if you override a variable. Note: component reflects BSI\'s own internal ' +
+        'grouping keys in custom_properties.json (e.g. "navbar", "tab"), not always the same ' +
+        'as the canonical component name from dsi_list_components — some BSI groupings aren\'t ' +
+        'tracked as standalone components.',
       inputSchema: { variable: z.string().describe('Token name in any form: --bsi-*, --it-*, or $it-*') },
       annotations: { readOnlyHint: true },
     },
