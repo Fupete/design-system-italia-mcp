@@ -17,7 +17,7 @@ export function registerTokensListGlobals(server: McpServer): void {
       description: 'Lists the global design tokens of the Design System that Bootstrap Italia actually uses. ' +
         'Each entry pairs the central Design Token (--it-*/$it-*, not overridable per-project) with the ' +
         'corresponding global --bsi-* CSS custom property (project-overridable), plus its resolved value. ' +
-        'Without arguments returns all global tokens; pass category to filter (e.g. "spacing", "color"). ' +
+        'Without arguments returns all global tokens; pass match to filter (e.g. "spacing", "color"). ' +
         'Only tokens bridged into BSI are listed. For per-component variables use tokens_list_component_vars.',
       inputSchema: {
         match: z.string().optional().describe('Substring filter on token/variable name (e.g. "spacing", "blue"). Not a semantic category — matches literal text in the name only. Omit to list all.'),

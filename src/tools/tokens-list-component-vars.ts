@@ -15,10 +15,10 @@ export function registerTokensListComponentVars(server: McpServer): void {
     'tokens_list_component_vars',
     {
       title: 'List Component Tokens',
-      description: 'Lists the CSS custom properties (--bsi-) you can override in your own ' + 
+      description: 'Lists the CSS custom properties (--bsi-) you can override in your own ' +
         'CSS to customize a Bootstrap Italia component, each with a semantic description, ' +
-        'resolution chain (resolvedVia), and concrete resolved value (e.g. ' + 
-        'var(--bsi-spacing-m) → 1.5rem). These --bsi- variables are always safe to override ' +
+        'resolution chain (resolvedVia), and concrete resolved value (e.g. ' +
+        'var(--bsi-spacing-m) → 24px). These --bsi- variables are always safe to override ' +
         'at runtime; the central Design Tokens they resolve through (--it-/$it-, visible in ' +
         'resolvedVia) are not meant to be overridden per-project, override the --bsi- ' +
         'variable itself instead.',

@@ -16,8 +16,11 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
     {
       title: 'Get Component Guide',
       description: 'Returns usage guidelines for a component from Designers Italia website: ' +
-        'when to use it, how to use it, recommended alternatives, accessibility notes ' +
-        'and library status (Bootstrap Italia, UI Kit Italia, ...).',
+        'when to use it (whenToUse, includes recommended alternatives where Designers Italia ' +
+        'lists them), how to use it (howToUse), accessibility notes, library status ' +
+        '(Bootstrap Italia, Dev Kit Italia) and, when available, the Dev Kit Storybook entry ' +
+        '(tags, markup URL). Flags devKitUrlMismatch in warnings when the Dev Kit doc URL in ' +
+        'components-status.json diverges from the live Storybook entry.',
       inputSchema: { component: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
     },

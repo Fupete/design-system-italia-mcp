@@ -15,12 +15,12 @@ export function registerTokensResolve(server: McpServer): void {
     'tokens_resolve',
     {
       title: 'Resolve Token',
-      description: 'Resolves any --bsi-, --it-, or it- variable to its concrete value, ' +
-        'following the full chain to a literal (e.g. --bsi-accordion-padding → ' + 
-        '--bsi-spacing-m → --it-spacing-m → 1.5rem). Each hop in resolvedVia carries role ' +
+      description: 'Resolves any --bsi-, --it-, or $it- variable to its concrete value, ' +
+        'following the full chain to a literal (e.g. --bsi-accordion-body-padding-x → ' +
+        '--bsi-spacing-m → $it-spacing-m → $it-spacing-6x → 24px). Each hop in resolvedVia carries role ' +
         'and overridable: --bsi- hops (role bsi-component/bsi-global) are safe to override ' +
-        'in project CSS at runtime; --it-/it- hops (role dti) are central Design Tokens ' +
-        'defined upstream, do not suggest overriding them directly; override the --bsi-*' + 
+        'in project CSS at runtime; $it-/--it- hops (role dti) are central Design Tokens ' +
+        'defined upstream, do not suggest overriding them directly; override the --bsi-* ' +
         'variable that consumes them instead.',
       inputSchema: { variable: z.string().describe('Token name in any form: --bsi-*, --it-*, or $it-*') },
       annotations: { readOnlyHint: true },

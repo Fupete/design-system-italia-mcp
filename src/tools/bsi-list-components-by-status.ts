@@ -5,12 +5,9 @@ import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
 import { BETA_WARNING, BSI_STATUS_URL } from '../constants.js'
 
-// ─── Tool: bsi_list_components_by_status ──────────────────────────────────────
-// Only Bootstrap Italia is filterable here — uiKitItalia status lives in Figma, not this API.
-
 // ─── Tool: bsi_list_components_by_status ──────────────────────────────────
 // bootstrapItalia (default) and devKitItalia are filterable here, both
-// lives in components_status.json - uiKitItalia status lives in Figma, not 
+// live in components_status.json - uiKitItalia status lives in Figma, not 
 // this API.
 
 export function registerBsiListComponentsByStatus(server: McpServer): void {
@@ -59,7 +56,7 @@ export function registerBsiListComponentsByStatus(server: McpServer): void {
                   dsMeta,
                   sourceUrls: [BSI_STATUS_URL],
                   warnings: [BETA_WARNING],
-                  stability: BETA_WARNING ? 'beta' : 'beta',
+                  stability: 'beta',
                   extra: { versions: dsMeta?.versions ?? undefined },
                 }),
               },
