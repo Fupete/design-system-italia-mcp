@@ -160,6 +160,15 @@ root ha `"version": "0.0.0"` — usare sempre `packages/dev-kit-italia/package.j
 per la versione reale. `snapshot-meta.json` include le versioni di BSI, Dev Kit e DS
 al momento del fetch.
 
+**Nota sulla doppia natura di "stabile"**: la colonna Note di questa tabella
+misura il rischio di URL/schema (branch temporaneo, a rischio ristrutturazione),
+non lo stato di beta/stable del *contenuto*. `components_status.json` (#2) è
+schema-stabile, non è mai stato segnato "branch temporaneo", ma il suo
+contenuto descrive lo stato di componenti dentro BSI 3.x/Dev Kit Italia, quindi
+`bsi_list_components_by_status` è comunque `stability: 'beta'` a livello tool.
+Le due classificazioni misurano cose diverse e possono legittimamente non
+coincidere, non è un'incoerenza da correggere quando succede.
+
 ---
 
 ## CI snapshot — flusso nightly

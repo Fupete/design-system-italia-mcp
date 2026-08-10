@@ -214,7 +214,7 @@ I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch [`data-f
 | # | Repo | Contenuto | Tool MCP |
 |---|------|-----------|----------|
 | 1 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Markup HTML varianti per componente | `bsi_get_component_markup` `bsi_list_component_variants` |
-| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Lista ~55 componenti, stato librerie (BSI/UI Kit), accessibilità, note issue | `dsi_list_components` `dsi_search_components` `bsi_list_components_by_status` |
+| 2 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Lista ~55 componenti, stato librerie (BSI/UI Kit/Dev Kit), accessibilità, note issue ⚠️ beta | `dsi_list_components` `dsi_search_components` `bsi_list_components_by_status` |
 | 3 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Token CSS `--bsi-*` per-componente con descrizioni semantiche | `tokens_list_component_vars` `tokens_search` `tokens_find_components` |
 | 4 | [bootstrap-italia](https://github.com/italia/bootstrap-italia) | Bridge `--bsi-*` → `--it-*` (token resolution) | `tokens_list_globals` `tokens_resolve` `tokens_find_components` |
 | 5 | [designers.italia.it](https://github.com/italia/designers.italia.it) | Linee guida d'uso, accessibilità, quando/come usare | `docs_get_component_guide` |
