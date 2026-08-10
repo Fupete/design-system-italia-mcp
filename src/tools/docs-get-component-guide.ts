@@ -29,7 +29,7 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
       const slug = slugify(component)
       const warnings: string[] = []
 
-      const [guidelines, status, devKitEntry, dsMeta] = await Promise.all([
+      const [guidelinesResult, status, devKitEntry, dsMeta] = await Promise.all([
         loadGuidelines(slug),
         loadStatus(slug),
         loadDevKitEntry(slug),
@@ -38,8 +38,10 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
 
       const canonicalSlug = status?.slug ?? slug
 
-      if (!guidelines) {
+      if (!guidelinesResult) {
         warnings.push(`Designers Italia component guidelines not found for "${canonicalSlug}"`)
+      } else if (guidelinesResult.tabWarning) {
+        warnings.push(guidelinesResult.tabWarning)
       }
       if (!status) {
         warnings.push(`Component status not found for "${canonicalSlug}"`)
@@ -60,8 +62,8 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
               {
                 name: status?.name ?? canonicalSlug,
                 slug: canonicalSlug,
-                description: guidelines?.description ?? null,
-                categories: guidelines?.categories ?? [],
+                description: guidelinesResult?.guidelines.description ?? null,
+                categories: guidelinesResult?.guidelines.categories ?? [],
                 status: status
                   ? {
                     libraryStatus: status.libraryStatus,
@@ -70,10 +72,10 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
                     knownIssueUrls: status.knownIssueUrls,
                   }
                   : null,
-                guidelines: guidelines
+                guidelines: guidelinesResult
                   ? {
-                    whenToUse: guidelines.whenToUse,
-                    howToUse: guidelines.howToUse,
+                    whenToUse: guidelinesResult.guidelines.whenToUse,
+                    howToUse: guidelinesResult.guidelines.howToUse,
                   }
                   : null,
                 devKit: devKitEntry

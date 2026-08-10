@@ -11,7 +11,7 @@ import { SNAPSHOT_DESIGNERS_COMPONENT_URL, DESIGNERS_SITE_BASE } from '../consta
 // Raw YAML parsed to JSON by snapshot-static.ts at fetch time.
 // Same structure as the original YAML — no runtime yaml parsing needed.
 
-interface RawDesignersJson {
+export interface RawDesignersJson {
   components?: {
     hero?: {
       subtitle?: string
@@ -34,17 +34,30 @@ interface RawDesignersJson {
 
 // ─── Parser ───────────────────────────────────────────────────────────────────
 
-function parseGuidelines(raw: RawDesignersJson): ComponentGuidelines {
+export interface GuidelinesResult {
+  guidelines: ComponentGuidelines
+  // Non-null when the "Uso e accessibilità" tab wasn't found by title and we
+  // fell back to the first tab — that fallback may be wrong if upstream also
+  // reorders tabs, not just renames this one.
+  tabWarning: string | null
+}
+
+export function parseGuidelines(raw: RawDesignersJson): GuidelinesResult {
   const hero = raw?.components?.hero
 
-  // "Uso e accessibilità" tab — find by title, fallback to first tab if renamed upstream
-  const usageTab = raw?.tabs?.find(t =>
+  // "Uso e accessibilità" tab — matched by title, fallback to first tab if
+  // renamed upstream. The fallback is surfaced as a warning, not silent.
+  const matchedTab = raw?.tabs?.find(t =>
     t.title?.toLowerCase().includes('uso') ||
     t.title?.toLowerCase().includes('accessibilit')
-  ) ?? raw?.tabs?.[0]  // fallback to first tab if title match fails
+  )
+  const usageTab = matchedTab ?? raw?.tabs?.[0]
 
-  if (!usageTab && raw?.tabs?.length) {
-    console.warn('parseGuidelines: usage tab not found by title, no fallback available')
+  let tabWarning: string | null = null
+  if (!matchedTab && usageTab) {
+    const titles = raw?.tabs?.map(t => t.title ?? '(untitled)').join(', ')
+    tabWarning = `"Uso e accessibilità" tab not found by title (tabs seen: ${titles}) — ` +
+      `fell back to first tab "${usageTab.title ?? '(untitled)'}", content may be from the wrong tab`
   }
 
   const allComponents = usageTab?.sectionsEditorial
@@ -57,28 +70,30 @@ function parseGuidelines(raw: RawDesignersJson): ComponentGuidelines {
     )?.text ?? null
   }
 
-  return {
+  const guidelines: ComponentGuidelines = {
     description: hero?.subtitle ?? null,
     categories: hero?.kangaroo?.tagsDesignSystem ?? [],
     whenToUse: findText('quando usarlo') ?? findText('quando usare'),
     howToUse: findText('come usarlo') ?? findText('come usare'),
   }
+
+  return { guidelines, tabWarning }
 }
 
 // ─── Public loader ────────────────────────────────────────────────────────────
 
-export async function loadGuidelines(slug: string): Promise<ComponentGuidelines | null> {
+export async function loadGuidelines(slug: string): Promise<GuidelinesResult | null> {
   const normalized = slugify(slug)
   for (const s of slugsToTry(normalized)) {
     const key = CACHE_KEYS.designers(s)
-    const cached = cache.get<ComponentGuidelines>(key)
+    const cached = cache.get<GuidelinesResult>(key)
     if (cached) return cached
     const url = SNAPSHOT_DESIGNERS_COMPONENT_URL(s)
     try {
       const raw = await fetchJson<RawDesignersJson>(url)
-      const guidelines = parseGuidelines(raw)
-      cache.set(key, guidelines, TTL.snapshot)
-      return guidelines
+      const result = parseGuidelines(raw)
+      cache.set(key, result, TTL.snapshot)
+      return result
     } catch {
       continue
     }
