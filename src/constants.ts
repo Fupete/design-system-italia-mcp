@@ -17,6 +17,9 @@ export const BETA_WARNING =
   'BSI 3.x and DevKit are in beta. ' +
   'There may be a few breaking changes before stable release.'
 
+export const STABILITY_BETA = 'beta' as const
+export const STABILITY_STABLE = 'stable' as const
+
 // ─── Bootstrap Italia — sources #1 #2 #3 #4 ─────────────────────────────────
 
 /** Active branch with structured token APIs — not present in 2.x */

@@ -54,7 +54,7 @@ export function parseBridge(scss: string): BridgeMap {
 // resolveToken()'s literal fallback for those).
 type RawTokensJson = Record<string, Array<{ 'variable-name': string; value: string }>>
 
-function parseBsiMap(raw: RawTokensJson): BsiMap {
+export function parseBsiMap(raw: RawTokensJson): BsiMap {
   const map: BsiMap = new Map()
   for (const entries of Object.values(raw)) {
     for (const e of entries) {
