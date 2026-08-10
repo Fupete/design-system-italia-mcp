@@ -13,10 +13,12 @@ export function registerTokensSearch(server: McpServer): void {
     'tokens_search',
     {
       title: 'Search Tokens',
-      description: 'Search for a Design Tokens Italia or BSI token by substring match on variable name. ' +
-        'Searches all BSI CSS custom properties (--bsi-*) and global Design Tokens Italia tokens (--it-*). ' +
+      description: 'Search for a Design Tokens Italia or BSI token by substring match. ' +
+        'Searches all BSI CSS custom properties (--bsi-*) and global Design Tokens Italia tokens (--it-*), ' +
+        'matching against variable name, description text, and value (raw for BSI, resolved for DTI). ' +
         'Examples: \'primary\', \'spacing-m\', \'blue-40\', \'radius\'. ' +
-        'Note: only substring on variable names, queries like \'primary color\' return no results.',
+        'Note: substring match only, not semantic — queries like \'primary color\' (a phrase, not a substring ' +
+        'present anywhere) return no results.',
       inputSchema: { query: z.string().describe('Search term (e.g. "spacing", "border-radius", "padding")') },
       annotations: { readOnlyHint: true },
     },

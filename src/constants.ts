@@ -10,15 +10,12 @@
 // Used in ping (index.ts) and in meta.warnings for tools exposing data from
 // beta sources (CSS tokens, Dev Kit Italia).
 //
-// Beta sources:  #3 BSI custom_properties.json, #7 Dev Kit index, #8 Dev Kit stories, #9 Dev Kit props
-// Stable sources: #1 #2 BSI markup/status, #4 BSI root.scss, #5 Designers YAML, #6 DTI, #10 GitHub Issues
+// Beta sources:  #3 BSI custom_properties.json, #4 BSI root.scss, #7 Dev Kit index, #8 Dev Kit stories, #9 Dev Kit props
+// Stable sources: #1 #2 BSI markup/status, #5 Designers YAML, #6 DTI, #10 GitHub Issues
 
 export const BETA_WARNING =
   'BSI 3.x and DevKit are in beta. ' +
   'There may be a few breaking changes before stable release.'
-
-export const STABILITY_BETA = 'beta' as const
-export const STABILITY_STABLE = 'stable' as const
 
 // ─── Bootstrap Italia — sources #1 #2 #3 #4 ─────────────────────────────────
 

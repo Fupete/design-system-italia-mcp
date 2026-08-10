@@ -1,6 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { formatTimestamp } from '../utils.js'
 import { getProjectBoardStatus } from '../loaders/github.js'
+import { buildMeta } from './helpers.js'
 
 // ─── Tool: github_get_project_repo_links ──────────────────────────────────────
 // Repo issue links, not live board card data — GitHub Projects v2 board
@@ -31,10 +32,13 @@ export function registerGithubGetProjectRepoLinks(server: McpServer): void {
                   url: 'https://github.com/orgs/italia/projects/17',
                   note: board.note,
                 },
-                meta: {
-                  dataFetchedAt: formatTimestamp(),
-                  stability: 'stable' as const,
-                },
+                meta: buildMeta({
+                  dsMeta: null,
+                  sourceUrls: ['https://github.com/orgs/italia/projects/17'],
+                  warnings: [],
+                  stability: 'stable',
+                  extra: { dataFetchedAt: formatTimestamp() },
+                }),
               },
               null,
               2

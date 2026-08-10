@@ -81,8 +81,9 @@ export function registerTokensListComponentVars(server: McpServer): void {
           extra: {
             versions: dsMeta?.versions ?? undefined,
             note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
-              'resolvedVia: intermediate --it-* token in the resolution chain (--bsi-* → --it-* → value). ' +
-              'null = resolution not available, value is already literal or another --bsi-* variable.',
+              'resolvedVia: full chain of hops to reach it, each role-labeled (bsi-component/bsi-global are ' +
+              'project-overridable, dti is central and not meant to be overridden per-project). ' +
+              'null = resolution not available, value is already literal.',
           },
         }),
       }

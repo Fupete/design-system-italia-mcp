@@ -39,6 +39,7 @@ jobs:
         run: npx tsx scripts/check-version.ts "${GITHUB_REF_NAME#v}"
 
       - run: npx tsc --noEmit
+      - run: npm run test
       - run: npm run build
       - run: test -f dist/index.js && echo "✅ dist/index.js present"
 
