@@ -216,6 +216,8 @@ const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse
     if (!res.headersSent) {
       res.writeHead(500, { 'Content-Type': 'application/json' })
       res.end(JSON.stringify({ error: 'Internal server error' }))
+    } else {
+      res.destroy()
     }
   }
 })
