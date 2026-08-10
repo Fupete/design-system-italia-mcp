@@ -1,25 +1,12 @@
 // src/tools/helpers.ts
 // ─── Shared helpers for tool handlers ────────────────────────────────────────
 
-import { loadStatus, loadAllStatuses } from '../loaders/bsi.js'
+import { loadAllStatuses } from '../loaders/bsi.js'
 import { loadDevKitIndex } from '../loaders/devkit.js'
 import { loadDsMeta } from '../loaders/meta.js'
-import { slugify, slugsToTry } from '../slugify.js'
+import { slugsToTry } from '../slugify.js'
 import { BSI_DOC_BASE } from '../constants.js'
 import type { ComponentStatus, DevKitEntry, DsMeta, StabilityLevel, StatusValue } from '../types.js'
-
-// ─── resolveSlug ──────────────────────────────────────────────────────────────
-// Resolves user input to canonical slug via components_status.json.
-// e.g. "fisarmonica" → "accordion", "Alert" → "alert"
-// Note: get_component_full keeps its own loadStatus call — it needs
-// the full status object for sourceUrls assembly, not just the slug.
-// Note: BSI component in meta sources keeps its resolved url (not canonical). 
-
-export async function resolveSlug(input: string): Promise<string> {
-  const slug = slugify(input.trim())
-  const status = await loadStatus(slug)
-  return status?.slug ?? slug
-}
 
 // ─── buildMeta ────────────────────────────────────────────────────────────────
 // Builds the standard meta object for tool responses.

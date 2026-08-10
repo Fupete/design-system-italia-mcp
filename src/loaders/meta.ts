@@ -125,12 +125,6 @@ export async function loadDsMeta(): Promise<DsMeta> {
 
 // ─── Public helpers ───────────────────────────────────────────────────────────
 
-// Returns the absolute Designers Italia URL for a component
-export async function getDesignersUrl(slug: string): Promise<string | null> {
-  const meta = await loadDsMeta()
-  return meta.components.get(slug)?.absoluteUrl ?? null
-}
-
 // Returns the three design system versions
 export async function getDsVersions(): Promise<DsVersions> {
   const meta = await loadDsMeta()

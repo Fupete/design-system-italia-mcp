@@ -162,13 +162,6 @@ async function loadMaps(): Promise<ResolvedMaps> {
   return maps
 }
 
-async function loadDtiMap(): Promise<DtiMap> {
-  const cached = cache.get<DtiMap>(CACHE_KEYS.designTokensDti())
-  if (cached) return cached
-  await loadMaps()
-  return cache.get<DtiMap>(CACHE_KEYS.designTokensDti()) ?? new Map()
-}
-
 // ─── Token value enrichment ───────────────────────────────────────────────────
 
 export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]> {

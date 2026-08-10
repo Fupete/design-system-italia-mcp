@@ -195,51 +195,6 @@ export interface DevKitPropsSnapshot {
   }>
 }
 
-// ─── Aggregated response get_component_full ───────────────────────────────────
+// ─── Shared stability level ─────────────────────────────────────────────────
 
 export type StabilityLevel = 'beta' | 'stable'
-
-export interface ComponentFull {
-  name: string
-  slug: string
-
-  // from ComponentStatus
-  status: ComponentStatus | null
-
-  // from api/componenti/{slug}.json
-  variantsCount: number
-  variantsAvailable: string[]
-  variants: ComponentVariant[]  // truncated to maxVariants
-
-  // from ComponentGuidelines
-  guidelines: ComponentGuidelines | null
-
-  // from custom_properties.json
-  tokens: CssToken[]
-
-  // from Dev Kit Italia
-  devKit: {
-    entry: DevKitEntry | null
-    component: DevKitComponent | null
-    description: string | null
-    storyVariants: {
-      count: number
-      available: string[]
-      variants: ComponentVariant[]
-    } | null
-  }
-
-  // from GitHub Issues
-  openIssues: ComponentIssue[]
-
-  // always present
-  meta: {
-    dataFetchedAt: string | null // sources snapshot date
-    sourceUrls: string[]
-    warnings: string[]
-    stability: StabilityLevel
-    versions?: DsVersions
-    designersUrl?: string | null
-  }
-}
-
