@@ -4,7 +4,7 @@ import { loadStatus, loadVariants, loadVariantsResolvedSlug } from '../loaders/b
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { BSI_COMPONENT_URL, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl } from '../constants.js'
+import { BSI_COMPONENT_URL, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl, BETA_WARNING } from '../constants.js'
 
 // ─── Tool: bsi_list_component_variants ────────────────────────────────────────
 // Names only, no markup — see bsi_get_component_markup for markup.
@@ -27,7 +27,7 @@ export function registerBsiListComponentVariants(server: McpServer): void {
     async ({ component }) => {
       component = component.trim()
       const slug = slugify(component)
-      const warnings: string[] = []
+      const warnings: string[] = [BETA_WARNING]
 
       const [status, dsMeta, bsiResolvedSlug] = await Promise.all([
         loadStatus(slug),

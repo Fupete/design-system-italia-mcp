@@ -5,7 +5,7 @@ import { loadStatus, loadVariants, loadVariantsResolvedSlug } from '../loaders/b
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { BSI_COMPONENT_URL, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl } from '../constants.js'
+import { BSI_COMPONENT_URL, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl, BETA_WARNING } from '../constants.js'
 
 // ─── Tool: bsi_get_component_markup ───────────────────────────────────────────
 // BSI markup only — Dev Kit story markup lives in devkit_get_component_markup.
@@ -29,7 +29,7 @@ export function registerBsiGetComponentMarkup(server: McpServer): void {
       component = component.trim()
       variant = variant?.trim()
       const slug = slugify(component)
-      const warnings: string[] = []
+      const warnings: string[] = [BETA_WARNING]
 
       const [status, dsMeta] = await Promise.all([
         loadStatus(slug),

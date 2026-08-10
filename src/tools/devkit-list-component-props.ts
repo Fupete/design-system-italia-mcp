@@ -5,7 +5,7 @@ import { loadDevKitEntry, loadDevKitComponent } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { DEVKIT_INDEX_URL } from '../constants.js'
+import { BETA_WARNING, DEVKIT_INDEX_URL } from '../constants.js'
 
 // ─── Tool: devkit_list_component_props ────────────────────────────────────────
 // Lists the it-* HTML attributes (props) of a Dev Kit Italia web component.
@@ -26,7 +26,7 @@ export function registerDevkitListComponentProps(server: McpServer): void {
     async ({ component }) => {
       component = component.trim()
       const slug = slugify(component)
-      const warnings: string[] = []
+      const warnings: string[] = [BETA_WARNING]
 
       const [status, dsMeta] = await Promise.all([
         loadStatus(slug),

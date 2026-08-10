@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 import { slugsToTry } from '../slugify.js'
 import { buildComponentUnion, buildMeta } from './helpers.js'
-import { BSI_STATUS_URL, DEVKIT_INDEX_URL } from '../constants.js'
+import { BETA_WARNING, BSI_STATUS_URL, DEVKIT_INDEX_URL } from '../constants.js'
 
 // ─── Tool: dsi_search_components ──────────────────────────────────────────────
 // Search over the same union as dsi_list_components. See buildComponentUnion
@@ -45,7 +45,7 @@ export function registerDsiSearchComponents(server: McpServer): void {
                 meta: buildMeta({
                   dsMeta,
                   sourceUrls: [BSI_STATUS_URL, DEVKIT_INDEX_URL],
-                  warnings: [],
+                  warnings: [BETA_WARNING],
                   stability: 'beta',
                   extra: { versions: dsMeta?.versions ?? undefined },
                 }),

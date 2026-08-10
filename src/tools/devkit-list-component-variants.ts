@@ -5,7 +5,7 @@ import { loadDevKitEntry, loadStoryVariants } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { DEVKIT_STORIES_URL, DEVKIT_INDEX_URL } from '../constants.js'
+import { DEVKIT_STORIES_URL, DEVKIT_INDEX_URL, BETA_WARNING } from '../constants.js'
 
 // ─── Tool: devkit_list_component_variants ─────────────────────────────────────
 // Names only, no markup — see devkit_get_component_markup for markup.
@@ -25,7 +25,7 @@ export function registerDevkitListComponentVariants(server: McpServer): void {
     async ({ component }) => {
       component = component.trim()
       const slug = slugify(component)
-      const warnings: string[] = []
+      const warnings: string[] = [BETA_WARNING]
 
       // loadStatus resolves aliases via BSI status; falls back to raw slug for
       // Dev Kit-only components (e.g. "icon") that have no BSI status entry.

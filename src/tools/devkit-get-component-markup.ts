@@ -6,7 +6,7 @@ import { loadDevKitEntry, loadStoryVariants } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { DEVKIT_STORIES_URL, DEVKIT_INDEX_URL } from '../constants.js'
+import { DEVKIT_STORIES_URL, DEVKIT_INDEX_URL, BETA_WARNING } from '../constants.js'
 
 // ─── Tool: devkit_get_component_markup ────────────────────────────────────────
 // Markup extracted from Storybook via CI snapshot (snapshot-devkit.ts).
@@ -30,7 +30,7 @@ export function registerDevkitGetComponentMarkup(server: McpServer): void {
       component = component.trim()
       variant = variant?.trim()
       const slug = slugify(component)
-      const warnings: string[] = []
+      const warnings: string[] = [BETA_WARNING]
 
       const [status, dsMeta] = await Promise.all([
         loadStatus(slug),

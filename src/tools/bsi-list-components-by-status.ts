@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { loadAllStatuses } from '../loaders/bsi.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
-import { BSI_STATUS_URL } from '../constants.js'
+import { BETA_WARNING, BSI_STATUS_URL } from '../constants.js'
 
 // ─── Tool: bsi_list_components_by_status ──────────────────────────────────────
 // Only Bootstrap Italia is filterable here — uiKitItalia status lives in Figma, not this API.
@@ -58,8 +58,8 @@ export function registerBsiListComponentsByStatus(server: McpServer): void {
                 meta: buildMeta({
                   dsMeta,
                   sourceUrls: [BSI_STATUS_URL],
-                  warnings: [],
-                  stability: 'stable',
+                  warnings: [BETA_WARNING],
+                  stability: BETA_WARNING ? 'beta' : 'beta',
                   extra: { versions: dsMeta?.versions ?? undefined },
                 }),
               },
