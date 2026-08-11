@@ -147,20 +147,24 @@ describe('parseDesignTokens', () => {
     assert.equal(map.get('--it-spacing-6x'), '24px (6x la dimensione della baseline)')
   })
 
-  it('KNOWN BUG (composedOf target): a composite value starting with $ is misread as a pure reference', () => {
-    // isRef today is `value.startsWith('$')` — unanchored. A composite like
-    // box-shadow's offset/blur/color triple, written as a chain of $it-*
-    // references, starts with $ too, so it takes the isRef branch and gets
-    // sliced as if the WHOLE value were one variable name. This test locks
-    // in today's actual (wrong) output so the isRef anchoring fix (step 1)
-    // has something concrete to change and re-verify against — update this
-    // test, don't just delete it, when isRef becomes anchored.
+  it('a composite value starting with $ is no longer misread as a pure reference (isRef anchored, step 1 of composedOf)', () => {
+    // Before the fix: unanchored isRef sliced the whole string as if it
+    // were one variable name, corrupting it (see git history / #13-#14).
+    // After: the composite survives intact as a literal string. It is NOT
+    // yet resolved (no embedded $it-* substitution happens here) — that's
+    // composedOf itself, still to do. This only stops the corruption.
     const scss = '$it-elevation-low: $it-shadow-offset-s 0 $it-shadow-blur-s $it-color-shadow-whisper;'
     const map = parseDesignTokens(scss)
     assert.equal(
       map.get('--it-elevation-low'),
-      '--it-shadow-offset-s 0 $it-shadow-blur-s $it-color-shadow-whisper'
+      '$it-shadow-offset-s 0 $it-shadow-blur-s $it-color-shadow-whisper'
     )
+  })
+
+  it('still treats a pure reference (nothing but $var) as a reference, not a literal', () => {
+    const scss = '$it-spacing-m: $it-spacing-6x;'
+    const map = parseDesignTokens(scss)
+    assert.equal(map.get('--it-spacing-m'), '--it-spacing-6x')
   })
 })
 
@@ -317,7 +321,7 @@ describe('resolveChain', () => {
     assert.deepEqual(chain, [])
   })
 
-it('breaks a cycle instead of recursing forever', () => {
+  it('breaks a cycle instead of recursing forever', () => {
     // --it-a -> --it-b -> --it-a — the visited set must stop this, not the
     // call stack. A real occurrence would mean bad upstream data, not a
     // Filo bug, but Filo must degrade to null, not crash the process.
@@ -355,4 +359,59 @@ it('breaks a cycle instead of recursing forever', () => {
     // The real composite ("0 var(--bsi-shadow-x) 4px") is lost long before
     // this point today — see the parseBsiMap KNOWN BUG test above.
   })
+})
+
+// ─── parseDesignTokens — real composite values ─────────────────────────────
+// Verified live via tokens_list_globals on 2026-08-11 (post isRef anchoring
+// fix, step 1 of composedOf) — design-tokens-italia/_variables.scss really
+// does contain composite elevation/shadow tokens, not just a hypothetical.
+// Important shape difference from the synthetic fixture above: these do NOT
+// start with $ — they start with a literal ("0 "), with $it-* references
+// embedded mid-string. composedOf detection can't rely on value.startsWith('$')
+// even after anchoring it correctly for the pure-reference case — it needs to
+// scan the whole string for embedded references, wherever they occur.
+
+describe('parseDesignTokens — real composite values (elevation/shadow)', () => {
+  it('--it-elevation-low survives intact as a literal string, not corrupted', () => {
+    const scss = '$it-elevation-low: 0 $it-shadow-blur-s $it-shadow-offset-s 0 $it-color-shadow-whisper;'
+    const map = parseDesignTokens(scss)
+    assert.equal(
+      map.get('--it-elevation-low'),
+      '0 $it-shadow-blur-s $it-shadow-offset-s 0 $it-color-shadow-whisper'
+    )
+  })
+
+  it('--it-elevation-medium survives intact', () => {
+    const scss = '$it-elevation-medium: 0 $it-shadow-offset-m $it-shadow-blur-m 0 $it-color-shadow-soft;'
+    const map = parseDesignTokens(scss)
+    assert.equal(
+      map.get('--it-elevation-medium'),
+      '0 $it-shadow-offset-m $it-shadow-blur-m 0 $it-color-shadow-soft'
+    )
+  })
+
+  it('--it-elevation-high survives intact', () => {
+    const scss = '$it-elevation-high: 0 $it-shadow-offset-l $it-shadow-blur-l 0 $it-color-shadow-dark;'
+    const map = parseDesignTokens(scss)
+    assert.equal(
+      map.get('--it-elevation-high'),
+      '0 $it-shadow-offset-l $it-shadow-blur-l 0 $it-color-shadow-dark'
+    )
+  })
+
+  it('all three coexist with normal single-value lines, none dropped', () => {
+    const scss = [
+      '$it-spacing-6x: 24px; // 6x la dimensione della baseline',
+      '$it-elevation-low: 0 $it-shadow-blur-s $it-shadow-offset-s 0 $it-color-shadow-whisper;',
+      '$it-elevation-medium: 0 $it-shadow-offset-m $it-shadow-blur-m 0 $it-color-shadow-soft;',
+      '$it-elevation-high: 0 $it-shadow-offset-l $it-shadow-blur-l 0 $it-color-shadow-dark;',
+    ].join('\n')
+    const map = parseDesignTokens(scss)
+    assert.equal(map.size, 4)
+    assert.equal(map.get('--it-elevation-low'), '0 $it-shadow-blur-s $it-shadow-offset-s 0 $it-color-shadow-whisper')
+  })
+
+  // NOT yet resolved — composedOf itself (substituting each embedded $it-*
+  // with its own resolved value) is still to do. This block only confirms
+  // step 1 (isRef anchoring) doesn't corrupt these on the way in.
 })

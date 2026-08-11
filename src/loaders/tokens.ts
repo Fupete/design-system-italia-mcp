@@ -28,7 +28,14 @@ export function parseDesignTokens(scss: string): DtiMap {
     const [, varName, rawValue, comment] = match
     const cssName = `--${varName}`
     const value = rawValue.trim()
-    const isRef = value.startsWith('$')
+    // Anchored: the ENTIRE value must be a single $var reference, not just
+    // start with $. A composite value (e.g. a shadow shorthand built from
+    // several $it-* references) also starts with $ but isn't a pure
+    // reference — the old unanchored check sliced the whole string as if it
+    // were one variable name, corrupting it. composedOf (resolving what's
+    // embedded in the composite) is separate work, not done here — this
+    // fix only stops the misclassification.
+    const isRef = /^\$[a-z0-9-]+$/.test(value)
     map.set(cssName, isRef
       ? `--${value.slice(1)}`
       : comment?.trim() ? `${value} (${comment.trim()})` : value
