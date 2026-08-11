@@ -101,7 +101,7 @@ interface ResolveResult {
   chain: ResolvedHop[]
 }
 
-function resolveChain(
+export function resolveChain(
   name: string,
   bsiMap: BsiMap,
   bridge: BridgeMap,
