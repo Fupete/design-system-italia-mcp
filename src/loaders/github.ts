@@ -2,20 +2,25 @@ import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { slugify } from '../slugify.js'
 import type { ComponentIssue, ComponentIssuesResult, BoardStatus } from '../types.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS } from '../constants.js'
+import { getUserAgent, FETCH_TIMEOUT_MS } from '../fetch.js'
 
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
+// Kept separate from fetch.ts's shared fetchJson — needs GitHub-specific
+// headers (Accept, API version, optional bearer auth) and 403 rate-limit
+// detection that the generic helper doesn't have.
 
 function authHeaders(): HeadersInit {
   const token = process.env.GITHUB_TOKEN
   return {
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
+    'User-Agent': getUserAgent(),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   }
 }
 
 async function fetchJson<T>(url: string): Promise<T> {
-  const res = await fetch(url, { headers: authHeaders() })
+  const res = await fetch(url, { headers: authHeaders(), signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
   if (res.status === 403) {
     const reset = res.headers.get('X-RateLimit-Reset')
     const resetTime = reset ? new Date(parseInt(reset) * 1000).toISOString() : 'unknown'

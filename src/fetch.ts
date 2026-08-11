@@ -18,11 +18,17 @@ export function getUserAgent(): string {
   return `design-system-italia-mcp/${VERSION} (+https://github.com/Fupete/design-system-italia-mcp)`
 }
 
+// Same value as scripts/canary.config.ts's httpGet — same class of fetch
+// (snapshot JSON/SCSS files), same reasonable upper bound for upstream
+// latency before giving up instead of hanging the tool call indefinitely.
+export const FETCH_TIMEOUT_MS = 15_000
+
 export async function fetchJson<T>(url: string): Promise<T> {
   const res = await fetch(url, {
     headers: {
       'User-Agent': getUserAgent(),
     },
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   })
   if (!res.ok) throw new Error(`Fetch failed: ${res.status} ${url}`)
   return res.json() as Promise<T>
@@ -33,6 +39,7 @@ export async function fetchText(url: string): Promise<string> {
     headers: {
       'User-Agent': getUserAgent(),
     },
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   })
   if (!res.ok) throw new Error(`Fetch failed: ${res.status} ${url}`)
   return res.text()

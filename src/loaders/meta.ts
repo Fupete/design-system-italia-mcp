@@ -1,7 +1,7 @@
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { SNAPSHOT_DSNAV_URL, SNAPSHOT_META_URL, DESIGNERS_SITE_BASE } from '../constants.js'
 import type { DsVersions, DsNavEntry, DsMeta, SnapshotMeta } from '../types.js'
-import { getUserAgent } from '../fetch.js'
+import { fetchJson } from '../fetch.js'
 
 // ─── Internal types for dsnav.json ───────────────────────────────────────────
 // Snapshot is already parsed JSON — no yaml needed.
@@ -38,22 +38,8 @@ export async function loadDsMeta(): Promise<DsMeta> {
 
   // Parallel fetch — graceful fallback on single source error
   const [dsnavResult, snapshotMetaResult] = await Promise.allSettled([
-    fetch(SNAPSHOT_DSNAV_URL, {
-      headers: {
-        'User-Agent': getUserAgent(),
-      },
-    }).then(r => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`)
-      return r.json() as Promise<RawDsnav>
-    }),
-    fetch(SNAPSHOT_META_URL, {
-      headers: {
-        'User-Agent': getUserAgent(),
-      },
-    }).then(r => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`)
-      return r.json() as Promise<SnapshotMeta>
-    }),
+    fetchJson<RawDsnav>(SNAPSHOT_DSNAV_URL),
+    fetchJson<SnapshotMeta>(SNAPSHOT_META_URL),
   ])
 
   // Versions — from snapshot-meta.json (already resolved at fetch time)
