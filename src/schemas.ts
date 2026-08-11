@@ -75,3 +75,20 @@ export const ZDevkitGetComponentMarkupOutput = z.object({
   }).nullable(),
   meta: ZMeta,
 })
+
+// ─── github_get_project_repo_links ────────────────────────────────────────────
+
+export const ZGithubGetProjectRepoLinksOutput = z.object({
+  board: z.object({
+    repos: z.array(z.object({
+      repo: z.string(),
+      openIssuesUrl: z.string(),
+    })),
+    note: z.string(),
+  }),
+  projectBoard: z.object({
+    url: z.string(),
+    note: z.string(),
+  }),
+  meta: ZMeta,
+})
