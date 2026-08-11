@@ -39,6 +39,12 @@ function statusBadge(s) {
   return badge(s || 'N/D', 'gray');
 }
 
+function dkBadge(dk) {
+  if (dk === true) return badge('PRESENTE', 'green'); // Dev Kit-only, no status.json row to read a real value from
+  if (!dk) return badge('NON PRESENTE', 'gray');
+  return statusBadge(dk); // real value from components-status.json, same treatment as bsi/uik
+}
+
 /* Components table */
 const N = 8;
 let curList = [], exp = false;
@@ -52,7 +58,7 @@ function drawRows() {
     <td><strong>${esc(c.name)}</strong></td>
     <td>${statusBadge(c.bsi)}</td>
     <td>${statusBadge(c.uik)}</td>
-    <td>${c.dk ? badge('PRESENTE', 'green') : badge('NON PRESENTE', 'gray')}</td>
+    <td>${dkBadge(c.dk)}</td>
   </tr>`).join('');
   const tog = document.getElementById('dash-tog');
   const cnt = document.getElementById('dash-tog-n');
@@ -610,7 +616,7 @@ async function loadDashboard() {
       const bsiSlug = name.toLowerCase().replace(/\s+/g, '-');
       const dkEntry = dkEntries.get(DK_SLUG_ALIASES[bsiSlug] ?? bsiSlug);
       if (dkEntry) claimedDkIds.add(dkEntry.id);
-      return { name, bsi: c['bootstrap Italia'] || '', uik: c['uI Kit Italia'] || '', dk: !!dkEntry };
+      return { name, bsi: c['bootstrap Italia'] || '', uik: c['uI Kit Italia'] || '', dk: c['dev Kit Italia'] || false };
     }).filter(c => c.name);
 
     // Dev Kit-only components (e.g. Icon) have no BSI status entry, so the

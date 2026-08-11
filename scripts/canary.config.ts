@@ -35,7 +35,7 @@ import {
   GITHUB_CONTENTS_DEVKIT_STORIES_URL,
 } from "../src/constants.js";
 import { parseBridge, parseDesignTokens, parseBsiMap } from "../src/loaders/tokens.js";
-import { slugFromStorybookTitle } from "../src/slugify.js";
+import { slugFromStorybookTitle, slugify, slugsToTry } from "../src/slugify.js";
 
 // ── Shared result type ────────────────────────────────────────────────────────
 
@@ -397,6 +397,52 @@ export const SNAPSHOT_FRESHNESS: PipelineCheck[] = [
         return {
           url: SNAPSHOT_BSI_STATUS_URL, ok: false, ms: Date.now() - t0,
           error: `unexpected "status a11y check" value(s): ${unexpected.join(', ')} — bsi.ts's checkCompleted === 'Done' literal may be stale`,
+        };
+      }
+      return { url: SNAPSHOT_BSI_STATUS_URL, ok: true, ms: Date.now() - t0 };
+    },
+  },
+  {
+    name: "[snapshot] Dashboard DK_SLUG_ALIASES — no BSI/Dev Kit duplicate rows",
+    async run({ get }) {
+      const t0 = Date.now();
+      const [statusRes, indexRes] = await Promise.all([
+        get(SNAPSHOT_BSI_STATUS_URL),
+        get(SNAPSHOT_DEVKIT_INDEX_URL),
+      ]);
+      if (!statusRes.ok) return { url: SNAPSHOT_BSI_STATUS_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${statusRes.status}` };
+      if (!indexRes.ok) return { url: SNAPSHOT_DEVKIT_INDEX_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${indexRes.status}` };
+
+      const status = JSON.parse(statusRes.body) as { items?: Array<{ title: string }> };
+      const bsiSlugs = (status.items ?? []).map((e) =>
+        slugify(e.title.replace(/`/g, '').replace(/\s*-\s*check\s+a11y\s+e\s+status\s*/i, '').trim())
+      );
+
+      const index = JSON.parse(indexRes.body) as { entries?: Record<string, { id: string; title: string; type: string }> };
+      const dkSlugs = new Set(
+        Object.values(index.entries ?? {})
+          .filter((e) => e.type === 'docs' && e.id.startsWith('componenti-'))
+          .map((e) => slugFromStorybookTitle(e.title))
+          .filter((s): s is string => !!s)
+      );
+
+      // Mirrors site.js's DK_SLUG_ALIASES — keep in sync when site.js changes.
+      const DASHBOARD_DK_ALIASES: Record<string, string> = {
+        'buttons': 'button', 'chips': 'chip', 'notifications': 'notification',
+        'progress-indicators': 'progress', 'sections': 'section',
+        'steppers': 'stepper', 'toggles': 'toggle',
+      };
+
+      const missed = bsiSlugs.filter((bsiSlug) => {
+        const narrowMatch = dkSlugs.has(DASHBOARD_DK_ALIASES[bsiSlug] ?? bsiSlug);
+        if (narrowMatch) return false;
+        return slugsToTry(bsiSlug).some((s) => dkSlugs.has(s));
+      });
+
+      if (missed.length > 0) {
+        return {
+          url: SNAPSHOT_BSI_STATUS_URL, ok: false, ms: Date.now() - t0,
+          error: `${missed.length} component(s) would show as duplicated rows in the dashboard — DK_SLUG_ALIASES in site.js is missing an alias for: ${missed.join(', ')}`,
         };
       }
       return { url: SNAPSHOT_BSI_STATUS_URL, ok: true, ms: Date.now() - t0 };
