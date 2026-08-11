@@ -49,8 +49,8 @@ function repoFromUrl(repositoryUrl: string): string {
 export async function loadComponentIssues(slug: string): Promise<ComponentIssuesResult> {
   const normalized = slugify(slug)
   const key = CACHE_KEYS.githubIssues(normalized)
-  const cached = cache.get<ComponentIssue[]>(key)
-  if (cached) return { issues: cached }
+  const cached = cache.get<ComponentIssuesResult>(key)
+  if (cached) return cached
 
   const repoFilter = GITHUB_WATCHED_REPOS.map((r) => `repo:${r}`).join(' ')
   const q = encodeURIComponent(`${normalized} ${repoFilter} is:issue is:open`)
@@ -60,7 +60,7 @@ export async function loadComponentIssues(slug: string): Promise<ComponentIssues
     const raw = await fetchJson<SearchResult>(url)
 
     const issues: ComponentIssue[] = raw.items
-      // Filter only the 4 relevant repositories
+      // Filter only the 4 relevant repos
       .filter((item) =>
         GITHUB_WATCHED_REPOS.some((r) => item.repository_url.endsWith(r))
       )
@@ -73,12 +73,18 @@ export async function loadComponentIssues(slug: string): Promise<ComponentIssues
         labels: item.labels.map((l) => l.name),
       }))
 
-    cache.set(key, issues, TTL.githubIssues)
-    return { issues }
+    const result: ComponentIssuesResult = { issues }
+    cache.set(key, result, TTL.githubIssues)
+    return result
   } catch (err) {
-    // Rate limit or network error — return empty array with warning
+    // Rate limit or network error: cache the failure too, same TTL as
+    // a success. Without this, every call for the same slug during a rate
+    // limit window re-hits GitHub and gets another 403, wasting the budget
+    // instead of backing off.
     console.warn(`GitHub issues loader: ${err}`)
-    return { issues: [], error: (err as Error).message }
+    const result: ComponentIssuesResult = { issues: [], error: (err as Error).message }
+    cache.set(key, result, TTL.githubIssues)
+    return result
   }
 }
 

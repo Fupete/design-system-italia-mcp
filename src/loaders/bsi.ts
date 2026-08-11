@@ -93,9 +93,15 @@ export async function loadStatus(slug: string): Promise<ComponentStatus | null> 
 type RawVariantsJson = Array<{ name: string; content: string }>
 type RawVariantsFile = { resolvedSlug: string; data: RawVariantsJson } | RawVariantsJson
 
-export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
+interface ResolvedVariants {
+  resolvedSlug: string
+  variants: ComponentVariant[]
+}
+
+// Shared by loadVariants/loadVariantsResolvedSlug, both need the same fetch
+async function loadResolvedVariants(slug: string): Promise<ResolvedVariants> {
   const key = CACHE_KEYS.bsiMarkup(slug)
-  const cached = cache.get<ComponentVariant[]>(key)
+  const cached = cache.get<ResolvedVariants>(key)
   if (cached) return cached
 
   for (const s of slugsToTry(slug)) {
@@ -103,29 +109,26 @@ export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
     try {
       const raw = await fetchJson<RawVariantsFile>(url)
       // Support both wrapped format (with resolvedSlug) and legacy array format
-      const items = Array.isArray(raw) ? raw : (raw as { resolvedSlug: string; data: RawVariantsJson }).data
+      const isWrapped = !Array.isArray(raw)
+      const items = isWrapped ? (raw as { resolvedSlug: string; data: RawVariantsJson }).data : raw
+      const resolvedSlug = isWrapped ? (raw as { resolvedSlug: string }).resolvedSlug : s
       const variants = items.map((v) => ({ name: v.name.trim(), html: v.content }))
-      cache.set(key, variants, TTL.snapshot)
-      return variants
+      const result: ResolvedVariants = { resolvedSlug, variants }
+      cache.set(key, result, TTL.snapshot)
+      return result
     } catch {
       continue
     }
   }
-  return []
+  return { resolvedSlug: slug, variants: [] }
+}
+
+export async function loadVariants(slug: string): Promise<ComponentVariant[]> {
+  return (await loadResolvedVariants(slug)).variants
 }
 
 export async function loadVariantsResolvedSlug(slug: string): Promise<string> {
-  for (const s of slugsToTry(slug)) {
-    const url = SNAPSHOT_BSI_COMPONENT_URL(s)
-    try {
-      const raw = await fetchJson<RawVariantsFile>(url)
-      if (!Array.isArray(raw) && raw.resolvedSlug) return raw.resolvedSlug
-      return s
-    } catch {
-      continue
-    }
-  }
-  return slug
+  return (await loadResolvedVariants(slug)).resolvedSlug
 }
 
 // ─── bsi/custom-properties.json ──────────────────────────────────
