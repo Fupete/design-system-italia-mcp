@@ -129,12 +129,12 @@ const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse
   try {
     const url = new URL(req.url ?? '/', `http://localhost:${PORT}`)
 
-    // CORS — restrict /cache/invalidate to same origin
-    if (url.pathname === '/cache/invalidate') {
-      res.setHeader('Access-Control-Allow-Origin', 'null')
-    } else {
-      res.setHeader('Access-Control-Allow-Origin', '*')
-    }
+    // CORS — no legitimate browser-JS use case for any endpoint here today.
+    // Documented usage (minisite: npx/stdio, VS Code mcp.json/stdio, HTTP
+    // remote client config) is always a native/desktop MCP client talking
+    // HTTP server-to-server, never a webpage's JS calling this URL directly
+    // — CORS doesn't apply to that traffic regardless of this header.
+    res.setHeader('Access-Control-Allow-Origin', 'null')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization')
 
