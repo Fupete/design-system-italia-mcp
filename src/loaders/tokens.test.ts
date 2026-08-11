@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { normalizeTokenName, roleFor, hopFor, parseDesignTokens, parseBridge, parseBsiMap, resolveChain } from './tokens.js'
+import { normalizeTokenName, roleFor, hopFor, parseDesignTokens, parseBridge, parseBsiMap, resolveChain, resolveComposite, findEmbeddedRefs } from './tokens.js'
 import type { DtiMap, BridgeMap } from './tokens.js'
 
 // ─── normalizeTokenName ─────────────────────────────────────────────────────
@@ -235,34 +235,34 @@ describe('parseBsiMap', () => {
     assert.equal(map.get('--bsi-card-padding'), '--bsi-spacing-l')
   })
 
-  it('KNOWN BUG (composedOf target): a composite value with an embedded var() is dropped entirely, not partially resolved', () => {
-    // A box-shadow-style composite like "0 var(--bsi-shadow-x) 4px" doesn't
-    // start with 'var(', so it fails parseBsiMap's own startsWith check and
-    // never enters the map at all — not even a wrong entry, just silence.
-    // This is the BSI-side twin of the DTI-side bug above: classifyValue()
-    // in bsi.ts has the exact same startsWith('var(') gate and would call
-    // this value 'literal', so tools never even attempt to resolve it.
+  it('a composite value with an embedded var() is now preserved raw, not dropped (composedOf step 2)', () => {
     const raw = {
       accordion: [
         { 'variable-name': '--bsi-accordion-shadow', value: '0 var(--bsi-shadow-x) 4px' },
       ],
     }
     const map = parseBsiMap(raw)
-    assert.equal(map.size, 0)
+    assert.equal(map.get('--bsi-accordion-shadow'), '0 var(--bsi-shadow-x) 4px')
   })
 
-  it('KNOWN BUG (composedOf target): only the first var() in a multi-reference value is captured', () => {
-    // Even in the cases parseBsiMap DOES accept (value starts with 'var('),
-    // the anchored capture group only grabs the first reference — a value
-    // like "var(--a) var(--b)" silently loses --b, no error, no partial hint.
+  it('a multi-reference value is also preserved raw — both refs survive for resolveComposite to find', () => {
     const raw = {
       accordion: [
         { 'variable-name': '--bsi-accordion-multi', value: 'var(--bsi-color-a) var(--bsi-color-b)' },
       ],
     }
     const map = parseBsiMap(raw)
-    assert.equal(map.get('--bsi-accordion-multi'), '--bsi-color-a')
-    // --bsi-color-b is nowhere — this assertion documents the loss, not a fix
+    assert.equal(map.get('--bsi-accordion-multi'), 'var(--bsi-color-a) var(--bsi-color-b)')
+  })
+
+  it('still stores a single pure reference as a bare name, unchanged from before', () => {
+    const raw = {
+      accordion: [
+        { 'variable-name': '--bsi-accordion-body-padding-x', value: 'var(--bsi-spacing-m)' },
+      ],
+    }
+    const map = parseBsiMap(raw)
+    assert.equal(map.get('--bsi-accordion-body-padding-x'), '--bsi-spacing-m')
   })
 })
 
@@ -341,23 +341,143 @@ describe('resolveChain', () => {
     assert.deepEqual(chain.map((h) => h.name), ['--it-b', '--it-a'])
   })
 
-  it('KNOWN BUG (composedOf target): a composite bsiMap value only follows its single stored reference', () => {
-    // Once parseBsiMap starts preserving composite values (the fix above),
-    // resolveChain itself will ALSO need to change — today it treats
-    // bsiMap.get(name) as always a single --bsi-*/--it-* name to recurse
-    // into, with no concept of "this hop actually has 3 embedded
-    // references, resolve all of them". This test exists to be replaced,
-    // not extended, once the composedOf data model lands (probably an
-    // array of sub-chains per hop instead of one linear array).
+  it('a composite bsiMap value resolves every embedded reference and substitutes into the string', () => {
     const compositeBsiMap = new Map([
-      ['--bsi-accordion-shadow', '--bsi-shadow-x'], // today: only one ref survives parseBsiMap at all
+      ['--bsi-accordion-shadow', '0 var(--bsi-shadow-x) 4px'],
     ])
     const compositeBridge = new Map([['--bsi-shadow-x', '--it-shadow-x']])
     const compositeDti: DtiMap = new Map([['--it-shadow-x', '2px']])
-    const { value } = resolveChain('--bsi-accordion-shadow', compositeBsiMap, compositeBridge, compositeDti)
-    assert.equal(value, '2px')
-    // The real composite ("0 var(--bsi-shadow-x) 4px") is lost long before
-    // this point today — see the parseBsiMap KNOWN BUG test above.
+    const { value, chain, composedOf, note } = resolveChain(
+      '--bsi-accordion-shadow', compositeBsiMap, compositeBridge, compositeDti
+    )
+    assert.equal(value, '0 2px 4px')
+    assert.deepEqual(chain, []) // composite path doesn't use the linear chain
+    assert.equal(composedOf?.length, 1)
+    assert.equal(composedOf?.[0].name, '--bsi-shadow-x')
+    assert.equal(composedOf?.[0].value, '2px')
+    assert.equal(note, undefined) // fully resolved, no note
+  })
+
+  it('a partially-resolved composite substitutes what it can and reports what it could not, via note', () => {
+    const compositeBsiMap = new Map([
+      ['--bsi-accordion-shadow', '0 var(--bsi-shadow-x) var(--bsi-shadow-missing) 4px'],
+    ])
+    const compositeBridge = new Map([['--bsi-shadow-x', '--it-shadow-x']])
+    const compositeDti: DtiMap = new Map([['--it-shadow-x', '2px']])
+    // --bsi-shadow-missing has no bridge/bsiMap entry — dead end
+    const { value, composedOf, note } = resolveChain(
+      '--bsi-accordion-shadow', compositeBsiMap, compositeBridge, compositeDti
+    )
+    assert.equal(value, '0 2px var(--bsi-shadow-missing) 4px')
+    assert.equal(composedOf?.length, 2)
+    assert.equal(composedOf?.find((c) => c.name === '--bsi-shadow-missing')?.value, null)
+    assert.match(note ?? '', /1 of 2 distinct embedded references resolved/)
+    assert.match(note ?? '', /--bsi-shadow-missing/)
+  })
+})
+
+// ─── findEmbeddedRefs ───────────────────────────────────────────────────────
+
+describe('findEmbeddedRefs', () => {
+  it('finds a single $it- reference embedded mid-string', () => {
+    const refs = findEmbeddedRefs('0 $it-shadow-blur-s 4px')
+    assert.equal(refs.length, 1)
+    assert.equal(refs[0].ref, '$it-shadow-blur-s')
+    assert.equal(refs[0].name, '--it-shadow-blur-s')
+  })
+
+  it('finds all three real elevation references, in order', () => {
+    const refs = findEmbeddedRefs('0 $it-shadow-blur-s $it-shadow-offset-s 0 $it-color-shadow-whisper')
+    assert.deepEqual(refs.map((r) => r.name), [
+      '--it-shadow-blur-s',
+      '--it-shadow-offset-s',
+      '--it-color-shadow-whisper',
+    ])
+  })
+
+  it('finds var(--bsi-*) references too, including one with a fallback', () => {
+    const refs = findEmbeddedRefs('0 var(--bsi-shadow-x) var(--bsi-shadow-y, 4px)')
+    assert.deepEqual(refs.map((r) => r.name), ['--bsi-shadow-x', '--bsi-shadow-y'])
+  })
+
+  it('returns an empty array for a true literal with no embedded references', () => {
+    assert.deepEqual(findEmbeddedRefs('24px (6x la dimensione della baseline)'), [])
+  })
+})
+
+// ─── resolveComposite ───────────────────────────────────────────────────────
+
+describe('resolveComposite', () => {
+  it('resolves the real 3-reference elevation-low value end to end', () => {
+    const bsiMap = new Map()
+    const bridge = new Map()
+    const dtiRaw: DtiMap = new Map([
+      ['--it-shadow-blur-s', '2px'],
+      ['--it-shadow-offset-s', '1px'],
+      ['--it-color-shadow-whisper', 'rgba(0,0,0,.08)'],
+    ])
+    const { value, composedOf, note } = resolveComposite(
+      '0 $it-shadow-blur-s $it-shadow-offset-s 0 $it-color-shadow-whisper',
+      bsiMap, bridge, dtiRaw
+    )
+    assert.equal(value, '0 2px 1px 0 rgba(0,0,0,.08)')
+    assert.equal(composedOf.length, 3)
+    assert.equal(note, undefined)
+  })
+
+  it('resolves a real 2-reference spacing composite (autocomplete item spacing)', () => {
+    const dtiRaw: DtiMap = new Map([
+      ['--it-spacing-xs', '12px'],
+      ['--it-spacing-s', '16px'],
+    ])
+    const bridge = new Map([
+      ['--bsi-spacing-xs', '--it-spacing-xs'],
+      ['--bsi-spacing-s', '--it-spacing-s'],
+    ])
+    const { value, composedOf } = resolveComposite(
+      'var(--bsi-spacing-xs) var(--bsi-spacing-s)', new Map(), bridge, dtiRaw
+    )
+    assert.equal(value, '12px 16px')
+    assert.equal(composedOf.length, 2)
+  })
+
+  it('resolves refs embedded inside calc() — real case, notification padding-right', () => {
+    // findEmbeddedRefs/resolveComposite don't parse calc() syntax at all —
+    // they just scan the whole string for var(...) occurrences wherever
+    // they sit, so calc() falls out correctly without any special-casing.
+    const dtiRaw: DtiMap = new Map([
+      ['--it-spacing-m', '24px'],
+      ['--it-spacing-xl', '40px'],
+    ])
+    const bridge = new Map([
+      ['--bsi-spacing-m', '--it-spacing-m'],
+      ['--bsi-spacing-xl', '--it-spacing-xl'],
+    ])
+    const { value, composedOf } = resolveComposite(
+      'calc(var(--bsi-spacing-m) + var(--bsi-spacing-xl))', new Map(), bridge, dtiRaw
+    )
+    assert.equal(value, 'calc(24px + 40px)')
+    assert.equal(composedOf.length, 2)
+  })
+
+  it('deduplicates a repeated reference — real case, timeline content-padding (4 refs, 3 identical)', () => {
+    const bsiMap = new Map()
+    const bridge = new Map([
+      ['--bsi-spacing-s', '--it-spacing-s'],
+      ['--bsi-spacing-xl', '--it-spacing-xl'],
+    ])
+    const dtiRaw: DtiMap = new Map([
+      ['--it-spacing-s', '16px'],
+      ['--it-spacing-xl', '40px'],
+    ])
+    const { value, composedOf } = resolveComposite(
+      'var(--bsi-spacing-s) var(--bsi-spacing-s) var(--bsi-spacing-s) var(--bsi-spacing-xl)',
+      bsiMap, bridge, dtiRaw
+    )
+    assert.equal(value, '16px 16px 16px 40px')
+    // 2 distinct refs, not 4 — --bsi-spacing-s resolved once, not three times
+    assert.equal(composedOf.length, 2)
+    assert.equal(composedOf.filter((c) => c.name === '--bsi-spacing-s').length, 1)
   })
 })
 

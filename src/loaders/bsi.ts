@@ -138,7 +138,16 @@ type RawTokensJson = Record<string, RawTokenEntry[]>
 
 export function classifyValue(value: string): CssToken['valueType'] {
   if (value.startsWith('#{') || value.startsWith('escape-svg(')) return 'scss-expression'
-  if (value.startsWith('var(')) return 'token-reference'
+  // Anchored: the ENTIRE value must be a single var(--x) call (optionally
+  // with a fallback, var(--x, fallback)) to count as a pure reference.
+  // Before this fix, value.startsWith('var(') also matched a composite
+  // like "0 var(--bsi-shadow-x) 4px" — startsWith is true, but the value
+  // isn't just that one reference, so it was silently misclassified as
+  // 'literal' by falling through, and never resolved.
+  if (/^var\(--[a-z0-9-]+(?:,\s*[^)]+)?\)$/.test(value)) return 'token-reference'
+  // Contains at least one var(...) reference somewhere, but isn't itself
+  // a single pure reference — composedOf territory.
+  if (/var\(--[a-z0-9-]+\)/.test(value)) return 'composite'
   return 'literal'
 }
 

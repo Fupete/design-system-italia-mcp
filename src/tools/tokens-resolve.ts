@@ -45,6 +45,7 @@ export function registerTokensResolve(server: McpServer): void {
         value: result.value,
         resolvedVia: result.resolvedVia,
         ...(result.ambiguous ? { ambiguousValues: result.ambiguous } : {}),
+        ...(result.composedOf ? { composedOf: result.composedOf } : {}),
         meta: buildMeta({
           dsMeta,
           sourceUrls: [BSI_CUSTOM_PROPERTIES_URL, BSI_ROOT_SCSS_URL, DTI_VARIABLES_SCSS_URL],

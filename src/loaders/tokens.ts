@@ -1,7 +1,7 @@
 import { fetchText, fetchJson } from '../fetch.js'
 import { cache, CACHE_KEYS, TTL } from '../cache.js'
 import { loadAllTokens, classifyValue } from './bsi.js'
-import type { CssToken, ResolvedHop, TokenRole } from '../types.js'
+import type { CssToken, ResolvedHop, TokenRole, ComposedRef } from '../types.js'
 import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL, SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL } from '../constants.js'
 
 // Map 1: --bsi-* component tokens (custom-properties.json) — token-reference entries only
@@ -15,9 +15,9 @@ import { SNAPSHOT_DTI_VARIABLES_SCSS_URL, SNAPSHOT_BSI_ROOT_SCSS_URL, SNAPSHOT_B
 // parsing logic the server uses, instead of a duplicated regex that can drift
 // out of sync (this drift is what caused the v0.3.12 root.scss bug).
 
-export type DtiMap = Map<string, string>     // --it-* → value or --it-* reference
+export type DtiMap = Map<string, string>     // --it-* → value, --it-* reference, or a raw composite string
 export type BridgeMap = Map<string, string>  // --bsi-* → --it-* (root.scss)
-type BsiMap = Map<string, string>     // --bsi-* → --bsi-* or --it-* (custom-properties.json, token-reference only)
+type BsiMap = Map<string, string>     // --bsi-* → bare next-hop name, or a raw composite string (custom-properties.json)
 
 // Format: $it-spacing-m: 1.5rem; // 24px
 export function parseDesignTokens(scss: string): DtiMap {
@@ -33,8 +33,8 @@ export function parseDesignTokens(scss: string): DtiMap {
     // several $it-* references) also starts with $ but isn't a pure
     // reference — the old unanchored check sliced the whole string as if it
     // were one variable name, corrupting it. composedOf (resolving what's
-    // embedded in the composite) is separate work, not done here — this
-    // fix only stops the misclassification.
+    // embedded in the composite) is handled downstream in resolveChain,
+    // not here — this fix only stops the misclassification on the way in.
     const isRef = /^\$[a-z0-9-]+$/.test(value)
     map.set(cssName, isRef
       ? `--${value.slice(1)}`
@@ -56,18 +56,32 @@ export function parseBridge(scss: string): BridgeMap {
   return map
 }
 
-// Extract --bsi-* → var(--bsi-* | --it-*) from custom-properties.json
-// Only token-reference entries — literals are already concrete (see
-// resolveToken()'s literal fallback for those).
+// Extract --bsi-* → next-hop from custom-properties.json. Two shapes stored:
+// - Pure single reference (var(--x), optionally with a fallback): stores the
+//   bare next-hop name, e.g. "--bsi-spacing-m" — resolveChain follows it
+//   directly, same as before.
+// - Composite (contains var(...) somewhere but isn't itself a single pure
+//   reference, e.g. "var(--bsi-spacing-xs) var(--bsi-spacing-s)" or
+//   "calc(var(--bsi-spacing-m) + var(--bsi-spacing-xl))"): stores the RAW
+//   value string as-is. resolveChain distinguishes the two by shape (a bare
+//   name matches /^--(bsi|it)-[a-z0-9-]+$/, a raw composite string doesn't)
+//   and resolves the composite by scanning it for every embedded reference
+//   (composedOf), instead of discarding it (the old bug — 8 real entries in
+//   custom-properties.json as of 2026-08-11, verified via diagnostic script).
 type RawTokensJson = Record<string, Array<{ 'variable-name': string; value: string }>>
 
 export function parseBsiMap(raw: RawTokensJson): BsiMap {
   const map: BsiMap = new Map()
   for (const entries of Object.values(raw)) {
     for (const e of entries) {
-      if (!e.value.startsWith('var(')) continue
-      const ref = e.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
-      if (ref) map.set(e['variable-name'], ref)
+      const singleRef = e.value.match(/^var\((--[a-z0-9-]+)(?:,\s*[^)]+)?\)$/)
+      if (singleRef) {
+        map.set(e['variable-name'], singleRef[1])
+        continue
+      }
+      if (/var\(--[a-z0-9-]+\)/.test(e.value)) {
+        map.set(e['variable-name'], e.value)
+      }
     }
   }
   return map
@@ -97,15 +111,96 @@ export function hopFor(name: string, dtiRaw: DtiMap, bridge: BridgeMap): Resolve
   }
 }
 
+// ─── Composite value detection & resolution ────────────────────────────────
+// A composite is a value with one or more references embedded ANYWHERE in
+// the string (not just at the start) — e.g. a spacing shorthand
+// ("var(--bsi-spacing-xs) var(--bsi-spacing-s)") or a calc() expression
+// ("calc(var(--bsi-spacing-m) + var(--bsi-spacing-xl))"). Detection can't
+// rely on startsWith(), the reference doesn't have to be first, and there
+// can be more than one. Verified against real custom-properties.json data
+// (2026-08-11): 8 entries across 6 components, 2-4 embedded refs each,
+// including one inside calc() — the scan-the-whole-string approach handles
+// calc() correctly with no special-casing, it just doesn't care about the
+// CSS function wrapped around the reference.
+
+const EMBEDDED_REF_PATTERN = /\$it-[a-z0-9-]+|var\(--[a-z0-9-]+(?:,\s*[^)]+)?\)/g
+
+export function findEmbeddedRefs(value: string): Array<{ ref: string; name: string }> {
+  const refs: Array<{ ref: string; name: string }> = []
+  for (const m of value.matchAll(EMBEDDED_REF_PATTERN)) {
+    const ref = m[0]
+    const name = ref.startsWith('$')
+      ? `--${ref.slice(1)}`
+      : ref.match(/^var\((--[a-z0-9-]+)/)![1]
+    refs.push({ ref, name })
+  }
+  return refs
+}
+
+function isBareTokenName(value: string): boolean {
+  return /^--(bsi|it)-[a-z0-9-]+$/.test(value)
+}
+
+// Resolves every reference embedded in a raw composite value, substitutes
+// each one that resolves into the string, and reports which (if any) didn't.
+// KNOWN LIMITATION: if an embedded reference's OWN resolution passes through
+// another composite value somewhere in its chain, that nested composite's
+// own composedOf/note is not propagated here — only its final value. Not
+// observed in real data today (all 8 known composites resolve their
+// embedded refs to plain dimensions/colors, no nested composites), but
+// worth knowing if declaredTimes/ambiguousValues work later surfaces a
+// deeper case.
+export function resolveComposite(
+  rawValue: string,
+  bsiMap: BsiMap,
+  bridge: BridgeMap,
+  dtiRaw: DtiMap,
+  visited = new Set<string>()
+): { value: string; composedOf: ComposedRef[]; note?: string } {
+  const refs = findEmbeddedRefs(rawValue)
+
+  // Dedupe by raw ref text — a value can repeat the same reference more
+  // than once (real case: --bsi-timeline-content-padding repeats
+  // var(--bsi-spacing-s) three times). Resolve each DISTINCT ref once;
+  // replaceAll below already substitutes every occurrence in one pass, so
+  // resolving the same ref repeatedly would only bloat composedOf with
+  // identical entries without changing the result.
+  const uniqueRefs = [...new Map(refs.map((r) => [r.ref, r])).values()]
+
+  const composedOf: ComposedRef[] = []
+  let resolvedString = rawValue
+  const unresolved: string[] = []
+
+  for (const { ref, name } of uniqueRefs) {
+    const result = resolveChain(name, bsiMap, bridge, dtiRaw, new Set(visited))
+    composedOf.push({ ref, name, value: result.value, resolvedVia: [hopFor(name, dtiRaw, bridge), ...result.chain] })
+    if (result.value !== null) {
+      resolvedString = resolvedString.replaceAll(ref, result.value)
+    } else {
+      unresolved.push(ref)
+    }
+  }
+
+  const note = unresolved.length > 0
+    ? `${uniqueRefs.length - unresolved.length} of ${uniqueRefs.length} distinct embedded references resolved — ` +
+    `could not resolve: ${unresolved.join(', ')} (see composedOf for detail)`
+    : undefined
+
+  return { value: resolvedString, composedOf, note }
+}
+
 // ─── Unified resolver ─────────────────────────────────────────────────────────
 //
 // Follows the full chain: --bsi-* → --bsi-* → --it-* → --it-* → concrete value
 // Returns { value, chain } where chain is every intermediate hop (excluding
-// the starting name), each labeled with its manipulability role.
+// the starting name), each labeled with its manipulability role. composedOf/
+// note are present only when the chain terminates in a composite value.
 
 interface ResolveResult {
   value: string | null
   chain: ResolvedHop[]
+  composedOf?: ComposedRef[]
+  note?: string
 }
 
 export function resolveChain(
@@ -122,19 +217,37 @@ export function resolveChain(
   if (name.startsWith('--bsi-')) {
     const next = bsiMap.get(name) ?? bridge.get(name)
     if (!next) return { value: null, chain: [] }
-    const result = resolveChain(next, bsiMap, bridge, dtiRaw, visited)
-    return { value: result.value, chain: [hopFor(next, dtiRaw, bridge), ...result.chain] }
+
+    if (isBareTokenName(next)) {
+      const result = resolveChain(next, bsiMap, bridge, dtiRaw, visited)
+      return { value: result.value, chain: [hopFor(next, dtiRaw, bridge), ...result.chain] }
+    }
+
+    // next is a raw composite string (see parseBsiMap) — not a name to
+    // recurse into, a value to resolve in place.
+    const { value, composedOf, note } = resolveComposite(next, bsiMap, bridge, dtiRaw, visited)
+    return { value, chain: [], composedOf, note }
   }
 
   // --it-* → follow dtiRaw
   if (name.startsWith('--it-')) {
     const val = dtiRaw.get(name)
     if (!val) return { value: null, chain: [] }
-    if (val.startsWith('--it-')) {
+
+    if (isBareTokenName(val)) {
       const result = resolveChain(val, bsiMap, bridge, dtiRaw, visited)
       return { value: result.value, chain: [hopFor(val, dtiRaw, bridge), ...result.chain] }
     }
-    return { value: val, chain: [] }
+
+    const refs = findEmbeddedRefs(val)
+    if (refs.length === 0) {
+      // True literal (possibly with a folded comment, e.g. "24px (6x...)"),
+      // nothing embedded — today's behavior, unchanged.
+      return { value: val, chain: [] }
+    }
+
+    const { value, composedOf, note } = resolveComposite(val, bsiMap, bridge, dtiRaw, visited)
+    return { value, chain: [], composedOf, note }
   }
 
   return { value: null, chain: [] }
@@ -183,6 +296,13 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
   }
 
   return tokens.map((token) => {
+    if (token.valueType === 'composite') {
+      // The token's own .value IS the composite string (from custom-
+      // properties.json directly) — resolve it in place, no name lookup.
+      const { value, composedOf, note } = resolveComposite(token.value, maps.bsiMap, maps.bridge, maps.dtiRaw)
+      return { ...token, valueResolved: value, composedOf, ...(note ? { valueResolvedNote: note } : {}) }
+    }
+
     if (token.valueType !== 'token-reference') return token
 
     const ref = token.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
@@ -254,13 +374,15 @@ export async function listGlobalBridgePairs(): Promise<Array<{
   bsiGlobal: string
   value: string | null
   resolvedVia: ResolvedHop[]
+  composedOf?: ComposedRef[]
+  note?: string
 }>> {
   const { bsiMap, bridge, dtiRaw } = await loadMaps()
-  const results: Array<{ it: string; bsiGlobal: string; value: string | null; resolvedVia: ResolvedHop[] }> = []
+  const results: Array<{ it: string; bsiGlobal: string; value: string | null; resolvedVia: ResolvedHop[]; composedOf?: ComposedRef[]; note?: string }> = []
 
   for (const [bsiGlobal, it] of bridge) {
-    const { value, chain } = resolveChain(it, bsiMap, bridge, dtiRaw)
-    results.push({ it, bsiGlobal, value, resolvedVia: chain })
+    const { value, chain, composedOf, note } = resolveChain(it, bsiMap, bridge, dtiRaw)
+    results.push({ it, bsiGlobal, value, resolvedVia: chain, composedOf, note })
   }
   return results
 }
@@ -275,9 +397,12 @@ export interface ResolveTokenResult {
   // across components — cannot pick one without guessing which component
   // the caller means. Surfaced instead of an arbitrary answer.
   ambiguous?: Array<{ component: string; value: string }>
+  // Present only for a composite value — one entry per embedded reference.
+  composedOf?: ComposedRef[]
   // Present when value is null but the token exists with a value that
-  // genuinely can't be resolved (scss-expression, or a broken chain) —
-  // distinguishes "found but unresolvable" from "not found at all".
+  // genuinely can't be resolved (scss-expression, or a broken chain), OR
+  // when a composite resolved only partially — distinguishes "found but
+  // unresolvable/incomplete" from "not found at all".
   note?: string
 }
 
@@ -330,19 +455,32 @@ export async function resolveToken(input: string): Promise<ResolveTokenResult> {
           note: 'scss-expression value(s) found — cannot resolve to a concrete value (requires SCSS compilation context)',
         }
       }
+      if (single.type === 'composite') {
+        const { value, composedOf, note } = resolveComposite(single.value, bsiMap, bridge, dtiRaw)
+        return { name, value, resolvedVia: [], composedOf, note }
+      }
       // type === 'token-reference' and unambiguous — fall through to the
       // normal chain resolution below, which follows this single reference.
     }
   }
 
-  const { value, chain } = resolveChain(name, bsiMap, bridge, dtiRaw)
-  return { name, value, resolvedVia: chain }
+  const { value, chain, composedOf, note } = resolveChain(name, bsiMap, bridge, dtiRaw)
+  return { name, value, resolvedVia: chain, composedOf, note }
 }
 
 // ─── Inverse lookup (tokens_find_components) ──────────────────────────────────
 // Given a token name, finds every BSI component whose token resolves through
 // it — either directly (the token itself) or as an intermediate hop in the
 // --bsi-* -> --it-* chain.
+//
+// NOT extended for composedOf: a component whose token embeds the target
+// only inside a composite value (rather than as a direct token-reference
+// hop) is not found here yet. Deliberately deferred — classifyValue()
+// returning 'composite' for those 8 entries still routes them through the
+// existing `!== 'token-reference'` branch below unchanged (same as it did
+// when they were misclassified 'literal'), so nothing breaks, it just
+// doesn't gain the new match type. Revisit if/when real usage shows this
+// gap matters.
 
 export async function findComponentsByToken(input: string): Promise<Array<{
   component: string
@@ -361,8 +499,9 @@ export async function findComponentsByToken(input: string): Promise<Array<{
       const isDirectMatch = name === target
 
       if (classifyValue(e.value) !== 'token-reference') {
-        // Literal token — no chain possible. Include only on direct match,
-        // with its raw value (nothing to resolve further).
+        // Literal (or composite, or scss-expression) token — no single-hop
+        // chain possible. Include only on direct match, with its raw value
+        // (nothing resolved further).
         if (isDirectMatch) {
           results.push({ component, token: name, resolvedVia: [], valueResolved: e.value })
         }

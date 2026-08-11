@@ -62,6 +62,7 @@ export function registerTokensListComponentVars(server: McpServer): void {
         tokenReference: tokens.filter((t) => t.valueType === 'token-reference'),
         literal: tokens.filter((t) => t.valueType === 'literal'),
         scssExpression: tokens.filter((t) => t.valueType === 'scss-expression'),
+        composite: tokens.filter((t) => t.valueType === 'composite'),
       }
 
       const output = {
@@ -72,6 +73,7 @@ export function registerTokensListComponentVars(server: McpServer): void {
           tokenReference: byType.tokenReference.length,
           literal: byType.literal.length,
           scssExpression: byType.scssExpression.length,
+          composite: byType.composite.length,
         },
         meta: buildMeta({
           dsMeta,
@@ -80,10 +82,12 @@ export function registerTokensListComponentVars(server: McpServer): void {
           stability: 'beta',
           extra: {
             versions: dsMeta?.versions ?? undefined,
-            note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
+note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
               'resolvedVia: full chain of hops to reach it, each role-labeled (bsi-component/bsi-global are ' +
               'project-overridable, dti is central and not meant to be overridden per-project). ' +
-              'null = resolution not available, value is already literal.',
+              'null = resolution not available, value is already literal. ' +
+              'composedOf: present only for composite values (e.g. box-shadow shorthand) — one entry per ' +
+              'embedded reference, each independently resolved; valueResolved is the fully substituted string.',
           },
         }),
       }

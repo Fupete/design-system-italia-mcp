@@ -55,13 +55,21 @@ export interface ResolvedHop {
   overridable: boolean   // true for --bsi-* (project-overridable at runtime), false for --it-*/$it-* (central, not overridable per-project)
 }
 
+export interface ComposedRef {
+  ref: string               // raw text as found embedded in the value, e.g. "$it-shadow-blur-s" or "var(--bsi-shadow-x)"
+  name: string               // normalized token name, e.g. "--it-shadow-blur-s"
+  value: string | null       // null if this specific embedded reference doesn't resolve
+  resolvedVia: ResolvedHop[]
+}
+
 export interface CssToken {
   name: string
   value: string
-  valueType: 'token-reference' | 'scss-expression' | 'literal'
+  valueType: 'token-reference' | 'scss-expression' | 'literal' | 'composite'
   resolvedVia: ResolvedHop[]
   valueResolved: string | null
-  valueResolvedNote?: string    // present only for scss-expression tokens
+  valueResolvedNote?: string    // present for scss-expression tokens, or composite tokens with a partial resolution
+  composedOf?: ComposedRef[]    // present only for composite tokens — one entry per embedded reference found
   description: string | null
 }
 

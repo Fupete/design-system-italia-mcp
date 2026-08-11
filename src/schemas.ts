@@ -25,14 +25,22 @@ const ZResolvedHop = z.object({
   overridable: z.boolean(),
 })
 
+const ZComposedRef = z.object({
+  ref: z.string(),
+  name: z.string(),
+  value: z.string().nullable(),
+  resolvedVia: z.array(ZResolvedHop),
+})
+
 export const ZCssToken = z.object({
   name: z.string(),
   value: z.string(),
-  valueType: z.enum(['token-reference', 'scss-expression', 'literal']),
+  valueType: z.enum(['token-reference', 'scss-expression', 'literal', 'composite']),
   valueResolved: z.string().nullable(),
   resolvedVia: z.array(ZResolvedHop),
   description: z.string().nullable(),
   valueResolvedNote: z.string().optional(),
+  composedOf: z.array(ZComposedRef).optional(),
 })
 
 // ─── get_component_tokens ─────────────────────────────────────────────────────
@@ -45,6 +53,7 @@ export const ZTokensListComponentVarsOutput = z.object({
     tokenReference: z.number(),
     literal: z.number(),
     scssExpression: z.number(),
+    composite: z.number(),
   }),
   meta: ZMeta.extend({
     note: z.string(),
