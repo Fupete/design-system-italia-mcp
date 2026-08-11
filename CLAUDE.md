@@ -21,7 +21,7 @@ Riferimento tecnico: [italia/dati-semantic-mcp](https://github.com/italia/dati-s
 design-system-italia-mcp/
 ├── src/
 │   ├── index.ts                       # Entry point — HTTP + stdio transport, /health, /cache/invalidate, ping
-│   ├── cache.ts                       # In-memory cache — two TTL buckets: snapshot (24h) + githubIssues (15min)
+│   ├── cache.ts                       # In-memory cache — three TTL buckets: snapshot (24h) + snapshotDegraded (15min) + githubIssues (15min)
 │   ├── constants.ts                   # URL e costanti condivise — SNAPSHOT_* + upstream + BETA_WARNING — unica source of truth
 │   ├── fetch.ts                       # Shared fetch helpers (fetchJson, fetchText) per i loader
 │   ├── schemas.ts                     # Zod output schemas per structuredContent — copertura parziale, vedi sotto
@@ -34,10 +34,10 @@ design-system-italia-mcp/
 │   │   ├── devkit.ts                  # Sorgenti #7 #8 #9 — index + stories + props Dev Kit (da snapshot)
 │   │   ├── devkit-parser.ts           # Parser argTypes/props da stories.ts — usato da snapshot-static.ts (CI) e come fallback runtime in devkit.ts
 │   │   ├── github.ts                  # Sorgente #10 — GitHub Issues REST API (unica sorgente live)
-│   │   ├── meta.ts                    # Sorgente #11 — versioni + designersUrl (da snapshot-meta.json)
+│   │   ├── meta.ts                    # Sorgente #11 — versioni + componenti/foundations con URL verificati + DsMeta.ok (successo/fallimento fetch snapshot-meta.json, usato da health.ts)
 │   │   └── tokens.ts                  # Sorgente #4 + #6 — bridge BSI→IT, DTI, resolveToken/findComponentsByToken/resolveTokenValues, roleFor/hopFor
 │   └── tools/
-│       ├── helpers.ts                 # resolveSlug(), buildMeta(), buildComponentUnion()/unionRows() — shared tool helpers
+│       ├── helpers.ts                 # buildMeta(), buildComponentUnion()/unionRows(), devKitUrlMismatch() — shared tool helpers
 │       ├── dsi-list-components.ts     # dsi_list_components — unione vera BSI ∪ Dev Kit
 │       ├── dsi-search-components.ts   # dsi_search_components — ricerca sulla stessa unione
 │       ├── bsi-list-component-variants.ts    # bsi_list_component_variants
@@ -188,9 +188,9 @@ upstream-snapshot.yml (04:00 UTC domenica safety-net + on trigger)
 
 upstream-canary.yml (07:00 UTC daily)
   → upstream health: sorgenti upstream raggiungibili e strutturalmente valide
-  → snapshot freshness: fetchedAt < 48h, conteggio file coerente
+  → snapshot freshness: sotto 48h ok senza altro controllo; sopra 48h confronta le versioni live upstream (stesse fonti di version-check.yml) contro quelle registrate — match = stale-ma-atteso (nessun rilascio upstream nel frattempo), drift = version-check.yml avrebbe dovuto triggerare un refresh e non l'ha fatto; conteggio file coerente
   → scrive HAS_FAILURES e FAILED_SOURCES su GITHUB_OUTPUT
-  → apertura issue automatica: non ancora implementata
+  → apertura issue automatica su failure (deduplicata per data, label "canary")
 
 test.yml (ad ogni push/PR su main)
   → npm run typecheck
@@ -203,10 +203,15 @@ test.yml (ad ogni push/PR su main)
 
 `node:test`, nessuna dipendenza aggiuntiva. Suite su funzioni pure esportate
 (`unionRows`, `roleFor`/`hopFor`, `normalizeTokenName`, `resolveChain` e simili)
-oltre a cache/health/devkit-parser preesistenti. Le funzioni pure sono più
-facili da testare con fixture che verificare solo end-to-end via MCP Inspector —
-diversi bug reali (B1, B2, B4 sull'union model e la risoluzione token) sono stati
-trovati proprio da questi test, non dalla sola verifica manuale.
+oltre a cache/health/devkit-parser preesistenti, più `designers.test.ts`
+(`parseGuidelines` — match/fallback/no-tabs), `bsi.test.ts` (`loadVariants`/
+`loadVariantsResolvedSlug` — fetch condiviso, formato legacy, fallimento totale)
+e `github.test.ts` (`loadComponentIssues` — cache su successo ed errore,
+distinzione errore/"0 issues" reale). Le funzioni pure sono più facili da
+testare con fixture che verificare solo end-to-end via MCP Inspector —
+diversi bug reali (B1, B2, B4 sull'union model e la risoluzione token, più i
+comportamenti silenziosi #26/#27/#35/#36) sono stati trovati o verificati
+proprio da questi test, non dalla sola verifica manuale.
 
 ```bash
 npm run typecheck && npm run test
@@ -249,8 +254,7 @@ Le sorgenti usano nomi diversi per lo stesso componente:
 **Source of truth per la lista componenti**: `components_status.json` ∪ `devkit/index.json` (unione, vedi `dsi_list_components`)
 **Normalizzazione**: strip backtick + lowercase + trim → `accordion`
 **Slug matching**: centralizzato in `src/slugify.ts`, non duplicare logica
-**Convenzione**: slugify una volta all'entry point del tool (in `resolveSlug()`),
-poi `slugsToTry()` sul risultato.
+**Convenzione**: slugify una volta all'entry point del tool, poi slugsToTry() sul risultato — pattern inline in ogni tool (non più centralizzato in un helper condiviso, rimosso perché duplicava la logica senza consumarla davvero, vedi "Cosa NON fare").
 
 Se un componente non viene trovato in una sorgente secondaria, la risposta lo
 riflette nel campo `null` corrispondente (`bsi: null` o `devkit: null` in
@@ -346,9 +350,10 @@ pescano più trasparentemente da entrambe le sorgenti in un'unica chiamata.
 
 ## Cache
 
-Due bucket TTL:
-- `TTL.snapshot` — 24h (tutte le sorgenti da `data-fetched` branch)
-- `TTL.githubIssues` — 15 min (unica sorgente live)
+Tre bucket TTL:
+- `TTL.snapshot` — 24h (tutte le sorgenti da `data-fetched` branch, fetch riuscito)
+- `TTL.snapshotDegraded` — 15 min (fetch di `snapshot-meta.json` fallito — recovery veloce su blip transitori invece di restare "degraded" fino a 24h)
+- `TTL.githubIssues` — 15 min (unica sorgente live, sia su successo che su errore/rate-limit — un errore cachato resta distinguibile da un "0 issues" reale)
 
 In sviluppo: `TTL.snapshot` ridotto a 1h.
 
@@ -358,6 +363,16 @@ POST /cache/invalidate
 Authorization: Bearer <CACHE_INVALIDATION_TOKEN>
 Body: { "source": "all" | "bsi" | "designers" | "tokens" | "devkit" | "github" | "meta" }
 ```
+
+**CORS**: `Access-Control-Allow-Origin: null` su tutti gli endpoint HTTP
+(incluso `/mcp`/`/health`, non solo `/cache/invalidate`). Nessun caso d'uso
+browser-JS legittimo oggi — i client documentati (`npx`/stdio, VS Code
+`mcp.json`/stdio, config client HTTP nativo) parlano sempre HTTP
+server-to-server, mai fetch() da una pagina web, quindi CORS non li tocca
+in nessun caso. Se un giorno serve supportare un client MCP browser-based
+reale, allargare allora — non prima, e insieme a una valutazione auth
+per quel caso specifico (un client cross-origin senza auth ha un profilo
+di rischio diverso da uno server-to-server).
 
 ---
 
@@ -387,9 +402,16 @@ aggiunto a `warnings` per i tool che espongono dati da sorgenti beta. Copertura
 nonostante `stability:'beta'` — follow-up non bloccante da chiudere.
 
 **Nota outputSchema**: copertura Zod (`structuredContent`) a macchia di leopardo —
-presente solo su `tokens_list_component_vars`, `bsi_get_component_markup`,
-`devkit_get_component_markup` (3 tool su 17). Gli altri restituiscono solo
-`content` testuale. Follow-up non bloccante.
+presente su `tokens_list_component_vars`, `bsi_get_component_markup`,
+`devkit_get_component_markup`, `github_get_project_repo_links` (4 tool su 17,
+aggiunto quest'ultimo 2026-08-11). Gli altri 12 restituiscono solo `content`
+testuale — manutenzione opportunistica, si aggiunge quando si tocca un tool
+per altro motivo, non una sessione dedicata. **Attenzione**: `outputSchema`
+da solo non basta — l'SDK richiede anche `structuredContent` nel return
+accanto a `content`, altrimenti fallisce la validazione
+(`Output validation error: ... no structured content was provided`), anche
+con lo schema corretto. Pattern: costruire l'oggetto `output` una volta,
+passarlo a entrambi (vedi "Cosa NON fare").
 
 **Nota CC-BY-SA**: `docs_get_component_guide` include contenuti editoriali da
 Designers Italia licenziati CC-BY-SA 4.0. Aggiungere warning nella risposta.
@@ -472,6 +494,11 @@ Se serve il markup di più varianti, il client fa più chiamate mirate a
 - Non dichiarare VERSION manualmente — viene letta da `package.json` a runtime via `createRequire`
 - Non usare `server.tool()` — usare sempre `server.registerTool()` con `title`, `inputSchema`, `annotations`
 - Non duplicare l'oggetto output — costruirlo una volta e riusare per `content` e `structuredContent`
+- Non reimplementare fetch a mano fuori da `fetch.ts` senza un motivo di
+  contratto reale (header/errori genuinamente diversi, come `github.ts` —
+  GitHub-specific headers + rilevazione 403 rate-limit) — usare sempre
+  `fetchJson`/`fetchText`, che includono già `User-Agent` e
+  `AbortSignal.timeout(FETCH_TIMEOUT_MS)`
 - Non usare `importPath` o lo slug come chiave d'identità per l'unione BSI∪DevKit —
   usare sempre `DevKitEntry.id` (Storybook), l'unico garantito univoco
 - Non ri-risolvere `token.name` in `bsiMap` per ottenere la chain — `bsiMap` è

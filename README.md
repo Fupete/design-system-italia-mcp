@@ -27,9 +27,9 @@
 
 ## Cos'è Filo / What is Filo
 
-**IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia v3 ⚠️ beta, web component e props Dev Kit Italia v1 ⚠️ beta, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched`.
+**IT** — Filo è un server MCP (Model Context Protocol) non ufficiale che espone a assistenti AI i dati strutturati del Design system .italia: componenti e markup HTML Bootstrap Italia v3 ⚠️ beta, web component e props Dev Kit Italia v1 ⚠️ beta, token CSS con valori risolti, linee guida per componente, stato di accessibilità e issue GitHub collegate. I dati sono aggiornati nightly tramite snapshot CI nel branch `data-fetched` quando upstream rilascia una nuova versione (al più tardi settimanalmente).
 
-**EN** — Filo is an unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia v3 components and HTML markup ⚠️ beta, Dev Kit Italia web components and props v1 ⚠️ beta, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot into the `data-fetched` branch.
+**EN** — Filo is an unofficial MCP (Model Context Protocol) server providing AI assistants with structured access to Italy's Design System resources: Bootstrap Italia v3 components and HTML markup ⚠️ beta, Dev Kit Italia web components and props v1 ⚠️ beta, CSS tokens with resolved values, per-component usage guidelines, accessibility status, and related GitHub issues. Data is refreshed nightly via CI snapshot into the `data-fetched` branch whenever upstream releases a new version (at least weekly).
 
 ---
 
@@ -67,7 +67,7 @@ I tool sono organizzati per sorgente/namespace: `dsi_` (inventario unificato com
 Ogni token include `resolvedVia`: l'elenco degli hop intermedi della catena di risoluzione, ciascuno con `role` (`bsi-component` | `bsi-global` | `dti`) e `overridable` (`true` per le `--bsi-*` sovrascrivibili a runtime, `false` per i Design Token centrali `--it-*`/`$it-*`, definiti upstream).
 
 ### Linee guida componenti e stato accessibilità — `docs_`
-- `docs_get_component_guide(component)` — linee guida d'uso da Designers Italia: descrizione, quando/come usarlo, stato verifiche accessibilità, stato libreria (Bootstrap Italia, UI Kit Italia, Dev Kit Italia). Lo stato accessibilità per-componente è disponibile anche in `dsi_list_components` (campo `bsi.accessibility`). Se l'URL Dev Kit registrato nella board diverge da quello reale su Storybook, la risposta lo segnala in `warnings` invece di sceglierne uno in silenzio.
+- `docs_get_component_guide(component)` — linee guida d'uso da Designers Italia: descrizione, quando/come usarlo, stato verifiche accessibilità, stato libreria (Bootstrap Italia, UI Kit Italia, Dev Kit Italia). Lo stato accessibilità per-componente è disponibile anche in `dsi_list_components` (campo `bsi.accessibility`). Se l'URL Dev Kit registrato nella board diverge da quello reale su Storybook, o se il tab "Uso e accessibilità" non viene trovato per titolo su Designers Italia (contenuto preso dal primo tab come fallback), la risposta lo segnala in `warnings` invece di restare in silenzio.
 
 ### Issue e stato progetto — `github_`
 - `github_get_component_issues(component)` — issue GitHub aperte per componente sulle repository monitorate (bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia), più le issue note già registrate in `components_status.json`.
@@ -225,7 +225,7 @@ I dati sono aggiornati nightly tramite CI snapshot e serviti dal branch [`data-f
 | 10 | GitHub REST API | Issue aperte: bootstrap-italia, design-ui-kit, dev-kit-italia, design-tokens-italia | `github_get_component_issues` `github_get_project_repo_links` |
 | 11 | designers.italia.it + BSI + Dev Kit | Versioni Design System / BSI / Dev Kit / DTI. URL verificati pagine componenti | meta in tutte le risposte |
 
-Le sorgenti 1–9 e 11 sono aggiornate nightly e cached per 24h.
+Le sorgenti 1–9 e 11 sono controllate ogni notte e aggiornate quando upstream rilascia una nuova versione (al più tardi settimanalmente), cached per 24h lato server.
 La sorgente 10 (GitHub Issues) è l'unica fetchata live a runtime (cache 15 min).
 `dataFetchedAt` nelle risposte riflette la data dell'ultimo snapshot CI.
 
