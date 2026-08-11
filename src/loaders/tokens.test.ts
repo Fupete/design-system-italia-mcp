@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { normalizeTokenName, roleFor, hopFor, parseDesignTokens, parseBridge, parseBsiMap, resolveChain, resolveComposite, findEmbeddedRefs } from './tokens.js'
+import { normalizeTokenName, roleFor, hopFor, parseDesignTokens, parseBridge, parseBsiMap, resolveChain, resolveComposite, findEmbeddedRefs, resolveSingleValue } from './tokens.js'
 import type { DtiMap, BridgeMap } from './tokens.js'
 
 // ─── normalizeTokenName ─────────────────────────────────────────────────────
@@ -534,4 +534,60 @@ describe('parseDesignTokens — real composite values (elevation/shadow)', () =>
   // NOT yet resolved — composedOf itself (substituting each embedded $it-*
   // with its own resolved value) is still to do. This block only confirms
   // step 1 (isRef anchoring) doesn't corrupt these on the way in.
+})
+
+// ─── resolveSingleValue ─────────────────────────────────────────────────────
+// Used by resolveTokenValues to resolve each entry of ambiguousValues the
+// same way it resolves a token's own primary value.
+
+describe('resolveSingleValue', () => {
+  const bridge: BridgeMap = new Map([
+    ['--bsi-color-link', '--it-color-link'],
+    ['--bsi-color-text-inverse', '--it-color-text-inverse'],
+  ])
+  const dtiRaw: DtiMap = new Map([
+    ['--it-color-link', '#0066cc'],
+    ['--it-color-text-inverse', '#ffffff'],
+  ])
+  const maps = { bsiMap: new Map(), bridge, dtiRaw }
+
+  it('resolves a literal value directly, no chain', () => {
+    const { valueResolved, resolvedVia } = resolveSingleValue('2.5rem', maps)
+    assert.equal(valueResolved, '2.5rem')
+    assert.deepEqual(resolvedVia, [])
+  })
+
+  it('resolves a token-reference through the full chain', () => {
+    // 2 hops, not 1: the first hop is the reference itself
+    // (--bsi-color-link), consistent with the established pattern used
+    // throughout the codebase (hopFor(ref) prepended, then resolveChain(ref)
+    // continues from there) — --bsi-color-link then bridges to
+    // --it-color-link before reaching the literal.
+    const { valueResolved, resolvedVia } = resolveSingleValue('var(--bsi-color-link)', maps)
+    assert.equal(valueResolved, '#0066cc')
+    assert.equal(resolvedVia.length, 2)
+    assert.equal(resolvedVia[0].name, '--bsi-color-link')
+    assert.equal(resolvedVia[1].name, '--it-color-link')
+  })
+
+  it('a second reference in the same maps resolves independently', () => {
+    const { valueResolved } = resolveSingleValue('var(--bsi-color-text-inverse)', maps)
+    assert.equal(valueResolved, '#ffffff')
+  })
+
+  it('resolves a scss-expression to null, no chain', () => {
+    const { valueResolved, resolvedVia } = resolveSingleValue('#{$navbar-brand-margin-end}', maps)
+    assert.equal(valueResolved, null)
+    assert.deepEqual(resolvedVia, [])
+  })
+
+  it('returns null for a var() reference with no matching bridge/bsiMap entry', () => {
+    const { valueResolved } = resolveSingleValue('var(--bsi-nonexistent)', maps)
+    assert.equal(valueResolved, null)
+  })
+
+  it('resolves a composite value by delegating to resolveComposite', () => {
+    const { valueResolved } = resolveSingleValue('var(--bsi-color-link) solid var(--bsi-color-text-inverse)', maps)
+    assert.equal(valueResolved, '#0066cc solid #ffffff')
+  })
 })

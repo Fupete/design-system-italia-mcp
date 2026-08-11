@@ -32,6 +32,13 @@ const ZComposedRef = z.object({
   resolvedVia: z.array(ZResolvedHop),
 })
 
+const ZAmbiguousDeclaration = z.object({
+  value: z.string(),
+  description: z.string().nullable(),
+  valueResolved: z.string().nullable(),
+  resolvedVia: z.array(ZResolvedHop),
+})
+
 export const ZCssToken = z.object({
   name: z.string(),
   value: z.string(),
@@ -41,6 +48,8 @@ export const ZCssToken = z.object({
   description: z.string().nullable(),
   valueResolvedNote: z.string().optional(),
   composedOf: z.array(ZComposedRef).optional(),
+  declaredTimes: z.number().optional(),
+  ambiguousValues: z.array(ZAmbiguousDeclaration).optional(),
 })
 
 // ─── get_component_tokens ─────────────────────────────────────────────────────
@@ -54,6 +63,7 @@ export const ZTokensListComponentVarsOutput = z.object({
     literal: z.number(),
     scssExpression: z.number(),
     composite: z.number(),
+    ambiguous: z.number(),
   }),
   meta: ZMeta.extend({
     note: z.string(),

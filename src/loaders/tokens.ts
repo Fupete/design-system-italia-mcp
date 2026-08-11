@@ -282,7 +282,25 @@ async function loadMaps(): Promise<ResolvedMaps> {
   return maps
 }
 
-// ─── Token value enrichment ───────────────────────────────────────────────────
+// Resolves a single raw value string the same way regardless of where it
+// came from (a token's own .value, or one entry in ambiguousValues) — used
+// by resolveTokenValues for both.
+export function resolveSingleValue(
+  value: string,
+  maps: ResolvedMaps
+): { valueResolved: string | null; resolvedVia: ResolvedHop[] } {
+  const type = classifyValue(value)
+  if (type === 'literal') return { valueResolved: value, resolvedVia: [] }
+  if (type === 'scss-expression') return { valueResolved: null, resolvedVia: [] }
+  if (type === 'composite') {
+    const { value: resolved } = resolveComposite(value, maps.bsiMap, maps.bridge, maps.dtiRaw)
+    return { valueResolved: resolved, resolvedVia: [] }
+  }
+  const ref = value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
+  if (!ref) return { valueResolved: null, resolvedVia: [] }
+  const { value: resolved, chain } = resolveChain(ref, maps.bsiMap, maps.bridge, maps.dtiRaw)
+  return { valueResolved: resolved, resolvedVia: [hopFor(ref, maps.dtiRaw, maps.bridge), ...chain] }
+}
 
 export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]> {
   if (tokens.length === 0) return tokens
@@ -296,26 +314,35 @@ export async function resolveTokenValues(tokens: CssToken[]): Promise<CssToken[]
   }
 
   return tokens.map((token) => {
+    let resolved: CssToken = token
+
     if (token.valueType === 'composite') {
-      // The token's own .value IS the composite string (from custom-
-      // properties.json directly) — resolve it in place, no name lookup.
       const { value, composedOf, note } = resolveComposite(token.value, maps.bsiMap, maps.bridge, maps.dtiRaw)
-      return { ...token, valueResolved: value, composedOf, ...(note ? { valueResolvedNote: note } : {}) }
+      resolved = { ...token, valueResolved: value, composedOf, ...(note ? { valueResolvedNote: note } : {}) }
+    } else if (token.valueType === 'token-reference') {
+      const ref = token.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
+      if (ref) {
+        const { value, chain } = resolveChain(ref, maps.bsiMap, maps.bridge, maps.dtiRaw)
+        resolved = { ...token, valueResolved: value, resolvedVia: [hopFor(ref, maps.dtiRaw, maps.bridge), ...chain] }
+      }
     }
 
-    if (token.valueType !== 'token-reference') return token
+    if (token.declaredTimes && token.declaredTimes > 1 && token.ambiguousValues) {
+      const resolvedAmbiguous = token.ambiguousValues.map((a) => ({
+        ...a,
+        ...resolveSingleValue(a.value, maps),
+      }))
+      const note =
+        `declared ${token.declaredTimes} times with different values in this component's source — ` +
+        `likely responsive breakpoints, theme modifier classes, or element states (e.g. [readonly]), ` +
+        `not distinguishable from this data alone (bootstrap-italia#1805 tracks the responsive case, ` +
+        `not the others). Overriding this variable at a single point removes whatever variation BSI ` +
+        `built in — replicate the same breakpoints/selectors if you want to preserve it, don't assume ` +
+        `one override is equivalent to all of them.`
+      resolved = { ...resolved, ambiguousValues: resolvedAmbiguous, valueResolvedNote: note }
+    }
 
-    const ref = token.value.match(/^var\((--[a-z0-9-]+)\)/)?.[1]
-    if (!ref) return token
-
-    // Resolve from the token's own declared reference (ref), not from a
-    // re-lookup of token.name in bsiMap. custom_properties.json can contain
-    // duplicate variable-names across components with different values —
-    // bsiMap is a flat Map keyed by name, so a re-lookup by name can return
-    // a different component's value (last write wins). Starting from `ref`
-    // sidesteps that ambiguity entirely.
-    const { value, chain } = resolveChain(ref, maps.bsiMap, maps.bridge, maps.dtiRaw)
-    return { ...token, valueResolved: value, resolvedVia: [hopFor(ref, maps.dtiRaw, maps.bridge), ...chain] }
+    return resolved
   })
 }
 

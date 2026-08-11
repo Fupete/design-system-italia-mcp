@@ -63,6 +63,7 @@ export function registerTokensListComponentVars(server: McpServer): void {
         literal: tokens.filter((t) => t.valueType === 'literal'),
         scssExpression: tokens.filter((t) => t.valueType === 'scss-expression'),
         composite: tokens.filter((t) => t.valueType === 'composite'),
+        ambiguous: tokens.filter((t) => (t.declaredTimes ?? 0) > 1),
       }
 
       const output = {
@@ -74,6 +75,7 @@ export function registerTokensListComponentVars(server: McpServer): void {
           literal: byType.literal.length,
           scssExpression: byType.scssExpression.length,
           composite: byType.composite.length,
+          ambiguous: byType.ambiguous.length,
         },
         meta: buildMeta({
           dsMeta,
@@ -82,12 +84,16 @@ export function registerTokensListComponentVars(server: McpServer): void {
           stability: 'beta',
           extra: {
             versions: dsMeta?.versions ?? undefined,
-note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
+            note: 'valueResolved: concrete value resolved via Design Tokens Italia. ' +
               'resolvedVia: full chain of hops to reach it, each role-labeled (bsi-component/bsi-global are ' +
               'project-overridable, dti is central and not meant to be overridden per-project). ' +
               'null = resolution not available, value is already literal. ' +
               'composedOf: present only for composite values (e.g. box-shadow shorthand) — one entry per ' +
-              'embedded reference, each independently resolved; valueResolved is the fully substituted string.',
+              'embedded reference, each independently resolved; valueResolved is the fully substituted string. ' +
+              'declaredTimes/ambiguousValues: present when a variable is declared more than once with different ' +
+              'values in this component\'s source (responsive breakpoints, theme classes, or element states — ' +
+              'see valueResolvedNote on the token itself). A single override does not necessarily preserve all ' +
+              'declared variants.',
           },
         }),
       }

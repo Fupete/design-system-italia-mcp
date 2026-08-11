@@ -62,15 +62,28 @@ export interface ComposedRef {
   resolvedVia: ResolvedHop[]
 }
 
+export interface AmbiguousDeclaration {
+  value: string
+  description: string | null
+  valueResolved: string | null
+  resolvedVia: ResolvedHop[]
+}
+
 export interface CssToken {
   name: string
   value: string
   valueType: 'token-reference' | 'scss-expression' | 'literal' | 'composite'
   resolvedVia: ResolvedHop[]
   valueResolved: string | null
-  valueResolvedNote?: string    // present for scss-expression tokens, or composite tokens with a partial resolution
+  valueResolvedNote?: string    // present for scss-expression tokens, composite tokens with a partial resolution, or ambiguous (declaredTimes > 1) tokens
   composedOf?: ComposedRef[]    // present only for composite tokens — one entry per embedded reference found
   description: string | null
+  // Present only when this variable-name is declared more than once in the
+  // component's source with different values (verified causes: media-query
+  // breakpoints, theme modifier classes, element-state selectors like
+  // [readonly] — bootstrap-italia#1805 only names the breakpoint case).
+  declaredTimes?: number
+  ambiguousValues?: AmbiguousDeclaration[]
 }
 
 // ─── Designers Italia — {slug}.yaml ──────────────────────────────────────────

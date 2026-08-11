@@ -166,18 +166,59 @@ export async function loadTokens(slug: string): Promise<CssToken[]> {
   for (const s of slugsToTry(slug)) {
     const entries = all[s]
     if (entries && entries.length > 0) {
-      return entries.map((e) => ({
-        name: e['variable-name'],
-        value: e.value,
-        valueType: classifyValue(e.value),
-        resolvedVia: [],
-        valueResolved: null,
-        description: e.description || null,
-      }))
+      return consolidateAmbiguous(entries)
     }
   }
 
   return []
+}
+
+// Groups raw entries by variable-name. A name declared once (or repeated
+// with the identical value — no real ambiguity) becomes a normal token. A
+// name declared more than once with DIFFERENT values becomes one
+// consolidated token with declaredTimes/ambiguousValues, instead of N
+// confusing identical-name rows with no signal they're related. Verified
+// against real .scss source (header/navbar/form) that the underlying causes
+// vary — not just media queries as bootstrap-italia#1805 names.
+export function consolidateAmbiguous(entries: RawTokenEntry[]): CssToken[] {
+  const byName = new Map<string, RawTokenEntry[]>()
+  for (const e of entries) {
+    const existing = byName.get(e['variable-name']) ?? []
+    existing.push(e)
+    byName.set(e['variable-name'], existing)
+  }
+
+  const result: CssToken[] = []
+  for (const [name, occurrences] of byName) {
+    const first = occurrences[0]
+    const distinctValues = new Set(occurrences.map((o) => o.value))
+
+    const base: CssToken = {
+      name,
+      value: first.value,
+      valueType: classifyValue(first.value),
+      resolvedVia: [],
+      valueResolved: null,
+      description: first.description || null,
+    }
+
+    if (distinctValues.size <= 1) {
+      result.push(base)
+      continue
+    }
+
+    result.push({
+      ...base,
+      declaredTimes: occurrences.length,
+      ambiguousValues: occurrences.map((o) => ({
+        value: o.value,
+        description: o.description || null,
+        valueResolved: null,
+        resolvedVia: [],
+      })),
+    })
+  }
+  return result
 }
 
 export async function searchTokens(query: string): Promise<Array<CssToken & { component: string }>> {
