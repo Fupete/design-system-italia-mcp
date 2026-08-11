@@ -34,6 +34,8 @@ jobs:
         id: versions
         run: |
           # Fetch current upstream versions
+          # NOTE: mirrored in scripts/canary.config.ts's freshness check (can't
+          # share code, bash vs TS) — when the dist-tag changes (beta to stable)
           BSI=$(curl -sf https://registry.npmjs.org/bootstrap-italia/beta | jq -r '.version')
           DK=$(curl -sf "https://registry.npmjs.org/@italia%2Fdev-kit-italia/beta" | jq -r '.version')
           DS=$(curl -sf https://raw.githubusercontent.com/italia/designers.italia.it/main/src/data/dsnav.yaml \

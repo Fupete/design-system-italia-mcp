@@ -35,6 +35,7 @@ import {
   GITHUB_CONTENTS_DEVKIT_STORIES_URL,
 } from "../src/constants.js";
 import { parseBridge, parseDesignTokens, parseBsiMap } from "../src/loaders/tokens.js";
+import { slugFromStorybookTitle } from "../src/slugify.js";
 
 // ── Shared result type ────────────────────────────────────────────────────────
 
@@ -128,25 +129,70 @@ export const UPSTREAM_HEALTH: StaticSource[] = [
 
 export const SNAPSHOT_FRESHNESS: PipelineCheck[] = [
   {
-    name: "[snapshot] snapshot-meta.json freshness (< 48h)",
+    name: "[snapshot] snapshot-meta.json freshness (stale + version drift)",
     async run({ get }) {
       const t0 = Date.now();
-      const res = await get(SNAPSHOT_META_URL);
-      if (!res.ok) {
-        return { url: SNAPSHOT_META_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${res.status}` };
+      const metaRes = await get(SNAPSHOT_META_URL);
+      if (!metaRes.ok) {
+        return { url: SNAPSHOT_META_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${metaRes.status}` };
       }
-      const meta = JSON.parse(res.body) as { fetchedAt?: string };
+      const meta = JSON.parse(metaRes.body) as {
+        fetchedAt?: string;
+        versions?: { bootstrapItalia?: string; devKitItalia?: string; designSystem?: string };
+      };
       if (!meta.fetchedAt) {
         return { url: SNAPSHOT_META_URL, ok: false, ms: Date.now() - t0, error: "fetchedAt missing" };
       }
       const ageMs = Date.now() - new Date(meta.fetchedAt).getTime();
+      if (ageMs <= 48 * 3_600_000) {
+        return { url: SNAPSHOT_META_URL, ok: true, ms: Date.now() - t0 };
+      }
+
+      // Stale (> 48h) isn't necessarily a problem — version-check.yml only
+      // re-triggers upstream-snapshot.yml when an upstream version actually
+      // changed, otherwise up to 7 days pass by design (weekly safety-net
+      // cron). Compare live upstream versions against what the snapshot
+      // recorded: same sources version-check.yml itself uses. A mismatch here
+      // means version-check.yml should have triggered a refresh and didn't.
       const ageH = Math.round(ageMs / 3_600_000);
-      if (ageMs > 48 * 3_600_000) {
+      // Same npm registry URLs as version-check.yml's curl calls (bash, can't
+      // import from here). When BSI/Dev Kit Italia go stable, update the
+      // dist-tag in BOTH places. 
+      const [bsiRes, dkRes, dsnavRes] = await Promise.all([
+        get('https://registry.npmjs.org/bootstrap-italia/beta'),
+        get('https://registry.npmjs.org/@italia%2Fdev-kit-italia/beta'),
+        get(DESIGNERS_DSNAV_URL),
+      ]);
+
+      if (!bsiRes.ok || !dkRes.ok || !dsnavRes.ok) {
         return {
           url: SNAPSHOT_META_URL, ok: false, ms: Date.now() - t0,
-          error: `snapshot is ${ageH}h old (threshold: 48h)`,
+          error: `snapshot is ${ageH}h old and upstream version check itself failed (registry unreachable)`,
         };
       }
+
+      const liveBsi = (JSON.parse(bsiRes.body) as { version?: string }).version;
+      const liveDk = (JSON.parse(dkRes.body) as { version?: string }).version;
+      const liveDs = dsnavRes.body.match(/^\s*label:\s*"?([^"\n]+)"?/m)?.[1]?.trim();
+
+      const drifted: string[] = [];
+      if (liveBsi && liveBsi !== meta.versions?.bootstrapItalia) {
+        drifted.push(`bootstrapItalia: snapshot ${meta.versions?.bootstrapItalia}, upstream ${liveBsi}`);
+      }
+      if (liveDk && liveDk !== meta.versions?.devKitItalia) {
+        drifted.push(`devKitItalia: snapshot ${meta.versions?.devKitItalia}, upstream ${liveDk}`);
+      }
+      if (liveDs && liveDs !== meta.versions?.designSystem) {
+        drifted.push(`designSystem: snapshot ${meta.versions?.designSystem}, upstream ${liveDs}`);
+      }
+
+      if (drifted.length > 0) {
+        return {
+          url: SNAPSHOT_META_URL, ok: false, ms: Date.now() - t0,
+          error: `snapshot is ${ageH}h old AND upstream has moved on — version-check.yml should have triggered a refresh: ${drifted.join('; ')}`,
+        };
+      }
+
       return { url: SNAPSHOT_META_URL, ok: true, ms: Date.now() - t0 };
     },
   },
@@ -304,6 +350,56 @@ export const SNAPSHOT_FRESHNESS: PipelineCheck[] = [
         };
       }
       return { url: SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, ok: true, ms: Date.now() - t0 };
+    },
+  },
+  {
+    name: "[snapshot] Dev Kit index — no slug collisions among docs entries",
+    async run({ get }) {
+      const t0 = Date.now();
+      const res = await get(SNAPSHOT_DEVKIT_INDEX_URL);
+      if (!res.ok) {
+        return { url: SNAPSHOT_DEVKIT_INDEX_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${res.status}` };
+      }
+      const raw = JSON.parse(res.body) as { entries?: Record<string, { id: string; title: string; type: string }> };
+      const bySlug = new Map<string, string[]>();
+      for (const entry of Object.values(raw.entries ?? {})) {
+        if (entry.type !== 'docs') continue;
+        if (!entry.id.startsWith('componenti-')) continue;
+        const slug = slugFromStorybookTitle(entry.title);
+        if (!slug) continue;
+        const existing = bySlug.get(slug) ?? [];
+        existing.push(entry.id);
+        bySlug.set(slug, existing);
+      }
+      const collisions = [...bySlug.entries()].filter(([, ids]) => ids.length > 1);
+      if (collisions.length > 0) {
+        const detail = collisions.map(([slug, ids]) => `${slug} (${ids.join(', ')})`).join('; ');
+        return {
+          url: SNAPSHOT_DEVKIT_INDEX_URL, ok: false, ms: Date.now() - t0,
+          error: `${collisions.length} slug collision(s) — loadDevKitIndex() would silently drop entries: ${detail}`,
+        };
+      }
+      return { url: SNAPSHOT_DEVKIT_INDEX_URL, ok: true, ms: Date.now() - t0 };
+    },
+  },
+  {
+    name: "[snapshot] BSI status a11y check wording ('Done' literal in bsi.ts)",
+    async run({ get }) {
+      const t0 = Date.now();
+      const res = await get(SNAPSHOT_BSI_STATUS_URL);
+      if (!res.ok) {
+        return { url: SNAPSHOT_BSI_STATUS_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${res.status}` };
+      }
+      const items = (JSON.parse(res.body) as { items?: Array<{ 'status a11y check'?: string }> }).items ?? [];
+      const distinctValues = new Set(items.map(e => e['status a11y check'] ?? '(missing)'));
+      const unexpected = [...distinctValues].filter(v => v !== 'Done');
+      if (unexpected.length > 0) {
+        return {
+          url: SNAPSHOT_BSI_STATUS_URL, ok: false, ms: Date.now() - t0,
+          error: `unexpected "status a11y check" value(s): ${unexpected.join(', ')} — bsi.ts's checkCompleted === 'Done' literal may be stale`,
+        };
+      }
+      return { url: SNAPSHOT_BSI_STATUS_URL, ok: true, ms: Date.now() - t0 };
     },
   },
 ];
