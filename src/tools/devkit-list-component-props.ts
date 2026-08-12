@@ -4,7 +4,7 @@ import { loadStatus } from '../loaders/bsi.js'
 import { loadDevKitEntry, loadDevKitComponent } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
-import { buildMeta } from './helpers.js'
+import { buildMeta, resolveDesignersUrl } from './helpers.js'
 import { BETA_WARNING, DEVKIT_INDEX_URL } from '../constants.js'
 
 // ─── Tool: devkit_list_component_props ────────────────────────────────────────
@@ -58,6 +58,7 @@ export function registerDevkitListComponentProps(server: McpServer): void {
           sourceUrls: [devKitEntry?.storybookUrl ?? DEVKIT_INDEX_URL],
           warnings,
           stability: 'beta',
+          extra: { designersUrl: resolveDesignersUrl(dsMeta, canonicalSlug) },
         }),
       }
 

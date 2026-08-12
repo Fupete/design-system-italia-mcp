@@ -4,6 +4,7 @@
 import { loadAllStatuses } from '../loaders/bsi.js'
 import { loadDevKitIndex } from '../loaders/devkit.js'
 import { loadDsMeta } from '../loaders/meta.js'
+import { designersUrl } from '../loaders/designers.js'
 import { slugsToTry } from '../slugify.js'
 import { BSI_DOC_BASE } from '../constants.js'
 import type { ComponentStatus, DevKitEntry, DsMeta, StabilityLevel, StatusValue } from '../types.js'
@@ -36,6 +37,17 @@ export function buildMeta(opts: {
     stability: opts.stability,
     ...opts.extra,
   }
+}
+
+// ─── Component-specific Designers Italia URL ───────────────────────────────
+// Shared by every component-specific tool's meta.designersUrl. Prefers the
+// URL verified live from dsnav (dsMeta.components), falls back to the
+// slug-derived one (designersUrl()) when dsMeta is unavailable or doesn't
+// have this component — same fallback docs_get_component_guide already used
+// for sourceUrls.designersItalia, now the single source of truth for both.
+
+export function resolveDesignersUrl(dsMeta: DsMeta | null, slug: string): string {
+  return dsMeta?.components.get(slug)?.absoluteUrl ?? designersUrl(slug)
 }
 
 // ─── Dev Kit URL coherence check ───────────────────────────────────────────

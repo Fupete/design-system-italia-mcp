@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { loadStatus, loadVariants, loadVariantsResolvedSlug } from '../loaders/bsi.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
-import { buildMeta } from './helpers.js'
+import { buildMeta, resolveDesignersUrl } from './helpers.js'
 import { BSI_COMPONENT_URL, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl, BETA_WARNING } from '../constants.js'
 
 // ─── Tool: bsi_list_component_variants ────────────────────────────────────────
@@ -59,7 +59,7 @@ export function registerBsiListComponentVariants(server: McpServer): void {
           ],
           warnings,
           stability: 'beta',
-          extra: { versions: dsMeta?.versions ?? undefined },
+          extra: { versions: dsMeta?.versions ?? undefined, designersUrl: resolveDesignersUrl(dsMeta, canonicalSlug) },
         }),
       }
 

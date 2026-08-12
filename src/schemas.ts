@@ -15,6 +15,7 @@ export const ZMeta = z.object({
   warnings: z.array(z.string()),
   stability: z.enum(['beta', 'stable']),
   versions: ZVersions.optional(),
+  designersUrl: z.string().optional(),
 })
 
 const ZResolvedHop = z.object({

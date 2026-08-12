@@ -5,7 +5,7 @@ import { loadStatus } from '../loaders/bsi.js'
 import { loadDevKitEntry, loadStoryVariants } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
-import { buildMeta } from './helpers.js'
+import { buildMeta, resolveDesignersUrl } from './helpers.js'
 import { DEVKIT_STORIES_URL, DEVKIT_INDEX_URL, BETA_WARNING } from '../constants.js'
 
 // ─── Tool: devkit_get_component_markup ────────────────────────────────────────
@@ -64,6 +64,7 @@ export function registerDevkitGetComponentMarkup(server: McpServer): void {
           sourceUrls: [devKitEntry ? DEVKIT_STORIES_URL(devKitEntry.importPath) : DEVKIT_INDEX_URL],
           warnings,
           stability: 'beta',
+          extra: { designersUrl: resolveDesignersUrl(dsMeta, canonicalSlug) },
         }),
       }
 

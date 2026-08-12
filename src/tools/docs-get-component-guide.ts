@@ -5,7 +5,7 @@ import { loadGuidelines, designersUrl } from '../loaders/designers.js'
 import { loadDevKitEntry } from '../loaders/devkit.js'
 import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
-import { buildMeta, devKitUrlMismatch } from './helpers.js'
+import { buildMeta, devKitUrlMismatch, resolveDesignersUrl } from './helpers.js'
 import { BETA_WARNING, BSI_STATUS_URL, DESIGNERS_COMPONENT_URL, DEVKIT_INDEX_URL } from '../constants.js'
 
 // ─── Tool: docs_get_component_guide ───────────────────────────────────────────
@@ -86,7 +86,7 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
                   }
                   : null,
                 sourceUrls: {
-                  designersItalia: dsMeta.components.get(canonicalSlug)?.absoluteUrl ?? designersUrl(canonicalSlug),
+                  designersItalia: resolveDesignersUrl(dsMeta, canonicalSlug),
                   bsiDoc: status?.sourceUrls.bsiDoc ?? null,
                   figma: status?.sourceUrls.figma ?? null,
                   devKitDoc: status?.sourceUrls.devKitDoc ?? null,
@@ -96,7 +96,7 @@ export function registerDocsGetComponentGuide(server: McpServer): void {
                   sourceUrls: [DESIGNERS_COMPONENT_URL(canonicalSlug), BSI_STATUS_URL, DEVKIT_INDEX_URL],
                   warnings,
                   stability: 'beta',
-                  extra: { versions: dsMeta?.versions ?? undefined },
+                  extra: { versions: dsMeta?.versions ?? undefined, designersUrl: resolveDesignersUrl(dsMeta, canonicalSlug) },
                 }),
               },
               null,

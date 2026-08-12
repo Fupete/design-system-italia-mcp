@@ -1,7 +1,8 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { unionRows, devKitUrlMismatch } from './helpers.js'
-import type { ComponentStatus, DevKitEntry } from '../types.js'
+import { unionRows, devKitUrlMismatch, resolveDesignersUrl } from './helpers.js'
+import { designersUrl } from '../loaders/designers.js'
+import type { ComponentStatus, DevKitEntry, DsMeta, DsNavEntry } from '../types.js'
 
 // ─── Fixtures ───────────────────────────────────────────────────────────────
 
@@ -33,6 +34,20 @@ function devKitEntry(overrides: Partial<DevKitEntry> & Pick<DevKitEntry, 'slug' 
     pattern: 'dedicated',
     componentType: 'web-component',
     ...overrides,
+  }
+}
+
+function dsNavEntry(absoluteUrl: string): DsNavEntry {
+  return { label: 'test', url: '/test', absoluteUrl }
+}
+
+function dsMetaFixture(components: Map<string, DsNavEntry> = new Map()): DsMeta {
+  return {
+    versions: { designSystem: 'v1', bootstrapItalia: '3.0.0', devKitItalia: '1.0.0', designTokensItalia: '1.0.0' },
+    components,
+    foundations: [],
+    fetchedAt: '2026-08-12T00:00:00.000Z',
+    ok: true,
   }
 }
 
@@ -129,5 +144,23 @@ describe('devKitUrlMismatch', () => {
     assert.equal(devKitUrlMismatch('accordion', null, 'https://storybook/accordion'), null)
     assert.equal(devKitUrlMismatch('accordion', 'https://board/accordion', undefined), null)
     assert.equal(devKitUrlMismatch('accordion', null, null), null)
+  })
+})
+
+// ─── resolveDesignersUrl ────────────────────────────────────────────────────
+
+describe('resolveDesignersUrl', () => {
+  it('prefers the live dsMeta entry when present', () => {
+    const meta = dsMetaFixture(new Map([['accordion', dsNavEntry('https://designers.italia.it/live/accordion/')]]))
+    assert.equal(resolveDesignersUrl(meta, 'accordion'), 'https://designers.italia.it/live/accordion/')
+  })
+
+  it('falls back to the slug-derived URL when dsMeta has no entry for this slug', () => {
+    const meta = dsMetaFixture(new Map([['accordion', dsNavEntry('https://designers.italia.it/live/accordion/')]]))
+    assert.equal(resolveDesignersUrl(meta, 'chips'), designersUrl('chips'))
+  })
+
+  it('falls back to the slug-derived URL when dsMeta itself is null', () => {
+    assert.equal(resolveDesignersUrl(null, 'accordion'), designersUrl('accordion'))
   })
 })
