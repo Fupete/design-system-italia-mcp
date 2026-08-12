@@ -29,13 +29,13 @@ design-system-italia-mcp/
 │   ├── types.ts                       # Tipi TypeScript condivisi — ResolvedHop, TokenRole, DevKitEntry, UnionRow, ecc.
 │   ├── utils.ts                       # Utility condivise (formatTimestamp)
 │   ├── loaders/
-│   │   ├── bsi.ts                     # Sorgenti #1 #2 #3 — markup, status, token BSI (da snapshot)
+│   │   ├── bsi.ts                     # Sorgenti #1 #2 #3 — markup, status, token BSI (da snapshot), classifyValue/matchSingleVarRef/containsVarRef, consolidateAmbiguous
 │   │   ├── designers.ts               # Sorgente #5 — JSON linee guida (da snapshot, no yaml a runtime)
 │   │   ├── devkit.ts                  # Sorgenti #7 #8 #9 — index + stories + props Dev Kit (da snapshot)
 │   │   ├── devkit-parser.ts           # Parser argTypes/props da stories.ts — usato da snapshot-static.ts (CI) e come fallback runtime in devkit.ts
 │   │   ├── github.ts                  # Sorgente #10 — GitHub Issues REST API (unica sorgente live)
 │   │   ├── meta.ts                    # Sorgente #11 — versioni + componenti/foundations con URL verificati + DsMeta.ok (successo/fallimento fetch snapshot-meta.json, usato da health.ts)
-│   │   └── tokens.ts                  # Sorgente #4 + #6 — bridge BSI→IT, DTI, resolveToken/findComponentsByToken/resolveTokenValues, roleFor/hopFor
+│   │   └── tokens.ts                  # Sorgente #4 + #6 — bridge BSI→IT, DTI, resolveToken/findComponentsByToken/resolveTokenValues/searchDesignTokens, roleFor/hopFor, resolveComposite/findEmbeddedRefs (composedOf), resolveSingleValue (ambiguousValues)
 │   └── tools/
 │       ├── helpers.ts                 # buildMeta(), buildComponentUnion()/unionRows(), devKitUrlMismatch() — shared tool helpers
 │       ├── dsi-list-components.ts     # dsi_list_components — unione vera BSI ∪ Dev Kit
@@ -123,6 +123,28 @@ $it-spacing-6x: 24px // 6x la dimensione della baseline ← #6 variables.scss (d
 ```
 `resolveChain()` segue la catena ricorsivamente e restituisce sia il valore finale
 che ogni hop intermedio come `ResolvedHop`. `bsi.ts` gestisce solo #1 #2 #3.
+**Valori compositi (`composedOf`)** — un valore può incorporare più riferimenti
+in un'unica stringa invece di esserne uno solo (shorthand spacing, `calc()`,
+box-shadow). `findEmbeddedRefs()`/`resolveComposite()` scansionano l'intera
+stringa (non solo l'inizio), risolvono ogni riferimento distinto e lo
+sostituiscono nel valore finale:
+--bsi-notification-padding-right: calc(var(--bsi-spacing-m) + var(--bsi-spacing-xl))
+→ valueResolved: "calc(24px + 40px)"
+→ composedOf: [{ ref: "var(--bsi-spacing-m)", value: "24px", resolvedVia: [...] },
+{ ref: "var(--bsi-spacing-xl)", value: "40px", resolvedVia: [...] }]
+
+8 casi reali confermati in `custom_properties.json` (autocomplete, form, list,
+navscroll, notification, timeline×3), 3 nel bridge DTI (elevation-low/medium/high).
+
+**Dichiarazioni multiple (`declaredTimes`/`ambiguousValues`)** — lo stesso
+`variable-name` può comparire più volte in un componente con valori diversi
+(breakpoint responsive, classi tema, selettori di stato — non distinguibile
+dal solo JSON, causa nota parziale: bootstrap-italia#1805). `consolidateAmbiguous()`
+in `bsi.ts` raggruppa le dichiarazioni invece di mostrare N righe scollegate
+con lo stesso nome; ogni valore dichiarato viene risolto indipendentemente in
+`ambiguousValues`, con un avviso esplicito che sovrascrivere un solo punto
+non preserva la variazione. 18 casi reali confermati su 6 componenti
+(header, navbar, form, autocomplete, notification, section).
 
 **Modello di manipolabilità (T-MANIP)** — `resolvedVia: ResolvedHop[]`, non `string[]`:
 ```typescript
@@ -140,6 +162,21 @@ in `dtiRaw` → `'dti'`; se è chiave nel `bridge` → `'bsi-global'`; altriment
 il prefisso `--it-`/`--bsi-` — `parseDesignTokens()` mappa qualsiasi `$foo:` a
 `--foo`, quindi un Design Token senza prefisso `it-` verrebbe altrimenti
 etichettato erroneamente come `bsi-component`/`overridable:true`.
+
+**`ComposedRef`** — stessa idea applicata a un riferimento embedded dentro un
+valore composito, non alla catena intera:
+```typescript
+interface ComposedRef {
+  ref: string             // testo grezzo trovato nella stringa, es. "$it-shadow-blur-s"
+  name: string             // nome normalizzato, es. "--it-shadow-blur-s"
+  value: string | null     // null se questo pezzo specifico non risolve
+  resolvedVia: ResolvedHop[]
+}
+```
+Presente solo su `CssToken.composedOf` (valori compositi) — un array con un
+elemento per ogni riferimento embedded, ciascuno risolto e labelizzato come
+sopra. `CssToken.ambiguousValues` (dichiarazioni multiple) usa una forma
+simile per ogni valore dichiarato: `{ value, description, valueResolved, resolvedVia }`.
 
 **Perché branch data-fetched invece di fetch live?**
 Elimina dipendenze di rete a runtime per le sorgenti core. Diff nightly
@@ -202,15 +239,18 @@ test.yml (ad ogni push/PR su main)
 ## Test
 
 `node:test`, nessuna dipendenza aggiuntiva. Suite su funzioni pure esportate
-(`unionRows`, `roleFor`/`hopFor`, `normalizeTokenName`, `resolveChain` e simili)
-oltre a cache/health/devkit-parser preesistenti, più `designers.test.ts`
-(`parseGuidelines` — match/fallback/no-tabs), `bsi.test.ts` (`loadVariants`/
-`loadVariantsResolvedSlug` — fetch condiviso, formato legacy, fallimento totale)
-e `github.test.ts` (`loadComponentIssues` — cache su successo ed errore,
-distinzione errore/"0 issues" reale). Le funzioni pure sono più facili da
-testare con fixture che verificare solo end-to-end via MCP Inspector —
-diversi bug reali (B1, B2, B4 sull'union model e la risoluzione token, più i
-comportamenti silenziosi #26/#27/#35/#36) sono stati trovati o verificati
+(`unionRows`, `roleFor`/`hopFor`, `normalizeTokenName`, `resolveChain`,
+`resolveComposite`, `findEmbeddedRefs`, `resolveSingleValue`,
+`consolidateAmbiguous` e simili) oltre a cache/health/devkit-parser
+preesistenti, più `designers.test.ts` (`parseGuidelines` — match/fallback/
+no-tabs), `bsi.test.ts` (`loadVariants`/`loadVariantsResolvedSlug` — fetch
+condiviso, formato legacy, fallimento totale) e `github.test.ts`
+(`loadComponentIssues` — cache su successo ed errore, distinzione
+errore/"0 issues" reale). Le funzioni pure sono più facili da testare con
+fixture che verificare solo end-to-end via MCP Inspector — diversi bug
+reali (B1, B2, B4 sull'union model e la risoluzione token, i comportamenti
+silenziosi #26/#27/#35/#36, un bug di sostituzione per substring
+order-dependent in `resolveComposite`) sono stati trovati o verificati
 proprio da questi test, non dalla sola verifica manuale.
 
 ```bash
