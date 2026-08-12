@@ -136,6 +136,14 @@ export async function loadVariantsResolvedSlug(slug: string): Promise<string> {
 type RawTokenEntry = { 'variable-name': string; value: string; description: string }
 type RawTokensJson = Record<string, RawTokenEntry[]>
 
+export function matchSingleVarRef(value: string): string | null {
+  return value.match(/^var\((--[a-z0-9-]+)(?:,\s*[^)]+)?\)$/)?.[1] ?? null
+}
+
+export function containsVarRef(value: string): boolean {
+  return /var\(--[a-z0-9-]+(?:,\s*[^)]+)?\)/.test(value)
+}
+
 export function classifyValue(value: string): CssToken['valueType'] {
   if (value.startsWith('#{') || value.startsWith('escape-svg(')) return 'scss-expression'
   // Anchored: the ENTIRE value must be a single var(--x) call (optionally
@@ -144,10 +152,12 @@ export function classifyValue(value: string): CssToken['valueType'] {
   // like "0 var(--bsi-shadow-x) 4px" — startsWith is true, but the value
   // isn't just that one reference, so it was silently misclassified as
   // 'literal' by falling through, and never resolved.
-  if (/^var\(--[a-z0-9-]+(?:,\s*[^)]+)?\)$/.test(value)) return 'token-reference'
+  if (matchSingleVarRef(value)) return 'token-reference'
   // Contains at least one var(...) reference somewhere, but isn't itself
-  // a single pure reference — composedOf territory.
-  if (/var\(--[a-z0-9-]+\)/.test(value)) return 'composite'
+  // a single pure reference — composedOf territory. Same fallback
+  // tolerance as matchSingleVarRef so a composite with a fallback-bearing
+  // embedded ref isn't missed here either.
+  if (containsVarRef(value)) return 'composite'
   return 'literal'
 }
 
@@ -227,21 +237,20 @@ export async function searchTokens(query: string): Promise<Array<CssToken & { co
   const results: Array<CssToken & { component: string }> = []
 
   for (const [slug, entries] of Object.entries(all)) {
-    for (const e of entries) {
-      if (
-        e['variable-name'].includes(q) ||
-        e.description?.toLowerCase().includes(q) ||
-        e.value.toLowerCase().includes(q)
-      ) {
-        results.push({
-          component: slug,
-          name: e['variable-name'],
-          value: e.value,
-          valueType: classifyValue(e.value),
-          resolvedVia: [],
-          valueResolved: null,
-          description: e.description || null,
-        })
+    const tokens = consolidateAmbiguous(entries)
+    for (const token of tokens) {
+      // Search across every declared variant when the token is ambiguous
+      // (real case: navbar-link-color has a distinct description per
+      // declaration — "mobile", "desktop", "theme dark" — a query for
+      // "desktop" should match even though it's not the first-shown value).
+      const haystacks = [token.name, token.description ?? '', token.value]
+      if (token.ambiguousValues) {
+        for (const a of token.ambiguousValues) {
+          haystacks.push(a.value, a.description ?? '')
+        }
+      }
+      if (haystacks.some((h) => h.toLowerCase().includes(q))) {
+        results.push({ component: slug, ...token })
       }
     }
   }

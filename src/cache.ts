@@ -82,7 +82,6 @@ export const CACHE_KEYS = {
   bsiTokens: () => `bsi:tokens`,
   designers: (slug: string) => `designers:${slug}`,
   designTokens: () => `tokens:variables`,
-  designTokensDti: () => `tokens:dti`,
   devKitIndex: () => `devkit:index`,
   devKitStories: (slug: string) => `devkit:stories:${slug}`,
   devKitProps: (slug: string) => `devkit:props:${slug}`,

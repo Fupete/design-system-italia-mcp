@@ -5,6 +5,7 @@ import { resolveTokenValues, searchDesignTokens } from '../loaders/tokens.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
 import { BETA_WARNING, BSI_CUSTOM_PROPERTIES_URL, DTI_VARIABLES_SCSS_URL } from '../constants.js'
+import type { ResolvedHop, ComposedRef } from '../types.js'
 
 // ─── Tool: tokens_search ───────────────────────────────────────────────────────
 
@@ -36,7 +37,7 @@ export function registerTokensSearch(server: McpServer): void {
         warnings.push('Design Tokens Italia value resolution not available')
       }
 
-      let globalResults: Array<{ name: string; value: string }> = []
+      let globalResults: Array<{ name: string; value: string | null; resolvedVia: ResolvedHop[]; composedOf?: ComposedRef[]; note?: string }> = []
       try {
         globalResults = await searchDesignTokens(query)
       } catch {

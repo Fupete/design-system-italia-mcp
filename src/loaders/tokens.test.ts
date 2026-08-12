@@ -590,4 +590,22 @@ describe('resolveSingleValue', () => {
     const { valueResolved } = resolveSingleValue('var(--bsi-color-link) solid var(--bsi-color-text-inverse)', maps)
     assert.equal(valueResolved, '#0066cc solid #ffffff')
   })
+
+  it('does not corrupt a longer reference sharing a prefix with a shorter one', () => {
+    const dtiRaw: DtiMap = new Map([
+      ['--it-shadow-blur-s', '2px'],
+      ['--it-shadow-blur-sm', '3px'],
+    ])
+    const { value, composedOf } = resolveComposite(
+      '$it-shadow-blur-s $it-shadow-blur-sm', new Map(), new Map(), dtiRaw
+    )
+    assert.equal(value, '2px 3px')
+    assert.equal(composedOf.length, 2)
+  })
+
+  it('keeps a composite whose embedded ref carries a fallback', () => {
+    const raw = { x: [{ 'variable-name': '--bsi-x', value: '0 var(--bsi-a, 1rem) 4px' }] }
+    const map = parseBsiMap(raw)
+    assert.equal(map.get('--bsi-x'), '0 var(--bsi-a, 1rem) 4px')
+  })
 })
