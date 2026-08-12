@@ -132,6 +132,18 @@ function showTokens(comp) {
   const toks = tokByComp[comp] || [];
   if (!toks.length) { el.innerHTML = '<p class="data-empty">Nessuna custom property.</p>'; cta.hidden = true; return; }
 
+  const ambiguousToks = toks.filter(t => t.declaredTimes);
+  // The badge's tooltip is a hover-only affordance — invisible on touch and
+  // not visually signaled as interactive (no "?", no underline). The values
+  // it explains have to be reachable without hovering, so they're also
+  // spelled out here, always visible, once per component instead of once
+  // per row.
+  const legend = ambiguousToks.length
+    ? `<div class="tok-legend"><p class="tok-legend-title">⚠ Dichiarate più volte con valori diversi — probabile variante responsive/tema/stato, non distinguibile da questi dati soli:</p>${
+        ambiguousToks.map(t => `<p class="tok-legend-item"><code>${esc(t.name)}</code>: ${esc(t.ambiguousValues.map(a => a.value).join(' · '))}</p>`).join('')
+      }</div>`
+    : '';
+
   el.innerHTML = `<div style="width:100%; overflow-x: auto; display: block;"><table class="tok-table"><thead><tr><th>Variabile</th><th>Valore risolto</th><th>Descrizione</th></tr></thead><tbody>${toks.map((t, i) => {
     const raw = t.value || '';
     const type = classifyValueClient(raw);
@@ -140,9 +152,9 @@ function showTokens(comp) {
       const resolved = resolveBsiChain(t.name, bsiResolveMaps.bsiMap, bsiResolveMaps.bridge, bsiResolveMaps.dtiRaw);
       cell = resolved
         ? esc(resolved)
-        : `<span class="token-unresolved" title="Riferimento non risolvibile con i dati disponibili">${esc(raw)}</span>`;
+        : `<span class="token-unresolved">${esc(raw)} <span class="tok-flag">non risolvibile</span></span>`;
     } else if (type === 'scss-expression') {
-      cell = `<span class="token-unresolved" title="Espressione SCSS — richiede compilazione, non risolvibile staticamente">${esc(raw)}</span>`;
+      cell = `<span class="token-unresolved">${esc(raw)} <span class="tok-flag">SCSS, richiede compilazione</span></span>`;
     } else {
       cell = esc(raw); // already a concrete literal (e.g. 1.25rem, rotate(-180deg))
     }
@@ -150,14 +162,10 @@ function showTokens(comp) {
     // silently showing only the first-seen value. Mirrors the
     // declaredTimes/ambiguousValues note server-side (bootstrap-italia#1805
     // tracks the responsive-breakpoint case, not the others: theme classes,
-    // element-state selectors like [readonly]).
-    const badge = t.declaredTimes
-      ? ` <span class="token-ambiguous" title="Dichiarata ${t.declaredTimes} volte con valori diversi — probabile variante responsive/tema/stato, non distinguibile da questi dati soli:&#10;${
-          t.ambiguousValues.map(a => esc(a.value)).join('&#10;')
-        }">⚠ ${t.declaredTimes}×</span>`
-      : '';
+    // element-state selectors like [readonly]). 
+    const badge = t.declaredTimes ? ` <span class="token-ambiguous">⚠ ${t.declaredTimes}×</span>` : '';
     return `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(t.name)}${badge}</td><td class="token-desc">${cell}</td><td class="token-desc">${esc(t.description)}</td></tr>`;
-  }).join('')}</tbody></table></div>`;
+  }).join('')}</tbody></table></div>${legend}`;
   cta.hidden = false;
   ex.hidden = true;
 }

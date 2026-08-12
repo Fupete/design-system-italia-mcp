@@ -589,14 +589,58 @@ li {
   color: var(--bsi-secondary-color);
 }
 
+.tok-flag {
+  display: inline-block;
+  font-style: normal;
+  font-size: .7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: #6b7280;
+  background: #eef0f2;
+  border-radius: 3px;
+  padding: .1em .4em;
+  margin-left: .3em;
+  white-space: nowrap;
+}
+
 .token-ambiguous {
   display: inline-block;
   margin-left: .4em;
   font-size: .75rem;
   font-weight: 600;
   color: #a35a00;
-  cursor: help;
   white-space: nowrap;
+}
+
+.tok-legend {
+  margin-top: .75rem;
+  padding: .7rem .9rem;
+  border: 1px solid #e8d3a8;
+  border-radius: 4px;
+  background: #fdf6e8;
+  font-size: .82rem;
+}
+
+.tok-legend-title {
+  font-weight: 600;
+  color: #a35a00;
+  margin-bottom: .4rem;
+}
+
+.tok-legend-item {
+  margin-bottom: .25rem;
+  color: var(--bsi-secondary-color);
+}
+
+.tok-legend-item:last-child {
+  margin-bottom: 0;
+}
+
+.tok-legend-item code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .78rem;
+  color: var(--bsi-secondary);
 }
 
 
