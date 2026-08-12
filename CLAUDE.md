@@ -274,9 +274,9 @@ versions: {
 }
 ```
 
-E `meta.designersUrl` con l'URL verificato dalla nav (non dedotto dallo slug):
+E `meta.designersUrl` (presente solo sui 7 tool component-specific — assente, non `null`, sugli altri): URL verificato dal vivo tramite `dsMeta.components` quando disponibile, altrimenti derivato dallo slug (`resolveDesignersUrl()` in `helpers.ts`, mai `null`):
 ```typescript
-designersUrl: string | null  // es. "https://designers.italia.it/design-system/componenti/accordion/"
+designersUrl?: string  // es. "https://designers.italia.it/design-system/componenti/accordion/"
 ```
 
 ---
@@ -424,7 +424,7 @@ meta: {
   sourceUrls: string[],          // URL upstream delle sorgenti (non URL snapshot interni)
   warnings: string[],            // sorgenti mancanti o errori non fatali
   versions?: DsVersions,         // designSystem / bootstrapItalia / devKitItalia / designTokensItalia
-  designersUrl?: string | null,  // URL verificato da dsnav.json, non dedotto
+  designersUrl?: string,         // URL verificato da dsnav.json, non dedotto - presente solo sui 7 tool component-specific — assente, non `null`, sugli altri
   stability: 'beta' | 'stable',  // beta se include token BSI 3.x o dati Dev Kit — nessuna sorgente resta 'alpha'
 }
 ```
