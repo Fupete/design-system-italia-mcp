@@ -589,6 +589,16 @@ li {
   color: var(--bsi-secondary-color);
 }
 
+.token-ambiguous {
+  display: inline-block;
+  margin-left: .4em;
+  font-size: .75rem;
+  font-weight: 600;
+  color: #a35a00;
+  cursor: help;
+  white-space: nowrap;
+}
+
 
 /* Workaround BSI 3.x #1726 — it-card-text incorrect font-size */
 ul.it-card-list li .it-card-text {

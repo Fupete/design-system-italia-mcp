@@ -83,10 +83,37 @@ let tokByComp = {};
 function populateTokenSel(raw) {
   tokByComp = {};
   const arr = Array.isArray(raw) ? raw : Object.values(raw);
+  // Group by component + variable-name first, then consolidate — mirrors
+  // consolidateAmbiguous in bsi.ts. A name declared once (or repeated with
+  // the identical value — no real ambiguity) becomes a normal token; a name
+  // declared more than once with DIFFERENT values (real case: header,
+  // navbar, form, autocomplete, notification, section) becomes one row
+  // flagged with declaredTimes/ambiguousValues, instead of N confusing
+  // identical-name rows with no signal they're related.
+  const grouped = {};
   arr.forEach(t => {
     const c = (t.component || 'altro').toLowerCase();
-    if (!tokByComp[c]) tokByComp[c] = [];
-    tokByComp[c].push({ name: t.name || t.property || '', value: t.value || '', description: t.description || '' });
+    const name = t.name || t.property || '';
+    if (!name) return;
+    if (!grouped[c]) grouped[c] = new Map();
+    const occurrences = grouped[c].get(name) || [];
+    occurrences.push({ value: t.value || '', description: t.description || '' });
+    grouped[c].set(name, occurrences);
+  });
+  Object.keys(grouped).forEach(c => {
+    tokByComp[c] = [];
+    grouped[c].forEach((occurrences, name) => {
+      const first = occurrences[0];
+      const distinctValues = new Set(occurrences.map(o => o.value));
+      if (distinctValues.size <= 1) {
+        tokByComp[c].push({ name, value: first.value, description: first.description });
+        return;
+      }
+      tokByComp[c].push({
+        name, value: first.value, description: first.description,
+        declaredTimes: occurrences.length, ambiguousValues: occurrences,
+      });
+    });
   });
   const sel = document.getElementById('tok-sel');
   Object.keys(tokByComp).sort().forEach(c => {
@@ -107,18 +134,29 @@ function showTokens(comp) {
 
   el.innerHTML = `<div style="width:100%; overflow-x: auto; display: block;"><table class="tok-table"><thead><tr><th>Variabile</th><th>Valore risolto</th><th>Descrizione</th></tr></thead><tbody>${toks.map((t, i) => {
     const raw = t.value || '';
+    const type = classifyValueClient(raw);
     let cell;
-    if (raw.startsWith('var(') && bsiResolveMaps) {
+    if ((type === 'token-reference' || type === 'composite') && bsiResolveMaps) {
       const resolved = resolveBsiChain(t.name, bsiResolveMaps.bsiMap, bsiResolveMaps.bridge, bsiResolveMaps.dtiRaw);
       cell = resolved
         ? esc(resolved)
         : `<span class="token-unresolved" title="Riferimento non risolvibile con i dati disponibili">${esc(raw)}</span>`;
-    } else if (raw.includes('#{')) {
+    } else if (type === 'scss-expression') {
       cell = `<span class="token-unresolved" title="Espressione SCSS — richiede compilazione, non risolvibile staticamente">${esc(raw)}</span>`;
     } else {
       cell = esc(raw); // already a concrete literal (e.g. 1.25rem, rotate(-180deg))
     }
-    return `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(t.name)}</td><td class="token-desc">${cell}</td><td class="token-desc">${esc(t.description)}</td></tr>`;
+    // Declared multiple times with different values — flag instead of
+    // silently showing only the first-seen value. Mirrors the
+    // declaredTimes/ambiguousValues note server-side (bootstrap-italia#1805
+    // tracks the responsive-breakpoint case, not the others: theme classes,
+    // element-state selectors like [readonly]).
+    const badge = t.declaredTimes
+      ? ` <span class="token-ambiguous" title="Dichiarata ${t.declaredTimes} volte con valori diversi — probabile variante responsive/tema/stato, non distinguibile da questi dati soli:&#10;${
+          t.ambiguousValues.map(a => esc(a.value)).join('&#10;')
+        }">⚠ ${t.declaredTimes}×</span>`
+      : '';
+    return `<tr class="${i % 2 === 1 ? 'tok-alt' : ''}"><td class="token-name">${esc(t.name)}${badge}</td><td class="token-desc">${cell}</td><td class="token-desc">${esc(t.description)}</td></tr>`;
   }).join('')}</tbody></table></div>`;
   cta.hidden = false;
   ex.hidden = true;
@@ -299,6 +337,25 @@ function parseBridgeClient(scss) {
   return map;
 }
 
+// Mirrors matchSingleVarRef/containsVarRef in bsi.ts — the entire value must
+// be a single var(--x) call (optionally with a fallback, var(--x, fallback))
+// to count as a pure reference; containsVarRef is the broader "has at least
+// one embedded reference somewhere" check used for composite detection.
+function matchSingleVarRefClient(value) {
+  return value.match(/^var\((--[a-z0-9-]+)(?:,\s*[^)]+)?\)$/)?.[1] ?? null;
+}
+function containsVarRefClient(value) {
+  return /var\(--[a-z0-9-]+(?:,\s*[^)]+)?\)/.test(value);
+}
+
+// Mirrors classifyValue in bsi.ts.
+function classifyValueClient(value) {
+  if (value.startsWith('#{') || value.startsWith('escape-svg(')) return 'scss-expression';
+  if (matchSingleVarRefClient(value)) return 'token-reference';
+  if (containsVarRefClient(value)) return 'composite';
+  return 'literal';
+}
+
 // Format: $it-spacing-m: 1.5rem; // 24px
 function parseDtiRawClient(scss) {
   const map = new Map();
@@ -307,42 +364,94 @@ function parseDtiRawClient(scss) {
     if (!m) continue;
     const [, varName, rawValue, comment] = m;
     const value = rawValue.trim();
-    const isRef = value.startsWith('$');
+    // Anchored: the ENTIRE value must be a single $var reference, not just
+    // start with $ — mirrors the isRef fix in parseDesignTokens (tokens.ts,
+    // composedOf step 1). Before this fix, a composite value that happens to
+    // start with $ (e.g. several $it-* refs) was sliced as if it were one
+    // variable name, corrupting it.
+    const isRef = /^\$[a-z0-9-]+$/.test(value);
     map.set(`--${varName}`, isRef ? `--${value.slice(1)}` : (comment ? `${value} (${comment.trim()})` : value));
   }
   return map;
 }
 
-// --bsi-* -> var(--bsi-*|--it-*) references from custom-properties.json — same
-// restriction as server-side parseBsiMap: only token-reference values, literals
-// and #{...} scss-expressions are intentionally excluded (nothing to follow).
+// --bsi-* -> next-hop, mirrors parseBsiMap in tokens.ts. Two shapes stored:
+// a pure single reference (var(--x), optionally with a fallback) stores the
+// bare next-hop name; a composite (contains var(...) somewhere but isn't
+// itself a single pure reference, e.g. "var(--bsi-spacing-xs) var(--bsi-spacing-s)"
+// or a calc() expression) stores the RAW value string as-is, resolved later
+// via resolveCompositeClient instead of being discarded.
 function parseBsiMapClient(raw) {
   const map = new Map();
   for (const entries of Object.values(raw || {})) {
     for (const e of (entries || [])) {
       const v = e.value || '';
-      if (!v.startsWith('var(')) continue;
-      const ref = v.match(/^var\((--[a-z0-9-]+)\)/)?.[1];
-      if (ref) map.set(e['variable-name'], ref);
+      const singleRef = matchSingleVarRefClient(v);
+      if (singleRef) { map.set(e['variable-name'], singleRef); continue; }
+      if (containsVarRefClient(v)) map.set(e['variable-name'], v);
     }
   }
   return map;
 }
 
+function isBareTokenNameClient(value) {
+  return /^--(bsi|it)-[a-z0-9-]+$/.test(value);
+}
+
+// Mirrors findEmbeddedRefs in tokens.ts — every $it-* or var(--x[, fallback])
+// reference found ANYWHERE in the string (not just at the start), e.g. a
+// spacing shorthand or a reference embedded inside calc().
+const EMBEDDED_REF_PATTERN_CLIENT = /\$it-[a-z0-9-]+|var\(--[a-z0-9-]+(?:,\s*[^)]+)?\)/g;
+
+function findEmbeddedRefsClient(value) {
+  const refs = [];
+  for (const m of value.matchAll(EMBEDDED_REF_PATTERN_CLIENT)) {
+    const ref = m[0];
+    const name = ref.startsWith('$') ? `--${ref.slice(1)}` : ref.match(/^var\((--[a-z0-9-]+)/)[1];
+    refs.push({ ref, name });
+  }
+  return refs;
+}
+
+// Mirrors resolveComposite in tokens.ts — resolves every reference embedded
+// in a raw composite value and substitutes each one that resolves back into
+// the string in a single pass over the original (via the regex engine's own
+// match positions, not sequential string replacement — a ref that's a
+// literal prefix of another ref in the same composite, e.g. $it-shadow-blur-s
+// vs $it-shadow-blur-sm, would otherwise get corrupted by replacing the
+// shorter one first).
+function resolveCompositeClient(rawValue, bsiMap, bridge, dtiRaw, visited = new Set()) {
+  const refs = findEmbeddedRefsClient(rawValue);
+  const uniqueRefs = [...new Map(refs.map(r => [r.ref, r])).values()];
+  const resolvedByRef = new Map();
+  for (const { ref, name } of uniqueRefs) {
+    resolvedByRef.set(ref, resolveBsiChain(name, bsiMap, bridge, dtiRaw, new Set(visited)));
+  }
+  return rawValue.replace(EMBEDDED_REF_PATTERN_CLIENT, match => resolvedByRef.get(match) ?? match);
+}
+
 // Mirrors resolveChain in tokens.ts — null exactly where the server would
-// also return null (dead end mid-chain, or nothing to follow at all).
+// also return null (dead end mid-chain, or nothing to follow at all). A
+// composite value (raw string stored by parseBsiMapClient/parseDtiRawClient,
+// distinguished from a bare next-hop name via isBareTokenNameClient) is
+// resolved via resolveCompositeClient instead of being treated as a name to
+// recurse into.
 function resolveBsiChain(name, bsiMap, bridge, dtiRaw, visited = new Set()) {
   if (visited.has(name)) return null;
   visited.add(name);
 
   if (name.startsWith('--bsi-')) {
     const next = bsiMap.get(name) ?? bridge.get(name);
-    return next ? resolveBsiChain(next, bsiMap, bridge, dtiRaw, visited) ?? next : null;
+    if (!next) return null;
+    if (isBareTokenNameClient(next)) return resolveBsiChain(next, bsiMap, bridge, dtiRaw, visited) ?? next;
+    return resolveCompositeClient(next, bsiMap, bridge, dtiRaw, visited);
   }
   if (name.startsWith('--it-')) {
     const val = dtiRaw.get(name);
     if (!val) return null;
-    return val.startsWith('--it-') ? (resolveBsiChain(val, bsiMap, bridge, dtiRaw, visited) ?? val) : val;
+    if (isBareTokenNameClient(val)) return resolveBsiChain(val, bsiMap, bridge, dtiRaw, visited) ?? val;
+    if (findEmbeddedRefsClient(val).length === 0) return val; // true literal, nothing embedded
+    return resolveCompositeClient(val, bsiMap, bridge, dtiRaw, visited);
   }
   return null;
 }
