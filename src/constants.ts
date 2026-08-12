@@ -6,6 +6,13 @@
 // If a source changes structure, update only the corresponding loader.
 // If a branch or base URL changes, update here.
 
+// Single source of truth for the example resolution chain shown in tool
+// descriptions (tokens_resolve, tokens_list_component_vars) — was duplicated
+// as two independently-hand-written strings, easy to drift apart.
+export const EXAMPLE_CHAIN =
+  '--bsi-accordion-body-padding-x → --bsi-spacing-m → $it-spacing-m → $it-spacing-6x → 24px'
+
+  
 // ─── Beta warning ────────────────────────────────────────────────────────────
 // Used in ping (index.ts) and in meta.warnings for tools exposing data from
 // beta sources (CSS tokens, Dev Kit Italia).

@@ -4,6 +4,7 @@ import { findComponentsByToken } from '../loaders/tokens.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
 import { BETA_WARNING, BSI_CUSTOM_PROPERTIES_URL, BSI_ROOT_SCSS_URL, DTI_VARIABLES_SCSS_URL } from '../constants.js'
+import { ZTokensFindComponentsOutput } from '../schemas.js'
 
 // ─── Tool: tokens_find_components ─────────────────────────────────────────────
 
@@ -21,6 +22,7 @@ export function registerTokensFindComponents(server: McpServer): void {
         'tracked as standalone components.',
       inputSchema: { variable: z.string().describe('Token name in any form: --bsi-*, --it-*, or $it-*') },
       annotations: { readOnlyHint: true },
+      outputSchema: ZTokensFindComponentsOutput,
     },
     async ({ variable }) => {
       variable = variable.trim()
@@ -49,6 +51,7 @@ export function registerTokensFindComponents(server: McpServer): void {
 
       return {
         content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )

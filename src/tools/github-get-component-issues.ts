@@ -6,6 +6,7 @@ import { loadStatus } from '../loaders/bsi.js'
 import { slugify } from '../slugify.js'
 import { GITHUB_SEARCH_ISSUES_URL, GITHUB_WATCHED_REPOS, BSI_STATUS_URL } from '../constants.js'
 import { buildMeta } from './helpers.js'
+import { ZGithubGetComponentIssuesOutput } from '../schemas.js'
 
 // ─── Tool: github_get_component_issues ────────────────────────────────────────
 
@@ -20,6 +21,7 @@ export function registerGithubGetComponentIssues(server: McpServer): void {
         'Also includes known issues already present in components_status.json.',
       inputSchema: { component: z.string().describe('Component name or slug (e.g. "accordion", "Alert")') },
       annotations: { readOnlyHint: true },
+      outputSchema: ZGithubGetComponentIssuesOutput,
     },
     async ({ component }) => {
       component = component.trim()
@@ -49,41 +51,35 @@ export function registerGithubGetComponentIssues(server: McpServer): void {
 
       const repoFilter = GITHUB_WATCHED_REPOS.map((r) => `repo:${r}`).join('+')
 
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(
-              {
-                component: canonicalSlug,
-                name: status?.name ?? canonicalSlug,
-                issues: {
-                  live: {
-                    total: issuesError ? null : liveUnique.length,
-                    results: liveUnique,
-                  },
-                  known: {
-                    total: knownIssues.length,
-                    urls: knownIssues,
-                    note: 'Known issues from components_status.json — manually updated, may not be live',
-                  },
-                },
-                meta: buildMeta({
-                  dsMeta: null,
-                  sourceUrls: [
-                    `${GITHUB_SEARCH_ISSUES_URL}?q=${canonicalSlug}+${repoFilter}+is:open`,
-                    BSI_STATUS_URL,
-                  ],
-                  warnings,
-                  stability: 'stable',
-                  extra: { dataFetchedAt: formatTimestamp() },
-                }),
-              },
-              null,
-              2
-            ),
+      const output = {
+        component: canonicalSlug,
+        name: status?.name ?? canonicalSlug,
+        issues: {
+          live: {
+            total: issuesError ? null : liveUnique.length,
+            results: liveUnique,
           },
-        ],
+          known: {
+            total: knownIssues.length,
+            urls: knownIssues,
+            note: 'Known issues from components_status.json — manually updated, may not be live',
+          },
+        },
+        meta: buildMeta({
+          dsMeta: null,
+          sourceUrls: [
+            `${GITHUB_SEARCH_ISSUES_URL}?q=${canonicalSlug}+${repoFilter}+is:open`,
+            BSI_STATUS_URL,
+          ],
+          warnings,
+          stability: 'stable' as const,
+          extra: { dataFetchedAt: formatTimestamp() },
+        }),
+      }
+
+      return {
+        content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )

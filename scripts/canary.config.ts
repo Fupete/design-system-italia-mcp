@@ -36,6 +36,7 @@ import {
 } from "../src/constants.js";
 import { parseBridge, parseDesignTokens, parseBsiMap } from "../src/loaders/tokens.js";
 import { slugFromStorybookTitle, slugify, slugsToTry } from "../src/slugify.js";
+import { classifyValue } from "../src/loaders/bsi.js"
 
 // ── Shared result type ────────────────────────────────────────────────────────
 
@@ -446,6 +447,32 @@ export const SNAPSHOT_FRESHNESS: PipelineCheck[] = [
         };
       }
       return { url: SNAPSHOT_BSI_STATUS_URL, ok: true, ms: Date.now() - t0 };
+    },
+  },
+  {
+    name: "[snapshot] custom_properties — token-reference values have exactly one var()",
+    async run({ get }) {
+      const t0 = Date.now();
+      const res = await get(SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL);
+      if (!res.ok) {
+        return { url: SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, ok: false, ms: Date.now() - t0, error: `HTTP ${res.status}` };
+      }
+      const raw = JSON.parse(res.body) as Record<string, Array<{ 'variable-name': string; value: string }>>;
+      const offenders: string[] = [];
+      for (const entries of Object.values(raw)) {
+        for (const e of entries) {
+          if (classifyValue(e.value) !== 'token-reference') continue;
+          const varCount = (e.value.match(/var\(/g) ?? []).length;
+          if (varCount !== 1) offenders.push(`${e['variable-name']}: "${e.value}"`);
+        }
+      }
+      if (offenders.length > 0) {
+        return {
+          url: SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, ok: false, ms: Date.now() - t0,
+          error: `${offenders.length} value(s) classified token-reference but don't contain exactly one var() — classifyValue()/matchSingleVarRef() may be out of sync: ${offenders.slice(0, 3).join('; ')}`,
+        };
+      }
+      return { url: SNAPSHOT_BSI_CUSTOM_PROPERTIES_URL, ok: true, ms: Date.now() - t0 };
     },
   },
 ];

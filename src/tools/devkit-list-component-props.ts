@@ -6,6 +6,7 @@ import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta, resolveDesignersUrl } from './helpers.js'
 import { BETA_WARNING, DEVKIT_INDEX_URL } from '../constants.js'
+import { ZDevkitListComponentPropsOutput } from '../schemas.js'
 
 // ─── Tool: devkit_list_component_props ────────────────────────────────────────
 // Lists the it-* HTML attributes (props) of a Dev Kit Italia web component.
@@ -22,6 +23,7 @@ export function registerDevkitListComponentProps(server: McpServer): void {
         component: z.string().describe('Component name or slug (e.g. "accordion", "icon")'),
       },
       annotations: { readOnlyHint: true },
+      outputSchema: ZDevkitListComponentPropsOutput,
     },
     async ({ component }) => {
       component = component.trim()
@@ -64,6 +66,7 @@ export function registerDevkitListComponentProps(server: McpServer): void {
 
       return {
         content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output
       }
     }
   )

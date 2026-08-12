@@ -5,6 +5,7 @@ import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta, resolveDesignersUrl } from './helpers.js'
 import { BSI_COMPONENT_URL, BSI_COMPONENT_DEFAULT_SUBFOLDER, subfolderFromDocUrl, BETA_WARNING } from '../constants.js'
+import { ZBsiListComponentVariantsOutput } from '../schemas.js'
 
 // ─── Tool: bsi_list_component_variants ────────────────────────────────────────
 // Names only, no markup — see bsi_get_component_markup for markup.
@@ -23,6 +24,7 @@ export function registerBsiListComponentVariants(server: McpServer): void {
         component: z.string().describe('Component name or slug (e.g. "accordion", "Accordion")'),
       },
       annotations: { readOnlyHint: true },
+      outputSchema: ZBsiListComponentVariantsOutput,
     },
     async ({ component }) => {
       component = component.trim()
@@ -65,6 +67,7 @@ export function registerBsiListComponentVariants(server: McpServer): void {
 
       return {
         content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )

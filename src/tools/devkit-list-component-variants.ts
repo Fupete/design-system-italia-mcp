@@ -6,6 +6,7 @@ import { slugify } from '../slugify.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta, resolveDesignersUrl } from './helpers.js'
 import { DEVKIT_STORIES_URL, DEVKIT_INDEX_URL, BETA_WARNING } from '../constants.js'
+import { ZDevkitListComponentVariantsOutput } from '../schemas.js'
 
 // ─── Tool: devkit_list_component_variants ─────────────────────────────────────
 // Names only, no markup — see devkit_get_component_markup for markup.
@@ -21,6 +22,7 @@ export function registerDevkitListComponentVariants(server: McpServer): void {
         component: z.string().describe('Component name or slug (e.g. "accordion", "icon")'),
       },
       annotations: { readOnlyHint: true },
+      outputSchema: ZDevkitListComponentVariantsOutput,
     },
     async ({ component }) => {
       component = component.trim()
@@ -60,6 +62,7 @@ export function registerDevkitListComponentVariants(server: McpServer): void {
 
       return {
         content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output
       }
     }
   )

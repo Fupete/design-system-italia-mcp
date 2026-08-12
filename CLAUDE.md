@@ -441,17 +441,66 @@ aggiunto a `warnings` per i tool che espongono dati da sorgenti beta. Copertura
 `devkit_list_component_props`) e in `dsi_list_components`/`dsi_search_components`
 nonostante `stability:'beta'` — follow-up non bloccante da chiudere.
 
-**Nota outputSchema**: copertura Zod (`structuredContent`) a macchia di leopardo —
-presente su `tokens_list_component_vars`, `bsi_get_component_markup`,
-`devkit_get_component_markup`, `github_get_project_repo_links` (4 tool su 17,
-aggiunto quest'ultimo 2026-08-11). Gli altri 12 restituiscono solo `content`
-testuale — manutenzione opportunistica, si aggiunge quando si tocca un tool
-per altro motivo, non una sessione dedicata. **Attenzione**: `outputSchema`
-da solo non basta — l'SDK richiede anche `structuredContent` nel return
-accanto a `content`, altrimenti fallisce la validazione
-(`Output validation error: ... no structured content was provided`), anche
-con lo schema corretto. Pattern: costruire l'oggetto `output` una volta,
-passarlo a entrambi (vedi "Cosa NON fare").
+**Nota outputSchema/structuredContent**: copertura Zod deliberatamente non
+uniforme — 12 tool su 16 hanno `outputSchema`+`structuredContent`, 4 no
+(`ping` è il 17°, sempre escluso, motivo diverso: campo `warnings` stringa
+non array). **Attenzione**: `outputSchema` da solo non basta — l'SDK
+richiede anche `structuredContent` nel return accanto a `content`, altrimenti
+fallisce la validazione (`Output validation error: ... no structured content
+was provided`), anche con lo schema corretto. Pattern: costruire l'oggetto
+`output` una volta, passarlo a entrambi (vedi "Cosa NON fare").
+
+**Perché non tutti e 16**: misurato il payload reale (content + structuredContent,
+che duplica lo stesso dato due volte) su ogni tool, worst case realistico
+(2026-08-12, `dsi-list-components-worst-case` = nessun filtro, `dsi-search-components-worst-case`
+= query a singolo carattere, `tokens-list-globals-worst-case` = nessun `match`):
+
+| Tool | Token stimati (worst case) | outputSchema |
+|---|---:|---|
+| `tokens_list_globals` | ~41.500 | ❌ rimosso |
+| `dsi_search_components` | ~22.100 | ❌ rimosso |
+| `dsi_list_components` | ~22.100 | ❌ rimosso |
+| `tokens_find_components` | ~7.700 | ✅ |
+| `tokens_search` | ~6.600 | ❌ rimosso |
+| `bsi_list_components_by_status` | ~4.700 | ✅ |
+| `docs_get_component_guide` | ~2.200 | ✅ |
+| `devkit_list_component_props` | ~1.300 | ✅ |
+| `tokens_resolve` | ~1.300 | ✅ |
+| `github_get_component_issues` | ~1.000 | ✅ |
+| `bsi_list_component_variants` | ~500 | ✅ |
+| `devkit_list_component_variants` | ~500 | ✅ |
+| `tokens_list_component_vars`, `bsi_get_component_markup`,
+  `devkit_get_component_markup`, `github_get_project_repo_links` | scoped, non ri-misurati | ✅ (pre-esistenti) |
+
+Criterio: i 4 rimossi non hanno un cap strutturale sul numero di risultati —
+`dsi_list_components` non accetta filtri, `dsi_search_components`/`tokens_search`
+possono ricevere una query larga che non filtra quasi nulla,
+`tokens_list_globals` senza `match` ritorna tutto. Gli 8 tenuti sono tutti
+scoped a un componente/token/query specifica (anche nel caso peggiore
+plausibile restano un ordine di grandezza sotto). `tokens_search` aveva
+anche un secondo motivo, più forte del solo payload: unisce due funzioni
+sorgente diverse (`searchTokens`/`searchDesignTokens`) in un output composito
+— è la shape più a rischio di drift futuro del lotto, confermato dal fatto
+che i due bug reali di schema trovati il 2026-08-12 erano entrambi qui
+(campo extra `component` non previsto, shape del global token sbagliata —
+copiata da `listGlobalBridgePairs` invece che da `searchDesignTokens`).
+Decisione presa prima del tag v0.5.0, quindi a costo zero di breaking change
+(nessun client dipendeva ancora da `structuredContent` su questi 4).
+
+Se in futuro si vuole recuperare `structuredContent` su uno dei 4 tagliati,
+l'opzione più sensata (da validare) non è "tenerlo com'è raddoppiato" ma trimmare `content`
+a un riassunto breve sopra una soglia di risultati, tenendo `structuredContent`
+completo solo per i client che lo consumano — non fatto ora perché cambia il
+contratto pubblico di `content` (rottura silenziosa per client testuali) e
+richiede una decisione esplicita su quale soglia, non un fix meccanico.
+
+Script di verifica: `scripts/verify-output-schemas.ts` valida in-process,
+contro tutti i dati reali (non un campione), i soli tool che hanno
+`outputSchema` — gira i loader veri e chiama `schema.safeParse()` su ogni
+componente/token/status reale. Da lanciare prima di ogni tag insieme a
+`typecheck`/`test`/`canary` — è quello che ha trovato zero regressioni sui
+1400+ check del giro pre-v0.5.0, cosa che il campionamento manuale via
+Inspector non garantiva.
 
 **Nota CC-BY-SA**: `docs_get_component_guide` include contenuti editoriali da
 Designers Italia licenziati CC-BY-SA 4.0. Aggiungere warning nella risposta.

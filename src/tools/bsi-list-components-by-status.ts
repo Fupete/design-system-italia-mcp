@@ -4,6 +4,7 @@ import { loadAllStatuses } from '../loaders/bsi.js'
 import { loadDsMeta } from '../loaders/meta.js'
 import { buildMeta } from './helpers.js'
 import { BETA_WARNING, BSI_STATUS_URL } from '../constants.js'
+import { ZBsiListComponentsByStatusOutput } from '../schemas.js'
 
 // ─── Tool: bsi_list_components_by_status ──────────────────────────────────
 // bootstrapItalia (default) and devKitItalia are filterable here, both
@@ -27,6 +28,7 @@ export function registerBsiListComponentsByStatus(server: McpServer): void {
           .describe('Which library status to filter on. Defaults to "bootstrapItalia".'),
       },
       annotations: { readOnlyHint: true },
+      outputSchema: ZBsiListComponentsByStatusOutput,
     },
     async ({ status, library }) => {
       status = status.trim()
@@ -43,28 +45,22 @@ export function registerBsiListComponentsByStatus(server: McpServer): void {
           docUrl: (lib === 'devKitItalia' ? s.sourceUrls.devKitDoc : s.sourceUrls.bsiDoc) ?? null,
         }))
 
+      const output = {
+        status: statusUpper,
+        total: results.length,
+        results,
+        meta: buildMeta({
+          dsMeta,
+          sourceUrls: [BSI_STATUS_URL],
+          warnings: [BETA_WARNING],
+          stability: 'beta' as const,
+          extra: { versions: dsMeta?.versions ?? undefined },
+        }),
+      }
+
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(
-              {
-                status: statusUpper,
-                total: results.length,
-                results,
-                meta: buildMeta({
-                  dsMeta,
-                  sourceUrls: [BSI_STATUS_URL],
-                  warnings: [BETA_WARNING],
-                  stability: 'beta',
-                  extra: { versions: dsMeta?.versions ?? undefined },
-                }),
-              },
-              null,
-              2
-            ),
-          },
-        ],
+        content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
+        structuredContent: output,
       }
     }
   )
