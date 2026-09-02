@@ -50,6 +50,27 @@
       "description": "Numero massimo di elementi nel rating, per messaggi di supporto e accessibilità, modificare rispetto al default solo se si cambia il numero di elementi visualizzati rispetto al default di 5",
       "default": "5",
       "options": []
+    },
+    {
+      "name": "form",
+      "type": "text",
+      "description": "ID html del form a cui è associato il componente it-radio-group, se non si trova all'interno di una form",
+      "default": null,
+      "options": []
+    },
+    {
+      "name": "custom-validation",
+      "type": "boolean",
+      "description": "Se la validazione del radio group è fatta esternamente (lato server o con plugin js - validazione custom), impostare questo attributo a `true`.",
+      "default": "false",
+      "options": []
+    },
+    {
+      "name": "validity-message",
+      "type": "text",
+      "description": "Messaggio da mostrare quando il radio group è invalido nel caso di validazione esterna (validazione custom). Se impostato a '' (stringa vuota) il campo viene considerato valido.",
+      "default": null,
+      "options": []
     }
   ],
   "subcomponents": []
