@@ -1,7 +1,7 @@
 {
   "slug": "bottomnav",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-bottomnav--documentazione&viewMode=docs",
-  "description": "Barra di navigazione fissa a fondo pagina per dispositivi mobile",
+  "description": "Barra di navigazione fissa a fondo pagina per dispositivi mobile.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

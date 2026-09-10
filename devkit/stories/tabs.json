@@ -1,7 +1,7 @@
 {
   "slug": "tabs",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-tabs--documentazione&viewMode=docs",
-  "description": "Contenitori con etichette per organizzare contenuti correlati in schede spearate all'interno della stessa sezione di pagina",
+  "description": "Contenitori con etichette per organizzare contenuti correlati in schede spearate all'interno della stessa sezione di pagina.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

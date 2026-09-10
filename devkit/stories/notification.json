@@ -1,7 +1,7 @@
 {
   "slug": "notification",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-notification--documentazione&viewMode=docs",
-  "description": "Messaggio di testo a comparsa per informare l'utente di eventi, aggiornamenti o azioni che richiedono la sua attenzione",
+  "description": "Messaggio di testo a comparsa per informare l'utente di eventi, aggiornamenti o azioni che richiedono la sua attenzione.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",

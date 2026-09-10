@@ -1,7 +1,7 @@
 {
   "slug": "dimmer",
   "devkitUrl": "https://italia.github.io/dev-kit-italia/iframe.html?id=componenti-dimmer--documentazione&viewMode=docs",
-  "description": "Elemento che oscura una porzione di pagina per focalizzare l'attenzione su un contenuto specifico",
+  "description": "Elemento che oscura una porzione di pagina per focalizzare l'attenzione su un contenuto specifico.",
   "variants": [
     {
       "name": "anteprima-e-attributi-del-componente",
